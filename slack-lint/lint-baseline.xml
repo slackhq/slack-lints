@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 7.0.2" type="baseline" client="gradle" name="AGP (7.0.2)" variant="all" version="7.0.2">
+
+    <issue
+        id="LintImplIdFormat"
+        message="Lint issue IDs should be reasonably short (&lt; 40 chars); they&apos;re used in suppress annotations etc"
+        errorLine1="      &quot;InjectWithScopeRequiredLoggedInUserProvider&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectWithUsageDetector.kt"
+            line="82"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplIdFormat"
+        message="Lint issue IDs should be reasonably short (&lt; 40 chars); they&apos;re used in suppress annotations etc"
+        errorLine1="      &quot;InjectWithTypeMustImplementAnvilInjectable&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectWithUsageDetector.kt"
+            line="92"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="      &quot;Count value in formatted string resource.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="28"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      &quot;AutoValue classes represent pure data classes, so mocking them should not be necessary.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/mocking/AutoValueMockDetector.kt"
+            line="16"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="      &quot;@Binds-annotated functions can be extension functions.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DaggerKotlinIssuesDetector.kt"
+            line="59"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="      &quot;@Binds-annotated functions can be extension functions.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DaggerKotlinIssuesDetector.kt"
+            line="59"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      &quot;data classes represent pure data classes, so mocking them should not be necessary.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/mocking/DataClassMockDetector.kt"
+            line="16"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;This class or method is deprecated; consider using an alternative.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DeprecatedAnnotationDetector.kt"
+            line="31"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      &quot;Dagger provider methods should not be called directly by user code.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DoNotCallProvidersDetector.kt"
+            line="38"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="      &quot;Use Slack&apos;s internal `@DoNotMock` annotation.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/mocking/ErrorProneDoNotMockDetector.kt"
+            line="22"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      briefDescription = &quot;Fragment dependencies should be injected using constructor injections only.&quot;,"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
+            line="63"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      briefDescription = &quot;Fragment dependencies should be injected using constructor injections only.&quot;,"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
+            line="63"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      briefDescription = &quot;Fragment dependencies should be injected using the Fragment&apos;s constructor.&quot;,"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
+            line="77"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      briefDescription = &quot;Fragment dependencies should be injected using the Fragment&apos;s constructor.&quot;,"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
+            line="77"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      &quot;Use Slack&apos;s JavaPreconditions instead of Guava&apos;s Preconditions checks&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/GuavaPreconditionsDetector.kt"
+            line="116"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      &quot;Use Slack&apos;s JavaPreconditions instead of Guava&apos;s Preconditions checks&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/GuavaPreconditionsDetector.kt"
+            line="116"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      &quot;Kotlin precondition checks should use the Kotlin standard library checks&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/GuavaPreconditionsDetector.kt"
+            line="128"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      &quot;Kotlin precondition checks should use the Kotlin standard library checks&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/GuavaPreconditionsDetector.kt"
+            line="128"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      &quot;Only Kotlin classes should be injected in order for Anvil to work.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectInJavaDetector.kt"
+            line="60"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      &quot;@InjectWith-annotated classes must implement LoggedInUserProvider (or extend something that does) if they target UserScope or OrgScope.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectWithUsageDetector.kt"
+            line="83"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      &quot;@InjectWith-annotated classes must implement AnvilInjectable (or extend something that does).&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectWithUsageDetector.kt"
+            line="93"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="      MESSAGE_LINT_ERROR_TITLE,"
+        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/JavaOnlyDetector.kt"
+            line="65"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="      &quot;Use slack.foundation.coroutines.android.MainScope.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MainScopeUsageDetector.kt"
+            line="37"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Single sentence error messages should not end with a period"
+        errorLine1="        &quot;Name &apos;$jsonName&apos; is duplicated by member &apos;${existingMember.name}&apos;.&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="818"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Single sentence error messages should not end with a period"
+        errorLine1="        &quot;Name &apos;$jsonName&apos; is duplicated by member &apos;${member.name}&apos;.&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="823"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      &quot;Use Kotlin&apos;s $FQN_KOTLIN_PAIR instead of other Pair types from other libraries like AndroidX and Slack commons&quot;,"
+        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/NonKotlinPairDetector.kt"
+            line="90"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="      &quot;Use Kotlin&apos;s $FQN_KOTLIN_PAIR instead of other Pair types from other libraries like AndroidX and Slack commons&quot;,"
+        errorLine2="      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/NonKotlinPairDetector.kt"
+            line="90"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="      &quot;Use SlackDispatchers.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/RawDispatchersUsageDetector.kt"
+            line="39"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="      &quot;This is replaced by the caller.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/retrofit/RetrofitUsageDetector.kt"
+            line="158"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="      briefDescription = &quot;subscribeOn called with the main thread scheduler.&quot;,"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="39"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be capitalized"
+        errorLine1="      briefDescription = &quot;subscribeOn called with the main thread scheduler.&quot;,"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="39"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="      &quot;Don&apos;t use Serializable.&quot;,"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SerializableDetector.kt"
+            line="43"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplUseUast"
+        message="Don&apos;t call PsiField#getInitializer(); you must use UAST instead. If you don&apos;t have a UField call UastFacade.getInitializerBody(field)"
+        errorLine1="      val assignment = variable?.initializer as? PsiMethodCallExpression"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="83"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="LintImplUseUast"
+        message="Don&apos;t call PsiField#getInitializer(); you must use UAST instead. If you don&apos;t have a UField call UastFacade.getInitializerBody(field)"
+        errorLine1="      is PsiField -> variable.initializer as? PsiMethodCallExpression"
+        errorLine2="                     ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="136"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="LintImplUseUast"
+        message="Don&apos;t call PsiField#getInitializer(); you must use UAST instead. If you don&apos;t have a UField call UastFacade.getInitializerBody(field)"
+        errorLine1="      is PsiLocalVariable -> variable.initializer as? PsiMethodCallExpression"
+        errorLine2="                             ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="137"
+            column="30"/>
+    </issue>
+
+</issues>
