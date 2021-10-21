@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  # Only run push on main
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '*.md'
+  # Always run on PRs
+  pull_request:
+
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: ${{ matrix.ci_lint_version }} / JDK ${{ matrix.ci_java_version }} / Kotlin ${{ matrix.ci_kotlin_version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ci_java_version: [16]
+        ci_lint_version: [30.0.3]
+        ci_kotlin_version: [1.5.31]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Generate cache key
+        run: ./.github/checksum.sh checksum.txt
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ matrix.job }}-${{ hashFiles('checksum.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-${{ matrix.job }}-
+
+      - name: Install JDK ${{ matrix.ci_java_version }}
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: ${{ matrix.ci_java_version }}
+
+      - name: Build and run tests
+        id: gradle
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: clean check --stacktrace -PlintVersion=${{ matrix.ci_lint_version }} -PkotlinVersion=${{ matrix.ci_kotlin_version }}
+
+      - name: Print build scan url
+        if: always()
+        run: echo ${{ steps.gradle.outputs.build-scan-url }}
+
+      - name: (Fail-only) Bundle the build report
+        if: failure()
+        run: find . -type d -name 'reports' | zip -@ -r build-reports.zip
+
+      - name: (Fail-only) Upload the build report
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          name: error-report
+          path: build-reports.zip
