@@ -33,11 +33,12 @@ buildscript {
 }
 
 plugins {
-  id("com.diffplug.spotless") version "5.15.0"
+  id("com.diffplug.spotless") version "5.17.0"
   id("com.vanniktech.maven.publish") version "0.18.0" apply false
-  id("org.jetbrains.dokka") version "1.5.0" apply false
+  id("org.jetbrains.dokka") version "1.5.30" apply false
   id("io.gitlab.arturbosch.detekt") version "1.18.1"
-  id("com.android.lint") version "7.0.2" apply false
+  id("com.android.lint") version "7.0.3" apply false
+  id("com.google.devtools.ksp") version "1.5.31-1.0.0" apply false
 }
 
 spotless {
