@@ -120,7 +120,7 @@ subprojects {
         .get()
       repositories {
         maven {
-          name = "Slack"
+          name = "SlackRepository"
           setUrl(url)
           credentials(PasswordCredentials::class.java)
         }
