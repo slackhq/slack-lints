@@ -115,7 +115,7 @@ subprojects {
 
     // Add our maven repository repo
     configure<PublishingExtension> {
-      val url = providers.gradleProperty("slack.repositoryUrl")
+      val url = providers.gradleProperty("SlackRepositoryUrl")
         .forUseAtConfigurationTime()
         .get()
       repositories {
