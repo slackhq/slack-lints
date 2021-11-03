@@ -7,7 +7,7 @@ plugins {
   id("com.google.devtools.ksp")
 }
 
-if (hasProperty("slack.repositoryUrl"))  {
+if (hasProperty("SlackRepositoryUrl"))  {
   apply(plugin = "com.vanniktech.maven.publish")
 }
 
