@@ -1,59 +1,42 @@
 # Contributors Guide
 
-Interested in contributing? Awesome! Before you do though, please read our
-[Code of Conduct](https://slackhq.github.io/code-of-conduct). We take it very seriously, and expect that you will as
-well.
+Note that this project is considered READ-ONLY. You are welcome to discuss or ask questions in the
+discussions section of the repo, but we do not normally accept external contributions without prior
+discussion.
 
-There are many ways you can contribute! :heart:
+## Development
 
-### Bug Reports and Fixes :bug:
--  If you find a bug, please search for it in the [Issues](https://github.com/{project_slug}/issues), and if it isn't already tracked,
-   [create a new issue](https://github.com/{project_slug}/issues/new). Fill out the "Bug Report" section of the issue template. Even if an Issue is closed, feel free to comment and add details, it will still
-   be reviewed.
--  Issues that have already been identified as a bug (note: able to reproduce) will be labelled `bug`.
--  If you'd like to submit a fix for a bug, [send a Pull Request](#creating_a_pull_request) and mention the Issue number.
-  -  Include tests that isolate the bug and verifies that it was fixed.
+Check out this repo with Android Studio or IntelliJ. It's a standard gradle project and
+conventional to check out.
 
-### New Features :bulb:
--  If you'd like to add new functionality to this project, describe the problem you want to solve in a [new Issue](https://github.com/{project_slug}/issues/new).
--  Issues that have been identified as a feature request will be labelled `enhancement`.
--  If you'd like to implement the new feature, please wait for feedback from the project
-   maintainers before spending too much time writing the code. In some cases, `enhancement`s may
-   not align well with the project objectives at the time.
+The primary project is `slack-lint`.
 
-### Tests :mag:, Documentation :books:, Miscellaneous :sparkles:
--  If you'd like to improve the tests, you want to make the documentation clearer, you have an
-   alternative implementation of something that may have advantages over the way its currently
-   done, or you have any other change, we would be happy to hear about it!
-  -  If its a trivial change, go ahead and [send a Pull Request](#creating_a_pull_request) with the changes you have in mind.
-  -  If not, [open an Issue](https://github.com/{project_slug}/issues/new) to discuss the idea first.
+Kotlin should be used for more idiomatic use with lint APIs.
 
-If you're new to our project and looking for some way to make your first contribution, look for
-Issues labelled `good first contribution`.
+## Setup
 
-## Requirements
+Be sure your devel environment has `ANDROID_HOME` defined or you'll have trouble running tests
+that require the Android SDK. If you've added it and still seeing the error about not having it
+defined while running tests, try closing and re-opening Android Studio.
 
-For your contribution to be accepted:
+## Lint Documentation
 
-- [x] You must have signed the [Contributor License Agreement (CLA)](https://cla-assistant.io/{project_slug}).
-- [x] The test suite must be complete and pass.
-- [x] The changes must be approved by code review.
-- [x] Commits should be atomic and messages must be descriptive. Related issues should be mentioned by Issue number.
+[The Android Lint API Guide](https://googlesamples.github.io/android-custom-lint-rules/book.html) provides an excellent overview of lint's purpose, how it works, and how to author custom checks.
 
-If the contribution doesn't meet the above criteria, you may fail our automated checks or a maintainer will discuss it with you. You can continue to improve a Pull Request by adding commits to the branch from which the PR was created.
-
-[Interested in knowing more about about pull requests at Slack?](https://slack.engineering/on-empathy-pull-requests-979e4257d158#.awxtvmb2z)
-
-## Creating a Pull Request
-
-1.  :fork_and_knife: Fork the repository on GitHub.
-2.  :runner: Clone/fetch your fork to your local development machine. It's a good idea to run the tests just
-    to make sure everything is in order.
-3.  :herb: Create a new branch and check it out.
-4.  :crystal_ball: Make your changes and commit them locally. Magic happens here!
-5.  :arrow_heading_up: Push your new branch to your fork. (e.g. `git push username fix-issue-16`).
-6.  :inbox_tray: Open a Pull Request on github.com from your new branch on your fork to `master` in this
-    repository.
+## Lint Guidelines
+- Limited scopes. Remember this will run in a slow build step or during the IDE, performance matters!
+    - If your check only matters for java or kotlin, only run on appropriate files
+    - Use the smallest necessary scope. Avoid tree walking through the AST if it can be avoided, there
+      are usually more appropriate hooks.
+- Use `UElementHandler` (via overriding `createUastHandler()`) rather than overriding `Detector`
+  callback methods. `Detector` callback methods tend only to be useful for tricky scenarios, like
+  annotated elements. For basic `UElement` types it's best to just use `UElementHandler` as it affords
+  a standard API and is easy to conditionally avoid nested parsing.
+- For testing, prefer writing source stubs directly in the test rather than extract individual files
+  in `resources` for stubs. Stubs in resources add friction for source glancing and tedious to
+  maintain, and should only be used for extremely complex source files.
+- Use our `implementation<*Detector>()` helper functions for wiring your `Issue` information. This
+  is important because it will help ensure your check works in both command line and in the IDE.
 
 ## Maintainers
 
