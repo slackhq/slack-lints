@@ -25,6 +25,5 @@ echo "current: $CURRENT_VERSION"
 echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
 echo "new: $NEW_VERSION"
 echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-echo "coordinates: $COORDINATES"
 # We just use the artifact ID in the android repo for the coordinate
 echo "COORDINATES=$ARTIFACT" >> $GITHUB_ENV
