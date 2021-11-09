@@ -20,9 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ci_java_version: [16]
-        ci_lint_version: [30.0.3]
-        ci_kotlin_version: [1.5.31]
+        ci_java_version: ['16']
+        ci_lint_version: ['30.0.3', '30.1.0-beta02', '30.2.0-alpha03']
+        ci_kotlin_version: ['1.5.31']
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -46,15 +46,17 @@ jobs:
           distribution: 'zulu'
           java-version: ${{ matrix.ci_java_version }}
 
-      - name: Build and run tests
-        id: gradle
+      - name: Build
         uses: eskatos/gradle-command-action@v1
         with:
-          arguments: clean check --stacktrace -PlintVersion=${{ matrix.ci_lint_version }} -PkotlinVersion=${{ matrix.ci_kotlin_version }}
+          arguments: spotlessCheck compileKotlin compileTestKotlin --stacktrace -PlintVersion=${{ matrix.ci_lint_version }} -PkotlinVersion=${{ matrix.ci_kotlin_version }}
 
-      - name: Print build scan url
-        if: always()
-        run: echo ${{ steps.gradle.outputs.build-scan-url }}
+      # Test only on current stable because test outputs change wildly between lint versions
+      - name: Check
+        if: matrix.ci_lint_version == '30.0.3'
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: check --stacktrace -PlintVersion=${{ matrix.ci_lint_version }} -PkotlinVersion=${{ matrix.ci_kotlin_version }}
 
       - name: (Fail-only) Bundle the build report
         if: failure()

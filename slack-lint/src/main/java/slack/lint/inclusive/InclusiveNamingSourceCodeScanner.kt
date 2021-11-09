@@ -20,17 +20,16 @@ import com.android.tools.lint.detector.api.Context
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.SourceCodeScanner
+import com.android.tools.lint.detector.api.isKotlin
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.uast.UClass
+import org.jetbrains.uast.UField
 import org.jetbrains.uast.UFile
 import org.jetbrains.uast.ULabeledExpression
 import org.jetbrains.uast.ULocalVariable
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UParameter
 import org.jetbrains.uast.UVariable
-import org.jetbrains.uast.java.JavaUField
-import org.jetbrains.uast.kotlin.KotlinUField
-import org.jetbrains.uast.kotlin.declarations.KotlinUMethod
 
 @Suppress("UnstableApiUsage")
 class InclusiveNamingSourceCodeScanner : Detector(), SourceCodeScanner {
@@ -67,15 +66,20 @@ class InclusiveNamingSourceCodeScanner : Detector(), SourceCodeScanner {
 
       override fun visitMethod(node: UMethod) {
         if (node.isConstructor) return
-        val type = if (node is KotlinUMethod) "function" else "method"
+        val type = if (isKotlin(node)) "function" else "method"
         checker.check(node, node.name, type)
       }
 
       // Covers parameters, properties, fields, and local vars
       override fun visitVariable(node: UVariable) {
         val type = when (node) {
-          is JavaUField -> "field"
-          is KotlinUField -> "property"
+          is UField -> {
+            if (isKotlin(node)) {
+              "property"
+            } else {
+              "field"
+            }
+          }
           is ULocalVariable -> "local variable"
           is UParameter -> {
             if (node.sourcePsi is KtProperty) {
