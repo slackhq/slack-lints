@@ -22,7 +22,7 @@ lintOptions {
 
 val lintVersion = providers.gradleProperty("lintVersion")
   .forUseAtConfigurationTime()
-  .getOrElse("30.0.3")
+  .getOrElse("30.1.0-beta02")
 dependencies {
   compileOnly("com.android.tools.lint:lint-api:$lintVersion")
   compileOnly("com.android.tools.lint:lint-checks:$lintVersion")
@@ -39,12 +39,12 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile>()
-  .matching { !it.name.contains("test", ignoreCase = true) }
+//  .matching { !it.name.contains("test", ignoreCase = true) }
   .configureEach {
     kotlinOptions {
       // Lint still requires 1.4 (regardless of what version the project uses), so this forces a lower
       // language level for now. Similar to `targetCompatibility` for Java.
-      apiVersion = "1.4"
-      languageVersion = "1.4"
+      apiVersion = "1.5"
+      languageVersion = "1.5"
     }
   }
