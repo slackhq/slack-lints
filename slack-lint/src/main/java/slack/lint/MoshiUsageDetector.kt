@@ -36,6 +36,7 @@ import com.intellij.psi.PsiTypeParameter
 import com.intellij.psi.util.InheritanceUtil.isInheritor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtCollectionLiteralExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.KtParameter
@@ -58,7 +59,6 @@ import org.jetbrains.uast.UReferenceExpression
 import org.jetbrains.uast.getUastParentOfType
 import org.jetbrains.uast.kotlin.KotlinUAnnotation
 import org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression
-import org.jetbrains.uast.kotlin.expressions.KotlinUCollectionLiteralExpression
 import org.jetbrains.uast.toUElement
 import org.jetbrains.uast.toUElementOfType
 import slack.lint.moshi.MoshiLintUtil.hasMoshiAnnotation
@@ -843,8 +843,8 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
     member.findAnnotation(FQCN_SERIALIZED_NAME)?.let { serializedName ->
       val name = serializedName.findAttributeValue("value")?.evaluate() as String
       @Suppress("UNCHECKED_CAST")
-      val alternateCount = (serializedName.findAttributeValue("alternate") as? KotlinUCollectionLiteralExpression)
-        ?.valueArgumentCount ?: -1
+      val alternateCount = (serializedName.findAttributeValue("alternate")?.sourcePsi as? KtCollectionLiteralExpression)
+        ?.getInnerExpressions()?.size ?: -1
       val hasAlternates = alternateCount > 0
 
       var fix: LintFix? = null
