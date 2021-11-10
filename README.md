@@ -4,8 +4,8 @@ slack-lints
 This repository contains a collection of custom Android/Kotlin lint checks we use in our Android and
 Kotlin code bases at Slack.
 
-This repo is effectively _read-only_ and does not publish artifacts to Maven Central. We develop
-these in the open though to knowledge share with the community.
+This repo is effectively _read-only_ and does not publish artifacts to Maven Central. We [develop
+these in the open](https://slack.engineering/developing-in-the-open/) to knowledge-share with the community.
 
 As such, our issue tracker is closed and we don't normally accept external PRs, but we welcome your
 questions in the discussions section of the project!
