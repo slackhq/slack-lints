@@ -27,6 +27,7 @@ import slack.lint.mocking.DoNotMockMockDetector
 import slack.lint.mocking.ErrorProneDoNotMockDetector
 import slack.lint.retrofit.RetrofitUsageDetector
 import slack.lint.rx.RxSubscribeOnMainDetector
+import slack.lint.text.SpanPointMarkDangerousCheckDetector
 
 @AutoService(IssueRegistry::class)
 class SlackIssueRegistry : IssueRegistry() {
@@ -62,5 +63,6 @@ class SlackIssueRegistry : IssueRegistry() {
     InjectInJavaDetector.ISSUE,
     RetrofitUsageDetector.ISSUE,
     RestrictCallsToDetector.ISSUE,
+    SpanPointMarkDangerousCheckDetector.ISSUE,
   )
 }
