@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.diffplug.gradle.spotless.SpotlessExtension
 import com.vanniktech.maven.publish.MavenPublishPluginExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.dokka.gradle.DokkaTask
@@ -33,7 +34,7 @@ buildscript {
 }
 
 plugins {
-  id("com.diffplug.spotless") version "5.17.1"
+  id("com.diffplug.spotless") version "6.0.0" apply false
   id("com.vanniktech.maven.publish") version "0.18.0" apply false
   id("org.jetbrains.dokka") version "1.5.30" apply false
   id("io.gitlab.arturbosch.detekt") version "1.18.1"
@@ -41,36 +42,42 @@ plugins {
   id("com.google.devtools.ksp") version "1.5.31-1.0.0" apply false
 }
 
-spotless {
-  format("misc") {
-    target("*.md", ".gitignore")
-    trimTrailingWhitespace()
-    endWithNewline()
-  }
-  val ktlintVersion = "0.41.0"
-  val ktlintUserData = mapOf("indent_size" to "2", "continuation_indent_size" to "2")
-  kotlin {
-    target("**/*.kt")
-    ktlint(ktlintVersion).userData(ktlintUserData)
-    trimTrailingWhitespace()
-    endWithNewline()
-    licenseHeaderFile("spotless/spotless.kt")
-    targetExclude("**/spotless.kt")
-  }
-  kotlinGradle {
-    ktlint(ktlintVersion).userData(ktlintUserData)
-    trimTrailingWhitespace()
-    endWithNewline()
-    licenseHeaderFile("spotless/spotless.kt", "(import|plugins|buildscript|dependencies|pluginManagement)")
-  }
-}
-
-subprojects {
+allprojects {
   repositories {
     google()
     mavenCentral()
   }
 
+  apply(plugin = "com.diffplug.spotless")
+  configure<SpotlessExtension> {
+    format("misc") {
+      target("*.md", ".gitignore")
+      trimTrailingWhitespace()
+      endWithNewline()
+    }
+    val ktlintVersion = "0.41.0"
+    val ktlintUserData = mapOf("indent_size" to "2", "continuation_indent_size" to "2")
+    kotlin {
+      target("**/*.kt")
+      ktlint(ktlintVersion).userData(ktlintUserData)
+      trimTrailingWhitespace()
+      endWithNewline()
+      licenseHeaderFile(rootProject.file("spotless/spotless.kt"))
+      targetExclude("**/spotless.kt")
+    }
+    kotlinGradle {
+      ktlint(ktlintVersion).userData(ktlintUserData)
+      trimTrailingWhitespace()
+      endWithNewline()
+      licenseHeaderFile(
+        rootProject.file("spotless/spotless.kt"),
+        "(import|plugins|buildscript|dependencies|pluginManagement)"
+      )
+    }
+  }
+}
+
+subprojects {
   pluginManager.withPlugin("java") {
     configure<JavaPluginExtension> {
       toolchain {
