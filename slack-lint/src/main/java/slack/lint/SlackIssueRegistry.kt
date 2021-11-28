@@ -61,5 +61,6 @@ class SlackIssueRegistry : IssueRegistry() {
     *RedactedUsageDetector.ISSUES,
     InjectInJavaDetector.ISSUE,
     RetrofitUsageDetector.ISSUE,
+    RestrictCallsToDetector.ISSUE,
   )
 }
