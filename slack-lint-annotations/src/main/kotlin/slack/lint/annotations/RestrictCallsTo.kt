@@ -17,14 +17,14 @@ package slack.lint.annotations
 
 import java.lang.annotation.Inherited
 import kotlin.annotation.AnnotationRetention.RUNTIME
-import kotlin.annotation.AnnotationTarget.CLASS
+import kotlin.annotation.AnnotationTarget.FUNCTION
 
 /**
  * Annotation representing a function or property that should not be called outside of a given
  * [scope]. Similar to androidx's `RestrictTo` annotation but just for calls.
  */
 @Inherited
-@Target(CLASS)
+@Target(FUNCTION)
 @Retention(RUNTIME)
 annotation class RestrictCallsTo(
   /**
