@@ -10,6 +10,7 @@ import com.android.tools.lint.detector.api.LintFix
 import com.android.tools.lint.detector.api.Location
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
+import com.android.tools.lint.detector.api.UastLintUtils
 import com.android.tools.lint.detector.api.XmlContext
 import com.intellij.psi.JavaElementVisitor
 import com.intellij.psi.PsiMethod
@@ -20,7 +21,10 @@ import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.UMethod
+import org.jetbrains.uast.UReferenceExpression
+import org.jetbrains.uast.UastBinaryOperator
 import org.jetbrains.uast.sourcePsiElement
+import org.jetbrains.uast.tryResolve
 import org.w3c.dom.Element
 import slack.lint.retrofit.RetrofitUsageDetector
 import slack.lint.rx.RxSubscribeOnMainDetector
@@ -28,6 +32,9 @@ import slack.lint.util.removeNode
 import slack.lint.util.sourceImplementation
 import java.util.regex.Pattern
 
+/**
+ * Checks for SpanPointMarkDangerousCheck. See [ISSUE].
+ */
 class SpanPointMarkDangerousCheckDetector : Detector(), SourceCodeScanner {
 
     companion object {
@@ -35,8 +42,8 @@ class SpanPointMarkDangerousCheckDetector : Detector(), SourceCodeScanner {
             id = "SpanPointMarkDangerousCheck",
             briefDescription = "my desc.",
             explanation = """
-        Spans flags can have priority or other bits set. Check using `currentFlag and Spanned.SPAN_POINT_MARK_MASK == desiredFlag` 
-      """,
+                Spans flags can have priority or other bits set. Check using `currentFlag and Spanned.SPAN_POINT_MARK_MASK == desiredFlag` 
+              """.trimIndent(),
             category = Category.CORRECTNESS,
             priority = 4,
             severity = Severity.ERROR,
@@ -44,59 +51,68 @@ class SpanPointMarkDangerousCheckDetector : Detector(), SourceCodeScanner {
         )
 
         val ISSUE = sourceImplementation<SpanPointMarkDangerousCheckDetector>().toIssue()
-
-        private const val MARK_POINT =
-            "(Spanned.)?(INCLUSIVE_INCLUSIVE|INCLUSIVE_EXCLUSIVE|EXCLUSIVE_INCLUSIVE|EXCLUSIVE_EXCLUSIVE)"
-        private const val FLAG_WITHOUT_MASK = "((?!\\b+and\\s+SPAN_POINT_MARK_MASK\\b).)*"
-        private const val EQUALITY_OPERATOR = "((==)|(\\!=))"
-        val regex = Regex(
-            "(^($FLAG_WITHOUT_MASK)\\s*$EQUALITY_OPERATOR\\s*($MARK_POINT)$)|" +
-                    "(^($MARK_POINT)\\s*$EQUALITY_OPERATOR\\s*($FLAG_WITHOUT_MASK)$)"
-        )
     }
 
     override fun getApplicableUastTypes() = listOf(UBinaryExpression::class.java)
 
-    /**
-     *
-     * For next time:
-     *
-     * Figure out how to only match the smallest binary expression that matches for each line:
-     * Currently it matches twice.
-     *
-     * Matches are [0 Spanned.INCLUSIVE_INCLUSIVE != spanned.getSpanFlags(Object()) || Spanned.x(), 1 null, 2 null, 3 null, 4 null, 5 null, 6 null, 7 null, 8 null, 9 null, 10 Spanned.INCLUSIVE_INCLUSIVE != spanned.getSpanFlags(Object()) || Spanned.x(), 11 Spanned.INCLUSIVE_INCLUSIVE, 12 Spanned., 13 INCLUSIVE_INCLUSIVE, 14 !=, 15 null, 16 !=, 17 spanned.getSpanFlags(Object()) || Spanned.x(), 18 )]
-        Matches are [0 Spanned.INCLUSIVE_INCLUSIVE != spanned.getSpanFlags(Object()), 1 null, 2 null, 3 null, 4 null, 5 null, 6 null, 7 null, 8 null, 9 null, 10 Spanned.INCLUSIVE_INCLUSIVE != spanned.getSpanFlags(Object()), 11 Spanned.INCLUSIVE_INCLUSIVE, 12 Spanned., 13 INCLUSIVE_INCLUSIVE, 14 !=, 15 null, 16 !=, 17 spanned.getSpanFlags(Object()), 18 )]
-
-     */
-
     override fun createUastHandler(context: JavaContext): UElementHandler {
-        System.out.println("regex" + regex.toString())
-        return object : UElementHandler() {
-            override fun visitBinaryExpression(node: UBinaryExpression) {
-                val text = node.sourcePsi?.text ?: return
-                val match = regex.find(text) ?: return
-                System.out.println("Matches are " + match.groups.mapIndexed { i, group -> "$i ${group?.value}" })
-                val markPoint = (match.groups[7] ?: match.groups[11])!!.value
-                val flagWithoutMask = (match.groups[2] ?: match.groups[10])!!.value
+        return ReportingHandler(context)
+    }
 
-                /*
-                Matches are [0 spanned.getSpanFlags(Object()) != Spanned.INCLUSIVE_INCLUSIVE, 1 spanned.getSpanFlags(Object()) != Spanned.INCLUSIVE_INCLUSIVE, 2 spanned.getSpanFlags(Object()) , 3  , 4 !=, 5 null, 6 !=, 7 Spanned.INCLUSIVE_INCLUSIVE, 8 Spanned., 9 INCLUSIVE_INCLUSIVE, 10 null, 11 null, 12 null, 13 null, 14 null, 15 null, 16 null, 17 null, 18 null]
-                 */
-                val equality = (match.groups[5] ?: match.groups[6] ?: match.groups[15] ?: match.groups[16])!!.value
+    /**
+     * Reports violations of SpanPointMarkDangerousCheck.
+     */
+    private class ReportingHandler(private val context: JavaContext) : UElementHandler() {
+        companion object{
+            private const val SPANNED_CLASS = "android.text.Spanned"
+            private val markPointFields = setOf(
+                "$SPANNED_CLASS.INCLUSIVE_INCLUSIVE",
+                "$SPANNED_CLASS.INCLUSIVE_EXCLUSIVE",
+                "$SPANNED_CLASS.EXCLUSIVE_INCLUSIVE",
+                "$SPANNED_CLASS.EXCLUSIVE_EXCLUSIVE",
+            )
+            private const val MASK_CLASS = "$SPANNED_CLASS.SPAN_POINT_MARK_MASK"
+        }
+        override fun visitBinaryExpression(node: UBinaryExpression) {
+            if (node.operator is UastBinaryOperator.ComparisonOperator) {
+                checkExpressions(node, node.leftOperand, node.rightOperand)
+                checkExpressions(node, node.rightOperand, node.leftOperand)
+            }
+        }
+
+        fun checkExpressions(node: UBinaryExpression, markPointCheck: UExpression, maskCheck: UExpression) {
+            if (matchesMarkPoint(markPointCheck) && !matchesMask(maskCheck)) {
                 context.report(
                     ISSUE,
                     context.getLocation(node),
-                    "Do not check against $markPoint directly. " +
+                    "Do not check against ${markPointCheck.sourcePsi?.text} directly. " +
                             "Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags.",
                     LintFix.create()
                         .replace()
                         .name("Use bitwise mask")
-                        .text(match.groups[0]!!.value)
-                        .with("($flagWithoutMask) and Spanned.SPAN_POINT_MARK_MASK $equality $markPoint")
+                        .text(maskCheck.sourcePsi?.text)
+                        .with("((${maskCheck.sourcePsi?.text}) and $MASK_CLASS)")
                         .build()
                 )
             }
         }
-    }
 
+        fun matchesMarkPoint(expression: UExpression): Boolean {
+            return markPointFields.contains(getQualifiedName(expression))
+        }
+
+        fun matchesMask(expression: UExpression): Boolean {
+            return if (expression is UBinaryExpression) {
+                getQualifiedName(expression.leftOperand) == MASK_CLASS || getQualifiedName(expression.rightOperand) == MASK_CLASS
+            } else {
+                false
+            }
+        }
+
+        fun getQualifiedName(expression: UExpression): String? {
+            return (expression as? UReferenceExpression)?.referenceNameElement?.uastParent?.tryResolve()?.let {
+                UastLintUtils.getQualifiedName(it)
+            }
+        }
+    }
 }
