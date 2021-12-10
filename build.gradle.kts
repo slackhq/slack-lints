@@ -34,7 +34,7 @@ buildscript {
 }
 
 plugins {
-  id("com.diffplug.spotless") version "6.0.0" apply false
+  id("com.diffplug.spotless") version "6.0.4" apply false
   id("com.vanniktech.maven.publish") version "0.18.0" apply false
   id("org.jetbrains.dokka") version "1.5.30" apply false
   id("io.gitlab.arturbosch.detekt") version "1.18.1"
