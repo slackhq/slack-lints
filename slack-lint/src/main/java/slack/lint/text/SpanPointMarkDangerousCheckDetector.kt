@@ -58,9 +58,7 @@ class SpanPointMarkDangerousCheckDetector : Detector(), SourceCodeScanner {
 
   override fun getApplicableUastTypes() = listOf(UBinaryExpression::class.java)
 
-  override fun createUastHandler(context: JavaContext): UElementHandler {
-    return ReportingHandler(context)
-  }
+  override fun createUastHandler(context: JavaContext) = ReportingHandler(context)
 
   /**
    * Reports violations of SpanPointMarkDangerousCheck.
