@@ -60,62 +60,71 @@ class SpanPointMarkDangerousCheckDetector : Detector(), SourceCodeScanner {
   override fun createUastHandler(context: JavaContext): UElementHandler {
     return ReportingHandler(context)
   }
+}
 
-  /**
-   * Reports violations of SpanPointMarkDangerousCheck.
-   */
-  private class ReportingHandler(private val context: JavaContext) : UElementHandler() {
-    companion object {
-      private const val SPANNED_CLASS = "android.text.Spanned"
-      private val markPointFields = setOf(
-        "$SPANNED_CLASS.SPAN_INCLUSIVE_INCLUSIVE",
-        "$SPANNED_CLASS.SPAN_INCLUSIVE_EXCLUSIVE",
-        "$SPANNED_CLASS.SPAN_EXCLUSIVE_INCLUSIVE",
-        "$SPANNED_CLASS.SPAN_EXCLUSIVE_EXCLUSIVE",
+/**
+ * Reports violations of SpanPointMarkDangerousCheck.
+ */
+private class ReportingHandler(private val context: JavaContext) : UElementHandler() {
+  companion object {
+    private const val SPANNED_CLASS = "android.text.Spanned"
+    private val MARK_POINT_FIELDS = setOf(
+      "$SPANNED_CLASS.SPAN_INCLUSIVE_INCLUSIVE",
+      "$SPANNED_CLASS.SPAN_INCLUSIVE_EXCLUSIVE",
+      "$SPANNED_CLASS.SPAN_EXCLUSIVE_INCLUSIVE",
+      "$SPANNED_CLASS.SPAN_EXCLUSIVE_EXCLUSIVE",
+    )
+    private const val MASK_CLASS = "$SPANNED_CLASS.SPAN_POINT_MARK_MASK"
+  }
+
+  override fun visitBinaryExpression(node: UBinaryExpression) {
+    if (node.operator == UastBinaryOperator.EQUALS ||
+      node.operator == UastBinaryOperator.NOT_EQUALS ||
+      node.operator == UastBinaryOperator.IDENTITY_EQUALS ||
+      node.operator == UastBinaryOperator.IDENTITY_NOT_EQUALS
+    ) {
+      checkExpressions(node, node.leftOperand, node.rightOperand)
+      checkExpressions(node, node.rightOperand, node.leftOperand)
+    }
+  }
+
+  private fun checkExpressions(node: UBinaryExpression, markPointCheck: UExpression, maskCheck: UExpression) {
+    if (matchesMarkPoint(markPointCheck) && !matchesMask(maskCheck)) {
+      context.report(
+        ISSUE,
+        context.getLocation(node),
+        """
+          Do not check against ${markPointCheck.sourcePsi?.text} directly. \
+          Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags.
+        """.trimIndent(),
+        LintFix.create()
+          .replace()
+          .name("Use bitwise mask")
+          .text(maskCheck.sourcePsi?.text)
+          .with("((${maskCheck.sourcePsi?.text}) and $MASK_CLASS)")
+          .build()
       )
-      private const val MASK_CLASS = "$SPANNED_CLASS.SPAN_POINT_MARK_MASK"
     }
+  }
 
-    override fun visitBinaryExpression(node: UBinaryExpression) {
-      if (node.operator is UastBinaryOperator.ComparisonOperator) {
-        checkExpressions(node, node.leftOperand, node.rightOperand)
-        checkExpressions(node, node.rightOperand, node.leftOperand)
-      }
-    }
+  private fun matchesMarkPoint(expression: UExpression): Boolean {
+    return getQualifiedName(expression) in MARK_POINT_FIELDS
+  }
 
-    fun checkExpressions(node: UBinaryExpression, markPointCheck: UExpression, maskCheck: UExpression) {
-      if (matchesMarkPoint(markPointCheck) && !matchesMask(maskCheck)) {
-        context.report(
-          ISSUE,
-          context.getLocation(node),
-          "Do not check against ${markPointCheck.sourcePsi?.text} directly. " +
-            "Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags.",
-          LintFix.create()
-            .replace()
-            .name("Use bitwise mask")
-            .text(maskCheck.sourcePsi?.text)
-            .with("((${maskCheck.sourcePsi?.text}) and $MASK_CLASS)")
-            .build()
-        )
-      }
+  private fun matchesMask(expression: UExpression): Boolean {
+    return if (expression is UBinaryExpression) {
+      expression.leftOperand.resolveQualifiedNameOrNull() == MASK_CLASS ||
+        expression.rightOperand.resolveQualifiedNameOrNull() == MASK_CLASS
+    } else {
+      false
     }
+  }
 
-    fun matchesMarkPoint(expression: UExpression): Boolean {
-      return markPointFields.contains(getQualifiedName(expression))
-    }
-
-    fun matchesMask(expression: UExpression): Boolean {
-      return if (expression is UBinaryExpression) {
-        getQualifiedName(expression.leftOperand) == MASK_CLASS || getQualifiedName(expression.rightOperand) == MASK_CLASS
-      } else {
-        false
-      }
-    }
-
-    fun getQualifiedName(expression: UExpression): String? {
-      return (expression as? UReferenceExpression)?.referenceNameElement?.uastParent?.tryResolve()?.let {
-        UastLintUtils.getQualifiedName(it)
-      }
-    }
+  private fun getQualifiedName(expression: UExpression): String? {
+    return (expression as? UReferenceExpression)
+      ?.referenceNameElement
+      ?.uastParent
+      ?.tryResolve()
+      ?.let(UastLintUtils::getQualifiedName)
   }
 }
