@@ -47,7 +47,7 @@ class SpanPointMarkDangerousCheckDetector : Detector(), SourceCodeScanner {
         Ensure that Span flags are checked using \
         `currentFlag and Spanned.SPAN_POINT_MARK_MASK == desiredFlag` \
         rather than just `currentFlag == desiredFlag`
-      """.trimIndent(),
+      """,
       category = Category.CORRECTNESS,
       priority = 4,
       severity = Severity.ERROR,
