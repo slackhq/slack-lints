@@ -18,7 +18,6 @@ package slack.lint.text
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Detector
-import com.android.tools.lint.detector.api.Implementation
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.LintFix
@@ -31,6 +30,7 @@ import org.jetbrains.uast.UReferenceExpression
 import org.jetbrains.uast.UastBinaryOperator
 import org.jetbrains.uast.tryResolve
 import slack.lint.text.SpanPointMarkDangerousCheckDetector.Companion.ISSUE
+import slack.lint.util.resolveQualifiedNameOrNull
 import slack.lint.util.sourceImplementation
 
 /**
@@ -39,21 +39,20 @@ import slack.lint.util.sourceImplementation
 class SpanPointMarkDangerousCheckDetector : Detector(), SourceCodeScanner {
 
   companion object {
-    private fun Implementation.toIssue() = Issue.create(
+    val ISSUE = Issue.create(
       id = "SpanPointMarkDangerousCheck",
       briefDescription = "Check Span Flags Using Bitmask",
-      explanation =
-      "Spans flags can have priority or other bits set. " +
-        "Ensure that Span flags are checked using " +
-        "`currentFlag and Spanned.SPAN_POINT_MARK_MASK == desiredFlag` " +
-        "rather than just `currentFlag == desiredFlag`",
+      explanation = """
+        Spans flags can have priority or other bits set. \
+        Ensure that Span flags are checked using \
+        `currentFlag and Spanned.SPAN_POINT_MARK_MASK == desiredFlag` \
+        rather than just `currentFlag == desiredFlag`
+      """.trimIndent(),
       category = Category.CORRECTNESS,
       priority = 4,
       severity = Severity.ERROR,
-      implementation = this
+      implementation = sourceImplementation<SpanPointMarkDangerousCheckDetector>()
     )
-
-    val ISSUE = sourceImplementation<SpanPointMarkDangerousCheckDetector>().toIssue()
   }
 
   override fun getApplicableUastTypes() = listOf(UBinaryExpression::class.java)
