@@ -15,7 +15,6 @@
  */
 package slack.lint.text
 
-import org.intellij.lang.annotations.Language
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
@@ -42,11 +41,10 @@ class SpanPointMarkDangerousCheckDetectorTest : BaseSlackLintTest() {
   ).indented()
 
   @Test
-  fun `visitBinaryExpression - given conforming expression - has clean report`() {
-    @Language("kotlin")
+  fun `conforming expression - has clean report`() {
     val testFile = kotlin(
       """
-                package slack.text
+              package slack.text
 
               import android.text.Spanned
 
@@ -65,30 +63,29 @@ class SpanPointMarkDangerousCheckDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
-  fun `visitBinaryExpression - given violating expression with INCLUSIVE_INCLUSIVE on left - creates error and fix`() {
+  fun `violating expression with INCLUSIVE_INCLUSIVE on left - creates error and fix`() {
     testViolatingExpressionLeft("Spanned.SPAN_INCLUSIVE_INCLUSIVE")
   }
 
   @Test
-  fun `visitBinaryExpression - given violating expression with INCLUSIVE_EXCLUSIVE on left - creates error and fix`() {
+  fun `violating expression with INCLUSIVE_EXCLUSIVE on left - creates error and fix`() {
     testViolatingExpressionLeft("Spanned.SPAN_INCLUSIVE_EXCLUSIVE")
   }
 
   @Test
-  fun `visitBinaryExpression - given violating expression with EXCLUSIVE_INCLUSIVE on left - creates error and fix`() {
+  fun `violating expression with EXCLUSIVE_INCLUSIVE on left - creates error and fix`() {
     testViolatingExpressionLeft("Spanned.SPAN_EXCLUSIVE_INCLUSIVE")
   }
 
   @Test
-  fun `visitBinaryExpression - given violating expression with EXCLUSIVE_EXCLUSIVE on left - creates error and fix`() {
+  fun `violating expression with EXCLUSIVE_EXCLUSIVE on left - creates error and fix`() {
     testViolatingExpressionLeft("Spanned.SPAN_EXCLUSIVE_EXCLUSIVE")
   }
 
   private fun testViolatingExpressionLeft(markPoint: String) {
-    @Language("kotlin")
     val testFile = kotlin(
       """
-                package slack.text
+              package slack.text
 
               import android.text.Spanned
 
@@ -122,30 +119,29 @@ class SpanPointMarkDangerousCheckDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
-  fun `visitBinaryExpression - given violating expression with INCLUSIVE_INCLUSIVE on right - creates error and fix`() {
+  fun `violating expression with INCLUSIVE_INCLUSIVE on right - creates error and fix`() {
     testViolatingExpressionRight("SPAN_INCLUSIVE_INCLUSIVE")
   }
 
   @Test
-  fun `visitBinaryExpression - given violating expression with INCLUSIVE_EXCLUSIVE on right - creates error and fix`() {
+  fun `violating expression with INCLUSIVE_EXCLUSIVE on right - creates error and fix`() {
     testViolatingExpressionRight("SPAN_INCLUSIVE_EXCLUSIVE")
   }
 
   @Test
-  fun `visitBinaryExpression - given violating expression with EXCLUSIVE_INCLUSIVE on right - creates error and fix`() {
+  fun `violating expression with EXCLUSIVE_INCLUSIVE on right - creates error and fix`() {
     testViolatingExpressionRight("SPAN_EXCLUSIVE_INCLUSIVE")
   }
 
   @Test
-  fun `visitBinaryExpression - given violating expression with EXCLUSIVE_EXCLUSIVE on right - creates error and fix`() {
+  fun `violating expression with EXCLUSIVE_EXCLUSIVE on right - creates error and fix`() {
     testViolatingExpressionRight("SPAN_EXCLUSIVE_EXCLUSIVE")
   }
 
   private fun testViolatingExpressionRight(markPoint: String) {
-    @Language("kotlin")
     val testFile = kotlin(
       """
-                package slack.text
+              package slack.text
 
               import android.text.Spanned.$markPoint
 
@@ -174,6 +170,150 @@ class SpanPointMarkDangerousCheckDetectorTest : BaseSlackLintTest() {
           @@ -7 +7
           -       return $markPoint == spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
           +       return $markPoint == ((spanned.getSpanFlags(Object())) and android.text.Spanned.SPAN_POINT_MARK_MASK) || isBoolean1() && isBoolean2()
+        """.trimIndent()
+      )
+  }
+
+  @Test
+  fun `violating expression with fully qualified - creates error and fix`() {
+    val markPoint = "android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE"
+    val testFile = kotlin(
+      """
+              package slack.text
+
+              class MyClass {
+                  fun doCheckIncorrectly(spanned: Spanned): Boolean {
+                    return $markPoint == spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
+                  }
+              }
+            """
+    ).indented()
+    lint()
+      .files(androidTextStubs, testFile)
+      .issues(SpanPointMarkDangerousCheckDetector.ISSUE)
+      .run()
+      .expect(
+        """
+          src/slack/text/MyClass.kt:5: Error: Do not check against android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanPointMarkDangerousCheck]
+                return $markPoint == spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          1 errors, 0 warnings
+        """.trimIndent()
+      )
+      .expectFixDiffs(
+        """
+          Fix for src/slack/text/MyClass.kt line 5: Use bitwise mask:
+          @@ -5 +5
+          -       return $markPoint == spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
+          +       return $markPoint == ((spanned.getSpanFlags(Object())) and android.text.Spanned.SPAN_POINT_MARK_MASK) || isBoolean1() && isBoolean2()
+        """.trimIndent()
+      )
+  }
+
+  @Test
+  fun `violating expression with not equal - creates error and fix`() {
+    val markPoint = "android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE"
+    val testFile = kotlin(
+      """
+              package slack.text
+
+              class MyClass {
+                  fun doCheckIncorrectly(spanned: Spanned): Boolean {
+                    return $markPoint != spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
+                  }
+              }
+            """
+    ).indented()
+    lint()
+      .files(androidTextStubs, testFile)
+      .issues(SpanPointMarkDangerousCheckDetector.ISSUE)
+      .run()
+      .expect(
+        """
+          src/slack/text/MyClass.kt:5: Error: Do not check against android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanPointMarkDangerousCheck]
+                return $markPoint != spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          1 errors, 0 warnings
+        """.trimIndent()
+      )
+      .expectFixDiffs(
+        """
+          Fix for src/slack/text/MyClass.kt line 5: Use bitwise mask:
+          @@ -5 +5
+          -       return $markPoint != spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
+          +       return $markPoint != ((spanned.getSpanFlags(Object())) and android.text.Spanned.SPAN_POINT_MARK_MASK) || isBoolean1() && isBoolean2()
+        """.trimIndent()
+      )
+  }
+
+  @Test
+  fun `violating expression with identity equality- creates error and fix`() {
+    val markPoint = "android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE"
+    val testFile = kotlin(
+      """
+              package slack.text
+
+              class MyClass {
+                  fun doCheckIncorrectly(spanned: Spanned): Boolean {
+                    return $markPoint === spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
+                  }
+              }
+            """
+    ).indented()
+    lint()
+      .files(androidTextStubs, testFile)
+      .issues(SpanPointMarkDangerousCheckDetector.ISSUE)
+      .run()
+      .expect(
+        """
+          src/slack/text/MyClass.kt:5: Error: Do not check against android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanPointMarkDangerousCheck]
+                return $markPoint === spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          1 errors, 0 warnings
+        """.trimIndent()
+      )
+      .expectFixDiffs(
+        """
+          Fix for src/slack/text/MyClass.kt line 5: Use bitwise mask:
+          @@ -5 +5
+          -       return $markPoint === spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
+          +       return $markPoint === ((spanned.getSpanFlags(Object())) and android.text.Spanned.SPAN_POINT_MARK_MASK) || isBoolean1() && isBoolean2()
+        """.trimIndent()
+      )
+  }
+
+  @Test
+  fun `violating expression with not identity equality - creates error and fix`() {
+    val markPoint = "android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE"
+    val testFile = kotlin(
+      """
+              package slack.text
+
+              class MyClass {
+                  fun doCheckIncorrectly(spanned: Spanned): Boolean {
+                    return $markPoint !== spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
+                  }
+              }
+            """
+    ).indented()
+    lint()
+      .files(androidTextStubs, testFile)
+      .issues(SpanPointMarkDangerousCheckDetector.ISSUE)
+      .run()
+      .expect(
+        """
+          src/slack/text/MyClass.kt:5: Error: Do not check against android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanPointMarkDangerousCheck]
+                return $markPoint !== spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          1 errors, 0 warnings
+        """.trimIndent()
+      )
+      .expectFixDiffs(
+        """
+          Fix for src/slack/text/MyClass.kt line 5: Use bitwise mask:
+          @@ -5 +5
+          -       return $markPoint !== spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
+          +       return $markPoint !== ((spanned.getSpanFlags(Object())) and android.text.Spanned.SPAN_POINT_MARK_MASK) || isBoolean1() && isBoolean2()
         """.trimIndent()
       )
   }
