@@ -129,7 +129,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/test/TestClass.java:8: Warning: This class or method is deprecated; consider using an alternative. [DeprecatedCall]
+          src/slack/test/TestClass.java:8: Warning: slack.test.ThisIsNotDeprecated.thisIsDeprecated is deprecated; consider using an alternative. [DeprecatedCall]
               new ThisIsNotDeprecated().thisIsDeprecated();
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           0 errors, 1 warnings
@@ -161,7 +161,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/test/TestClass.kt:8: Warning: This class or method is deprecated; consider using an alternative. [DeprecatedCall]
+          src/slack/test/TestClass.kt:8: Warning: slack.test.ThisIsNotDeprecated.thisIsDeprecated is deprecated; consider using an alternative. [DeprecatedCall]
               ThisIsNotDeprecated().thisIsDeprecated()
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           0 errors, 1 warnings
@@ -193,7 +193,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/test/TestClass.kt:8: Warning: This class or method is deprecated; consider using an alternative. [DeprecatedCall]
+          src/slack/test/TestClass.kt:8: Warning: slack.test.ThisIsDeprecated.ThisIsDeprecated is deprecated; consider using an alternative. [DeprecatedCall]
               ThisIsDeprecated()
               ~~~~~~~~~~~~~~~~~~
           0 errors, 1 warnings
@@ -225,7 +225,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/test/TestClass.kt:8: Warning: This class or method is deprecated; consider using an alternative. [DeprecatedCall]
+          src/slack/test/TestClass.kt:8: Warning: slack.test.ThisIsNotDeprecated.thisIsDeprecated is deprecated; consider using an alternative. [DeprecatedCall]
               ThisIsNotDeprecated().thisIsDeprecated()
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           0 errors, 1 warnings
@@ -237,6 +237,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
     """
         package slack.test;
 
+        import java.lang.Deprecated;
+
         @Deprecated()
         class ThisIsDeprecated {
 
@@ -247,8 +249,6 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
   private val NON_DEPRECATED_CLASS = java(
     """
         package slack.test;
-
-        import java.lang.Deprecated;
 
         class ThisIsNotDeprecated {
 
