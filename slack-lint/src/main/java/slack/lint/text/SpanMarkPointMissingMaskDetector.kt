@@ -85,7 +85,7 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
   }
 
   private fun checkExpressions(node: UBinaryExpression, markPointCheck: UExpression, maskCheck: UExpression) {
-    if (markPointCheck.isMarkPointFieldName() && !maskCheck.matchesMask()) {
+    if (markPointCheck.isMarkPointFieldName() && !maskCheck.isMaskClass()) {
       context.report(
         ISSUE,
         context.getLocation(node),
@@ -114,7 +114,7 @@ private fun UExpression.getQualifiedName(): String? {
     ?.let(UastLintUtils::getQualifiedName)
 }
 
-private fun UExpression.matchesMask(): Boolean {
+private fun UExpression.isMaskClass(): Boolean {
   return if (this is UBinaryExpression) {
     this.leftOperand.resolveQualifiedNameOrNull() == MASK_CLASS ||
       this.rightOperand.resolveQualifiedNameOrNull() == MASK_CLASS
