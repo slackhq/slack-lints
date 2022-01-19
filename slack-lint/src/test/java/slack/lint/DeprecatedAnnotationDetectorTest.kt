@@ -237,8 +237,6 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
     """
         package slack.test;
 
-        import java.lang.Deprecated;
-
         @Deprecated()
         class ThisIsDeprecated {
 
@@ -249,6 +247,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
   private val NON_DEPRECATED_CLASS = java(
     """
         package slack.test;
+        
+        import java.lang.Deprecated;
 
         class ThisIsNotDeprecated {
 
