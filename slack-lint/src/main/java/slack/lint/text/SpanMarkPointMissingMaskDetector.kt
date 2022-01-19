@@ -105,9 +105,7 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
     }
   }
 
-  private fun matchesMarkPoint(expression: UExpression): Boolean {
-    return getQualifiedName(expression) in MARK_POINT_FIELDS
-  }
+  private fun matchesMarkPoint(expression: UExpression): Boolean = getQualifiedName(expression) in MARK_POINT_FIELDS
 
   private fun matchesMask(expression: UExpression): Boolean {
     return if (expression is UBinaryExpression) {
