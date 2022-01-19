@@ -29,18 +29,18 @@ import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.UReferenceExpression
 import org.jetbrains.uast.UastBinaryOperator
 import org.jetbrains.uast.tryResolve
-import slack.lint.text.SpanPointMarkDangerousCheckDetector.Companion.ISSUE
+import slack.lint.text.SpanMarkPointMissingMaskDetector.Companion.ISSUE
 import slack.lint.util.resolveQualifiedNameOrNull
 import slack.lint.util.sourceImplementation
 
 /**
- * Checks for SpanPointMarkDangerousCheck. See [ISSUE].
+ * Checks for SpanMarkPointMissingMask. See [ISSUE].
  */
-class SpanPointMarkDangerousCheckDetector : Detector(), SourceCodeScanner {
+class SpanMarkPointMissingMaskDetector : Detector(), SourceCodeScanner {
 
   companion object {
     val ISSUE = Issue.create(
-      id = "SpanPointMarkDangerousCheck",
+      id = "SpanMarkPointMissingMask",
       briefDescription = "Check Span Flags Using Bitmask",
       explanation = """
         Spans flags can have priority or other bits set. \
@@ -51,7 +51,7 @@ class SpanPointMarkDangerousCheckDetector : Detector(), SourceCodeScanner {
       category = Category.CORRECTNESS,
       priority = 4,
       severity = Severity.ERROR,
-      implementation = sourceImplementation<SpanPointMarkDangerousCheckDetector>()
+      implementation = sourceImplementation<SpanMarkPointMissingMaskDetector>()
     )
   }
 
@@ -63,7 +63,7 @@ class SpanPointMarkDangerousCheckDetector : Detector(), SourceCodeScanner {
 }
 
 /**
- * Reports violations of SpanPointMarkDangerousCheck.
+ * Reports violations of SpanMarkPointMissingMask.
  */
 private class ReportingHandler(private val context: JavaContext) : UElementHandler() {
   companion object {

@@ -19,12 +19,12 @@ import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
 /**
- * Tests [SpanPointMarkDangerousCheckDetector].
+ * Tests [SpanMarkPointMissingMaskDetector].
  */
-class SpanPointMarkDangerousCheckDetectorTest : BaseSlackLintTest() {
+class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
 
-  override fun getDetector() = SpanPointMarkDangerousCheckDetector()
-  override fun getIssues() = listOf(SpanPointMarkDangerousCheckDetector.ISSUE)
+  override fun getDetector() = SpanMarkPointMissingMaskDetector()
+  override fun getIssues() = listOf(SpanMarkPointMissingMaskDetector.ISSUE)
 
   private val androidTextStubs = kotlin(
     """
@@ -57,7 +57,7 @@ class SpanPointMarkDangerousCheckDetectorTest : BaseSlackLintTest() {
     ).indented()
     lint()
       .files(androidTextStubs, testFile)
-      .issues(SpanPointMarkDangerousCheckDetector.ISSUE)
+      .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expectClean()
   }
@@ -98,11 +98,11 @@ class SpanPointMarkDangerousCheckDetectorTest : BaseSlackLintTest() {
     ).indented()
     lint()
       .files(androidTextStubs, testFile)
-      .issues(SpanPointMarkDangerousCheckDetector.ISSUE)
+      .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expect(
         """
-          src/slack/text/MyClass.kt:7: Error: Do not check against $markPoint directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanPointMarkDangerousCheck]
+          src/slack/text/MyClass.kt:7: Error: Do not check against $markPoint directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanMarkPointMissingMask]
                 return spanned.getSpanFlags(Object()) == $markPoint || Spanned.x()
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
@@ -154,11 +154,11 @@ class SpanPointMarkDangerousCheckDetectorTest : BaseSlackLintTest() {
     ).indented()
     lint()
       .files(androidTextStubs, testFile)
-      .issues(SpanPointMarkDangerousCheckDetector.ISSUE)
+      .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expect(
         """
-          src/slack/text/MyClass.kt:7: Error: Do not check against $markPoint directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanPointMarkDangerousCheck]
+          src/slack/text/MyClass.kt:7: Error: Do not check against $markPoint directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanMarkPointMissingMask]
                 return $markPoint == spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
@@ -190,11 +190,11 @@ class SpanPointMarkDangerousCheckDetectorTest : BaseSlackLintTest() {
     ).indented()
     lint()
       .files(androidTextStubs, testFile)
-      .issues(SpanPointMarkDangerousCheckDetector.ISSUE)
+      .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expect(
         """
-          src/slack/text/MyClass.kt:5: Error: Do not check against android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanPointMarkDangerousCheck]
+          src/slack/text/MyClass.kt:5: Error: Do not check against android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanMarkPointMissingMask]
                 return $markPoint == spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
@@ -226,11 +226,11 @@ class SpanPointMarkDangerousCheckDetectorTest : BaseSlackLintTest() {
     ).indented()
     lint()
       .files(androidTextStubs, testFile)
-      .issues(SpanPointMarkDangerousCheckDetector.ISSUE)
+      .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expect(
         """
-          src/slack/text/MyClass.kt:5: Error: Do not check against android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanPointMarkDangerousCheck]
+          src/slack/text/MyClass.kt:5: Error: Do not check against android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanMarkPointMissingMask]
                 return $markPoint != spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
@@ -262,11 +262,11 @@ class SpanPointMarkDangerousCheckDetectorTest : BaseSlackLintTest() {
     ).indented()
     lint()
       .files(androidTextStubs, testFile)
-      .issues(SpanPointMarkDangerousCheckDetector.ISSUE)
+      .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expect(
         """
-          src/slack/text/MyClass.kt:5: Error: Do not check against android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanPointMarkDangerousCheck]
+          src/slack/text/MyClass.kt:5: Error: Do not check against android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanMarkPointMissingMask]
                 return $markPoint === spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
@@ -298,11 +298,11 @@ class SpanPointMarkDangerousCheckDetectorTest : BaseSlackLintTest() {
     ).indented()
     lint()
       .files(androidTextStubs, testFile)
-      .issues(SpanPointMarkDangerousCheckDetector.ISSUE)
+      .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expect(
         """
-          src/slack/text/MyClass.kt:5: Error: Do not check against android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanPointMarkDangerousCheck]
+          src/slack/text/MyClass.kt:5: Error: Do not check against android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE directly. Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags. [SpanMarkPointMissingMask]
                 return $markPoint !== spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
