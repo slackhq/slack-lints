@@ -55,9 +55,7 @@ class SpanMarkPointMissingMaskDetector : Detector(), SourceCodeScanner {
 
   override fun getApplicableUastTypes() = listOf(UBinaryExpression::class.java)
 
-  override fun createUastHandler(context: JavaContext): UElementHandler {
-    return ReportingHandler(context)
-  }
+  override fun createUastHandler(context: JavaContext): UElementHandler = ReportingHandler(context)
 }
 
 private const val SPANNED_CLASS = "android.text.Spanned"
