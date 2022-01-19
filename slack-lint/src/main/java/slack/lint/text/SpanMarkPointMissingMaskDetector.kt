@@ -105,7 +105,7 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
     }
   }
 
-  private fun matchesMarkPoint(expression: UExpression): Boolean = getQualifiedName(expression) in MARK_POINT_FIELDS
+  private fun matchesMarkPoint(expression: UExpression): Boolean = expression.getQualifiedName() in MARK_POINT_FIELDS
 
   private fun matchesMask(expression: UExpression): Boolean {
     return if (expression is UBinaryExpression) {
@@ -115,12 +115,12 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
       false
     }
   }
+}
 
-  private fun getQualifiedName(expression: UExpression): String? {
-    return (expression as? UReferenceExpression)
-      ?.referenceNameElement
-      ?.uastParent
-      ?.tryResolve()
-      ?.let(UastLintUtils::getQualifiedName)
-  }
+private fun UExpression.getQualifiedName(): String? {
+  return (this as? UReferenceExpression)
+    ?.referenceNameElement
+    ?.uastParent
+    ?.tryResolve()
+    ?.let(UastLintUtils::getQualifiedName)
 }
