@@ -39,7 +39,7 @@ class SpanMarkPointMissingMaskDetector : Detector(), SourceCodeScanner {
   companion object {
     val ISSUE = Issue.create(
       id = "SpanMarkPointMissingMask",
-      briefDescription = "Check Span Flags Using Bitmask",
+      briefDescription = "Check that Span flags use the bitwise mask SPAN_POINT_MARK_MASK when being compared to.",
       explanation = """
         Spans flags can have priority or other bits set. \
         Ensure that Span flags are checked using \
