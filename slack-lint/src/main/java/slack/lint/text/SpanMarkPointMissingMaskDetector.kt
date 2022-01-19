@@ -85,7 +85,7 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
   }
 
   private fun checkExpressions(node: UBinaryExpression, markPointCheck: UExpression, maskCheck: UExpression) {
-    if (markPointCheck.isMarkPointFieldName() && !matchesMask(maskCheck)) {
+    if (markPointCheck.isMarkPointFieldName() && !maskCheck.matchesMask()) {
       context.report(
         ISSUE,
         context.getLocation(node),
@@ -102,15 +102,6 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
       )
     }
   }
-
-  private fun matchesMask(expression: UExpression): Boolean {
-    return if (expression is UBinaryExpression) {
-      expression.leftOperand.resolveQualifiedNameOrNull() == MASK_CLASS ||
-        expression.rightOperand.resolveQualifiedNameOrNull() == MASK_CLASS
-    } else {
-      false
-    }
-  }
 }
 
 private fun UExpression.isMarkPointFieldName(): Boolean = this.getQualifiedName() in MARK_POINT_FIELDS
@@ -121,4 +112,13 @@ private fun UExpression.getQualifiedName(): String? {
     ?.uastParent
     ?.tryResolve()
     ?.let(UastLintUtils::getQualifiedName)
+}
+
+private fun UExpression.matchesMask(): Boolean {
+  return if (this is UBinaryExpression) {
+    this.leftOperand.resolveQualifiedNameOrNull() == MASK_CLASS ||
+      this.rightOperand.resolveQualifiedNameOrNull() == MASK_CLASS
+  } else {
+    false
+  }
 }
