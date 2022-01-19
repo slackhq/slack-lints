@@ -31,6 +31,7 @@ import com.android.tools.lint.detector.api.LintFix
 import com.android.tools.lint.detector.api.ResourceXmlDetector
 import com.android.tools.lint.detector.api.Scope
 import com.android.tools.lint.detector.api.SourceCodeScanner
+import com.android.tools.lint.detector.api.UastLintUtils
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.asJava.classes.KtLightClassForFacade
@@ -39,8 +40,10 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.UQualifiedReferenceExpression
+import org.jetbrains.uast.UReferenceExpression
 import org.jetbrains.uast.USimpleNameReferenceExpression
 import org.jetbrains.uast.kotlin.KotlinUClass
+import org.jetbrains.uast.tryResolve
 import java.util.EnumSet
 
 /**
@@ -281,5 +284,23 @@ internal fun UExpression.unwrapSimpleNameReferenceExpression(): USimpleNameRefer
     is USimpleNameReferenceExpression -> this
     is UQualifiedReferenceExpression -> this.selector.unwrapSimpleNameReferenceExpression()
     else -> error("Unrecognized reference expression type $this")
+  }
+}
+
+/**
+ * Returns the fully qualified name of the expression, or null if unknown.
+ *
+ * For example, given:
+ * ```
+ * import org.x.Clazz.CONSTANT
+ * ...
+ *     if (aVar == CONSTANT)
+ *                 ^^^^^^^^
+ * ```
+ * The qualified name of the underlined expression will be "org.x.Clazz.CONSTANT".
+ */
+internal fun UExpression.resolveQualifiedNameOrNull(): String? {
+  return (this as? UReferenceExpression)?.referenceNameElement?.uastParent?.tryResolve()?.let {
+    UastLintUtils.getQualifiedName(it)
   }
 }
