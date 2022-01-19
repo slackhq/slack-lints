@@ -33,9 +33,7 @@ import slack.lint.text.SpanMarkPointMissingMaskDetector.Companion.ISSUE
 import slack.lint.util.resolveQualifiedNameOrNull
 import slack.lint.util.sourceImplementation
 
-/**
- * Checks for SpanMarkPointMissingMask. See [ISSUE].
- */
+/** Checks for SpanMarkPointMissingMask. See [ISSUE]. */
 class SpanMarkPointMissingMaskDetector : Detector(), SourceCodeScanner {
 
   companion object {
