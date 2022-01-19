@@ -60,21 +60,19 @@ class SpanMarkPointMissingMaskDetector : Detector(), SourceCodeScanner {
   }
 }
 
+private const val SPANNED_CLASS = "android.text.Spanned"
+private val MARK_POINT_FIELDS = setOf(
+  "$SPANNED_CLASS.SPAN_INCLUSIVE_INCLUSIVE",
+  "$SPANNED_CLASS.SPAN_INCLUSIVE_EXCLUSIVE",
+  "$SPANNED_CLASS.SPAN_EXCLUSIVE_INCLUSIVE",
+  "$SPANNED_CLASS.SPAN_EXCLUSIVE_EXCLUSIVE",
+)
+private const val MASK_CLASS = "$SPANNED_CLASS.SPAN_POINT_MARK_MASK"
+
 /**
  * Reports violations of SpanMarkPointMissingMask.
  */
 private class ReportingHandler(private val context: JavaContext) : UElementHandler() {
-  companion object {
-    private const val SPANNED_CLASS = "android.text.Spanned"
-    private val MARK_POINT_FIELDS = setOf(
-      "$SPANNED_CLASS.SPAN_INCLUSIVE_INCLUSIVE",
-      "$SPANNED_CLASS.SPAN_INCLUSIVE_EXCLUSIVE",
-      "$SPANNED_CLASS.SPAN_EXCLUSIVE_INCLUSIVE",
-      "$SPANNED_CLASS.SPAN_EXCLUSIVE_EXCLUSIVE",
-    )
-    private const val MASK_CLASS = "$SPANNED_CLASS.SPAN_POINT_MARK_MASK"
-  }
-
   override fun visitBinaryExpression(node: UBinaryExpression) {
     if (node.operator == UastBinaryOperator.EQUALS ||
       node.operator == UastBinaryOperator.NOT_EQUALS ||
@@ -87,7 +85,7 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
   }
 
   private fun checkExpressions(node: UBinaryExpression, markPointCheck: UExpression, maskCheck: UExpression) {
-    if (matchesMarkPoint(markPointCheck) && !matchesMask(maskCheck)) {
+    if (markPointCheck.matchesMarkPoint() && !matchesMask(maskCheck)) {
       context.report(
         ISSUE,
         context.getLocation(node),
@@ -105,8 +103,6 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
     }
   }
 
-  private fun matchesMarkPoint(expression: UExpression): Boolean = expression.getQualifiedName() in MARK_POINT_FIELDS
-
   private fun matchesMask(expression: UExpression): Boolean {
     return if (expression is UBinaryExpression) {
       expression.leftOperand.resolveQualifiedNameOrNull() == MASK_CLASS ||
@@ -116,6 +112,8 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
     }
   }
 }
+
+private fun UExpression.matchesMarkPoint(): Boolean = this.getQualifiedName() in MARK_POINT_FIELDS
 
 private fun UExpression.getQualifiedName(): String? {
   return (this as? UReferenceExpression)
