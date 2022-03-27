@@ -15,6 +15,7 @@
  */
 package slack.lint
 
+import com.android.tools.lint.checks.infrastructure.TestMode
 import org.junit.Test
 
 class MoshiUsageDetectorTest : BaseSlackLintTest() {
@@ -99,6 +100,7 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
     """
   ).indented()
 
+  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.WHITESPACE)
   override fun getDetector() = MoshiUsageDetector()
   override fun getIssues() = MoshiUsageDetector.issues().toList()
 

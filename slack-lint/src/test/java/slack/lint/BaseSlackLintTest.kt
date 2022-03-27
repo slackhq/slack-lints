@@ -19,6 +19,7 @@ import com.android.tools.lint.checks.infrastructure.LintDetectorTest
 import com.android.tools.lint.checks.infrastructure.TestFile
 import com.android.tools.lint.checks.infrastructure.TestLintClient
 import com.android.tools.lint.checks.infrastructure.TestLintTask
+import com.android.tools.lint.checks.infrastructure.TestMode
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Issue
 import com.android.utils.SdkUtils
@@ -42,6 +43,8 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
   /** Optional override to customize the lint client name when running lint test tasks. */
   open val lintClientName: String? = null
 
+  open val skipTestModes: Array<TestMode>? = null
+
   fun loadStub(stubName: String): TestFile {
     return copy(stubsPath + File.separatorChar + stubName, "src/main/java/$stubName")
   }
@@ -60,6 +63,11 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
       lintTask.sdkHome(File(it))
     }
     lintTask.allowCompilationErrors(false)
+
+    skipTestModes
+      ?.let { testModesToSkip ->
+        lintTask.skipTestModes(*testModesToSkip)
+      }
     return lintTask
   }
 

@@ -36,8 +36,7 @@ lintOptions {
 }
 
 val lintVersion = providers.gradleProperty("lintVersion")
-  .forUseAtConfigurationTime()
-  .getOrElse("30.0.3")
+  .getOrElse("30.1.2")
 dependencies {
   compileOnly("com.android.tools.lint:lint-api:$lintVersion")
   compileOnly("com.android.tools.lint:lint-checks:$lintVersion")
@@ -54,7 +53,6 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile>()
-  .matching { !it.name.contains("test", ignoreCase = true) }
   .configureEach {
     kotlinOptions {
       // Lint still requires 1.4 (regardless of what version the project uses), so this forces a lower

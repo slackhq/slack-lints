@@ -15,11 +15,13 @@
  */
 package slack.lint
 
+import com.android.tools.lint.checks.infrastructure.TestMode
 import com.android.tools.lint.detector.api.Detector
 import org.junit.Test
 
 class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
 
+  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.WHITESPACE)
   override fun getDetector(): Detector = GuavaPreconditionsDetector()
   override fun getIssues() = GuavaPreconditionsDetector.issues.toList()
 

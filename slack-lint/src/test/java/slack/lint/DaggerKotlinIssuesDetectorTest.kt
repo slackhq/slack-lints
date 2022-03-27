@@ -17,6 +17,7 @@
 
 package slack.lint
 
+import com.android.tools.lint.checks.infrastructure.TestMode
 import org.junit.Test
 
 class DaggerKotlinIssuesDetectorTest : BaseSlackLintTest() {
@@ -42,6 +43,7 @@ class DaggerKotlinIssuesDetectorTest : BaseSlackLintTest() {
     ).indented()
   }
 
+  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.WHITESPACE)
   override fun getDetector() = DaggerKotlinIssuesDetector()
   override fun getIssues() = DaggerKotlinIssuesDetector.issues.toList()
 
