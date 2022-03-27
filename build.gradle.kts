@@ -29,17 +29,17 @@ buildscript {
   dependencies {
     // We have to declare this here in order for kotlin-facets to be generated in iml files
     // https://youtrack.jetbrains.com/issue/KT-36331
-    classpath(kotlin("gradle-plugin", version = "1.5.31"))
+    classpath(kotlin("gradle-plugin", version = libs.versions.kotlin.get()))
   }
 }
 
 plugins {
-  id("com.diffplug.spotless") version "6.1.0" apply false
-  id("com.vanniktech.maven.publish") version "0.18.0" apply false
-  id("org.jetbrains.dokka") version "1.5.30" apply false
-  id("io.gitlab.arturbosch.detekt") version "1.18.1"
-  id("com.android.lint") version "7.0.3" apply false
-  id("com.google.devtools.ksp") version "1.5.31-1.0.0" apply false
+  alias(libs.plugins.spotless) apply false
+  alias(libs.plugins.mavenPublish) apply false
+  alias(libs.plugins.dokka) apply false
+  alias(libs.plugins.detekt)
+  alias(libs.plugins.lint) apply false
+  alias(libs.plugins.ksp) apply false
 }
 
 allprojects {
@@ -123,7 +123,6 @@ subprojects {
     // Add our maven repository repo
     configure<PublishingExtension> {
       val url = providers.gradleProperty("SlackRepositoryUrl")
-        .forUseAtConfigurationTime()
         .get()
       repositories {
         maven {
