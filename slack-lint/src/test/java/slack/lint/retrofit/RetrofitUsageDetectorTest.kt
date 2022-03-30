@@ -63,15 +63,15 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/test/Example.kt:9: Error: @FormUrlEncoded requires @PUT, @POST, or @PATCH. [RetrofitUsage]
-          @GET("/")
-          ^
+        src/test/Example.kt:11: Error: @FormUrlEncoded requires @PUT, @POST, or @PATCH. [RetrofitUsage]
+          fun wrongMethod(): String
+              ~~~~~~~~~~~
         src/test/Example.kt:14: Error: @FormUrlEncoded but has no @Field(Map) parameters. [RetrofitUsage]
           @FormUrlEncoded
           ~~~~~~~~~~~~~~~
-        src/test/Example.kt:17: Error: @Field(Map) param requires @FormUrlEncoded. [RetrofitUsage]
-          @POST("/")
-          ^
+        src/test/Example.kt:18: Error: @Field(Map) param requires @FormUrlEncoded. [RetrofitUsage]
+          fun missingAnnotation(@Field("hi") input: String): String
+              ~~~~~~~~~~~~~~~~~
         3 errors, 0 warnings
         """.trimIndent()
       )
@@ -81,7 +81,7 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
         @@ -14 +14
         -   @FormUrlEncoded
         +
-        Fix for src/test/Example.kt line 17: Replace with @retrofit2.http.FormUrlEncoded...:
+        Fix for src/test/Example.kt line 18: Replace with @retrofit2.http.FormUrlEncoded...:
         @@ -17 +17
         -   @POST("/")
         +   @retrofit2.http.FormUrlEncoded

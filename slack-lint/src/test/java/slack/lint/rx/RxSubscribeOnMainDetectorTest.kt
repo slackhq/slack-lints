@@ -15,6 +15,7 @@
  */
 package slack.lint.rx
 
+import com.android.tools.lint.checks.infrastructure.TestMode
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
@@ -36,6 +37,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
     """
   ).indented()
 
+  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.WHITESPACE, TestMode.PARENTHESIZED)
   override fun getDetector() = RxSubscribeOnMainDetector()
   override fun getIssues() = listOf(RxSubscribeOnMainDetector.ISSUE)
 

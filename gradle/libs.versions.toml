@@ -1,0 +1,29 @@
+[versions]
+kotlin = "1.6.10"
+ktlint = "0.44.0"
+jvmTarget = "1.8"
+lint = "30.1.2"
+
+[plugins]
+detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.18.1" }
+dokka = { id = "org.jetbrains.dokka", version = "1.6.10" }
+lint = { id = "com.android.lint", version = "7.1.2" }
+ksp = { id = "com.google.devtools.ksp", version = "1.6.10-1.0.4" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.19.0" }
+spotless = { id = "com.diffplug.spotless", version = "6.3.0" }
+
+[libraries]
+autoService-annotations = "com.google.auto.service:auto-service-annotations:1.0"
+autoService-ksp = "dev.zacsweers.autoservice:auto-service-ksp:1.0.0"
+junit = "junit:junit:4.13.2"
+eithernet = "com.slack.eithernet:eithernet:1.0.0"
+retrofit = "com.squareup.retrofit2:retrofit:2.9.0"
+lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "lint" }
+lint-checks = { module = "com.android.tools.lint:lint-checks", version.ref = "lint" }
+lint = { module = "com.android.tools.lint:lint", version.ref = "lint" }
+lint-tests = { module = "com.android.tools.lint:lint-tests", version.ref = "lint" }
+lint-testUtils = { module = "com.android.tools:testutils", version.ref = "lint" }
+
+[bundles]
+lintApi = ["lint-api", "lint-checks"]
+lintTest = ["lint", "lint-tests", "lint-testUtils"]

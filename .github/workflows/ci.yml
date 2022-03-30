@@ -19,13 +19,18 @@ jobs:
     name: ${{ matrix.ci_lint_version }} / JDK ${{ matrix.ci_java_version }} / Kotlin ${{ matrix.ci_kotlin_version }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         ci_java_version: ['17']
-        ci_lint_version: ['30.0.3', '30.1.0-beta02', '30.2.0-alpha03']
-        ci_kotlin_version: ['1.5.31']
+        ci_lint_version: ['30.1.2', '30.2.0-beta04', '30.3.0-alpha07']
+        ci_kotlin_version: ['1.6.10']
+    env:
+      DEP_OVERRIDES: 'true'
+      DEP_OVERRIDE_LINT: ${{ matrix.ci_lint_version }}
+      DEP_OVERRIDE_KOTLIN: ${{ matrix.ci_kotlin_version }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1
@@ -33,7 +38,7 @@ jobs:
       - name: Generate cache key
         run: ./.github/checksum.sh checksum.txt
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v3
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ matrix.job }}-${{ hashFiles('checksum.txt') }}
@@ -47,14 +52,14 @@ jobs:
           java-version: ${{ matrix.ci_java_version }}
 
       - name: Build
-        uses: eskatos/gradle-command-action@v1
+        uses: gradle/gradle-build-action@v2
         with:
-          arguments: spotlessCheck compileKotlin compileTestKotlin --stacktrace -PlintVersion=${{ matrix.ci_lint_version }} -PkotlinVersion=${{ matrix.ci_kotlin_version }}
+          arguments: spotlessCheck compileKotlin compileTestKotlin
 
       # Test only on current stable because test outputs change wildly between lint versions
       - name: Check
-        if: matrix.ci_lint_version == '30.0.3'
-        uses: eskatos/gradle-command-action@v1
+        if: matrix.ci_lint_version == '30.1.2'
+        uses: gradle/gradle-build-action@v2
         with:
           arguments: check --stacktrace -PlintVersion=${{ matrix.ci_lint_version }} -PkotlinVersion=${{ matrix.ci_kotlin_version }}
 
@@ -64,7 +69,7 @@ jobs:
 
       - name: (Fail-only) Upload the build report
         if: failure()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: error-report
           path: build-reports.zip

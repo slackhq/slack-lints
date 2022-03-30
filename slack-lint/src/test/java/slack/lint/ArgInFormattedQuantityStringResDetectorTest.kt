@@ -15,9 +15,12 @@
  */
 package slack.lint
 
+import com.android.tools.lint.checks.infrastructure.TestMode
 import org.junit.Test
 
 class ArgInFormattedQuantityStringResDetectorTest : BaseSlackLintTest() {
+
+  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.PARENTHESIZED)
 
   override fun getDetector() = ArgInFormattedQuantityStringResDetector()
 

@@ -15,6 +15,7 @@
  */
 package slack.lint.text
 
+import com.android.tools.lint.checks.infrastructure.TestMode
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
@@ -23,6 +24,7 @@ import slack.lint.BaseSlackLintTest
  */
 class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
 
+  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.PARENTHESIZED)
   override fun getDetector() = SpanMarkPointMissingMaskDetector()
   override fun getIssues() = listOf(SpanMarkPointMissingMaskDetector.ISSUE)
 
