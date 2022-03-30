@@ -35,7 +35,7 @@ import slack.lint.util.sourceImplementation
  *
  * See https://chris.banes.dev/always-provide-a-modifier/ for more details.
  *
- * The "known" list of layout functions are currently defined at [COMMON_LAYOUT_COMPOSABLES] and
+ * The "known" list of layout functions are currently defined at [COMPOSABLE_EMITTERS_SET] and
  * should be added to eagerly.
  */
 class AlwaysProvideAModifier : Detector(), SourceCodeScanner {
@@ -65,7 +65,7 @@ class AlwaysProvideAModifier : Detector(), SourceCodeScanner {
           .map { it.skipParenthesizedExprDown() }
           .any { expression ->
             // TODO do we care about the package name to be super sure?
-            expression is UCallExpression && expression.methodName in COMMON_LAYOUT_COMPOSABLES
+            expression is UCallExpression && expression.methodName in COMPOSABLE_EMITTERS_SET
           }
         if (hasTopLevelLayout) {
           context.report(
@@ -81,7 +81,7 @@ class AlwaysProvideAModifier : Detector(), SourceCodeScanner {
 
   companion object {
     private const val MODIFIER = "androidx.compose.ui.Modifier"
-    private val COMMON_LAYOUT_COMPOSABLES = setOf(
+    private val COMPOSABLE_EMITTERS_SET = setOf(
       // androidx.compose.foundation
       "BasicTextField",
       "Box",
