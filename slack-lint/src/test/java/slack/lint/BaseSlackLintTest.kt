@@ -43,6 +43,14 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
   /** Optional override to customize the lint client name when running lint test tasks. */
   open val lintClientName: String? = null
 
+  /**
+   * Lint periodically adds new "TestModes" to LintDetectorTest. These modes act as a sort of
+   * chaos testing mechanism, adding different common variations of code (extra spaces, extra
+   * parens, etc) to the test files to ensure that lints are robust against them. They also
+   * make it quite difficult to test against and need extra work sometimes to properly support, so
+   * we expose this property to allow tests to skip certain modes that need more work in subsequent
+   * PRs.
+   */
   open val skipTestModes: Array<TestMode>? = null
 
   fun loadStub(stubName: String): TestFile {
