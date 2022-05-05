@@ -64,5 +64,6 @@ class SlackIssueRegistry : IssueRegistry() {
     RetrofitUsageDetector.ISSUE,
     RestrictCallsToDetector.ISSUE,
     SpanMarkPointMissingMaskDetector.ISSUE,
+    *UseAnvilForMultibindingDetector.issues.toTypedArray()
   )
 }
