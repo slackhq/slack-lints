@@ -100,7 +100,13 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
     """
   ).indented()
 
-  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.WHITESPACE)
+  override val skipTestModes: Array<TestMode> = arrayOf(
+    TestMode.WHITESPACE,
+    // Aliases are impossible to test correctly because you have to maintain completely different
+    // expected fixes and source inputs
+    TestMode.TYPE_ALIAS,
+    TestMode.IMPORT_ALIAS
+  )
   override fun getDetector() = MoshiUsageDetector()
   override fun getIssues() = MoshiUsageDetector.issues().toList()
 
@@ -156,6 +162,49 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @TypeLabel(label = "three")
           @JsonClass(generateAdapter = true)
           data class SubtypeWithInterface(val foo: String) : ARandomInterface, BaseType()
+
+          interface ARandomInterface
+        """
+    ).indented()
+
+    lint()
+      .files(*testFiles(), source)
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun sealed_interface_correct() {
+    val source = kotlin(
+      """
+          package slack.model
+
+          import com.squareup.moshi.JsonClass
+          import dev.zacsweers.moshix.sealed.annotations.TypeLabel
+          import dev.zacsweers.moshix.sealed.annotations.DefaultObject
+
+          @JsonClass(generateAdapter = true, generator = "sealed:type")
+          sealed interface BaseType {
+            @TypeLabel(label = "nested")
+            @JsonClass(generateAdapter = true)
+            data class Nested(val foo: String) : BaseType
+          }
+
+          @TypeLabel(label = "one")
+          @JsonClass(generateAdapter = true)
+          data class Subtype(val foo: String) : BaseType
+
+          @TypeLabel(label = "two")
+          object ObjectSubType : BaseType
+
+          @DefaultObject
+          object Default : BaseType
+
+          // Cover for making sure listing interfaces before superclasses don't affect
+          // superclass lookups
+          @TypeLabel(label = "three")
+          @JsonClass(generateAdapter = true)
+          data class SubtypeWithInterface(val foo: String) : ARandomInterface, BaseType
 
           interface ARandomInterface
         """
