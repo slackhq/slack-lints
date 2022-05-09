@@ -56,6 +56,7 @@ import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.ULiteralExpression
 import org.jetbrains.uast.UParameter
 import org.jetbrains.uast.UReferenceExpression
+import org.jetbrains.uast.getContainingUFile
 import org.jetbrains.uast.getUastParentOfType
 import org.jetbrains.uast.kotlin.KotlinUAnnotation
 import org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression
@@ -476,33 +477,40 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
 
         val isAnnotatedWithTypeLabelOrDefaultObject = isTypeLabeled || isDefaultObjectLabeled
 
-        val superclass = node.javaPsi.superClass?.qualifiedName?.let {
-          context.evaluator.findClass(it)
-        }?.toUElementOfType<UClass>()
-        if (superclass != null) {
-          if (context.evaluator.isSealed(superclass)) {
-            val superJsonClassAnnotation = superclass.findAnnotation(FQCN_JSON_CLASS)
-            if (superJsonClassAnnotation != null) {
-              val generatorExpression = superJsonClassAnnotation.findAttributeValue("generator")
-              val generator = generatorExpression?.evaluate() as? String
-              if (generator != null) {
-                if (generator.startsWith("sealed:")) {
-                  if (!isAnnotatedWithTypeLabelOrDefaultObject) {
-                    context.report(
-                      ISSUE_MISSING_TYPE_LABEL,
-                      context.getNameLocation(node),
-                      ISSUE_MISSING_TYPE_LABEL.getBriefDescription(TextFormat.TEXT),
-                      quickfixData = null
-                    )
-                    return
-                  } else {
-                    return
+        // Collect all superTypes since interfaces can be sealed too!
+        // Filter out types in other packages as the compiler will enforce that for us.
+        val currentPackage = node.getContainingUFile()?.packageName ?: return
+        val sealedSuperTypeFound = node.superTypes
+          .asSequence()
+          .mapNotNull { context.evaluator.getTypeClass(it)?.toUElementOfType<UClass>() }
+          .filter { it.getContainingUFile()?.packageName == currentPackage }
+          .firstOrNull { superType ->
+            if (context.evaluator.isSealed(superType)) {
+              val superJsonClassAnnotation = superType.findAnnotation(FQCN_JSON_CLASS)
+              if (superJsonClassAnnotation != null) {
+                val generatorExpression = superJsonClassAnnotation.findAttributeValue("generator")
+                val generator = generatorExpression?.evaluate() as? String
+                if (generator != null) {
+                  if (generator.startsWith("sealed:")) {
+                    if (!isAnnotatedWithTypeLabelOrDefaultObject) {
+                      context.report(
+                        ISSUE_MISSING_TYPE_LABEL,
+                        context.getNameLocation(node),
+                        ISSUE_MISSING_TYPE_LABEL.getBriefDescription(TextFormat.TEXT),
+                        quickfixData = null
+                      )
+                      return@firstOrNull true
+                    } else {
+                      return@firstOrNull true
+                    }
                   }
                 }
               }
             }
+            false
           }
-        }
+
+        if (sealedSuperTypeFound != null) return
 
         // If we've reached here and have annotations, something is wrong
         if (isAnnotatedWithTypeLabelOrDefaultObject) {
