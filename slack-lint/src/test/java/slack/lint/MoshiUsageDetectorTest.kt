@@ -995,19 +995,19 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 6: Remove '@JsonClass(generateAdapter = true)':
+        Autofix for src/slack/model/Example.kt line 6: Remove '@JsonClass(generateAdapter = true)':
         @@ -6 +6
         -   @JsonClass(generateAdapter = true)
         +
-        Fix for src/slack/model/Example.kt line 9: Remove '@JsonClass(generateAdapter = true)':
+        Autofix for src/slack/model/Example.kt line 9: Remove '@JsonClass(generateAdapter = true)':
         @@ -9 +9
         -   @JsonClass(generateAdapter = true)
         +
-        Fix for src/slack/model/Example.kt line 12: Remove '@JsonClass(generateAdapter = true)':
+        Autofix for src/slack/model/Example.kt line 12: Remove '@JsonClass(generateAdapter = true)':
         @@ -12 +12
         -   @JsonClass(generateAdapter = true)
         +
-        Fix for src/slack/model/Example.kt line 15: Remove '@JsonClass(generateAdapter = true)':
+        Autofix for src/slack/model/Example.kt line 15: Remove '@JsonClass(generateAdapter = true)':
         @@ -15 +15
         -   @JsonClass(generateAdapter = true)
         +
