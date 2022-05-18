@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 7.1.2" type="baseline" client="gradle" dependencies="false" name="AGP (7.1.2)" variant="all" version="7.1.2">
+<issues format="6" by="lint 7.2.0" type="baseline" client="gradle" dependencies="false" name="AGP (7.2.0)" variant="all" version="7.2.0">
 
     <issue
         id="LintImplIdFormat"
@@ -261,7 +261,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="833"
+            line="841"
             column="9"/>
     </issue>
 
@@ -272,7 +272,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="838"
+            line="846"
             column="9"/>
     </issue>
 
@@ -571,6 +571,435 @@
             file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
             line="152"
             column="30"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUField is UAST implementation. Consider using one of its corresponding UAST interfaces: `UVariableEx`, `UVariable`, `UDeclaration`, `UAnnotated`, `UDeclarationEx`, `UAnchorOwner`, `UFieldEx`, `UField`"
+        errorLine1="import org.jetbrains.uast.java.JavaUField"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/mocking/AbstractMockDetector.kt"
+            line="33"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUField is UAST implementation. Consider using one of its corresponding UAST interfaces: `UVariableEx`, `UVariable`, `UDeclaration`, `UAnnotated`, `UDeclarationEx`, `UAnchorOwner`, `UFieldEx`, `UField`"
+        errorLine1="        } else if (node is JavaUField &amp;&amp; isMockAnnotated(node)) {"
+        errorLine2="                           ~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/mocking/AbstractMockDetector.kt"
+            line="122"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpressionEx`, `UCallExpression`, `UResolvable`, `UElementWithLocation`"
+        errorLine1="import org.jetbrains.uast.java.JavaUCallExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="31"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCompositeQualifiedExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.java.JavaUCompositeQualifiedExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="32"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="33"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="34"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpressionEx`, `UCallExpression`, `UResolvable`, `UElementWithLocation`"
+        errorLine1="            is JavaUCompositeQualifiedExpression -> checkCall { JavaUCallExpression::class.safeCast(arg.selector) }"
+        errorLine2="                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="65"
+            column="65"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCompositeQualifiedExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="            is JavaUCompositeQualifiedExpression -> checkCall { JavaUCallExpression::class.safeCast(arg.selector) }"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="65"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpressionEx`, `UCallExpression`, `UResolvable`, `UElementWithLocation`"
+        errorLine1="            is JavaUCallExpression -> checkCall { arg }"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="66"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`"
+        errorLine1="            is KotlinUQualifiedReferenceExpression -> checkCall { KotlinUFunctionCallExpression::class.safeCast(arg.selector) }"
+        errorLine2="                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="67"
+            column="67"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="            is KotlinUQualifiedReferenceExpression -> checkCall { KotlinUFunctionCallExpression::class.safeCast(arg.selector) }"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="67"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`"
+        errorLine1="            is KotlinUFunctionCallExpression -> checkCall { arg }"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="68"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinReceiverUParameter is UAST implementation. Consider using one of its corresponding UAST interfaces: `UVariableEx`, `UVariable`, `UDeclaration`, `UAnnotated`, `UDeclarationEx`, `UAnchorOwner`, `UParameterEx`, `UParameter`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinReceiverUParameter"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DaggerKotlinIssuesDetector.kt"
+            line="44"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinReceiverUParameter is UAST implementation. Consider using one of its corresponding UAST interfaces: `UVariableEx`, `UVariable`, `UDeclaration`, `UAnnotated`, `UDeclarationEx`, `UAnchorOwner`, `UParameterEx`, `UParameter`"
+        errorLine1="          if (firstParam !is KotlinReceiverUParameter) {"
+        errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DaggerKotlinIssuesDetector.kt"
+            line="131"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UClassLiteralExpression`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectWithUsageDetector.kt"
+            line="29"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UClassLiteralExpression`"
+        errorLine1="            ) as? KotlinUClassLiteralExpression"
+        errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectWithUsageDetector.kt"
+            line="63"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClass is UAST implementation. Consider using one of its corresponding UAST interfaces: `UClass`, `UDeclaration`, `UAnnotated`, `UAnchorOwner`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUClass"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="45"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClass is UAST implementation. Consider using one of its corresponding UAST interfaces: `UClass`, `UDeclaration`, `UAnnotated`, `UAnchorOwner`"
+        errorLine1="  if (this is KotlinUClass &amp;&amp; sourcePsi is KtObjectDeclaration &amp;&amp; name == &quot;Companion&quot;) {"
+        errorLine2="              ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="86"
+            column="15"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClass is UAST implementation. Consider using one of its corresponding UAST interfaces: `UClass`, `UDeclaration`, `UAnnotated`, `UAnchorOwner`"
+        errorLine1="internal fun UClass.isKotlinObject() = this is KotlinUClass &amp;&amp; sourcePsi is KtObjectDeclaration"
+        errorLine2="                                               ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="99"
+            column="48"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClass is UAST implementation. Consider using one of its corresponding UAST interfaces: `UClass`, `UDeclaration`, `UAnnotated`, `UAnchorOwner`"
+        errorLine1="internal fun UClass.isKotlinTopLevelFacadeClass() = this is KotlinUClass &amp;&amp; javaPsi is KtLightClassForFacade"
+        errorLine2="                                                            ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="101"
+            column="61"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClass is UAST implementation. Consider using one of its corresponding UAST interfaces: `UClass`, `UDeclaration`, `UAnnotated`, `UAnchorOwner`"
+        errorLine1="  if (this is KotlinUClass &amp;&amp; evaluator.hasModifier(this, KtTokens.INNER_KEYWORD)) return true"
+        errorLine2="              ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="111"
+            column="15"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUAnnotation is UAST implementation. Consider using one of its corresponding UAST interfaces: `UAnnotationEx`, `UAnnotation`, `UResolvable`, `UAnchorOwner`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUAnnotation"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="61"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UClassLiteralExpression`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="62"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUAnnotation is UAST implementation. Consider using one of its corresponding UAST interfaces: `UAnnotationEx`, `UAnnotation`, `UResolvable`, `UAnchorOwner`"
+        errorLine1="                (annotationEntry.toUElement() as KotlinUAnnotation)"
+        errorLine2="                                                 ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="365"
+            column="50"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UClassLiteralExpression`"
+        errorLine1="      ) as? KotlinUClassLiteralExpression"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="543"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpressionEx`, `UCallExpression`, `UResolvable`, `UElementWithLocation`"
+        errorLine1="import org.jetbrains.uast.java.JavaUCallExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="36"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCompositeQualifiedExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.java.JavaUCompositeQualifiedExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="37"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="38"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="39"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUSimpleReferenceExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `USimpleNameReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUSimpleReferenceExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="40"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.psi.UastKotlinPsiVariable is UAST implementation. Consider using one of its corresponding UAST interfaces."
+        errorLine1="import org.jetbrains.uast.kotlin.psi.UastKotlinPsiVariable"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="41"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpressionEx`, `UCallExpression`, `UResolvable`, `UElementWithLocation`"
+        errorLine1="      is JavaUCompositeQualifiedExpression -> checkCall { JavaUCallExpression::class.safeCast(arg.selector) }"
+        errorLine2="                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="84"
+            column="59"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCompositeQualifiedExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="      is JavaUCompositeQualifiedExpression -> checkCall { JavaUCallExpression::class.safeCast(arg.selector) }"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="84"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpressionEx`, `UCallExpression`, `UResolvable`, `UElementWithLocation`"
+        errorLine1="      is JavaUCallExpression -> checkCall { arg }"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="85"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`"
+        errorLine1="      is KotlinUQualifiedReferenceExpression -> checkCall { KotlinUFunctionCallExpression::class.safeCast(arg.selector) }"
+        errorLine2="                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="86"
+            column="61"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="      is KotlinUQualifiedReferenceExpression -> checkCall { KotlinUFunctionCallExpression::class.safeCast(arg.selector) }"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="86"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`"
+        errorLine1="      is KotlinUFunctionCallExpression -> checkCall { arg }"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="87"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUSimpleReferenceExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `USimpleNameReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="      is KotlinUSimpleReferenceExpression -> {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="131"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.psi.UastKotlinPsiVariable is UAST implementation. Consider using one of its corresponding UAST interfaces."
+        errorLine1="          is UastKotlinPsiVariable -> { // The variable reference is local"
+        errorLine2="             ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="137"
+            column="14"/>
     </issue>
 
 </issues>
