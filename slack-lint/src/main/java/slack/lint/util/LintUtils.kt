@@ -83,7 +83,7 @@ internal fun PsiClass.implements(
  *  @see [isKotlinObject]
  */
 internal fun UClass.isCompanionObject(evaluator: JavaEvaluator): Boolean {
-  if (this is KotlinUClass && ktClass is KtObjectDeclaration && name == "Companion") {
+  if (this is KotlinUClass && sourcePsi is KtObjectDeclaration && name == "Companion") {
     // best effort until we can update to lint tools 26.6.x. See below
     return true
   }
@@ -96,7 +96,7 @@ internal fun UClass.isCompanionObject(evaluator: JavaEvaluator): Boolean {
  *
  * @see [isCompanionObject]
  */
-internal fun UClass.isKotlinObject() = this is KotlinUClass && ktClass is KtObjectDeclaration
+internal fun UClass.isKotlinObject() = this is KotlinUClass && sourcePsi is KtObjectDeclaration
 
 internal fun UClass.isKotlinTopLevelFacadeClass() = this is KotlinUClass && javaPsi is KtLightClassForFacade
 
