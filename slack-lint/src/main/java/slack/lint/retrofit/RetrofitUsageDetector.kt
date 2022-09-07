@@ -29,6 +29,7 @@ import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.sourcePsiElement
 import slack.lint.util.removeNode
+import slack.lint.util.safeReturnType
 import slack.lint.util.sourceImplementation
 
 /**
@@ -51,8 +52,8 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
           .firstOrNull()
           ?: return
 
-        val returnType = node.returnTypeReference?.type
-        if (returnType == null || returnType == PsiType.VOID) {
+        val returnType = node.safeReturnType(context)
+        if (returnType == null || returnType == PsiType.VOID || returnType.canonicalText == "kotlin.Unit") {
           node.report(
             "Retrofit endpoints should return something other than Unit/void.",
             context.getNameLocation(node)

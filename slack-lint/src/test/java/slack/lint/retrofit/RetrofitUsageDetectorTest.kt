@@ -58,7 +58,8 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
               fun correct(@Field("hi") input: String): String
             }
           """
-        ).indented()
+        )
+          .indented()
       )
       .run()
       .expect(
@@ -117,7 +118,8 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
               fun correct(@Body input: String): String
             }
           """
-        ).indented()
+        )
+          .indented()
       )
       .run()
       .expect(
@@ -152,10 +154,14 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
               fun unitMethod()
 
               @GET("/")
+              suspend fun suspendUnitMethod()
+
+              @GET("/")
               fun unitMethodExplicit(): Unit
             }
           """
-        ).indented()
+        )
+          .indented()
       )
       .run()
       .expect(
@@ -164,9 +170,12 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
           fun unitMethod()
               ~~~~~~~~~~
         src/test/Example.kt:10: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
+          suspend fun suspendUnitMethod()
+                      ~~~~~~~~~~~~~~~~~
+        src/test/Example.kt:13: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
           fun unitMethodExplicit(): Unit
               ~~~~~~~~~~~~~~~~~~
-        2 errors, 0 warnings
+        3 errors, 0 warnings
         """.trimIndent()
       )
   }
