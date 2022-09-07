@@ -33,12 +33,17 @@ import com.android.tools.lint.detector.api.Scope
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.UastLintUtils
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiClassType
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiType
+import com.intellij.psi.PsiWildcardType
 import org.jetbrains.kotlin.asJava.classes.KtLightClassForFacade
+import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UExpression
+import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UQualifiedReferenceExpression
 import org.jetbrains.uast.UReferenceExpression
 import org.jetbrains.uast.USimpleNameReferenceExpression
@@ -302,5 +307,31 @@ internal fun UExpression.unwrapSimpleNameReferenceExpression(): USimpleNameRefer
 internal fun UExpression.resolveQualifiedNameOrNull(): String? {
   return (this as? UReferenceExpression)?.referenceNameElement?.uastParent?.tryResolve()?.let {
     UastLintUtils.getQualifiedName(it)
+  }
+}
+
+/**
+ * Collects the return type of this [UMethod] in a suspend-safe way.
+ *
+ * For coroutines, the suspend methods return context rather than the source-declared return type,
+ * which is encoded in a continuation parameter at the end of the parameter list.
+ *
+ * For example, the following snippet:
+ * ```
+ * suspend fun foo(): String
+ * ```
+ *
+ * Will appear like so to lint:
+ * ```
+ * Object foo(Continuation<? super String> continuation)
+ * ```
+*/
+internal fun UMethod.safeReturnType(context: JavaContext): PsiType? {
+  if (language == KotlinLanguage.INSTANCE && context.evaluator.isSuspend(this)) {
+    val classReference = parameterList.parameters.lastOrNull()?.type as? PsiClassType ?: return null
+    val wildcard = classReference.parameters.singleOrNull() as? PsiWildcardType ?: return null
+    return wildcard.bound
+  } else {
+    return returnType
   }
 }

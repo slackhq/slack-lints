@@ -117,11 +117,13 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
           // Bad
 
           fun getResult(): ApiResult<String, Exception>
+          suspend fun getResultSuspended(): ApiResult<String, Exception>
           val resultVal: ApiResult<String, Exception>
 
           // Good
 
           fun getString(): String
+          suspend fun getStringSuspended(): String
           val stringValue: String
         }
       """
@@ -167,7 +169,47 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
         src/test/MyRepository.kt:8: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
           fun getResult(): ApiResult<String, Exception>
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        3 errors, 0 warnings
+        src/test/MyRepository.kt:9: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
+          suspend fun getResultSuspended(): ApiResult<String, Exception>
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        4 errors, 0 warnings
+        """.trimIndent()
+      )
+  }
+
+  @Test
+  fun regressionTest() {
+    lint()
+      .files(
+        API_RESULT,
+        kotlin(
+          """
+        package test
+
+        import com.slack.eithernet.ApiResult
+
+        interface StuffRepository {
+
+          suspend fun fetchStuff(): ApiResult<String, String>
+
+          suspend fun setStuff(
+            discoverability: String
+          ): ApiResult<Unit, String>
+        }
+      """
+        )
+          .indented(),
+      )
+      .run()
+      .expect(
+        """
+          src/test/StuffRepository.kt:7: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
+            suspend fun fetchStuff(): ApiResult<String, String>
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          src/test/StuffRepository.kt:9: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
+            suspend fun setStuff(
+            ^
+          2 errors, 0 warnings
         """.trimIndent()
       )
   }
