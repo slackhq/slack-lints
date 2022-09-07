@@ -38,6 +38,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiType
 import com.intellij.psi.PsiWildcardType
 import org.jetbrains.kotlin.asJava.classes.KtLightClassForFacade
+import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.uast.UClass
@@ -47,7 +48,6 @@ import org.jetbrains.uast.UQualifiedReferenceExpression
 import org.jetbrains.uast.UReferenceExpression
 import org.jetbrains.uast.USimpleNameReferenceExpression
 import org.jetbrains.uast.kotlin.KotlinUClass
-import org.jetbrains.uast.kotlin.isKotlin
 import org.jetbrains.uast.tryResolve
 import java.util.EnumSet
 
@@ -327,7 +327,7 @@ internal fun UExpression.resolveQualifiedNameOrNull(): String? {
  * ```
 */
 internal fun UMethod.safeReturnType(context: JavaContext): PsiType? {
-  if (isKotlin(this) && context.evaluator.isSuspend(this)) {
+  if (language == KotlinLanguage.INSTANCE && context.evaluator.isSuspend(this)) {
     val classReference = parameterList.parameters.lastOrNull()?.type as? PsiClassType ?: return null
     val wildcard = classReference.parameters.singleOrNull() as? PsiWildcardType ?: return null
     return wildcard.bound
