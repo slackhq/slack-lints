@@ -26,6 +26,8 @@ import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.isJava
 import com.intellij.psi.PsiModifierListOwner
+import com.intellij.psi.PsiType
+import com.intellij.psi.util.PsiTypesUtil
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.KtProperty
@@ -33,8 +35,8 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UField
 import org.jetbrains.uast.UMethod
-import org.jetbrains.uast.UTypeReferenceExpression
 import org.jetbrains.uast.getContainingUClass
+import slack.lint.util.safeReturnType
 import slack.lint.util.sourceImplementation
 
 private const val EITHERNET_PACKAGE = "com.slack.eithernet"
@@ -54,7 +56,7 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
         check(
           node.isPublic,
           { node.isRepositoryMember },
-          { node.returnTypeReference.isEitherNetType },
+          { node.safeReturnType(context).isEitherNetType },
           { context.getLocation(node) }
         )
       }
@@ -63,7 +65,7 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
         check(
           node.isPublic,
           { node.isRepositoryMember },
-          { node.typeReference.isEitherNetType },
+          { node.type.isEitherNetType },
           { context.getLocation(node) }
         )
       }
@@ -104,9 +106,9 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
           return containingClass.name?.endsWith("Repository") == true
         }
 
-      private val UTypeReferenceExpression?.isEitherNetType: Boolean
+      private val PsiType?.isEitherNetType: Boolean
         get() {
-          return this?.getQualifiedName()?.startsWith(EITHERNET_PACKAGE) == true
+          return PsiTypesUtil.getPsiClass(this)?.qualifiedName?.startsWith(EITHERNET_PACKAGE) == true
         }
     }
 
