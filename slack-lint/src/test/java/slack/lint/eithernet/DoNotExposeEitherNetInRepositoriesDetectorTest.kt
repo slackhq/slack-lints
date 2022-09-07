@@ -88,19 +88,16 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/test/MyClassRepository.kt:8: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
-          abstract fun getResultPublic(): ApiResult<String, Exception>
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test/MyClassRepository.kt:9: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
-          val resultProperty: ApiResult<String, Exception>? = null
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test/MyRepository.kt:8: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
-          fun getResult(): ApiResult<String, Exception>
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test/MyRepository.kt:9: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
-          suspend fun getResultSuspended(): ApiResult<String, Exception>
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        4 errors, 0 warnings
+        src/test/MyClassRepository.java:8: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
+          public abstract ApiResult<String, Exception> getResultPublic();
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/test/MyClassRepository.java:9: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
+          public ApiResult<String, Exception> resultField = null;
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/test/MyRepository.java:8: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
+          ApiResult<String, Exception> getResult();
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        3 errors, 0 warnings
         """.trimIndent()
       )
   }
@@ -172,7 +169,10 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
         src/test/MyRepository.kt:8: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
           fun getResult(): ApiResult<String, Exception>
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        3 errors, 0 warnings
+        src/test/MyRepository.kt:9: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
+          suspend fun getResultSuspended(): ApiResult<String, Exception>
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        4 errors, 0 warnings
         """.trimIndent()
       )
   }
