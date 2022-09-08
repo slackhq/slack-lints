@@ -57,7 +57,7 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
           node.isPublic,
           { node.isRepositoryMember },
           { node.safeReturnType(context).isEitherNetType },
-          { context.getLocation(node) }
+          { context.getLocation(node.returnTypeReference ?: node) }
         )
       }
 
@@ -66,7 +66,7 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
           node.isPublic,
           { node.isRepositoryMember },
           { node.type.isEitherNetType },
-          { context.getLocation(node) }
+          { context.getLocation(node.typeReference ?: node) }
         )
       }
 
