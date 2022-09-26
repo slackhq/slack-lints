@@ -71,7 +71,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:6: Error: Please use L10nR as an import alias instead [FullyQualifiedResource]
+        src/slack/pkg/subpackage/MyClass.kt:6: Error: Use L10nR as an import alias instead [FullyQualifiedResource]
                 val appName = getString(slack.l10n.R.string.app_name)
                                         ~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -114,7 +114,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:8: Error: Please use L10nR as an import alias instead [FullyQualifiedResource]
+        src/slack/pkg/subpackage/MyClass.kt:8: Error: Use L10nR as an import alias instead [FullyQualifiedResource]
                 val appName = getString(slack.l10n.R.string.app_name)
                                         ~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -157,7 +157,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:9: Error: Please use L10nR as an import alias instead [FullyQualifiedResource]
+        src/slack/pkg/subpackage/MyClass.kt:9: Error: Use L10nR as an import alias instead [FullyQualifiedResource]
                 val appName = getString(slack.l10n.R.string.app_name)
                                         ~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -197,7 +197,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:8: Error: Please use L10nR as an import alias instead [FullyQualifiedResource]
+        src/slack/pkg/subpackage/MyClass.kt:8: Error: Use L10nR as an import alias instead [FullyQualifiedResource]
                 val appName = getString(slack.l10n.R.string.app_name)
                                         ~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -239,7 +239,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:8: Error: Please use L10nR as an import alias instead [FullyQualifiedResource]
+        src/slack/pkg/subpackage/MyClass.kt:8: Error: Use L10nR as an import alias instead [FullyQualifiedResource]
                 val appName = getString(slack.l10n.R.string.app_name)
                                         ~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -281,7 +281,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:8: Error: Please use an import alias instead [FullyQualifiedResource]
+        src/slack/pkg/subpackage/MyClass.kt:8: Error: Use an import alias instead [FullyQualifiedResource]
                 val appName = getString(slack.pkg.R.string.app_name)
                                         ~~~~~~~~~~~
         1 errors, 0 warnings

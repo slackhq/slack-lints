@@ -52,7 +52,7 @@ class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
           context.report(
             ISSUE,
             context.getNameLocation(node.receiver),
-            if (alias != null) "Please use $alias as an import alias instead" else "Please use an import alias instead",
+            if (alias != null) "Use $alias as an import alias instead" else "Use an import alias instead",
             quickfixData = createLintFix(alias, node, qualifier)
           )
         }

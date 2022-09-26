@@ -69,7 +69,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Please use an import alias here [MissingResourceImportAlias]
+        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
         import slack.l10n.R
         ~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -109,7 +109,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Please use an import alias here [MissingResourceImportAlias]
+        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
         import slack.l10n.R
         ~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -153,7 +153,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Please use an import alias here [MissingResourceImportAlias]
+        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
         import slack.l10n.R
         ~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -201,7 +201,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Please use an import alias here [MissingResourceImportAlias]
+        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
         import slack.l10n.R
         ~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -247,7 +247,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Please use an import alias here [MissingResourceImportAlias]
+        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
         import slack.pkg.subpkg.R
         ~~~~~~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings

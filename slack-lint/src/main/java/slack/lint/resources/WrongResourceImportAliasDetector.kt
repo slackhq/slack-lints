@@ -43,7 +43,7 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
       context.report(
         ISSUE,
         it.nameLocation,
-        "Please use ${it.alias} as an import alias here",
+        "Use ${it.alias} as an import alias here",
         quickfixData = fix()
           .name("Replace import alias")
           // Apply the fixes in reverse so that the ranges/locations don't change.

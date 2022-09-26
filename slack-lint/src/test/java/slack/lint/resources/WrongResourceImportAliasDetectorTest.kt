@@ -69,7 +69,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Please use L10nR as an import alias here [WrongResourceImportAlias]
+        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use L10nR as an import alias here [WrongResourceImportAlias]
         import slack.l10n.R as L10R
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -110,7 +110,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:4: Error: Please use L10nR as an import alias here [WrongResourceImportAlias]
+        src/slack/pkg/subpackage/MyClass.kt:4: Error: Use L10nR as an import alias here [WrongResourceImportAlias]
         import slack.l10n.R as L10R
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -154,7 +154,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Please use L10nR as an import alias here [WrongResourceImportAlias]
+        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use L10nR as an import alias here [WrongResourceImportAlias]
         import slack.l10n.R as L10R
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -199,7 +199,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Please use SlackKitR as an import alias here [WrongResourceImportAlias]
+        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use SlackKitR as an import alias here [WrongResourceImportAlias]
         import slack.uikit.resources.R as SKR
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings

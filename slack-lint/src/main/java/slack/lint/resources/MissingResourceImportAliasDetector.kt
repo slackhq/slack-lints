@@ -45,7 +45,7 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
       context.report(
         ISSUE,
         it.nameLocation,
-        "Please use an import alias here",
+        "Use an import alias for R classes from other modules",
         quickfixData =
         fix()
           .name("Add import alias")
@@ -84,7 +84,7 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
 
               fixes.add(createImportLintFix(importDirective, importedFqNameString, alias))
             } else {
-              context.report(ISSUE, context.getNameLocation(importDirective), "Please use an import alias here")
+              context.report(ISSUE, context.getNameLocation(importDirective), "Use an import alias for R classes from other modules")
             }
           }
         }
@@ -123,7 +123,7 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
         "Missing import alias for R class.",
         """
           Only the local module's R class is allowed to be imported without an alias. \
-          Please add an import alias for this. For example, import slack.l10n.R as L10nR
+          Add an import alias for this. For example, import slack.l10n.R as L10nR
           """,
         Category.CORRECTNESS,
         6,
