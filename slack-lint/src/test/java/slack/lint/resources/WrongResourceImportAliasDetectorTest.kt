@@ -36,7 +36,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
           import slack.l10n.R as L10nR
           import slack.pkg.R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(L10R.string.app_name)
@@ -61,7 +61,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
           import slack.l10n.R as L10R
 
-           class MyClass
+          class MyClass
           """
         )
           .indented()
@@ -96,7 +96,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
           import slack.uikit.resources.R as SlackKitR
           import slack.l10n.R as L10R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(L10R.string.app_name)
@@ -139,7 +139,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
           import slack.l10n.R as L10R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(L10R.string.app_name) + "-" + getString(L10R.string.suffix)
@@ -184,7 +184,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
           import slack.uikit.resources.R as SKR
           import slack.l10n.R as L10R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   getColor(SKR.color.transparent).let { println(it) }
@@ -228,7 +228,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
           import slack.pkg.subpkg.R as SubPkgR
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(SubPkgR.string.app_name)
@@ -253,7 +253,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
           import slack.l10n.R;
 
-           class MyClass {
+          class MyClass {
 
              MyClass() {
                   String appName = getString(R.string.app_name);

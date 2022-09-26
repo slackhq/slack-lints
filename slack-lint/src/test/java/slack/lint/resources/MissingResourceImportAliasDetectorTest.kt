@@ -36,7 +36,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
           import slack.l10n.R as L10nR
           import slack.pkg.R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(L10R.string.app_name)
@@ -61,7 +61,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
           import slack.l10n.R
 
-           class MyClass
+          class MyClass
           """
         )
           .indented()
@@ -95,7 +95,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
           import slack.l10n.R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(R.string.app_name)
@@ -138,7 +138,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
           import slack.l10n.R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(R.string.app_name) + "-" + getString(R.string.suffix)
@@ -184,7 +184,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
           import slack.l10n.R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(R.string.app_name) + "-" + getString(R.string.suffix)
@@ -233,7 +233,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
           import slack.pkg.subpkg.R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(R.string.app_name)
@@ -266,7 +266,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
           import slack.pkg.subpkg.R;
 
-           class MyClass {
+          class MyClass {
 
              MyClass() {
                   String appName = getString(R.string.app_name);

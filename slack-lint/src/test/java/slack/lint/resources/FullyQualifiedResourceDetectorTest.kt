@@ -35,7 +35,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
 
           import slack.l10n.R as L10nR
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(L10R.string.app_name)
@@ -57,7 +57,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
           """
           package slack.pkg.subpackage
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(slack.l10n.R.string.app_name)
@@ -100,7 +100,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
 
           import slack.pkg.R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(slack.l10n.R.string.app_name)
@@ -143,7 +143,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
           import slack.pkg.R
           import slack.l10n.R as L10nR
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(slack.l10n.R.string.app_name)
@@ -183,7 +183,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
 
           import slack.l10n.R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(slack.l10n.R.string.app_name)
@@ -225,7 +225,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
 
           import slack.l10n.R as L10R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(slack.l10n.R.string.app_name)
@@ -267,7 +267,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
 
           import slack.l10n.R as L10R
 
-           class MyClass {
+          class MyClass {
 
              init {
                   val appName = getString(slack.pkg.R.string.app_name)
@@ -298,7 +298,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
           """
           package slack.pkg.subpackage;
 
-           class MyClass {
+          class MyClass {
             MyClass(){
             String appName = getString(slack.l10n.R.string.app_name);
            }
