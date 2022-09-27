@@ -18,11 +18,3 @@ package slack.lint.resources.model
 import com.android.tools.lint.detector.api.Location
 
 data class RootIssueData(val alias: String, val nameLocation: Location)
-
-val IMPORT_ALIASES =
-  mapOf(
-    "slack.l10n.R" to "L10nR",
-    "slack.uikit.resources.R" to "SlackKitR",
-    "slack.uikit.R" to "UiKitR",
-    "slack.coreui.R" to "CoreUiR"
-  )

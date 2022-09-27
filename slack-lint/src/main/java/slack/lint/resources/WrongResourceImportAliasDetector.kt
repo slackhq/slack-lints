@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UImportStatement
 import org.jetbrains.uast.USimpleNameReferenceExpression
-import slack.lint.resources.model.IMPORT_ALIASES
+import slack.lint.resources.ImportAliasesLoader.importAliases
 import slack.lint.resources.model.RootIssueData
 import slack.lint.util.sourceImplementation
 
@@ -37,6 +37,12 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
 
   private val fixes = mutableListOf<LintFix>()
   private var rootIssueData: RootIssueData? = null
+
+  override fun beforeCheckRootProject(context: Context) {
+    super.beforeCheckRootProject(context)
+
+    ImportAliasesLoader.loadImportAliases(context)
+  }
 
   override fun afterCheckFile(context: Context) {
     rootIssueData?.let {
@@ -75,7 +81,7 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
 
         val importedFqNameString = importDirective.importedFqName?.asString() ?: return
         if (importedFqNameString.endsWith(".R") && importDirective.aliasName != null) {
-          IMPORT_ALIASES[importedFqNameString]?.let { alias ->
+          importAliases[importedFqNameString]?.let { alias ->
             val aliasName = importDirective.aliasName
             if (alias != aliasName) {
               this.wrongAlias = aliasName

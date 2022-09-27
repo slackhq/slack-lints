@@ -30,7 +30,7 @@ import org.jetbrains.uast.UImportStatement
 import org.jetbrains.uast.USimpleNameReferenceExpression
 import org.jetbrains.uast.getContainingUFile
 import org.jetbrains.uast.getQualifiedParentOrThis
-import slack.lint.resources.model.IMPORT_ALIASES
+import slack.lint.resources.ImportAliasesLoader.importAliases
 import slack.lint.resources.model.RootIssueData
 import slack.lint.util.sourceImplementation
 
@@ -39,6 +39,12 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
 
   private val fixes = mutableListOf<LintFix>()
   private var rootIssueData: RootIssueData? = null
+
+  override fun beforeCheckRootProject(context: Context) {
+    super.beforeCheckRootProject(context)
+
+    ImportAliasesLoader.loadImportAliases(context)
+  }
 
   override fun afterCheckFile(context: Context) {
     rootIssueData?.let {
@@ -77,7 +83,7 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
           val isLocalResourceImport = parentImportedFqName?.let { packageName.startsWith(it) } ?: true
           if (!isLocalResourceImport) {
             val importedFqNameString = requireNotNull(importedFqName).asString()
-            val alias = IMPORT_ALIASES[importedFqNameString]
+            val alias = importAliases[importedFqNameString]
 
             if (alias != null) {
               rootIssueData = RootIssueData(alias = alias, nameLocation = context.getNameLocation(importDirective))

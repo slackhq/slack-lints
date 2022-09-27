@@ -17,6 +17,7 @@ package slack.lint.resources
 
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.Category
+import com.android.tools.lint.detector.api.Context
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
@@ -28,13 +29,19 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UQualifiedReferenceExpression
-import slack.lint.resources.model.IMPORT_ALIASES
+import slack.lint.resources.ImportAliasesLoader.importAliases
 import slack.lint.util.sourceImplementation
 
 private const val FQN_ANDROID_R = "android.R"
 
 /** Reports an error when an R class is referenced using its fully qualified name. */
 class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
+
+  override fun beforeCheckRootProject(context: Context) {
+    super.beforeCheckRootProject(context)
+
+    ImportAliasesLoader.loadImportAliases(context)
+  }
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UQualifiedReferenceExpression::class.java)
 
@@ -47,7 +54,7 @@ class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
 
         val qualifier = node.receiver.asSourceString()
         if (qualifier.endsWith(".R") && qualifier != FQN_ANDROID_R) {
-          val alias = IMPORT_ALIASES[qualifier]
+          val alias = importAliases[qualifier]
 
           context.report(
             ISSUE,
