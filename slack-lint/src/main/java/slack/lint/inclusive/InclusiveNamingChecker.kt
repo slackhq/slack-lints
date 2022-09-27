@@ -41,7 +41,7 @@ sealed class InclusiveNamingChecker<C : Context, N> {
     internal val BLOCK_LIST =
       StringOption(
         "block-list",
-        "A comma-separated list of blocked words from [BLOCK_LIST_PROPERTY] set in the root project's`.",
+        "A comma-separated list of words that should not be used in source code.",
         null,
         "This property should define a comma-separated list of words that should not be used in source code."
       )
