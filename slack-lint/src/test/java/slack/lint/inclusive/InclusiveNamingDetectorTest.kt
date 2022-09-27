@@ -15,23 +15,29 @@
  */
 package slack.lint.inclusive
 
-import com.android.tools.lint.checks.infrastructure.TestFile.PropertyTestFile
+import com.android.tools.lint.checks.infrastructure.TestLintTask
+import com.android.tools.lint.checks.infrastructure.TestMode
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Issue
 import org.junit.Ignore
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
-@Suppress("UnstableApiUsage")
 class InclusiveNamingDetectorTest : BaseSlackLintTest() {
-
-  private fun propertiesFile(): PropertyTestFile = projectProperties().apply {
-    property(InclusiveNamingChecker.BLOCK_LIST_PROPERTY, "fork,knife,spoon,spork")
-    to(InclusiveNamingChecker.PROPERTY_FILE)
-  }
 
   override fun getDetector(): Detector = InclusiveNamingSourceCodeScanner()
   override fun getIssues(): List<Issue> = InclusiveNamingChecker.ISSUES.toList()
+
+  override fun lint(): TestLintTask {
+    return super.lint()
+      .configureOption(InclusiveNamingChecker.BLOCK_LIST, "fork,knife,spoon,spork")
+  }
+
+  override val skipTestModes: Array<TestMode> = arrayOf(
+    // Aliases are impossible to test correctly because you have to maintain completely different
+    // expected fixes and source inputs
+    TestMode.TYPE_ALIAS,
+  )
 
   @Test
   fun kotlin() {
@@ -44,7 +50,6 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
     // - Function
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           "test/ForkHandler.kt",
           """
@@ -113,7 +118,6 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
     // - Method
     lint()
       .files(
-        propertiesFile(),
         java(
           "test/ForkHandler.java",
           """
@@ -159,7 +163,6 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
     // Attr
     lint()
       .files(
-        propertiesFile(),
         xml(
           "test_file.xml",
           """
