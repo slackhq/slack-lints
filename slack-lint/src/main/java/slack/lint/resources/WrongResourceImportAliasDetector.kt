@@ -45,6 +45,8 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
   }
 
   override fun afterCheckFile(context: Context) {
+    // Collect all the fixes and apply them to one issue on the import to avoid renaming the import alias with a fix
+    // and leaving the R references still referencing the old import alias or vice versa.
     rootIssueData?.let {
       context.report(
         ISSUE,
