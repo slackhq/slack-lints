@@ -25,6 +25,7 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Location
 import com.android.tools.lint.detector.api.Position
 import com.android.tools.lint.detector.api.Severity
+import com.android.tools.lint.detector.api.StringOption
 import com.android.tools.lint.detector.api.TextFormat
 import com.android.tools.lint.detector.api.XmlContext
 import org.jetbrains.uast.UElement
@@ -32,20 +33,24 @@ import org.w3c.dom.Node
 import slack.lint.util.Priorities
 import slack.lint.util.resourcesImplementation
 import slack.lint.util.sourceImplementation
-import java.io.StringReader
 import java.util.Locale
-import java.util.Properties
 
 sealed class InclusiveNamingChecker<C : Context, N> {
   companion object {
 
-    private val SOURCE_ISSUE = sourceImplementation<InclusiveNamingSourceCodeScanner>().toIssue()
-    private val RESOURCES_ISSUE = resourcesImplementation<InclusiveNamingResourceScanner>().toIssue()
+    internal val BLOCK_LIST =
+      StringOption(
+        "block-list",
+        "A comma-separated list of blocked words from [BLOCK_LIST_PROPERTY] set in the root project's`.",
+        null,
+        "This property should define a comma-separated list of words that should not be used in source code."
+      )
 
-    val ISSUES: Array<Issue> = arrayOf(
-      SOURCE_ISSUE,
-      RESOURCES_ISSUE
-    )
+    private val SOURCE_ISSUE = sourceImplementation<InclusiveNamingSourceCodeScanner>().toIssue()
+    private val RESOURCES_ISSUE =
+      resourcesImplementation<InclusiveNamingResourceScanner>().toIssue()
+
+    val ISSUES: Array<Issue> = arrayOf(SOURCE_ISSUE, RESOURCES_ISSUE)
 
     private fun Implementation.toIssue(): Issue {
       return Issue.create(
@@ -54,33 +59,23 @@ sealed class InclusiveNamingChecker<C : Context, N> {
         """
           We try to use inclusive naming at Slack. Terms such as blacklist, whitelist, master, slave, etc, while maybe \
           widely used today, can be socially charged and make others feel excluded or uncomfortable.
-        """.trimIndent(),
+        """
+          .trimIndent(),
         Category.CORRECTNESS,
         Priorities.NORMAL,
         Severity.ERROR,
         this
-      )
+      ).setOptions(listOf(BLOCK_LIST))
     }
 
-    const val PROPERTY_FILE = "gradle.properties"
-    const val BLOCK_LIST_PROPERTY = "inclusiveNaming.blocklist"
-
-    /**
-     * Loads a comma-separated list of blocked words from [BLOCK_LIST_PROPERTY] set in the root project's
-     * `gradle.properties`.
-     */
+    /** Loads a comma-separated list of blocked words from the [BLOCK_LIST] option. */
     fun loadBlocklist(context: Context): Set<String> {
-      val props = Properties()
-      return context.project.propertyFiles.find { it.name == PROPERTY_FILE }?.run {
-        val content = StringReader(context.client.readFile(this).toString())
-        props.load(content)
-        props.getProperty(BLOCK_LIST_PROPERTY)
-          ?.splitToSequence(",")
-          .orEmpty()
-          .map(String::trim)
-          .filter(String::isNotBlank)
-          .toSet()
-      } ?: emptySet()
+      return BLOCK_LIST.getValue(context.configuration)
+        ?.splitToSequence(",")
+        .orEmpty()
+        .map(String::trim)
+        .filter(String::isNotBlank)
+        .toSet()
     }
   }
 
@@ -93,35 +88,30 @@ sealed class InclusiveNamingChecker<C : Context, N> {
   fun check(node: N, name: String?, type: String, isFile: Boolean = false) {
     if (name == null) return
     val lowerCased = name.toLowerCase(Locale.US)
-    blocklist.find { it in lowerCased }?.let { matched ->
-      val location = locationFor(node)
-      if (!shouldReport(node, location, name, isFile)) return
-      val description = buildString {
-        append(issue.getBriefDescription(TextFormat.TEXT))
-        append(" Matched string is '")
-        append(matched)
-        append("' in ")
-        append(type)
-        append(" name '")
-        append(name)
-        append("'")
+    blocklist
+      .find { it in lowerCased }
+      ?.let { matched ->
+        val location = locationFor(node)
+        if (!shouldReport(node, location, name, isFile)) return
+        val description = buildString {
+          append(issue.getBriefDescription(TextFormat.TEXT))
+          append(" Matched string is '")
+          append(matched)
+          append("' in ")
+          append(type)
+          append(" name '")
+          append(name)
+          append("'")
+        }
+        context.report(issue, location, description, null)
       }
-      context.report(
-        issue,
-        location,
-        description,
-        null
-      )
-    }
   }
 
-  class SourceCodeChecker(
-    override val context: JavaContext,
-    override val blocklist: Set<String>
-  ) : InclusiveNamingChecker<JavaContext, UElement>() {
+  class SourceCodeChecker(override val context: JavaContext, override val blocklist: Set<String>) :
+    InclusiveNamingChecker<JavaContext, UElement>() {
     /**
-     * Some element types will be reported multiple times (such as property parameters). This caches reports so we
-     * only report once.
+     * Some element types will be reported multiple times (such as property parameters). This caches
+     * reports so we only report once.
      */
     private val cachedReports = mutableSetOf<CacheKey>()
     override val issue: Issue = SOURCE_ISSUE
@@ -130,7 +120,12 @@ sealed class InclusiveNamingChecker<C : Context, N> {
       return context.getLocation(node)
     }
 
-    override fun shouldReport(node: UElement, location: Location, name: String, isFile: Boolean): Boolean {
+    override fun shouldReport(
+      node: UElement,
+      location: Location,
+      name: String,
+      isFile: Boolean
+    ): Boolean {
       return cachedReports.add(CacheKey.fromLocation(location, isFile))
     }
 
@@ -158,10 +153,8 @@ sealed class InclusiveNamingChecker<C : Context, N> {
     }
   }
 
-  class XmlChecker(
-    override val context: XmlContext,
-    override val blocklist: Set<String>
-  ) : InclusiveNamingChecker<XmlContext, Node>() {
+  class XmlChecker(override val context: XmlContext, override val blocklist: Set<String>) :
+    InclusiveNamingChecker<XmlContext, Node>() {
     override val issue: Issue = RESOURCES_ISSUE
     override fun locationFor(node: Node): Location {
       return context.getLocation(node)
