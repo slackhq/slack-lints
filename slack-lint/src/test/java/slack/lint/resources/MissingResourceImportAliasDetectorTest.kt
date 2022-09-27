@@ -23,11 +23,11 @@ import slack.lint.BaseSlackLintTest
 class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
   private fun propertiesFile(): TestFile.PropertyTestFile = projectProperties().apply {
-      property(
-              ImportAliasesLoader.IMPORT_ALIASES_PROPERTY,
-              "slack.l10n.R as L10nR, slack.uikit.resources.R as SlackKitR, slack.uikit.R as UiKitR"
-      )
-      to(ImportAliasesLoader.PROPERTY_FILE)
+    property(
+      ImportAliasesLoader.IMPORT_ALIASES_PROPERTY,
+      "slack.l10n.R as L10nR, slack.uikit.resources.R as SlackKitR, slack.uikit.R as UiKitR"
+    )
+    to(ImportAliasesLoader.PROPERTY_FILE)
   }
 
   override fun getDetector(): Detector = MissingResourceImportAliasDetector()
