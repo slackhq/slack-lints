@@ -15,29 +15,30 @@
  */
 package slack.lint.resources
 
-import com.android.tools.lint.checks.infrastructure.TestFile
+import com.android.tools.lint.checks.infrastructure.TestLintTask
 import com.android.tools.lint.detector.api.Detector
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
+import slack.lint.resources.ImportAliasesLoader.IMPORT_ALIASES
 
 class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
-  private fun propertiesFile(): TestFile.PropertyTestFile = projectProperties().apply {
-    property(
-      ImportAliasesLoader.IMPORT_ALIASES_PROPERTY,
-      "slack.l10n.R as L10nR, slack.uikit.resources.R as SlackKitR, slack.uikit.R as UiKitR"
-    )
-    to(ImportAliasesLoader.PROPERTY_FILE)
-  }
 
   override fun getDetector(): Detector = FullyQualifiedResourceDetector()
 
   override fun getIssues() = listOf(FullyQualifiedResourceDetector.ISSUE)
 
+  override fun lint(): TestLintTask {
+    return super.lint()
+      .configureOption(
+        IMPORT_ALIASES,
+        "slack.l10n.R as L10nR, slack.uikit.resources.R as SlackKitR, slack.uikit.R as UiKitR"
+      )
+  }
+
   @Test
   fun `test success`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -62,7 +63,6 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
   fun `test failure no imports`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -104,7 +104,6 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
   fun `test failure no import`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -147,7 +146,6 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
   fun `test failure import`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -189,7 +187,6 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
   fun `test failure import without alias`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -232,7 +229,6 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
   fun `test failure import wrong alias`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -275,7 +271,6 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
   fun `test failure no fix`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -309,7 +304,6 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
   fun `test java no-op`() {
     lint()
       .files(
-        propertiesFile(),
         java(
           """
           package slack.pkg.subpackage;

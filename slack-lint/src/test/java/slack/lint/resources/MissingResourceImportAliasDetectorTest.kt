@@ -15,30 +15,29 @@
  */
 package slack.lint.resources
 
-import com.android.tools.lint.checks.infrastructure.TestFile
+import com.android.tools.lint.checks.infrastructure.TestLintTask
 import com.android.tools.lint.detector.api.Detector
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
 class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
-  private fun propertiesFile(): TestFile.PropertyTestFile = projectProperties().apply {
-    property(
-      ImportAliasesLoader.IMPORT_ALIASES_PROPERTY,
-      "slack.l10n.R as L10nR, slack.uikit.resources.R as SlackKitR, slack.uikit.R as UiKitR"
-    )
-    to(ImportAliasesLoader.PROPERTY_FILE)
-  }
-
   override fun getDetector(): Detector = MissingResourceImportAliasDetector()
 
   override fun getIssues() = listOf(MissingResourceImportAliasDetector.ISSUE)
+
+  override fun lint(): TestLintTask {
+    return super.lint()
+      .configureOption(
+        ImportAliasesLoader.IMPORT_ALIASES,
+        "slack.l10n.R as L10nR, slack.uikit.resources.R as SlackKitR, slack.uikit.R as UiKitR"
+      )
+  }
 
   @Test
   fun `test success`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -65,7 +64,6 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
   fun `test failure no references`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -100,7 +98,6 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
   fun `test failure one reference`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -144,7 +141,6 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
   fun `test failure multiple references`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -191,7 +187,6 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
   fun `test failure VERSION_CODES R reference`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -241,7 +236,6 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
   fun `test failure no fix`() {
     lint()
       .files(
-        propertiesFile(),
         kotlin(
           """
           package slack.pkg.subpackage
@@ -275,7 +269,6 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
   fun `test java no-op`() {
     lint()
       .files(
-        propertiesFile(),
         java(
           """
           package slack.pkg.subpackage;

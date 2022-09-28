@@ -30,7 +30,7 @@ import org.jetbrains.uast.UImportStatement
 import org.jetbrains.uast.USimpleNameReferenceExpression
 import org.jetbrains.uast.getContainingUFile
 import org.jetbrains.uast.getQualifiedParentOrThis
-import slack.lint.resources.ImportAliasesLoader.importAliases
+import slack.lint.resources.ImportAliasesLoader.IMPORT_ALIASES
 import slack.lint.resources.model.RootIssueData
 import slack.lint.util.sourceImplementation
 
@@ -40,10 +40,12 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
   private val fixes = mutableListOf<LintFix>()
   private var rootIssueData: RootIssueData? = null
 
+  private lateinit var importAliases: Map<String, String>
+
   override fun beforeCheckRootProject(context: Context) {
     super.beforeCheckRootProject(context)
 
-    ImportAliasesLoader.loadImportAliases(context)
+    importAliases = ImportAliasesLoader.loadImportAliases(context)
   }
 
   override fun afterCheckFile(context: Context) {
@@ -137,6 +139,6 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
         6,
         Severity.ERROR,
         sourceImplementation<MissingResourceImportAliasDetector>()
-      )
+      ).setOptions(listOf(IMPORT_ALIASES))
   }
 }

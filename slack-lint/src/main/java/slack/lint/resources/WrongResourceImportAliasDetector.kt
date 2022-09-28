@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UImportStatement
 import org.jetbrains.uast.USimpleNameReferenceExpression
-import slack.lint.resources.ImportAliasesLoader.importAliases
+import slack.lint.resources.ImportAliasesLoader.IMPORT_ALIASES
 import slack.lint.resources.model.RootIssueData
 import slack.lint.util.sourceImplementation
 
@@ -38,10 +38,12 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
   private val fixes = mutableListOf<LintFix>()
   private var rootIssueData: RootIssueData? = null
 
+  private lateinit var importAliases: Map<String, String>
+
   override fun beforeCheckRootProject(context: Context) {
     super.beforeCheckRootProject(context)
 
-    ImportAliasesLoader.loadImportAliases(context)
+    importAliases = ImportAliasesLoader.loadImportAliases(context)
   }
 
   override fun afterCheckFile(context: Context) {
@@ -144,6 +146,6 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
         6,
         Severity.ERROR,
         sourceImplementation<WrongResourceImportAliasDetector>()
-      )
+      ).setOptions(listOf(IMPORT_ALIASES))
   }
 }

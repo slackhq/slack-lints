@@ -29,18 +29,19 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UQualifiedReferenceExpression
-import slack.lint.resources.ImportAliasesLoader.importAliases
+import slack.lint.resources.ImportAliasesLoader.IMPORT_ALIASES
 import slack.lint.util.sourceImplementation
 
 private const val FQN_ANDROID_R = "android.R"
 
 /** Reports an error when an R class is referenced using its fully qualified name. */
 class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
+  private lateinit var importAliases: Map<String, String>
 
   override fun beforeCheckRootProject(context: Context) {
     super.beforeCheckRootProject(context)
 
-    ImportAliasesLoader.loadImportAliases(context)
+    importAliases = ImportAliasesLoader.loadImportAliases(context)
   }
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UQualifiedReferenceExpression::class.java)
@@ -145,6 +146,6 @@ class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
         6,
         Severity.ERROR,
         sourceImplementation<FullyQualifiedResourceDetector>()
-      )
+      ).setOptions(listOf(IMPORT_ALIASES))
   }
 }
