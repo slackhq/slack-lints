@@ -26,6 +26,9 @@ import slack.lint.mocking.AutoValueMockDetector
 import slack.lint.mocking.DataClassMockDetector
 import slack.lint.mocking.DoNotMockMockDetector
 import slack.lint.mocking.ErrorProneDoNotMockDetector
+import slack.lint.resources.FullyQualifiedResourceDetector
+import slack.lint.resources.MissingResourceImportAliasDetector
+import slack.lint.resources.WrongResourceImportAliasDetector
 import slack.lint.retrofit.RetrofitUsageDetector
 import slack.lint.rx.RxSubscribeOnMainDetector
 import slack.lint.text.SpanMarkPointMissingMaskDetector
@@ -67,5 +70,8 @@ class SlackIssueRegistry : IssueRegistry() {
     RestrictCallsToDetector.ISSUE,
     SpanMarkPointMissingMaskDetector.ISSUE,
     DoNotExposeEitherNetInRepositoriesDetector.ISSUE,
+    FullyQualifiedResourceDetector.ISSUE,
+    MissingResourceImportAliasDetector.ISSUE,
+    WrongResourceImportAliasDetector.ISSUE,
   )
 }
