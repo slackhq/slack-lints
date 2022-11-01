@@ -79,7 +79,7 @@ class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
           // Alternative to ReplaceStringBuilder#imports since that one didn't work here.
           addImportIfMissing(qualifier, alias, fixes)
 
-          fix().name("Replace import alias").composite(
+          fix().name("Replace with import alias").composite(
             *fixes.reversed().toTypedArray()
           ).autoFix()
         } else {

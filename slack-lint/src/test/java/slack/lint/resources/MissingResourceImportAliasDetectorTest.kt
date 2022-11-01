@@ -40,10 +40,10 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
           """
-          package slack.pkg.subpackage
+          package lint.test.pkg.subpackage
 
           import slack.l10n.R as L10nR
-          import slack.pkg.R
+          import lint.test.pkg.R
 
           class MyClass {
 
@@ -66,7 +66,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
           """
-          package slack.pkg.subpackage
+          package lint.test.pkg
 
           import slack.l10n.R
 
@@ -78,7 +78,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
+        src/lint/test/pkg/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
         import slack.l10n.R
         ~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -86,7 +86,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Autofix for src/slack/pkg/subpackage/MyClass.kt line 3: Add import alias:
+        Autofix for src/lint/test/pkg/MyClass.kt line 3: Add import alias:
         @@ -3 +3
         - import slack.l10n.R
         + import slack.l10n.R as L10nR
@@ -100,7 +100,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
           """
-          package slack.pkg.subpackage
+          package lint.test.pkg
 
           import slack.l10n.R
 
@@ -118,7 +118,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
+        src/lint/test/pkg/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
         import slack.l10n.R
         ~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -126,7 +126,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Autofix for src/slack/pkg/subpackage/MyClass.kt line 3: Add import alias:
+        Autofix for src/lint/test/pkg/MyClass.kt line 3: Add import alias:
         @@ -3 +3
         - import slack.l10n.R
         + import slack.l10n.R as L10nR
@@ -143,7 +143,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
           """
-          package slack.pkg.subpackage
+          package lint.test.pkg
 
           import slack.l10n.R
 
@@ -162,7 +162,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
+        src/lint/test/pkg/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
         import slack.l10n.R
         ~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -170,7 +170,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Autofix for src/slack/pkg/subpackage/MyClass.kt line 3: Add import alias:
+        Autofix for src/lint/test/pkg/MyClass.kt line 3: Add import alias:
         @@ -3 +3
         - import slack.l10n.R
         + import slack.l10n.R as L10nR
@@ -189,7 +189,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
           """
-          package slack.pkg.subpackage
+          package lint.test.pkg
 
           import slack.l10n.R
 
@@ -210,7 +210,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
+        src/lint/test/pkg/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
         import slack.l10n.R
         ~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -218,7 +218,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Autofix for src/slack/pkg/subpackage/MyClass.kt line 3: Add import alias:
+        Autofix for src/lint/test/pkg/MyClass.kt line 3: Add import alias:
         @@ -3 +3
         - import slack.l10n.R
         + import slack.l10n.R as L10nR
@@ -238,9 +238,9 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
           """
-          package slack.pkg.subpackage
+          package lint.test.pkg
 
-          import slack.pkg.subpkg.R
+          import lint.test.subpkg.R
 
           class MyClass {
 
@@ -256,8 +256,8 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/slack/pkg/subpackage/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
-        import slack.pkg.subpkg.R
+        src/lint/test/pkg/MyClass.kt:3: Error: Use an import alias for R classes from other modules [MissingResourceImportAlias]
+        import lint.test.subpkg.R
         ~~~~~~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
         """.trimIndent()
@@ -271,9 +271,9 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
       .files(
         java(
           """
-          package slack.pkg.subpackage;
+          package lint.test.pkg;
 
-          import slack.pkg.subpkg.R;
+          import lint.test.subpkg.R;
 
           class MyClass {
 
