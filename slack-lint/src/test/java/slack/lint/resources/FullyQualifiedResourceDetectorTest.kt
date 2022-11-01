@@ -89,7 +89,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Autofix for src/slack/pkg/subpackage/MyClass.kt line 6: Replace import alias:
+        Autofix for src/slack/pkg/subpackage/MyClass.kt line 6: Replace with import alias:
         @@ -3 +3
         + import slack.l10n.R as L10nR
         +
@@ -132,7 +132,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Autofix for src/slack/pkg/subpackage/MyClass.kt line 8: Replace import alias:
+        Autofix for src/slack/pkg/subpackage/MyClass.kt line 8: Replace with import alias:
         @@ -4 +4
         + import slack.l10n.R as L10nR
         @@ -8 +9
@@ -175,7 +175,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Autofix for src/slack/pkg/subpackage/MyClass.kt line 9: Replace import alias:
+        Autofix for src/slack/pkg/subpackage/MyClass.kt line 9: Replace with import alias:
         @@ -9 +9
         -         val appName = getString(slack.l10n.R.string.app_name)
         +         val appName = getString(L10nR.string.app_name)
@@ -215,7 +215,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Autofix for src/slack/pkg/subpackage/MyClass.kt line 8: Replace import alias:
+        Autofix for src/slack/pkg/subpackage/MyClass.kt line 8: Replace with import alias:
         @@ -4 +4
         + import slack.l10n.R as L10nR
         @@ -8 +9
@@ -257,7 +257,7 @@ class FullyQualifiedResourceDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Autofix for src/slack/pkg/subpackage/MyClass.kt line 8: Replace import alias:
+        Autofix for src/slack/pkg/subpackage/MyClass.kt line 8: Replace with import alias:
         @@ -4 +4
         + import slack.l10n.R as L10nR
         @@ -8 +9
