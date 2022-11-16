@@ -27,7 +27,6 @@ import com.android.tools.lint.detector.api.XmlContext
 import com.android.tools.lint.detector.api.XmlScanner
 import com.intellij.psi.PsiField
 import com.intellij.psi.PsiMethod
-import java.util.EnumSet
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
@@ -37,6 +36,7 @@ import org.jetbrains.uast.UQualifiedReferenceExpression
 import org.jetbrains.uast.util.isConstructorCall
 import org.w3c.dom.Element
 import slack.lint.denylistedapis.DenyListedEntry.Companion.MatchAll
+import java.util.EnumSet
 
 /**
  * Deny-listed APIs that we don't want people to use.
@@ -50,56 +50,56 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         className = "io.reactivex.rxjava3.core.Observable",
         functionName = "hide",
         errorMessage =
-          "There should be no reason to defend against downcasting an Observable to " +
-            "an implementation type like Relay or Subject in a closed codebase. Doing this incurs " +
-            "needless runtime memory and performance overhead. Relays and Subjects both extend from " +
-            "Observable and can be supplied to functions accepting Observable directly. When " +
-            "returning a Relay or Subject, declare the return type explicitly as Observable " +
-            "(e.g., fun foo(): Observable<Foo> = fooRelay)."
+        "There should be no reason to defend against downcasting an Observable to " +
+          "an implementation type like Relay or Subject in a closed codebase. Doing this incurs " +
+          "needless runtime memory and performance overhead. Relays and Subjects both extend from " +
+          "Observable and can be supplied to functions accepting Observable directly. When " +
+          "returning a Relay or Subject, declare the return type explicitly as Observable " +
+          "(e.g., fun foo(): Observable<Foo> = fooRelay)."
       ),
       DenyListedEntry(
         className = "io.reactivex.rxjava3.core.Flowable",
         functionName = "hide",
         errorMessage =
-          "There should be no reason to defend against downcasting an Observable to " +
-            "an implementation type like FlowableProcessor in a closed codebase. Doing this incurs " +
-            "needless runtime memory and performance overhead. FlowableProcessor extends from " +
-            "Flowable and can be supplied to functions accepting Flowable directly. When " +
-            "returning a FlowableProcessor, declare the return type explicitly as Flowable " +
-            "(e.g., fun foo(): Flowable<Foo> = fooProcessor)."
+        "There should be no reason to defend against downcasting an Observable to " +
+          "an implementation type like FlowableProcessor in a closed codebase. Doing this incurs " +
+          "needless runtime memory and performance overhead. FlowableProcessor extends from " +
+          "Flowable and can be supplied to functions accepting Flowable directly. When " +
+          "returning a FlowableProcessor, declare the return type explicitly as Flowable " +
+          "(e.g., fun foo(): Flowable<Foo> = fooProcessor)."
       ),
       DenyListedEntry(
         className = "io.reactivex.rxjava3.core.Completable",
         functionName = "hide",
         errorMessage =
-          "There should be no reason to defend against downcasting a Completable to " +
-            "an implementation type like CompletableSubject in a closed codebase. Doing this incurs " +
-            "needless runtime memory and performance overhead. CompletableSubject extends from " +
-            "Completable and can be supplied to functions accepting Completable directly. When " +
-            "returning a CompletableSubject, declare the return type explicitly as Completable " +
-            "(e.g., fun foo(): Completable<Foo> = fooSubject)."
+        "There should be no reason to defend against downcasting a Completable to " +
+          "an implementation type like CompletableSubject in a closed codebase. Doing this incurs " +
+          "needless runtime memory and performance overhead. CompletableSubject extends from " +
+          "Completable and can be supplied to functions accepting Completable directly. When " +
+          "returning a CompletableSubject, declare the return type explicitly as Completable " +
+          "(e.g., fun foo(): Completable<Foo> = fooSubject)."
       ),
       DenyListedEntry(
         className = "io.reactivex.rxjava3.core.Maybe",
         functionName = "hide",
         errorMessage =
-          "There should be no reason to defend against downcasting a Maybe to " +
-            "an implementation type like MaybeSubject in a closed codebase. Doing this incurs " +
-            "needless runtime memory and performance overhead. MaybeSubject extends from " +
-            "Maybe and can be supplied to functions accepting Maybe directly. When " +
-            "returning a MaybeSubject, declare the return type explicitly as Maybe " +
-            "(e.g., fun foo(): Maybe<Foo> = fooSubject)."
+        "There should be no reason to defend against downcasting a Maybe to " +
+          "an implementation type like MaybeSubject in a closed codebase. Doing this incurs " +
+          "needless runtime memory and performance overhead. MaybeSubject extends from " +
+          "Maybe and can be supplied to functions accepting Maybe directly. When " +
+          "returning a MaybeSubject, declare the return type explicitly as Maybe " +
+          "(e.g., fun foo(): Maybe<Foo> = fooSubject)."
       ),
       DenyListedEntry(
         className = "io.reactivex.rxjava3.core.Single",
         functionName = "hide",
         errorMessage =
-          "There should be no reason to defend against downcasting a Single to " +
-            "an implementation type like SingleSubject in a closed codebase. Doing this incurs " +
-            "needless runtime memory and performance overhead. SingleSubject extends from " +
-            "Single and can be supplied to functions accepting Single directly. When " +
-            "returning a SingleSubject, declare the return type explicitly as Single " +
-            "(e.g., fun foo(): Single<Foo> = fooSubject)."
+        "There should be no reason to defend against downcasting a Single to " +
+          "an implementation type like SingleSubject in a closed codebase. Doing this incurs " +
+          "needless runtime memory and performance overhead. SingleSubject extends from " +
+          "Single and can be supplied to functions accepting Single directly. When " +
+          "returning a SingleSubject, declare the return type explicitly as Single " +
+          "(e.g., fun foo(): Single<Foo> = fooSubject)."
       ),
       DenyListedEntry(
         className = "androidx.core.content.ContextCompat",
@@ -118,10 +118,10 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         functionName = "withId",
         parameters = listOf("int"),
         errorMessage =
-          "Consider matching the content description instead. IDs are " +
-            "implementation details of how a screen is built, not how it works. You can't" +
-            " tell a user to click on the button with ID 428194727 so our tests should not" +
-            " be doing that. "
+        "Consider matching the content description instead. IDs are " +
+          "implementation details of how a screen is built, not how it works. You can't" +
+          " tell a user to click on the button with ID 428194727 so our tests should not" +
+          " be doing that. "
       ),
       DenyListedEntry(
         className = "android.view.View",
@@ -129,7 +129,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         parameters = listOf("android.view.View.OnClickListener"),
         arguments = listOf("null"),
         errorMessage =
-          "This fails to also set View#isClickable. Use View#clearOnClickListener() instead"
+        "This fails to also set View#isClickable. Use View#clearOnClickListener() instead"
       ),
       DenyListedEntry(
         // If you are deny listing an extension method you need to ascertain the fully qualified
@@ -138,24 +138,24 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         className = "kotlinx.coroutines.flow.FlowKt__CollectKt",
         functionName = "launchIn",
         errorMessage =
-          "Use the structured concurrent CoroutineScope#launch and Flow#collect " +
-            "APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect " +
-            "can be refactored into standalone suspend funs and mixed in with regular control flow " +
-            "in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at " +
-            "the same time hide the suspend context, encouraging the developer to continue working in " +
-            "the reactive domain."
+        "Use the structured concurrent CoroutineScope#launch and Flow#collect " +
+          "APIs instead of reactive Flow#onEach and Flow#launchIn. Suspend calls like Flow#collect " +
+          "can be refactored into standalone suspend funs and mixed in with regular control flow " +
+          "in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at " +
+          "the same time hide the suspend context, encouraging the developer to continue working in " +
+          "the reactive domain."
       ),
       DenyListedEntry(
         className = "kotlinx.coroutines.test.TestBuildersKt",
         functionName = "runBlockingTest",
         errorMessage =
-          "Use runBlocking or runBlockingWithTestDispatcher instead. runBlockingTest " +
-            "is often overkill. The only difference between it and runBlocking is that it gives you " +
-            "a TestDispatcher. Treat it like RxJava's TestScheduler: if you don't need it, leave it " +
-            "out. But even if you do need it, you are better off using TestDispatcher directly: if a " +
-            "coroutine is blocked on something other than TestDispatcher (which isn't uncommon - " +
-            "most things that block in Cash App aren't coroutines right now), at the end of your " +
-            "runBlockingTest block it will fail the test. This is not what you want."
+        "Use runBlocking or runBlockingWithTestDispatcher instead. runBlockingTest " +
+          "is often overkill. The only difference between it and runBlocking is that it gives you " +
+          "a TestDispatcher. Treat it like RxJava's TestScheduler: if you don't need it, leave it " +
+          "out. But even if you do need it, you are better off using TestDispatcher directly: if a " +
+          "coroutine is blocked on something other than TestDispatcher (which isn't uncommon - " +
+          "most things that block in Cash App aren't coroutines right now), at the end of your " +
+          "runBlockingTest block it will fail the test. This is not what you want."
       ),
       DenyListedEntry(
         className = "androidx.viewpager2.widget.ViewPager2",
@@ -163,7 +163,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         parameters = listOf("int"),
         arguments = listOf("ViewCompat.generateViewId()"),
         errorMessage =
-          "Use an id defined in resources or a statically created instead of generating with ViewCompat.generateViewId(). See https://issuetracker.google.com/issues/185820237"
+        "Use an id defined in resources or a statically created instead of generating with ViewCompat.generateViewId(). See https://issuetracker.google.com/issues/185820237"
       ),
       DenyListedEntry(
         className = "androidx.viewpager2.widget.ViewPager2",
@@ -171,13 +171,13 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         parameters = listOf("int"),
         arguments = listOf("View.generateViewId()"),
         errorMessage =
-          "Use an id defined in resources or a statically created instead of generating with View.generateViewId(). See https://issuetracker.google.com/issues/185820237"
+        "Use an id defined in resources or a statically created instead of generating with View.generateViewId(). See https://issuetracker.google.com/issues/185820237"
       ),
       DenyListedEntry(
         className = "java.util.LinkedList",
         functionName = "<init>",
         errorMessage =
-          "For a stack/queue/double-ended queue use ArrayDeque, for a list use ArrayList. Both are more efficient internally."
+        "For a stack/queue/double-ended queue use ArrayDeque, for a list use ArrayList. Both are more efficient internally."
       ),
       DenyListedEntry(
         className = "java.util.Stack",
@@ -188,19 +188,19 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         className = "java.util.Vector",
         functionName = "<init>",
         errorMessage =
-          "For a vector use ArrayList or ArrayDeque which are more efficient internally."
+        "For a vector use ArrayList or ArrayDeque which are more efficient internally."
       ),
       DenyListedEntry(
         className = "io.reactivex.rxjava3.schedulers.Schedulers",
         functionName = "newThread",
         errorMessage =
-          "Use a scheduler which wraps a cached set of threads. There should be no reason to be arbitrarily creating threads on Android."
+        "Use a scheduler which wraps a cached set of threads. There should be no reason to be arbitrarily creating threads on Android."
       ),
       DenyListedEntry(
         className = "android.os.Build.VERSION_CODES",
         fieldName = MatchAll,
         errorMessage =
-          "No one remembers what these constants map to. Use the API level integer value directly since it's self-defining."
+        "No one remembers what these constants map to. Use the API level integer value directly since it's self-defining."
       ),
       // TODO we should do this too, but don't currently.
       //    DenyListedEntry(
@@ -212,48 +212,48 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         className = "kotlinx.coroutines.rx3.RxCompletableKt",
         functionName = "rxCompletable",
         errorMessage =
-          "rxCompletable defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way.",
+        "rxCompletable defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way.",
         parameters =
-          listOf(
-            "kotlin.coroutines.CoroutineContext",
-            "kotlin.jvm.functions.Function2<? super kotlinx.coroutines.CoroutineScope,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,? extends java.lang.Object>",
-          ),
+        listOf(
+          "kotlin.coroutines.CoroutineContext",
+          "kotlin.jvm.functions.Function2<? super kotlinx.coroutines.CoroutineScope,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,? extends java.lang.Object>",
+        ),
         arguments = listOf("*"),
       ),
       DenyListedEntry(
         className = "kotlinx.coroutines.rx3.RxMaybeKt",
         functionName = "rxMaybe",
         errorMessage =
-          "rxMaybe defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way.",
+        "rxMaybe defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way.",
         parameters =
-          listOf(
-            "kotlin.coroutines.CoroutineContext",
-            "kotlin.jvm.functions.Function2<? super kotlinx.coroutines.CoroutineScope,? super kotlin.coroutines.Continuation<? super T>,? extends java.lang.Object>",
-          ),
+        listOf(
+          "kotlin.coroutines.CoroutineContext",
+          "kotlin.jvm.functions.Function2<? super kotlinx.coroutines.CoroutineScope,? super kotlin.coroutines.Continuation<? super T>,? extends java.lang.Object>",
+        ),
         arguments = listOf("*"),
       ),
       DenyListedEntry(
         className = "kotlinx.coroutines.rx3.RxSingleKt",
         functionName = "rxSingle",
         errorMessage =
-          "rxSingle defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way.",
+        "rxSingle defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way.",
         parameters =
-          listOf(
-            "kotlin.coroutines.CoroutineContext",
-            "kotlin.jvm.functions.Function2<? super kotlinx.coroutines.CoroutineScope,? super kotlin.coroutines.Continuation<? super T>,? extends java.lang.Object>",
-          ),
+        listOf(
+          "kotlin.coroutines.CoroutineContext",
+          "kotlin.jvm.functions.Function2<? super kotlinx.coroutines.CoroutineScope,? super kotlin.coroutines.Continuation<? super T>,? extends java.lang.Object>",
+        ),
         arguments = listOf("*"),
       ),
       DenyListedEntry(
         className = "kotlinx.coroutines.rx3.RxObservableKt",
         functionName = "rxObservable",
         errorMessage =
-          "rxObservable defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way.",
+        "rxObservable defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way.",
         parameters =
-          listOf(
-            "kotlin.coroutines.CoroutineContext",
-            "kotlin.jvm.functions.Function2<? super kotlinx.coroutines.channels.ProducerScope<T>,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,? extends java.lang.Object>",
-          ),
+        listOf(
+          "kotlin.coroutines.CoroutineContext",
+          "kotlin.jvm.functions.Function2<? super kotlinx.coroutines.channels.ProducerScope<T>,? super kotlin.coroutines.Continuation<? super kotlin.Unit>,? extends java.lang.Object>",
+        ),
         arguments = listOf("*"),
       ),
     )
@@ -406,7 +406,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         (actualValue as? ULiteralExpression)?.asRenderString()
           ?: (actualValue as? UQualifiedReferenceExpression)
             ?.asRenderString() // Helps to match against static method params
-                               // 'Class.staticMethod()'.
+      // 'Class.staticMethod()'.
       if (expectedValue == renderString) return true
 
       return false
@@ -419,18 +419,18 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         id = "DenyListedApi",
         briefDescription = "Deny-listed API",
         explanation =
-          "This lint check flags usages of APIs in external libraries that we prefer not to use.",
+        "This lint check flags usages of APIs in external libraries that we prefer not to use.",
         category = CORRECTNESS,
         priority = 5,
         severity = ERROR,
         implementation =
-          Implementation(
-            DenyListedApiDetector::class.java,
-            EnumSet.of(Scope.JAVA_FILE, Scope.RESOURCE_FILE, Scope.TEST_SOURCES),
-            EnumSet.of(Scope.JAVA_FILE),
-            EnumSet.of(Scope.RESOURCE_FILE),
-            EnumSet.of(Scope.TEST_SOURCES),
-          )
+        Implementation(
+          DenyListedApiDetector::class.java,
+          EnumSet.of(Scope.JAVA_FILE, Scope.RESOURCE_FILE, Scope.TEST_SOURCES),
+          EnumSet.of(Scope.JAVA_FILE),
+          EnumSet.of(Scope.RESOURCE_FILE),
+          EnumSet.of(Scope.TEST_SOURCES),
+        )
       )
   }
 }

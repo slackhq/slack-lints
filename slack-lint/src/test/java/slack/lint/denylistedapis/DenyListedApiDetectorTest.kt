@@ -74,7 +74,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           |  fun test() {
           |    observable().test(rxRule).assertValue(42)
           |  }
-          |  
+          |
           |  fun observable(): Observable<String> = TODO()
           |}
           """
@@ -627,7 +627,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         |package com.squareup.util.rx3.test
         |
         |import io.reactivex.rxjava3.core.Observable
-        | 
+        |
         |class RxRule {
         |  fun <T : Any> newObserver(): RecordingObserver<T> = TODO()
         |}
@@ -644,7 +644,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         |
         |import android.graphics.drawable.Drawable;
         |import android.content.Context;
-        | 
+        |
         |public class ContextCompat {
         |  public static Drawable getDrawable(Context context, int id) {}
         |}
@@ -680,9 +680,9 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         |public class View {
         |
         |  public static int generateViewId() { return 0; }
-        |  
+        |
         |  public void setOnClickListener(View.OnClickListener l) {}
-        |  
+        |
         |  public interface OnClickListener {}
         |}
       """
@@ -770,7 +770,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       kotlin(
         """
         |package kotlinx.coroutines.rx3
-        |        
+        |
         |import kotlin.coroutines.CoroutineContext
         |import kotlin.coroutines.EmptyCoroutineContext
         |import kotlinx.coroutines.CoroutineScope
@@ -781,7 +781,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         |    context: CoroutineContext = EmptyCoroutineContext,
         |    block: suspend CoroutineScope.() -> Unit
         |): Completable {
-        |  return Completable    
+        |  return Completable
         |}
       """
           .trimMargin()
@@ -803,7 +803,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       kotlin(
         """
         |package kotlinx.coroutines.rx3
-        |        
+        |
         |import kotlin.coroutines.CoroutineContext
         |import kotlin.coroutines.EmptyCoroutineContext
         |import kotlinx.coroutines.CoroutineScope
@@ -814,7 +814,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         |    context: CoroutineContext = EmptyCoroutineContext,
         |    block: suspend CoroutineScope.() -> T
         |): Single<T> {
-        |  return Single<T>()    
+        |  return Single<T>()
         |}
       """
           .trimMargin()
@@ -836,7 +836,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       kotlin(
         """
         |package kotlinx.coroutines.rx3
-        |        
+        |
         |import kotlin.coroutines.CoroutineContext
         |import kotlin.coroutines.EmptyCoroutineContext
         |import kotlinx.coroutines.CoroutineScope
@@ -847,7 +847,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         |    context: CoroutineContext = EmptyCoroutineContext,
         |    block: suspend CoroutineScope.() -> T?
         |): Maybe<T> {
-        |  return Maybe<T>()    
+        |  return Maybe<T>()
         |}
       """
           .trimMargin()
@@ -869,7 +869,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       kotlin(
         """
         |package kotlinx.coroutines.rx3
-        |        
+        |
         |import kotlin.coroutines.CoroutineContext
         |import kotlin.coroutines.EmptyCoroutineContext
         |import kotlinx.coroutines.CoroutineScope
@@ -881,7 +881,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         |    context: CoroutineContext = EmptyCoroutineContext,
         |    block: suspend ProducerScope<T>.() -> Unit
         |): Observable<T> {
-        |  return Observable<T>()    
+        |  return Observable<T>()
         |}
       """
           .trimMargin()

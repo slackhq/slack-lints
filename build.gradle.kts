@@ -64,8 +64,7 @@ allprojects {
       trimTrailingWhitespace()
       endWithNewline()
       licenseHeaderFile(rootProject.file("spotless/spotless.kt"))
-      targetExclude("**/spotless.kt")
-      targetExclude("**/denylistedapis/*.kt")
+      targetExclude("**/spotless.kt", "**/denylistedapis/*.kt")
     }
     // Externally adapted sources that should preserve their license header
     format("kotlinExternal", KotlinExtension::class.java) {
