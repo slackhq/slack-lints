@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         ci_java_version: ['17']
-        ci_lint_version: ['30.2.0', '30.3.0-beta01', '30.4.0-alpha03']
+        ci_lint_version: ['30.3.1', '30.4.0-beta05', '31.0.0-alpha08']
     env:
       DEP_OVERRIDES: 'true'
       DEP_OVERRIDE_LINT: ${{ matrix.ci_lint_version }}

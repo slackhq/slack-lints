@@ -94,14 +94,14 @@ subprojects {
     }
 
     tasks.withType<JavaCompile>().configureEach {
-      options.release.set(8)
+      options.release.set(11)
     }
   }
 
   pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
     tasks.withType<KotlinCompile>().configureEach {
       kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
         // TODO re-enable once lint uses Kotlin 1.5
 //        allWarningsAsErrors = true
 //        freeCompilerArgs = freeCompilerArgs + listOf("-progressive")
@@ -110,7 +110,7 @@ subprojects {
   }
 
   tasks.withType<Detekt>().configureEach {
-    jvmTarget = "1.8"
+    jvmTarget = "11"
   }
 
   pluginManager.withPlugin("com.vanniktech.maven.publish") {
