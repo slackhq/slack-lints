@@ -7,10 +7,7 @@ plugins {
   // Run lint on the lints! https://groups.google.com/g/lint-dev/c/q_TVEe85dgc
   alias(libs.plugins.lint)
   alias(libs.plugins.ksp)
-}
-
-if (hasProperty("SlackRepositoryUrl")) {
-  apply(plugin = "com.vanniktech.maven.publish")
+  alias(libs.plugins.mavenPublish)
 }
 
 lint {

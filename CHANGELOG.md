@@ -1,7 +1,9 @@
 Changelog
 =========
 
-1.0.0
+0.1.0
 -----
 
-_2021-??-??_
+_2022-11-17_
+
+* Initial release on maven central.
