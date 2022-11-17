@@ -1,0 +1,1137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="6" by="lint 7.3.1" type="baseline" client="gradle" dependencies="false" name="AGP (7.3.1)" variant="all" version="7.3.1">
+
+    <issue
+        id="LintImplIdFormat"
+        message="Lint issue IDs should be reasonably short (&lt; 40 chars); they&apos;re used in suppress annotations etc"
+        errorLine1="        &quot;InjectWithScopeRequiredLoggedInUserProvider&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectWithUsageDetector.kt"
+            line="76"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplIdFormat"
+        message="Lint issue IDs should be reasonably short (&lt; 40 chars); they&apos;re used in suppress annotations etc"
+        errorLine1="        &quot;InjectWithTypeMustImplementAnvilInjectable&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectWithUsageDetector.kt"
+            line="87"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="        &quot;Count value in formatted string resource.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="31"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;AutoValue classes represent pure data classes, so mocking them should not be necessary.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/mocking/AutoValueMockDetector.kt"
+            line="19"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="        &quot;@Binds-annotated functions can be extension functions.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DaggerKotlinIssuesDetector.kt"
+            line="63"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="        &quot;@Binds-annotated functions can be extension functions.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DaggerKotlinIssuesDetector.kt"
+            line="63"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;data classes represent pure data classes, so mocking them should not be necessary.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/mocking/DataClassMockDetector.kt"
+            line="19"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        BRIEF_DESCRIPTION_PREFIX_DEFAULT + BRIEF_DESCRIPTION_SUFFIX,"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DeprecatedAnnotationDetector.kt"
+            line="73"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;Dagger provider methods should not be called directly by user code.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DoNotCallProvidersDetector.kt"
+            line="42"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="&quot;EitherNet&quot; looks like a code reference; surround with backtics in string to display as symbol, e.g. \`EitherNet\`"
+        errorLine1="            message = &quot;Repository APIs should not expose EitherNet types directly.&quot;"
+        errorLine2="                                                         ~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/eithernet/DoNotExposeEitherNetInRepositoriesDetector.kt"
+            line="85"
+            column="58"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Single sentence error messages should not end with a period"
+        errorLine1="            message = &quot;Repository APIs should not expose EitherNet types directly.&quot;"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/eithernet/DoNotExposeEitherNetInRepositoriesDetector.kt"
+            line="85"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="        briefDescription = &quot;Repository APIs should not expose EitherNet types directly.&quot;,"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/eithernet/DoNotExposeEitherNetInRepositoriesDetector.kt"
+            line="107"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="&quot;EitherNet&quot; looks like a code reference; surround with backtics in string to display as symbol, e.g. \`EitherNet\`"
+        errorLine1="          &quot;EitherNet (and networking in general) should be an implementation detail of the repository layer.&quot;,"
+        errorLine2="           ~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/eithernet/DoNotExposeEitherNetInRepositoriesDetector.kt"
+            line="109"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="        &quot;Use Slack&apos;s internal `@DoNotMock` annotation.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/mocking/ErrorProneDoNotMockDetector.kt"
+            line="25"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="          &quot;Fragment dependencies should be injected using constructor injections only.&quot;,"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
+            line="67"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="          &quot;Fragment dependencies should be injected using constructor injections only.&quot;,"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
+            line="67"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="          &quot;Fragment dependencies should be injected using the Fragment&apos;s constructor.&quot;,"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
+            line="84"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="          &quot;Fragment dependencies should be injected using the Fragment&apos;s constructor.&quot;,"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
+            line="84"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="          &quot;Resources should use an import alias instead of being fully qualified.&quot;,"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/resources/FullyQualifiedResourceDetector.kt"
+            line="150"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Multi-line issue explanation strings will interpret line separators as hard breaks, and this looks like a continuation of the same paragraph. Consider using \ at the end of the previous line to indicate that the lines should be joined, or add a blank line between unrelated sentences, or suppress this issue type here."
+        errorLine1="            &quot;import slack.l10n.R as L10nR\n&quot; +"
+        errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/resources/FullyQualifiedResourceDetector.kt"
+            line="152"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="&quot;...getString(L10nR.string.app_name)&quot; looks like a call; surround with backtics in string to display as symbol, e.g. \`...getString(L10nR.string.app_name)\`"
+        errorLine1="            &quot;...getString(L10nR.string.app_name)&quot;,"
+        errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/resources/FullyQualifiedResourceDetector.kt"
+            line="154"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;Use Slack&apos;s JavaPreconditions instead of Guava&apos;s Preconditions checks&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/GuavaPreconditionsDetector.kt"
+            line="127"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;Use Slack&apos;s JavaPreconditions instead of Guava&apos;s Preconditions checks&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/GuavaPreconditionsDetector.kt"
+            line="127"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;Kotlin precondition checks should use the Kotlin standard library checks&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/GuavaPreconditionsDetector.kt"
+            line="140"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;Kotlin precondition checks should use the Kotlin standard library checks&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/GuavaPreconditionsDetector.kt"
+            line="140"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;Only Kotlin classes should be injected in order for Anvil to work.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectInJavaDetector.kt"
+            line="63"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;@InjectWith-annotated classes must implement LoggedInUserProvider (or extend something that does) if they target UserScope or OrgScope.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectWithUsageDetector.kt"
+            line="77"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;@InjectWith-annotated classes must implement AnvilInjectable (or extend something that does).&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectWithUsageDetector.kt"
+            line="88"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="        MESSAGE_LINT_ERROR_TITLE,"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/JavaOnlyDetector.kt"
+            line="53"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="        &quot;Use slack.foundation.coroutines.android.MainScope.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MainScopeUsageDetector.kt"
+            line="38"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="          &quot;Missing import alias for R class.&quot;,"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/resources/MissingResourceImportAliasDetector.kt"
+            line="140"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Single sentence error messages should not end with a period"
+        errorLine1="        &quot;Name &apos;$jsonName&apos; is duplicated by member &apos;${existingMember.name}&apos;.&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="848"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Single sentence error messages should not end with a period"
+        errorLine1="        &quot;Name &apos;$jsonName&apos; is duplicated by member &apos;${member.name}&apos;.&quot;"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="853"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;Calls to @MustUseNamedParams-annotated methods must name all parameters.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MustUseNamedParamsDetector.kt"
+            line="58"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="&quot;MustUseNamedParams&quot; looks like a code reference; surround with backtics in string to display as symbol, e.g. \`MustUseNamedParams\`"
+        errorLine1="        &quot;Calls to @MustUseNamedParams-annotated methods must name all parameters.&quot;,"
+        errorLine2="                   ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MustUseNamedParamsDetector.kt"
+            line="59"
+            column="20"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;Use Kotlin&apos;s $FQN_KOTLIN_PAIR instead of other Pair types from other libraries like AndroidX and Slack commons&quot;,"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/NonKotlinPairDetector.kt"
+            line="95"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;Use Kotlin&apos;s $FQN_KOTLIN_PAIR instead of other Pair types from other libraries like AndroidX and Slack commons&quot;,"
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/NonKotlinPairDetector.kt"
+            line="95"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="        &quot;Use SlackDispatchers.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/RawDispatchersUsageDetector.kt"
+            line="40"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;Methods annotated with @RestrictedCallsTo should only be called from the specified scope.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/RestrictCallsToDetector.kt"
+            line="27"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="&quot;ok&quot; is usually capitalized as &quot;OK&quot;"
+        errorLine1="          ok."
+        errorLine2="          ~~">
+        <location
+            file="src/main/java/slack/lint/RestrictCallsToDetector.kt"
+            line="31"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="        &quot;This is replaced by the caller.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/retrofit/RetrofitUsageDetector.kt"
+            line="158"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="        briefDescription = &quot;subscribeOn called with the main thread scheduler.&quot;,"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="43"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be capitalized"
+        errorLine1="        briefDescription = &quot;subscribeOn called with the main thread scheduler.&quot;,"
+        errorLine2="                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="43"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Multi-line issue explanation strings will interpret line separators as hard breaks, and this looks like a continuation of the same paragraph. Consider using \ at the end of the previous line to indicate that the lines should be joined, or add a blank line between unrelated sentences, or suppress this issue type here."
+        errorLine1="        on the main thread - that is, code above this line."
+        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="47"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="        &quot;Don&apos;t use Serializable.&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SerializableDetector.kt"
+            line="47"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="          &quot;Check that Span flags use the bitwise mask SPAN_POINT_MARK_MASK when being compared to.&quot;,"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/text/SpanMarkPointMissingMaskDetector.kt"
+            line="31"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="The issue summary should *not* end with a period (think of it as a headline)"
+        errorLine1="          &quot;Wrong import alias for this R class.&quot;,"
+        errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/resources/WrongResourceImportAliasDetector.kt"
+            line="127"
+            column="12"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Multi-line issue explanation strings will interpret line separators as hard breaks, and this looks like a continuation of the same paragraph. Consider using \ at the end of the previous line to indicate that the lines should be joined, or add a blank line between unrelated sentences, or suppress this issue type here."
+        errorLine1="            &quot;import slack.l10n.R as L10nR\n&quot; +"
+        errorLine2="             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/resources/WrongResourceImportAliasDetector.kt"
+            line="129"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="&quot;UiKit&quot; looks like a code reference; surround with backtics in string to display as symbol, e.g. \`UiKit\`"
+        errorLine1="            &quot;import slack.uikit.R as UiKitR&quot;,"
+        errorLine2="                                     ~~~~~">
+        <location
+            file="src/main/java/slack/lint/resources/WrongResourceImportAliasDetector.kt"
+            line="130"
+            column="38"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `kotlin()` test file construction"
+        errorLine1="              .trimIndent()"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/slack/lint/FragmentDaggerFieldInjectionDetectorTest.kt"
+            line="84"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `java()` test file construction"
+        errorLine1="              .trimIndent()"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/slack/lint/FragmentDaggerFieldInjectionDetectorTest.kt"
+            line="134"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `kotlin()` test file construction"
+        errorLine1="              .trimIndent()"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/slack/lint/FragmentDaggerFieldInjectionDetectorTest.kt"
+            line="204"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `java()` test file construction"
+        errorLine1="              .trimIndent()"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/slack/lint/FragmentDaggerFieldInjectionDetectorTest.kt"
+            line="265"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `java()` test file construction"
+        errorLine1="              .trimIndent()"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/slack/lint/FragmentDaggerFieldInjectionDetectorTest.kt"
+            line="321"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `kotlin()` test file construction"
+        errorLine1="              .trimIndent()"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/slack/lint/FragmentDaggerFieldInjectionDetectorTest.kt"
+            line="371"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `java()` test file construction"
+        errorLine1="              .trimIndent()"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/slack/lint/FragmentDaggerFieldInjectionDetectorTest.kt"
+            line="456"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `java()` test file construction"
+        errorLine1="              .trimIndent()"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/slack/lint/FragmentDaggerFieldInjectionDetectorTest.kt"
+            line="506"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `kotlin()` test file construction"
+        errorLine1="              .trimIndent()"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/slack/lint/MainScopeUsageDetectorTest.kt"
+            line="45"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `kotlin()` test file construction"
+        errorLine1="              .trimIndent()"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/slack/lint/MainScopeUsageDetectorTest.kt"
+            line="88"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `kotlin()` test file construction"
+        errorLine1="              .trimIndent()"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/slack/lint/RawDispatchersUsageDetectorTest.kt"
+            line="68"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `kotlin()` test file construction"
+        errorLine1="              .trimIndent()"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/test/java/slack/lint/RawDispatchersUsageDetectorTest.kt"
+            line="131"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplUseUast"
+        message="Don&apos;t call PsiField#getInitializer(); you must use UAST instead. If you don&apos;t have a UField call UastFacade.getInitializerBody(field)"
+        errorLine1="      val assignment = variable?.initializer as? PsiMethodCallExpression"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="90"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="LintImplUseUast"
+        message="Don&apos;t call PsiField#getInitializer(); you must use UAST instead. If you don&apos;t have a UField call UastFacade.getInitializerBody(field)"
+        errorLine1="        is PsiField -> variable.initializer as? PsiMethodCallExpression"
+        errorLine2="                       ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="151"
+            column="24"/>
+    </issue>
+
+    <issue
+        id="LintImplUseUast"
+        message="Don&apos;t call PsiField#getInitializer(); you must use UAST instead. If you don&apos;t have a UField call UastFacade.getInitializerBody(field)"
+        errorLine1="        is PsiLocalVariable -> variable.initializer as? PsiMethodCallExpression"
+        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="152"
+            column="32"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUField is UAST implementation. Consider using one of its corresponding UAST interfaces: `UVariableEx`, `UVariable`, `UDeclaration`, `UAnnotated`, `UDeclarationEx`, `UAnchorOwner`, `UFieldEx`, `UField`"
+        errorLine1="import org.jetbrains.uast.java.JavaUField"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/mocking/AbstractMockDetector.kt"
+            line="20"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUField is UAST implementation. Consider using one of its corresponding UAST interfaces: `UVariableEx`, `UVariable`, `UDeclaration`, `UAnnotated`, `UDeclarationEx`, `UAnchorOwner`, `UFieldEx`, `UField`"
+        errorLine1="        } else if (node is JavaUField &amp;&amp; isMockAnnotated(node)) {"
+        errorLine2="                           ~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/mocking/AbstractMockDetector.kt"
+            line="107"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`, `UElementWithLocation`"
+        errorLine1="import org.jetbrains.uast.java.JavaUCallExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="19"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCompositeQualifiedExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.java.JavaUCompositeQualifiedExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="20"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="21"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="22"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCompositeQualifiedExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="            is JavaUCompositeQualifiedExpression ->"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="53"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`, `UElementWithLocation`"
+        errorLine1="              checkCall { JavaUCallExpression::class.safeCast(arg.selector) }"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="54"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`, `UElementWithLocation`"
+        errorLine1="            is JavaUCallExpression -> checkCall { arg }"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="55"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="            is KotlinUQualifiedReferenceExpression ->"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="56"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`"
+        errorLine1="              checkCall { KotlinUFunctionCallExpression::class.safeCast(arg.selector) }"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="57"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`"
+        errorLine1="            is KotlinUFunctionCallExpression -> checkCall { arg }"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
+            line="58"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinReceiverUParameter is UAST implementation. Consider using one of its corresponding UAST interfaces: `UVariableEx`, `UVariable`, `UDeclaration`, `UAnnotated`, `UDeclarationEx`, `UAnchorOwner`, `UParameterEx`, `UParameter`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinReceiverUParameter"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DaggerKotlinIssuesDetector.kt"
+            line="32"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinReceiverUParameter is UAST implementation. Consider using one of its corresponding UAST interfaces: `UVariableEx`, `UVariable`, `UDeclaration`, `UAnnotated`, `UDeclarationEx`, `UAnchorOwner`, `UParameterEx`, `UParameter`"
+        errorLine1="          if (firstParam !is KotlinReceiverUParameter) {"
+        errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DaggerKotlinIssuesDetector.kt"
+            line="116"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UClassLiteralExpression`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectWithUsageDetector.kt"
+            line="16"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UClassLiteralExpression`"
+        errorLine1="            (injectWith.findAttributeValue(&quot;scope&quot;) as? KotlinUClassLiteralExpression) ?: return"
+        errorLine2="                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/InjectWithUsageDetector.kt"
+            line="45"
+            column="57"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClass is UAST implementation. Consider using one of its corresponding UAST interfaces: `UClass`, `UDeclaration`, `UAnnotated`, `UAnchorOwner`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUClass"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="38"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClass is UAST implementation. Consider using one of its corresponding UAST interfaces: `UClass`, `UDeclaration`, `UAnnotated`, `UAnchorOwner`"
+        errorLine1="  if (this is KotlinUClass &amp;&amp; sourcePsi is KtObjectDeclaration &amp;&amp; name == &quot;Companion&quot;) {"
+        errorLine2="              ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="76"
+            column="15"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClass is UAST implementation. Consider using one of its corresponding UAST interfaces: `UClass`, `UDeclaration`, `UAnnotated`, `UAnchorOwner`"
+        errorLine1="internal fun UClass.isKotlinObject() = this is KotlinUClass &amp;&amp; sourcePsi is KtObjectDeclaration"
+        errorLine2="                                               ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="89"
+            column="48"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClass is UAST implementation. Consider using one of its corresponding UAST interfaces: `UClass`, `UDeclaration`, `UAnnotated`, `UAnchorOwner`"
+        errorLine1="  this is KotlinUClass &amp;&amp; javaPsi is KtLightClassForFacade"
+        errorLine2="          ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="92"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClass is UAST implementation. Consider using one of its corresponding UAST interfaces: `UClass`, `UDeclaration`, `UAnnotated`, `UAnchorOwner`"
+        errorLine1="  if (this is KotlinUClass &amp;&amp; evaluator.hasModifier(this, KtTokens.INNER_KEYWORD)) return true"
+        errorLine2="              ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="102"
+            column="15"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUAnnotation is UAST implementation. Consider using one of its corresponding UAST interfaces: `UAnnotationEx`, `UAnnotation`, `UResolvable`, `UAnchorOwner`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUAnnotation"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="48"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UClassLiteralExpression`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="49"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUAnnotation is UAST implementation. Consider using one of its corresponding UAST interfaces: `UAnnotationEx`, `UAnnotation`, `UResolvable`, `UAnchorOwner`"
+        errorLine1="                (annotationEntry.toUElement() as KotlinUAnnotation).takeIf {"
+        errorLine2="                                                 ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="361"
+            column="50"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UClassLiteralExpression`"
+        errorLine1="      (adaptedByAnnotation.findAttributeValue(&quot;adapter&quot;) as? KotlinUClassLiteralExpression)"
+        errorLine2="                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="539"
+            column="62"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`, `UElementWithLocation`"
+        errorLine1="import org.jetbrains.uast.java.JavaUCallExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="24"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCompositeQualifiedExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.java.JavaUCompositeQualifiedExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="25"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="26"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="27"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUSimpleReferenceExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `USimpleNameReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="import org.jetbrains.uast.kotlin.KotlinUSimpleReferenceExpression"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="28"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.psi.UastKotlinPsiVariable is UAST implementation. Consider using one of its corresponding UAST interfaces."
+        errorLine1="import org.jetbrains.uast.kotlin.psi.UastKotlinPsiVariable"
+        errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="29"
+            column="1"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCompositeQualifiedExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="      is JavaUCompositeQualifiedExpression ->"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="75"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`, `UElementWithLocation`"
+        errorLine1="        checkCall { JavaUCallExpression::class.safeCast(arg.selector) }"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="76"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.java.JavaUCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`, `UElementWithLocation`"
+        errorLine1="      is JavaUCallExpression -> checkCall { arg }"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="77"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UQualifiedReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="      is KotlinUQualifiedReferenceExpression ->"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="78"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`"
+        errorLine1="        checkCall { KotlinUFunctionCallExpression::class.safeCast(arg.selector) }"
+        errorLine2="                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="79"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `UCallExpression`, `UResolvable`"
+        errorLine1="      is KotlinUFunctionCallExpression -> checkCall { arg }"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="80"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.KotlinUSimpleReferenceExpression is UAST implementation. Consider using one of its corresponding UAST interfaces: `UExpression`, `UAnnotated`, `USimpleNameReferenceExpression`, `UReferenceExpression`, `UResolvable`"
+        errorLine1="      is KotlinUSimpleReferenceExpression -> {"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="128"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="UastImplementation"
+        message="org.jetbrains.uast.kotlin.psi.UastKotlinPsiVariable is UAST implementation. Consider using one of its corresponding UAST interfaces."
+        errorLine1="            is UastKotlinPsiVariable -> { // The variable reference is local"
+        errorLine2="               ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
+            line="135"
+            column="16"/>
+    </issue>
+
+</issues>

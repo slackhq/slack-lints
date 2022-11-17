@@ -1,0 +1,151 @@
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
+@file:Suppress("UnstableApiUsage")
+
+package slack.lint.inclusive
+
+import com.android.tools.lint.detector.api.Category
+import com.android.tools.lint.detector.api.Context
+import com.android.tools.lint.detector.api.Implementation
+import com.android.tools.lint.detector.api.Issue
+import com.android.tools.lint.detector.api.JavaContext
+import com.android.tools.lint.detector.api.Location
+import com.android.tools.lint.detector.api.Position
+import com.android.tools.lint.detector.api.Severity
+import com.android.tools.lint.detector.api.StringOption
+import com.android.tools.lint.detector.api.TextFormat
+import com.android.tools.lint.detector.api.XmlContext
+import java.util.Locale
+import org.jetbrains.uast.UElement
+import org.w3c.dom.Node
+import slack.lint.util.Priorities
+import slack.lint.util.resourcesImplementation
+import slack.lint.util.sourceImplementation
+
+sealed class InclusiveNamingChecker<C : Context, N> {
+  companion object {
+
+    internal val BLOCK_LIST =
+      StringOption(
+        "block-list",
+        "A comma-separated list of words that should not be used in source code.",
+        null,
+        "This property should define a comma-separated list of words that should not be used in source code."
+      )
+
+    private val SOURCE_ISSUE = sourceImplementation<InclusiveNamingSourceCodeScanner>().toIssue()
+    private val RESOURCES_ISSUE =
+      resourcesImplementation<InclusiveNamingResourceScanner>().toIssue()
+
+    val ISSUES: Array<Issue> = arrayOf(SOURCE_ISSUE, RESOURCES_ISSUE)
+
+    private fun Implementation.toIssue(): Issue {
+      return Issue.create(
+          "InclusiveNaming",
+          "Use inclusive naming.",
+          """
+          We try to use inclusive naming at Slack. Terms such as blacklist, whitelist, master, slave, etc, while maybe \
+          widely used today, can be socially charged and make others feel excluded or uncomfortable.
+        """
+            .trimIndent(),
+          Category.CORRECTNESS,
+          Priorities.NORMAL,
+          Severity.ERROR,
+          this
+        )
+        .setOptions(listOf(BLOCK_LIST))
+    }
+
+    /** Loads a comma-separated list of blocked words from the [BLOCK_LIST] option. */
+    fun loadBlocklist(context: Context): Set<String> {
+      return BLOCK_LIST.getValue(context.configuration)
+        ?.splitToSequence(",")
+        .orEmpty()
+        .map(String::trim)
+        .filter(String::isNotBlank)
+        .toSet()
+    }
+  }
+
+  abstract val context: C
+  abstract val blocklist: Set<String>
+  protected abstract val issue: Issue
+  abstract fun locationFor(node: N): Location
+  open fun shouldReport(node: N, location: Location, name: String, isFile: Boolean): Boolean = true
+
+  fun check(node: N, name: String?, type: String, isFile: Boolean = false) {
+    if (name == null) return
+    val lowerCased = name.toLowerCase(Locale.US)
+    blocklist
+      .find { it in lowerCased }
+      ?.let { matched ->
+        val location = locationFor(node)
+        if (!shouldReport(node, location, name, isFile)) return
+        val description = buildString {
+          append(issue.getBriefDescription(TextFormat.TEXT))
+          append(" Matched string is '")
+          append(matched)
+          append("' in ")
+          append(type)
+          append(" name '")
+          append(name)
+          append("'")
+        }
+        context.report(issue, location, description, null)
+      }
+  }
+
+  class SourceCodeChecker(override val context: JavaContext, override val blocklist: Set<String>) :
+    InclusiveNamingChecker<JavaContext, UElement>() {
+    /**
+     * Some element types will be reported multiple times (such as property parameters). This caches
+     * reports so we only report once.
+     */
+    private val cachedReports = mutableSetOf<CacheKey>()
+    override val issue: Issue = SOURCE_ISSUE
+
+    override fun locationFor(node: UElement): Location {
+      return context.getLocation(node)
+    }
+
+    override fun shouldReport(
+      node: UElement,
+      location: Location,
+      name: String,
+      isFile: Boolean
+    ): Boolean {
+      return cachedReports.add(CacheKey.fromLocation(location, isFile))
+    }
+
+    private data class CacheKey(val location: String) {
+      companion object {
+        fun fromLocation(location: Location, isFile: Boolean): CacheKey {
+          val fileName = location.file.name
+          val start: String
+          val end: String
+          if (isFile) {
+            start = ""
+            end = ""
+          } else {
+            start = location.start?.lineString ?: ""
+            end = location.end?.lineString ?: ""
+          }
+          return CacheKey("$fileName-$start-$end")
+        }
+
+        private val Position.lineString: String
+          get() {
+            return "$line:$column"
+          }
+      }
+    }
+  }
+
+  class XmlChecker(override val context: XmlContext, override val blocklist: Set<String>) :
+    InclusiveNamingChecker<XmlContext, Node>() {
+    override val issue: Issue = RESOURCES_ISSUE
+    override fun locationFor(node: Node): Location {
+      return context.getLocation(node)
+    }
+  }
+}
