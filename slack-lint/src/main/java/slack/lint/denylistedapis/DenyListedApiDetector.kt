@@ -196,12 +196,13 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         errorMessage =
         "Use a scheduler which wraps a cached set of threads. There should be no reason to be arbitrarily creating threads on Android."
       ),
-      DenyListedEntry(
-        className = "android.os.Build.VERSION_CODES",
-        fieldName = MatchAll,
-        errorMessage =
-        "No one remembers what these constants map to. Use the API level integer value directly since it's self-defining."
-      ),
+      // TODO this would conflict with MagicNumber in detekt, revisit
+//      DenyListedEntry(
+//        className = "android.os.Build.VERSION_CODES",
+//        fieldName = MatchAll,
+//        errorMessage =
+//        "No one remembers what these constants map to. Use the API level integer value directly since it's self-defining."
+//      ),
       // TODO we should do this too, but don't currently.
       //    DenyListedEntry(
       //      className = "java.time.Instant",

@@ -343,6 +343,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       )
   }
 
+  @Ignore("Revisiting after we look more into how this would conflict with MagicNumber")
   @Test
   fun buildVersionCodes() {
     lint()
