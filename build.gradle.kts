@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import com.diffplug.gradle.spotless.KotlinExtension
 import com.diffplug.gradle.spotless.SpotlessExtension
 import com.vanniktech.maven.publish.MavenPublishPluginExtension
 import io.gitlab.arturbosch.detekt.Detekt
@@ -63,7 +64,14 @@ allprojects {
       trimTrailingWhitespace()
       endWithNewline()
       licenseHeaderFile(rootProject.file("spotless/spotless.kt"))
-      targetExclude("**/spotless.kt")
+      targetExclude("**/spotless.kt", "**/denylistedapis/*.kt")
+    }
+    // Externally adapted sources that should preserve their license header
+    format("kotlinExternal", KotlinExtension::class.java) {
+      target("**/denylistedapis/*.kt")
+      ktlint(ktlintVersion).userData(ktlintUserData)
+      trimTrailingWhitespace()
+      endWithNewline()
     }
     kotlinGradle {
       ktlint(ktlintVersion).userData(ktlintUserData)
