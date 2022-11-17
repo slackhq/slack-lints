@@ -7,20 +7,6 @@ import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-buildscript {
-  repositories {
-    mavenCentral()
-    google()
-    // Last because this proxies jcenter!
-    gradlePluginPortal()
-  }
-  dependencies {
-    // We have to declare this here in order for kotlin-facets to be generated in iml files
-    // https://youtrack.jetbrains.com/issue/KT-36331
-    classpath(kotlin("gradle-plugin", version = libs.versions.kotlin.get()))
-  }
-}
-
 plugins {
   alias(libs.plugins.spotless) apply false
   alias(libs.plugins.mavenPublish) apply false
@@ -30,14 +16,9 @@ plugins {
   alias(libs.plugins.ksp) apply false
 }
 
-val ktfmtVersion = libs.versions.ktfmt.get().toString()
+val ktfmtVersion = libs.versions.ktfmt.get()
 
 allprojects {
-  repositories {
-    google()
-    mavenCentral()
-  }
-
   apply(plugin = "com.diffplug.spotless")
   configure<SpotlessExtension> {
     format("misc") {

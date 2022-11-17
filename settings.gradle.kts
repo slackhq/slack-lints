@@ -22,6 +22,10 @@ dependencyResolutionManagement {
       }
     }
   }
+  repositories {
+    google()
+    mavenCentral()
+  }
 }
 
 rootProject.name = "slack-lints"
