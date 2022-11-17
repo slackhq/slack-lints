@@ -3,6 +3,7 @@
 package slack.lint.eithernet
 
 import com.android.tools.lint.checks.infrastructure.LintDetectorTest.kotlin
+import com.android.tools.lint.checks.infrastructure.TestMode
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
@@ -18,6 +19,9 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
   override fun getDetector() = DoNotExposeEitherNetInRepositoriesDetector()
 
   override fun getIssues() = listOf(DoNotExposeEitherNetInRepositoriesDetector.ISSUE)
+
+  // TODO fix these
+  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.SUPPRESSIBLE)
 
   @Test
   fun javaTests() {

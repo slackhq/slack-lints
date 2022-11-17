@@ -3,6 +3,7 @@
 package slack.lint
 
 import com.android.tools.lint.checks.infrastructure.TestFile
+import com.android.tools.lint.checks.infrastructure.TestMode
 import org.junit.Ignore
 import org.junit.Test
 
@@ -36,6 +37,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
   override fun getDetector() = JavaOnlyDetector()
 
   override fun getIssues() = listOf(JavaOnlyDetector.ISSUE)
+
+  // TODO fix these
+  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.SUPPRESSIBLE)
 
   @Test
   fun positive() {

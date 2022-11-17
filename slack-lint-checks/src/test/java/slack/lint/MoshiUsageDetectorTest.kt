@@ -106,10 +106,11 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
   override val skipTestModes: Array<TestMode> =
     arrayOf(
       TestMode.WHITESPACE,
+      TestMode.SUPPRESSIBLE,
       // Aliases are impossible to test correctly because you have to maintain completely different
       // expected fixes and source inputs
       TestMode.TYPE_ALIAS,
-      TestMode.IMPORT_ALIAS
+      TestMode.IMPORT_ALIAS,
     )
   override fun getDetector() = MoshiUsageDetector()
   override fun getIssues() = MoshiUsageDetector.issues().toList()

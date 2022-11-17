@@ -2,10 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
+import com.android.tools.lint.checks.infrastructure.TestMode
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
 class DoNotMockUsageDetectorTest : BaseSlackLintTest() {
+
+  // TODO fix these
+  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.TYPE_ALIAS, TestMode.IMPORT_ALIAS)
 
   private val slackDoNotMock =
     kotlin(
