@@ -146,18 +146,6 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           "the reactive domain."
       ),
       DenyListedEntry(
-        className = "kotlinx.coroutines.test.TestBuildersKt",
-        functionName = "runBlockingTest",
-        errorMessage =
-        "Use runBlocking or runBlockingWithTestDispatcher instead. runBlockingTest " +
-          "is often overkill. The only difference between it and runBlocking is that it gives you " +
-          "a TestDispatcher. Treat it like RxJava's TestScheduler: if you don't need it, leave it " +
-          "out. But even if you do need it, you are better off using TestDispatcher directly: if a " +
-          "coroutine is blocked on something other than TestDispatcher (which isn't uncommon - " +
-          "most things that block in Cash App aren't coroutines right now), at the end of your " +
-          "runBlockingTest block it will fail the test. This is not what you want."
-      ),
-      DenyListedEntry(
         className = "androidx.viewpager2.widget.ViewPager2",
         functionName = "setId",
         parameters = listOf("int"),
