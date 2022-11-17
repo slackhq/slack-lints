@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 @file:Suppress("UnstableApiUsage")
 
 package slack.lint
@@ -21,33 +8,35 @@ import org.junit.Test
 
 class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
 
-  private val javaxInjectStubs = kotlin(
-    """
+  private val javaxInjectStubs =
+    kotlin("""
         package javax.inject
 
         annotation class Inject
-      """
-  ).indented()
+      """).indented()
 
-  private val assistedInjectStubs = kotlin(
-    """
+  private val assistedInjectStubs =
+    kotlin("""
       package dagger.assisted
 
       annotation class AssistedInject
-      """
-  ).indented()
+      """)
+      .indented()
 
-  private val topLevelFragment = java(
-    """
+  private val topLevelFragment =
+    java(
+        """
       package androidx.fragment.app;
 
       public abstract class Fragment {
       }
     """
-  ).indented()
+      )
+      .indented()
 
-  private val coreUiAbstractFragment = kotlin(
-    """
+  private val coreUiAbstractFragment =
+    kotlin(
+        """
       package slack.coreui.fragment
 
       import androidx.fragment.app.Fragment
@@ -56,7 +45,8 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
 
       }
     """
-  ).indented()
+      )
+      .indented()
 
   override fun getDetector() = FragmentDaggerFieldInjectionDetector()
   override fun getIssues() = FragmentDaggerFieldInjectionDetector.issues.toList()
@@ -70,7 +60,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         topLevelFragment,
         coreUiAbstractFragment,
         kotlin(
-          """
+            """
             package foo
 
             import javax.inject.Inject
@@ -90,8 +80,10 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
                 notAnnotated = "fast"
               }
             }
-          """.trimIndent()
-        ).indented()
+          """
+              .trimIndent()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -104,7 +96,8 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
             @Inject
             ^
           2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -117,7 +110,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         topLevelFragment,
         coreUiAbstractFragment,
         java(
-          """
+            """
             package foo;
 
             import javax.inject.Inject;
@@ -137,8 +130,10 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
                 notAnnotated = "fast";
               }
             }
-          """.trimIndent()
-        ).indented()
+          """
+              .trimIndent()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -151,7 +146,8 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
             @Inject
             ^
           2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -164,7 +160,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         topLevelFragment,
         coreUiAbstractFragment,
         kotlin(
-          """
+            """
             package foo
 
             import javax.inject.Inject
@@ -204,8 +200,10 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
                 notAnnotated = "fast"
               }
             }
-          """.trimIndent()
-        ).indented()
+          """
+              .trimIndent()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -224,7 +222,8 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
             @Inject
             ^
           4 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -237,7 +236,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         topLevelFragment,
         coreUiAbstractFragment,
         java(
-          """
+            """
             package foo;
 
             import javax.inject.Inject;
@@ -262,8 +261,10 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
                 notAnnotated = "fast";
               }
             }
-          """.trimIndent()
-        ).indented()
+          """
+              .trimIndent()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -276,7 +277,8 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
             @Inject
             ^
           2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -289,7 +291,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         topLevelFragment,
         coreUiAbstractFragment,
         java(
-          """
+            """
             package foo;
 
             import javax.inject.Inject;
@@ -315,8 +317,10 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
                 notAnnotated = "fast";
               }
             }
-          """.trimIndent()
-        ).indented()
+          """
+              .trimIndent()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -329,7 +333,8 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
             @Inject
             ^
           2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -342,7 +347,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         topLevelFragment,
         coreUiAbstractFragment,
         kotlin(
-          """
+            """
             package foo
 
             import javax.inject.Inject
@@ -362,8 +367,10 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
                 notAnnotated = "fast"
               }
             }
-          """.trimIndent()
-        ).indented()
+          """
+              .trimIndent()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -376,7 +383,8 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
             @Inject
             ^
           2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -386,7 +394,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
       .files(
         javaxInjectStubs,
         kotlin(
-          """
+            """
             package foo
 
             import javax.inject.Inject
@@ -406,7 +414,8 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
               }
             }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -422,7 +431,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         topLevelFragment,
         coreUiAbstractFragment,
         java(
-          """
+            """
             package foo;
 
             import javax.inject.Inject;
@@ -443,8 +452,10 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
                 notAnnotated = "fast";
               }
             }
-          """.trimIndent()
-        ).indented()
+          """
+              .trimIndent()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -457,7 +468,8 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
             @Inject
             ^
           2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -470,7 +482,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         topLevelFragment,
         coreUiAbstractFragment,
         java(
-          """
+            """
             package foo;
 
             import javax.inject.Inject;
@@ -490,8 +502,10 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
                 notAnnotated = "fast";
               }
             }
-          """.trimIndent()
-        ).indented()
+          """
+              .trimIndent()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()

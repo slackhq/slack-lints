@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.rx
 
 import com.android.tools.lint.checks.infrastructure.TestMode
@@ -23,8 +10,9 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
 
   private val rxJavaJar3 = rxJavaJar3()
 
-  private val androidSchedulers = java(
-    """
+  private val androidSchedulers =
+    java(
+        """
       package io.reactivex.rxjava3.android.schedulers;
 
       import io.reactivex.rxjava3.core.Scheduler;
@@ -35,7 +23,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           }
       }
     """
-  ).indented()
+      )
+      .indented()
 
   override val skipTestModes: Array<TestMode> = arrayOf(TestMode.WHITESPACE, TestMode.PARENTHESIZED)
   override fun getDetector() = RxSubscribeOnMainDetector()
@@ -48,7 +37,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         java(
-          """
+            """
             package com.slack.lint;
 
             import io.reactivex.rxjava3.core.Observable;
@@ -60,7 +49,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -70,7 +60,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               obs.subscribeOn(AndroidSchedulers.mainThread());
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -78,7 +69,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           @@ -8 +8
           -     obs.subscribeOn(AndroidSchedulers.mainThread());
           +     obs.observeOn(AndroidSchedulers.mainThread());
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -89,7 +81,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Observable
@@ -101,7 +93,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -111,7 +104,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               obs.subscribeOn(AndroidSchedulers.mainThread())
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -119,7 +113,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           @@ -8 +8
           -     obs.subscribeOn(AndroidSchedulers.mainThread())
           +     obs.observeOn(AndroidSchedulers.mainThread())
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -130,7 +125,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         java(
-          """
+            """
             package com.slack.lint;
 
             import io.reactivex.rxjava3.core.Observable;
@@ -142,7 +137,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -152,7 +148,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               obs.subscribeOn(mainThread());
                   ~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -160,7 +157,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           @@ -8 +8
           -     obs.subscribeOn(mainThread());
           +     obs.observeOn(mainThread());
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -171,7 +169,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Observable
@@ -183,7 +181,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -193,7 +192,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               obs.subscribeOn(mainThread())
                   ~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -201,7 +201,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           @@ -8 +8
           -     obs.subscribeOn(mainThread())
           +     obs.observeOn(mainThread())
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -212,7 +213,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         java(
-          """
+            """
             package com.slack.lint;
 
             import io.reactivex.rxjava3.core.Observable;
@@ -226,7 +227,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -236,7 +238,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               obs.subscribeOn(scheduler);
                   ~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -244,7 +247,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           @@ -10 +10
           -     obs.subscribeOn(scheduler);
           +     obs.observeOn(scheduler);
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -255,7 +259,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         java(
-          """
+            """
             package com.slack.lint;
 
             import io.reactivex.rxjava3.core.Observable;
@@ -269,7 +273,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -279,7 +284,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               obs.subscribeOn(scheduler);
                   ~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -287,7 +293,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           @@ -10 +10
           -     obs.subscribeOn(scheduler);
           +     obs.observeOn(scheduler);
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -298,7 +305,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Observable
@@ -312,7 +319,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -322,7 +330,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               obs.subscribeOn(scheduler)
                   ~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -330,7 +339,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           @@ -10 +10
           -     obs.subscribeOn(scheduler)
           +     obs.observeOn(scheduler)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -341,7 +351,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Observable
@@ -355,7 +365,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -365,7 +376,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               obs.subscribeOn(scheduler)
                   ~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -373,7 +385,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           @@ -10 +10
           -     obs.subscribeOn(scheduler)
           +     obs.observeOn(scheduler)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -384,7 +397,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         java(
-          """
+            """
             package com.slack.lint;
 
             import io.reactivex.rxjava3.core.Observable;
@@ -396,7 +409,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -410,7 +424,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Observable
@@ -422,7 +436,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -436,7 +451,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         java(
-          """
+            """
             package com.slack.lint;
 
             import io.reactivex.rxjava3.core.Observable;
@@ -448,10 +463,12 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
-      .allowCompilationErrors() // Until AGP 7.1.0 https://groups.google.com/g/lint-dev/c/BigCO8sMhKU
+      .allowCompilationErrors() // Until AGP 7.1.0
+      // https://groups.google.com/g/lint-dev/c/BigCO8sMhKU
       .run()
       .expectClean()
   }
@@ -463,7 +480,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Observable
@@ -475,7 +492,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -489,7 +507,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         java(
-          """
+            """
             package com.slack.lint;
 
             import io.reactivex.rxjava3.core.Observable;
@@ -503,7 +521,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -517,7 +536,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Observable
@@ -530,7 +549,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -544,7 +564,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Flowable
@@ -556,7 +576,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -566,7 +587,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               flow.subscribeOn(AndroidSchedulers.mainThread())
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -574,7 +596,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           @@ -8 +8
           -     flow.subscribeOn(AndroidSchedulers.mainThread())
           +     flow.observeOn(AndroidSchedulers.mainThread())
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -585,7 +608,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Flowable
@@ -597,7 +620,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -611,7 +635,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Maybe
@@ -623,7 +647,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -633,7 +658,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               maybe.subscribeOn(AndroidSchedulers.mainThread())
                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -641,7 +667,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           @@ -8 +8
           -     maybe.subscribeOn(AndroidSchedulers.mainThread())
           +     maybe.observeOn(AndroidSchedulers.mainThread())
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -652,7 +679,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Maybe
@@ -664,7 +691,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -678,7 +706,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Single
@@ -690,7 +718,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -700,7 +729,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               single.subscribeOn(AndroidSchedulers.mainThread())
                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -708,7 +738,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           @@ -8 +8
           -     single.subscribeOn(AndroidSchedulers.mainThread())
           +     single.observeOn(AndroidSchedulers.mainThread())
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -719,7 +750,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Single
@@ -731,7 +762,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -745,7 +777,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Completable
@@ -757,7 +789,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -767,7 +800,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               completable.subscribeOn(AndroidSchedulers.mainThread())
                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -775,7 +809,8 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
           @@ -8 +8
           -     completable.subscribeOn(AndroidSchedulers.mainThread())
           +     completable.observeOn(AndroidSchedulers.mainThread())
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -786,7 +821,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
         rxJavaJar3,
         androidSchedulers,
         kotlin(
-          """
+            """
             package com.slack.lint
 
             import io.reactivex.rxjava3.core.Flowable
@@ -798,10 +833,12 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
-      .allowCompilationErrors() // Until AGP 7.1.0 https://groups.google.com/g/lint-dev/c/BigCO8sMhKU
+      .allowCompilationErrors() // Until AGP 7.1.0
+      // https://groups.google.com/g/lint-dev/c/BigCO8sMhKU
       .run()
       .expectClean()
   }

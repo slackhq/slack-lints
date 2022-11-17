@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -40,11 +27,12 @@ import org.jetbrains.uast.kotlin.KotlinUField
 abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
   companion object {
     val MOCK_ANNOTATIONS = setOf("org.mockito.Mock", "org.mockito.Spy")
-    val MOCK_CLASSES = setOf(
-      "org.mockito.Mockito",
-      "slack.test.mockito.MockitoHelpers",
-      "slack.test.mockito.MockitoHelpersKt"
-    )
+    val MOCK_CLASSES =
+      setOf(
+        "org.mockito.Mockito",
+        "slack.test.mockito.MockitoHelpers",
+        "slack.test.mockito.MockitoHelpersKt"
+      )
     val MOCK_METHODS = setOf("mock", "spy")
   }
 
@@ -62,8 +50,7 @@ abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
     reason: Reason
   )
 
-  override fun getApplicableUastTypes() =
-    listOf(UCallExpression::class.java, UField::class.java)
+  override fun getApplicableUastTypes() = listOf(UCallExpression::class.java, UField::class.java)
 
   override fun createUastHandler(context: JavaContext): UElementHandler {
     return object : UElementHandler() {
@@ -104,9 +91,7 @@ abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
             argumentType = context.evaluator.getTypeClass(variable.type)
           }
 
-          argumentType?.let {
-            checkMock(nodeToReport, argumentType)
-          }
+          argumentType?.let { checkMock(nodeToReport, argumentType) }
         }
       }
 
@@ -153,7 +138,9 @@ abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
   /**
    * @property type a [PsiClass] object representing the class that should not be mocked.
    * @property reason The reason this class should not be mocked, which may be as simple as "it is
+   * ```
    *                  annotated to forbid mocking" but may also provide a suggested workaround.
+   * ```
    */
   data class Reason(val type: PsiClass, val reason: String)
 }

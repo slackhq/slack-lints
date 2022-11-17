@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2020 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2020 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -47,8 +34,8 @@ import slack.lint.util.sourceImplementation
  *
  * Consuming repos should create and use `@KotlinOnly` and `@JavaOnly` annotations from the
  * `slack-lint-annotations` artifact. We would normally like to consume these via properties
- * defining them, but lint APIs only allow reading APIs from project-local gradle.properties and
- * not root properties files.
+ * defining them, but lint APIs only allow reading APIs from project-local gradle.properties and not
+ * root properties files.
  *
  * Copied recipe from https://github.com/uber/lint-checks
  */
@@ -60,15 +47,16 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
     private const val MESSAGE_LINT_ERROR_TITLE = "Using @JavaOnly elements in Kotlin code."
     private const val MESSAGE_LINT_ERROR_EXPLANATION = "This should not be called from Kotlin code"
     @JvmField
-    val ISSUE = Issue.create(
-      ISSUE_ID,
-      MESSAGE_LINT_ERROR_TITLE,
-      MESSAGE_LINT_ERROR_EXPLANATION,
-      Category.INTEROPERABILITY_KOTLIN,
-      6,
-      Severity.ERROR,
-      sourceImplementation<JavaOnlyDetector>()
-    )
+    val ISSUE =
+      Issue.create(
+        ISSUE_ID,
+        MESSAGE_LINT_ERROR_TITLE,
+        MESSAGE_LINT_ERROR_EXPLANATION,
+        Category.INTEROPERABILITY_KOTLIN,
+        6,
+        Severity.ERROR,
+        sourceImplementation<JavaOnlyDetector>()
+      )
 
     private fun anonymousTypeString(psiClass: PsiClass, type: String): String {
       return "Cannot create $type instances of @JavaOnly-annotated type ${UastLintUtils.getClassName(psiClass)} (in ${psiClass.containingFile.name}) " +
@@ -78,7 +66,8 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
 
   override fun createUastHandler(context: JavaContext): UElementHandler {
     if (!isKotlin(context.psiFile)) {
-      // We only run this on Kotlin files, the ErrorProne analogue handles Java files. Can revisit if we get lint in the IDE or otherwise unify
+      // We only run this on Kotlin files, the ErrorProne analogue handles Java files. Can revisit
+      // if we get lint in the IDE or otherwise unify
       return UElementHandler.NONE
     }
     return object : UElementHandler() {
@@ -108,8 +97,9 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
           }
           return
         }
-        val reportData = checkMissingSubclass(node, KOTLIN_ONLY, "KotlinOnly")
-          ?: checkMissingSubclass(node, JAVA_ONLY, "JavaOnly") ?: return
+        val reportData =
+          checkMissingSubclass(node, KOTLIN_ONLY, "KotlinOnly")
+            ?: checkMissingSubclass(node, JAVA_ONLY, "JavaOnly") ?: return
         context.report(
           ISSUE,
           context.getLocation(node.sourcePsi!!),
@@ -126,17 +116,19 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
         return listOfNotNull(node.javaPsi.superClass, *node.interfaces)
           .mapNotNull { psiClass ->
             context.evaluator.findAnnotation(psiClass, targetAnnotation)?.run {
-              val message = "Type subclasses/implements ${UastLintUtils.getClassName(psiClass)} in ${psiClass.containingFile.name} which is annotated @$targetAnnotationSimpleName, it should also be annotated."
+              val message =
+                "Type subclasses/implements ${UastLintUtils.getClassName(psiClass)} in ${psiClass.containingFile.name} which is annotated @$targetAnnotationSimpleName, it should also be annotated."
               val source = node.text
-              return@mapNotNull message to fix()
-                .replace()
-                .name("Add @$targetAnnotationSimpleName")
-                .range(context.getLocation(node.sourcePsi!!))
-                .shortenNames()
-                .text(source)
-                .with("@$targetAnnotation $source")
-                .autoFix()
-                .build()
+              return@mapNotNull message to
+                fix()
+                  .replace()
+                  .name("Add @$targetAnnotationSimpleName")
+                  .range(context.getLocation(node.sourcePsi!!))
+                  .shortenNames()
+                  .text(source)
+                  .with("@$targetAnnotation $source")
+                  .autoFix()
+                  .build()
             }
           }
           .firstOrNull()
@@ -177,8 +169,9 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
         if (hasJavaOnly || hasKotlinOnly) {
           return
         }
-        val reportData = checkMissingOverride(node, KOTLIN_ONLY, "KotlinOnly")
-          ?: checkMissingOverride(node, JAVA_ONLY, "JavaOnly") ?: return
+        val reportData =
+          checkMissingOverride(node, KOTLIN_ONLY, "KotlinOnly")
+            ?: checkMissingOverride(node, JAVA_ONLY, "JavaOnly") ?: return
         context.report(ISSUE, context.getLocation(node), reportData.first, reportData.second)
       }
 
@@ -189,36 +182,37 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
       ): Pair<String, LintFix>? {
         return context.evaluator.getSuperMethod(node)?.let { method ->
           context.evaluator.findAnnotation(method, targetAnnotation)?.run {
-            val message = "Function overrides ${method.name} in ${UastLintUtils.getClassName(
+            val message =
+              "Function overrides ${method.name} in ${UastLintUtils.getClassName(
               method.containingClass!!
             )} which is annotated @$targetAnnotationSimpleName, it should also be annotated."
             val modifier = node.modifierList.children.joinToString(separator = " ") { it.text }
-            return@let message to fix()
-              .replace()
-              .name("Add @$targetAnnotationSimpleName")
-              .range(context.getLocation(node))
-              .shortenNames()
-              .text(modifier)
-              .with("@$targetAnnotation $modifier")
-              .autoFix()
-              .build()
+            return@let message to
+              fix()
+                .replace()
+                .name("Add @$targetAnnotationSimpleName")
+                .range(context.getLocation(node))
+                .shortenNames()
+                .text(modifier)
+                .with("@$targetAnnotation $modifier")
+                .autoFix()
+                .build()
           }
         }
       }
 
       override fun visitCallExpression(node: UCallExpression) {
-        node.resolve().toUElementOfType<UMethod>()?.isAnnotationPresent()?.let {
-          node.report(it)
-        }
+        node.resolve().toUElementOfType<UMethod>()?.isAnnotationPresent()?.let { node.report(it) }
       }
 
       override fun visitCallableReferenceExpression(node: UCallableReferenceExpression) {
-        node.resolve().toUElementOfType<UMethod>()?.isAnnotationPresent()?.let {
-          node.report(it)
-        }
+        node.resolve().toUElementOfType<UMethod>()?.isAnnotationPresent()?.let { node.report(it) }
       }
 
-      private fun UExpression.report(javaOnlyMessage: String?, callString: String = "called from Kotlin") {
+      private fun UExpression.report(
+        javaOnlyMessage: String?,
+        callString: String = "called from Kotlin"
+      ) {
         val message = StringBuilder("This method should not be $callString")
         if (javaOnlyMessage.isNullOrBlank()) {
           message.append(", see its documentation for details.")
@@ -228,20 +222,24 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
         context.report(ISSUE, context.getLocation(this), message.toString())
       }
 
-      private fun UElement?.isReturnExpression(): Boolean = this != null && uastParent is UReturnExpression
+      private fun UElement?.isReturnExpression(): Boolean =
+        this != null && uastParent is UReturnExpression
 
       private fun UElement.isEnclosedInJavaOnlyMethod(): Boolean {
         return getContainingUMethod()?.isAnnotationPresent() != null
       }
 
       private fun UMethod.isAnnotationPresent(): String? {
-        findAnnotation(JAVA_ONLY)?.let { return it.extractValue() }
-        getContainingUClass()?.findAnnotation(JAVA_ONLY)?.let { return it.extractValue() }
+        findAnnotation(JAVA_ONLY)?.let {
+          return it.extractValue()
+        }
+        getContainingUClass()?.findAnnotation(JAVA_ONLY)?.let {
+          return it.extractValue()
+        }
         context.evaluator.getPackage(this)?.let { pkg ->
-          context.evaluator.findAnnotation(
-            pkg,
-            KOTLIN_ONLY
-          )?.toUElementOfType<UAnnotation>()?.let { return it.extractValue() }
+          context.evaluator.findAnnotation(pkg, KOTLIN_ONLY)?.toUElementOfType<UAnnotation>()?.let {
+            return it.extractValue()
+          }
         }
         return null
       }

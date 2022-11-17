@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import org.junit.Test
@@ -20,13 +7,12 @@ import org.junit.Test
 class SerializableDetectorTest : BaseSlackLintTest() {
 
   companion object {
-    private val PARCELABLE_STUB = kotlin(
-      """
+    private val PARCELABLE_STUB =
+      kotlin("""
       package android.os
 
       interface Parcelable
-      """
-    ).indented()
+      """).indented()
   }
 
   override fun getDetector() = SerializableDetector()
@@ -40,13 +26,12 @@ class SerializableDetectorTest : BaseSlackLintTest() {
       .issues(RawDispatchersUsageDetector.ISSUE)
       .files(
         PARCELABLE_STUB,
-        kotlin(
-          """
+        kotlin("""
             package slack
 
             class ImplementsNothing
-          """
-        ).indented()
+          """)
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -59,7 +44,7 @@ class SerializableDetectorTest : BaseSlackLintTest() {
       .files(
         PARCELABLE_STUB,
         kotlin(
-          """
+            """
             package slack
 
             import java.io.Serializable
@@ -67,7 +52,8 @@ class SerializableDetectorTest : BaseSlackLintTest() {
 
             class ImplementsBoth : Serializable, Parcelable
           """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -80,14 +66,15 @@ class SerializableDetectorTest : BaseSlackLintTest() {
       .files(
         PARCELABLE_STUB,
         kotlin(
-          """
+            """
             package slack
 
             import kotlin.RuntimeException
 
             class ImplementsImplicitly : RuntimeException
           """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -100,7 +87,7 @@ class SerializableDetectorTest : BaseSlackLintTest() {
       .files(
         PARCELABLE_STUB,
         kotlin(
-          """
+            """
             package slack
 
             import java.io.Serializable
@@ -108,7 +95,8 @@ class SerializableDetectorTest : BaseSlackLintTest() {
 
             class ImplementsExplicitly : RuntimeException, Serializable
           """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -118,7 +106,8 @@ class SerializableDetectorTest : BaseSlackLintTest() {
         class ImplementsExplicitly : RuntimeException, Serializable
               ~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -128,14 +117,15 @@ class SerializableDetectorTest : BaseSlackLintTest() {
       .files(
         PARCELABLE_STUB,
         kotlin(
-          """
+            """
             package slack
 
             import java.io.Serializable
 
             class BadClass : Serializable
           """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -155,14 +145,15 @@ class SerializableDetectorTest : BaseSlackLintTest() {
       .files(
         PARCELABLE_STUB,
         kotlin(
-          """
+            """
             package slack
 
             import kotlin.io.Serializable
 
             class BadClass : Serializable
           """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -184,13 +175,14 @@ class SerializableDetectorTest : BaseSlackLintTest() {
       .files(
         PARCELABLE_STUB,
         java(
-          """
+            """
             package slack;
 
             class ImplementsNothing {
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -203,7 +195,7 @@ class SerializableDetectorTest : BaseSlackLintTest() {
       .files(
         PARCELABLE_STUB,
         java(
-          """
+            """
             package slack;
 
             import java.io.Serializable;
@@ -212,7 +204,8 @@ class SerializableDetectorTest : BaseSlackLintTest() {
             class ImplementsBoth implements Serializable, Parcelable {
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -225,7 +218,7 @@ class SerializableDetectorTest : BaseSlackLintTest() {
       .files(
         PARCELABLE_STUB,
         java(
-          """
+            """
             package slack;
 
             import java.io.Serializable;
@@ -233,7 +226,8 @@ class SerializableDetectorTest : BaseSlackLintTest() {
             class BadClass implements Serializable {
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()

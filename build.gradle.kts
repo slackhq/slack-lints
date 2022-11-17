@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 import com.diffplug.gradle.spotless.KotlinExtension
 import com.diffplug.gradle.spotless.SpotlessExtension
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
@@ -43,6 +30,8 @@ plugins {
   alias(libs.plugins.ksp) apply false
 }
 
+val ktfmtVersion = libs.versions.ktfmt.get().toString()
+
 allprojects {
   repositories {
     google()
@@ -56,11 +45,9 @@ allprojects {
       trimTrailingWhitespace()
       endWithNewline()
     }
-    val ktlintVersion = "0.41.0"
-    val ktlintUserData = mapOf("indent_size" to "2", "continuation_indent_size" to "2")
     kotlin {
       target("**/*.kt")
-      ktlint(ktlintVersion).userData(ktlintUserData)
+      ktfmt(ktfmtVersion).googleStyle()
       trimTrailingWhitespace()
       endWithNewline()
       licenseHeaderFile(rootProject.file("spotless/spotless.kt"))
@@ -69,12 +56,12 @@ allprojects {
     // Externally adapted sources that should preserve their license header
     format("kotlinExternal", KotlinExtension::class.java) {
       target("**/denylistedapis/*.kt")
-      ktlint(ktlintVersion).userData(ktlintUserData)
+      ktfmt(ktfmtVersion).googleStyle()
       trimTrailingWhitespace()
       endWithNewline()
     }
     kotlinGradle {
-      ktlint(ktlintVersion).userData(ktlintUserData)
+      ktfmt(ktfmtVersion).googleStyle()
       trimTrailingWhitespace()
       endWithNewline()
       licenseHeaderFile(
@@ -87,15 +74,9 @@ allprojects {
 
 subprojects {
   pluginManager.withPlugin("java") {
-    configure<JavaPluginExtension> {
-      toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-      }
-    }
+    configure<JavaPluginExtension> { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
 
-    tasks.withType<JavaCompile>().configureEach {
-      options.release.set(11)
-    }
+    tasks.withType<JavaCompile>().configureEach { options.release.set(11) }
   }
 
   pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
@@ -103,24 +84,20 @@ subprojects {
       kotlinOptions {
         jvmTarget = "11"
         // TODO re-enable once lint uses Kotlin 1.5
-//        allWarningsAsErrors = true
-//        freeCompilerArgs = freeCompilerArgs + listOf("-progressive")
+        //        allWarningsAsErrors = true
+        //        freeCompilerArgs = freeCompilerArgs + listOf("-progressive")
       }
     }
   }
 
-  tasks.withType<Detekt>().configureEach {
-    jvmTarget = "11"
-  }
+  tasks.withType<Detekt>().configureEach { jvmTarget = "11" }
 
   pluginManager.withPlugin("com.vanniktech.maven.publish") {
     apply(plugin = "org.jetbrains.dokka")
 
     tasks.withType<DokkaTask>().configureEach {
       outputDirectory.set(rootDir.resolve("../docs/0.x"))
-      dokkaSourceSets.configureEach {
-        skipDeprecated.set(true)
-      }
+      dokkaSourceSets.configureEach { skipDeprecated.set(true) }
     }
 
     configure<MavenPublishBaseExtension> {

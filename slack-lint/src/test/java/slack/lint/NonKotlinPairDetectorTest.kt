@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.detector.api.Detector
@@ -29,7 +16,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
       .files(
         ANDROIDX_PAIR_STUB,
         java(
-          """
+            """
                   package slack.test;
 
                   import androidx.core.util.Pair;
@@ -44,7 +31,8 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*NonKotlinPairDetector.issues)
       .run()
@@ -64,7 +52,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
       .files(
         ANDROIDX_PAIR_STUB,
         java(
-          """
+            """
                   package slack.test;
 
                   import androidx.core.util.Pair;
@@ -78,7 +66,8 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*NonKotlinPairDetector.issues)
       .run()
@@ -98,7 +87,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
       .files(
         SLACK_COMMONS_PAIR,
         java(
-          """
+            """
                   package slack.test;
 
                   import slack.commons.Pair;
@@ -112,7 +101,8 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*NonKotlinPairDetector.issues)
       .run()
@@ -132,7 +122,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
       .files(
         SLACK_COMMONS_PAIR,
         java(
-          """
+            """
                   package slack.test;
 
                   public class TestClass {
@@ -144,7 +134,8 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*NonKotlinPairDetector.issues)
       .run()
@@ -164,7 +155,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
       .files(
         KOTLIN_PAIR,
         kotlin(
-          """
+            """
                   package slack.test
 
                   import kotlin.Pair
@@ -178,7 +169,8 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*NonKotlinPairDetector.issues)
       .run()
@@ -191,7 +183,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
       .files(
         ANDROIDX_PAIR_STUB,
         kotlin(
-          """
+            """
                   package slack.test
 
                   import androidx.core.util.Pair
@@ -205,7 +197,8 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*NonKotlinPairDetector.issues)
       .run()
@@ -225,7 +218,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
       .files(
         ANDROIDX_PAIR_STUB,
         kotlin(
-          """
+            """
                   package slack.test
 
                   import androidx.core.util.Pair
@@ -239,7 +232,8 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*NonKotlinPairDetector.issues)
       .run()
@@ -259,7 +253,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
       .files(
         SLACK_COMMONS_PAIR,
         kotlin(
-          """
+            """
                   package slack.test
 
                   import slack.commons.Pair
@@ -274,7 +268,8 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*NonKotlinPairDetector.issues)
       .run()
@@ -289,8 +284,9 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
   }
 
   companion object {
-    private val ANDROIDX_PAIR_STUB = java(
-      """
+    private val ANDROIDX_PAIR_STUB =
+      java(
+        """
           package androidx.core.util;
           public class Pair<F, S> {
             public final F first;
@@ -306,25 +302,27 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
             }
           }
         """
-    )
+      )
 
-    private val SLACK_COMMONS_PAIR = kotlin(
-      """
+    private val SLACK_COMMONS_PAIR =
+      kotlin(
+        """
           package slack.commons
           data class Pair<out A, out B>(
               val first: A,
               val second: B
           )
         """
-    )
+      )
   }
-  private val KOTLIN_PAIR = kotlin(
-    """
+  private val KOTLIN_PAIR =
+    kotlin(
+      """
           package kotlin
           public data class Pair<out A, out B>(
               public val first: A,
               public val second: B
           )
         """
-  )
+    )
 }

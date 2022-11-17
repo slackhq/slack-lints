@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.checks.infrastructure.TestMode
@@ -45,15 +32,13 @@ class ArgInFormattedQuantityStringResDetectorTest : BaseSlackLintTest() {
       )
       .run()
       .expect(
-        (
+        ("src/com/slack/lint/Foo.java:7: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]\n" +
+          "    String s = res.getQuantityString(0, 3, 3, \"asdf\");\n" +
+          "                                           ~\n" +
           "src/com/slack/lint/Foo.java:7: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]\n" +
-            "    String s = res.getQuantityString(0, 3, 3, \"asdf\");\n" +
-            "                                           ~\n" +
-            "src/com/slack/lint/Foo.java:7: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]\n" +
-            "    String s = res.getQuantityString(0, 3, 3, \"asdf\");\n" +
-            "                                              ~~~~~~\n" +
-            "0 errors, 2 warnings\n"
-          )
+          "    String s = res.getQuantityString(0, 3, 3, \"asdf\");\n" +
+          "                                              ~~~~~~\n" +
+          "0 errors, 2 warnings\n")
       )
   }
 
@@ -76,15 +61,13 @@ class ArgInFormattedQuantityStringResDetectorTest : BaseSlackLintTest() {
       )
       .run()
       .expect(
-        (
+        ("src/com/slack/lint/Foo.kt:7: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]\n" +
+          "    val s = res.getQuantityString(0, 3, 3, \"asdf\")\n" +
+          "                                        ~\n" +
           "src/com/slack/lint/Foo.kt:7: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]\n" +
-            "    val s = res.getQuantityString(0, 3, 3, \"asdf\")\n" +
-            "                                        ~\n" +
-            "src/com/slack/lint/Foo.kt:7: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]\n" +
-            "    val s = res.getQuantityString(0, 3, 3, \"asdf\")\n" +
-            "                                            ~~~~\n" +
-            "0 errors, 2 warnings\n"
-          )
+          "    val s = res.getQuantityString(0, 3, 3, \"asdf\")\n" +
+          "                                            ~~~~\n" +
+          "0 errors, 2 warnings\n")
       )
   }
 
@@ -93,22 +76,20 @@ class ArgInFormattedQuantityStringResDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         java(
-          (
-            "" +
-              "package com.slack.lint;\n" +
-              "import static com.slack.lint.Foo.LocalizationUtils.getFormattedCount;\n" +
-              "\n" +
-              "import android.content.res.Resources;\n" +
-              "\n" +
-              "public class Foo {\n" +
-              "  public void bar(Resources res) {\n" +
-              "    String s = res.getQuantityString(0, 3, getFormattedCount(), 3);\n" +
-              "  }\n" +
-              "  public static class LocalizationUtils {\n" +
-              "   public static String getFormattedCount() { return \"\"; }\n" +
-              "  }" +
-              "}\n"
-            )
+          ("" +
+            "package com.slack.lint;\n" +
+            "import static com.slack.lint.Foo.LocalizationUtils.getFormattedCount;\n" +
+            "\n" +
+            "import android.content.res.Resources;\n" +
+            "\n" +
+            "public class Foo {\n" +
+            "  public void bar(Resources res) {\n" +
+            "    String s = res.getQuantityString(0, 3, getFormattedCount(), 3);\n" +
+            "  }\n" +
+            "  public static class LocalizationUtils {\n" +
+            "   public static String getFormattedCount() { return \"\"; }\n" +
+            "  }" +
+            "}\n")
         )
       )
       .run()
@@ -160,23 +141,21 @@ class ArgInFormattedQuantityStringResDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         java(
-          (
-            "" +
-              "package com.slack.lint;\n" +
-              "import static com.slack.lint.Foo.LocalizationUtils.getFormattedCount;\n" +
-              "\n" +
-              "import android.content.res.Resources;\n" +
-              "\n" +
-              "public class Foo {\n" +
-              "  public void bar(Resources res) {\n" +
-              "    final String a = getFormattedCount();\n" +
-              "    String s = res.getQuantityString(0, 3, a, 3);\n" +
-              "  }\n" +
-              "  public static class LocalizationUtils {\n" +
-              "   public static String getFormattedCount() { return \"\"; }\n" +
-              "  }\n" +
-              "}\n"
-            )
+          ("" +
+            "package com.slack.lint;\n" +
+            "import static com.slack.lint.Foo.LocalizationUtils.getFormattedCount;\n" +
+            "\n" +
+            "import android.content.res.Resources;\n" +
+            "\n" +
+            "public class Foo {\n" +
+            "  public void bar(Resources res) {\n" +
+            "    final String a = getFormattedCount();\n" +
+            "    String s = res.getQuantityString(0, 3, a, 3);\n" +
+            "  }\n" +
+            "  public static class LocalizationUtils {\n" +
+            "   public static String getFormattedCount() { return \"\"; }\n" +
+            "  }\n" +
+            "}\n")
         )
       )
       .run()

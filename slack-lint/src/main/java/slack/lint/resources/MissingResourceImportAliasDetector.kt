@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2022 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2022 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.resources
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -33,7 +20,10 @@ import slack.lint.resources.ImportAliasesLoader.IMPORT_ALIASES
 import slack.lint.resources.model.RootIssueData
 import slack.lint.util.sourceImplementation
 
-/** Reports an error when an R class, other than the local module's, is imported without an import alias. */
+/**
+ * Reports an error when an R class, other than the local module's, is imported without an import
+ * alias.
+ */
 class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
 
   private val fixes = mutableListOf<LintFix>()
@@ -48,7 +38,8 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
   }
 
   override fun afterCheckFile(context: Context) {
-    // Collect all the fixes and apply them to one issue on the import to avoid adding the import alias with a fix
+    // Collect all the fixes and apply them to one issue on the import to avoid adding the import
+    // alias with a fix
     // and leaving the R references still referencing the non-aliased R or vice versa.
     rootIssueData?.let {
       context.report(
@@ -56,11 +47,11 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
         it.nameLocation,
         "Use an import alias for R classes from other modules",
         quickfixData =
-        fix()
-          .name("Add import alias")
-          // Apply the fixes in reverse so that the ranges/locations don't change.
-          .composite(*fixes.reversed().toTypedArray())
-          .autoFix()
+          fix()
+            .name("Add import alias")
+            // Apply the fixes in reverse so that the ranges/locations don't change.
+            .composite(*fixes.reversed().toTypedArray())
+            .autoFix()
       )
       rootIssueData = null
       fixes.clear()
@@ -89,17 +80,29 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
             val alias = importAliases[importedFqNameString]
 
             if (alias != null) {
-              rootIssueData = RootIssueData(alias = alias, nameLocation = context.getNameLocation(importDirective))
+              rootIssueData =
+                RootIssueData(
+                  alias = alias,
+                  nameLocation = context.getNameLocation(importDirective)
+                )
 
               fixes.add(createImportLintFix(importDirective, importedFqNameString, alias))
             } else {
-              context.report(ISSUE, context.getNameLocation(importDirective), "Use an import alias for R classes from other modules")
+              context.report(
+                ISSUE,
+                context.getNameLocation(importDirective),
+                "Use an import alias for R classes from other modules"
+              )
             }
           }
         }
       }
 
-      private fun createImportLintFix(importDirective: KtImportDirective, importedFqNameString: String, alias: String?): LintFix {
+      private fun createImportLintFix(
+        importDirective: KtImportDirective,
+        importedFqNameString: String,
+        alias: String?
+      ): LintFix {
         return fix()
           .replace()
           .range(context.getLocation(importDirective))
@@ -110,16 +113,21 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
 
       override fun visitSimpleNameReferenceExpression(node: USimpleNameReferenceExpression) {
         rootIssueData?.alias?.let {
-          if (node.asSourceString() == "R" &&
-            // Make sure node is its own parent to safeguard against cases like Build.VERSION_CODES.R.
-            node.getQualifiedParentOrThis() == node
+          if (
+            node.asSourceString() == "R" &&
+              // Make sure node is its own parent to safeguard against cases like
+              // Build.VERSION_CODES.R.
+              node.getQualifiedParentOrThis() == node
           ) {
             fixes.add(createReferenceLintFix(node, it))
           }
         }
       }
 
-      private fun createReferenceLintFix(node: USimpleNameReferenceExpression, alias: String): LintFix {
+      private fun createReferenceLintFix(
+        node: USimpleNameReferenceExpression,
+        alias: String
+      ): LintFix {
         return fix().replace().range(context.getLocation(node)).with(alias).build()
       }
     }
@@ -128,16 +136,17 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
   companion object {
     val ISSUE: Issue =
       Issue.create(
-        "MissingResourceImportAlias",
-        "Missing import alias for R class.",
-        """
+          "MissingResourceImportAlias",
+          "Missing import alias for R class.",
+          """
           Only the local module's R class is allowed to be imported without an alias. \
           Add an import alias for this. For example, import slack.l10n.R as L10nR
           """,
-        Category.CORRECTNESS,
-        6,
-        Severity.ERROR,
-        sourceImplementation<MissingResourceImportAliasDetector>()
-      ).setOptions(listOf(IMPORT_ALIASES))
+          Category.CORRECTNESS,
+          6,
+          Severity.ERROR,
+          sourceImplementation<MissingResourceImportAliasDetector>()
+        )
+        .setOptions(listOf(IMPORT_ALIASES))
   }
 }

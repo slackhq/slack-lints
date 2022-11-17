@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.checks.infrastructure.TestMode
@@ -25,8 +12,9 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
   override fun getDetector(): Detector = GuavaPreconditionsDetector()
   override fun getIssues() = GuavaPreconditionsDetector.issues.toList()
 
-  private val guavaPreconditionsStub = java(
-    """
+  private val guavaPreconditionsStub =
+    java(
+        """
       package com.google.common.base;
 
       public final class Preconditions {
@@ -36,10 +24,12 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           public static int checkElementIndex(int index, int size) { return 0; }
       }
     """
-  ).indented()
+      )
+      .indented()
 
-  private val slackPreconditionsStub = kotlin(
-    """
+  private val slackPreconditionsStub =
+    kotlin(
+        """
       @file:JvmName("JavaPreconditions")
 
       package slack.commons
@@ -47,8 +37,10 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
       fun require(condition: Boolean) {}
       fun checkNotNull(condition: Boolean) {}
       fun <T> checkNotNull(value: T): T {}
-    """.trimIndent()
-  ).indented()
+    """
+          .trimIndent()
+      )
+      .indented()
 
   @Test
   fun `Java - Using Guava Preconditions with static reference will show warnings`() {
@@ -56,7 +48,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
       .files(
         guavaPreconditionsStub,
         java(
-          """
+            """
             package foo;
 
             import com.google.common.base.Preconditions;
@@ -73,7 +65,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*GuavaPreconditionsDetector.issues)
       .run()
@@ -95,8 +88,10 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               Preconditions.checkElementIndex(0, 1);
                             ~~~~~~~~~~~~~~~~~
           5 errors, 0 warnings
-        """.trimIndent()
-      ).expectFixDiffs(
+        """
+          .trimIndent()
+      )
+      .expectFixDiffs(
         """
           Fix for src/foo/Foo.java line 7: Use Slack's JavaPreconditions checks:
           @@ -7 +7
@@ -118,7 +113,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           @@ -13 +13
           -     Preconditions.checkElementIndex(0, 1);
           +     slack.commons.JavaPreconditions.checkElementIndex(0, 1);
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -128,7 +124,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
       .files(
         guavaPreconditionsStub,
         java(
-          """
+            """
             package foo;
 
             public class Foo {
@@ -143,7 +139,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*GuavaPreconditionsDetector.issues)
       .run()
@@ -165,8 +162,10 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               com.google.common.base.Preconditions.checkElementIndex(0, 1);
                                                    ~~~~~~~~~~~~~~~~~
           5 errors, 0 warnings
-        """.trimIndent()
-      ).expectFixDiffs(
+        """
+          .trimIndent()
+      )
+      .expectFixDiffs(
         """
           Fix for src/foo/Foo.java line 5: Use Slack's JavaPreconditions checks:
           @@ -5 +5
@@ -188,7 +187,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           @@ -11 +11
           -     com.google.common.base.Preconditions.checkElementIndex(0, 1);
           +     slack.commons.JavaPreconditions.checkElementIndex(0, 1);
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -198,7 +198,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
       .files(
         guavaPreconditionsStub,
         java(
-          """
+            """
             package foo;
 
             import static com.google.common.base.Preconditions.checkState;
@@ -218,7 +218,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*GuavaPreconditionsDetector.issues)
       .run()
@@ -240,7 +241,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               checkElementIndex(0, 1);
               ~~~~~~~~~~~~~~~~~
           5 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -264,7 +266,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           @@ -16 +16
           -     checkElementIndex(0, 1);
           +     slack.commons.JavaPreconditions.checkElementIndex(0, 1);
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -274,7 +277,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
       .files(
         slackPreconditionsStub,
         java(
-          """
+            """
             package foo;
 
             import slack.commons.JavaPreconditions;
@@ -290,7 +293,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*GuavaPreconditionsDetector.issues)
       .run()
@@ -303,7 +307,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
       .files(
         slackPreconditionsStub,
         java(
-          """
+            """
             package foo;
 
             import static slack.commons.JavaPreconditions.check;
@@ -321,10 +325,12 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*GuavaPreconditionsDetector.issues)
-      .allowCompilationErrors() // Until AGP 7.1.0 https://groups.google.com/g/lint-dev/c/BigCO8sMhKU
+      .allowCompilationErrors() // Until AGP 7.1.0
+      // https://groups.google.com/g/lint-dev/c/BigCO8sMhKU
       .run()
       .expectClean()
   }
@@ -335,7 +341,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
       .files(
         guavaPreconditionsStub,
         kotlin(
-          """
+            """
             package foo
 
             import com.google.common.base.Preconditions
@@ -352,7 +358,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*GuavaPreconditionsDetector.issues)
       .run()
@@ -374,7 +381,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               Preconditions.checkElementIndex(0, 1)
                             ~~~~~~~~~~~~~~~~~
           5 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -394,7 +402,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           @@ -12 +12
           -     Preconditions.checkNotNull("Hello")
           +     checkNotNull("Hello")
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -404,7 +413,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
       .files(
         guavaPreconditionsStub,
         kotlin(
-          """
+            """
             package foo
 
             class Foo {
@@ -419,7 +428,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*GuavaPreconditionsDetector.issues)
       .run()
@@ -441,7 +451,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               com.google.common.base.Preconditions.checkElementIndex(0, 1)
                                                    ~~~~~~~~~~~~~~~~~
           5 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -461,7 +472,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           @@ -10 +10
           -     com.google.common.base.Preconditions.checkNotNull("Hello")
           +     checkNotNull("Hello")
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -471,7 +483,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
       .files(
         guavaPreconditionsStub,
         kotlin(
-          """
+            """
             package foo
 
             import com.google.common.base.Preconditions.checkState
@@ -491,7 +503,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               }
             }
           """
-        ).indented()
+          )
+          .indented()
       )
       .issues(*GuavaPreconditionsDetector.issues)
       .run()
@@ -513,7 +526,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
               checkElementIndex(0, 1)
               ~~~~~~~~~~~~~~~~~
           5 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -529,7 +543,8 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           @@ -14 +14
           -     checkArgument(false)
           +     require(false)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 }

@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2020 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2020 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.checks.infrastructure.TestFile
@@ -22,24 +9,28 @@ import org.junit.Test
 class JavaOnlyDetectorTest : BaseSlackLintTest() {
 
   companion object {
-    val JAVA_ONLY: TestFile = java(
-      "test/slack/lint/annotations/JavaOnly.java",
-      """
+    val JAVA_ONLY: TestFile =
+      java(
+          "test/slack/lint/annotations/JavaOnly.java",
+          """
           package slack.lint.annotations;
           public @interface JavaOnly {
             String value() default "Description";
           }
           """
-    ).indented()
-    val KOTLIN_ONLY: TestFile = java(
-      "test/slack/lint/annotations/KotlinOnly.java",
-      """
+        )
+        .indented()
+    val KOTLIN_ONLY: TestFile =
+      java(
+          "test/slack/lint/annotations/KotlinOnly.java",
+          """
           package slack.lint.annotations;
           public @interface KotlinOnly {
             String value() default "Description";
           }
           """
-    ).indented()
+        )
+        .indented()
   }
 
   override fun getDetector() = JavaOnlyDetector()
@@ -53,8 +44,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/Test.kt",
-          """
+            "test/test/pkg/Test.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   class Test {
@@ -67,7 +58,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                     }
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -82,7 +74,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
               val r = this::g
                       ~~~~~~~
           3 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -94,24 +87,26 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         java(
-          "test/test/pkg/package-info.java",
-          """
+            "test/test/pkg/package-info.java",
+            """
                   @slack.lint.annotations.JavaOnly
                   package test.pkg;
                   import slack.lint.annotations.JavaOnly;"""
-        ).indented(),
+          )
+          .indented(),
         java(
-          "test/test/pkg/A.java",
-          """
+            "test/test/pkg/A.java",
+            """
                   package test.pkg;
                   public class A {
                     public static void f() {}
                   }
                 """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg2/Test.kt",
-          """
+            "test/test/pkg2/Test.kt",
+            """
                   package test.pkg2
                   import slack.lint.annotations.JavaOnly
                   class Test {
@@ -120,7 +115,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                     }
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -129,7 +125,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
               f()
               ~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -141,8 +138,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
         JAVA_ONLY,
         KOTLIN_ONLY,
         kotlin(
-          "test/test/pkg/Test.kt",
-          """
+            "test/test/pkg/Test.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   import slack.lint.annotations.KotlinOnly
@@ -150,7 +147,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                     @JavaOnly @KotlinOnly fun f()
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -159,7 +157,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
             @JavaOnly @KotlinOnly fun f()
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -171,8 +170,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
         JAVA_ONLY,
         KOTLIN_ONLY,
         kotlin(
-          "test/test/pkg/Test.kt",
-          """
+            "test/test/pkg/Test.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   import slack.lint.annotations.KotlinOnly
@@ -180,7 +179,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                     fun f()
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -189,7 +189,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
           @JavaOnly @KotlinOnly interface Test {
           ^
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -200,24 +201,26 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         KOTLIN_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.KotlinOnly
                   interface A {
                     @KotlinOnly fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   class B : A {
                     override fun f()
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -226,7 +229,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
             override fun f()
             ~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -234,7 +238,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
           @@ -3 +3
           -   override fun f()
           +   @slack.lint.annotations.KotlinOnly override fun f()
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -245,25 +250,27 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         KOTLIN_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.KotlinOnly
                   interface A {
                     @KotlinOnly fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.KotlinOnly
                   class B : A {
                     @KotlinOnly override fun f()
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -276,24 +283,26 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   interface A {
                     @JavaOnly fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   class B : A {
                     override fun f()
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -302,7 +311,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
             override fun f()
             ~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -310,7 +320,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
           @@ -3 +3
           -   override fun f()
           +   @slack.lint.annotations.JavaOnly override fun f()
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -321,25 +332,27 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   interface A {
                     @JavaOnly fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   class B : A {
                     @JavaOnly override fun f()
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -352,24 +365,26 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         KOTLIN_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.KotlinOnly
                   @KotlinOnly interface A {
                     fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   class B : A {
                     override fun f()
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -378,7 +393,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
           class B : A {
           ^
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -386,7 +402,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
           @@ -2 +2
           - class B : A {
           + @slack.lint.annotations.KotlinOnly class B : A {
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -397,25 +414,27 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         KOTLIN_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.KotlinOnly
                   @KotlinOnly interface A {
                     fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.KotlinOnly
                   @KotlinOnly class B : A {
                     override fun f()
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -428,24 +447,26 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   @JavaOnly interface A {
                     fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   class B : A {
                     override fun f()
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -454,7 +475,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
           class B : A {
           ^
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -462,7 +484,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
           @@ -2 +2
           - class B : A {
           + @slack.lint.annotations.JavaOnly class B : A {
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -473,25 +496,27 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   @JavaOnly interface A {
                     fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   @JavaOnly class B : A {
                     override fun f()
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -511,25 +536,27 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/I.kt",
-          """
+            "test/test/pkg/I.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   interface I {
                     @JavaOnly override fun toString(): String
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   class B : I
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/Test.kt",
-          """
+            "test/test/pkg/Test.kt",
+            """
                   package test.pkg
                   class Test {
                     fun f(b: B) {
@@ -539,7 +566,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                     }
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -551,7 +579,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
               i.toString()
               ~~~~~~~~~~~~
           2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -562,24 +591,26 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   @JavaOnly interface A {
                     fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   class B {
                     fun f(): A = {}
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -588,7 +619,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
               fun f(): A = {}
                            ~~
             1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -599,24 +631,26 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   interface A {
                     @JavaOnly fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   class B {
                     fun f(): A = {}
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -625,7 +659,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
               fun f(): A = {}
                            ~~
             1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -636,23 +671,25 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   interface A {
                     fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   class B {
                     fun f(): A = {}
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -665,25 +702,27 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   interface A {
                     @JavaOnly fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   class B {
                     @JavaOnly fun f(): A = {}
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -696,25 +735,27 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   @JavaOnly interface A {
                     fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   class B {
                     @JavaOnly fun f(): A = {}
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -727,18 +768,19 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   @JavaOnly interface A {
                     fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   class B {
                     fun f(): A = object : A() {
@@ -746,7 +788,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                     }
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -755,7 +798,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
               fun f(): A = object : A() {
                            ^
             1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -766,17 +810,18 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   interface A {
                     fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   class B {
                     fun f(): A = object : A() {
@@ -784,7 +829,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                     }
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -797,18 +843,19 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   interface A {
                     @JavaOnly fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   class B {
@@ -817,7 +864,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                     }
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -830,18 +878,19 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
       .files(
         JAVA_ONLY,
         kotlin(
-          "test/test/pkg/A.kt",
-          """
+            "test/test/pkg/A.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   @JavaOnly interface A {
                     fun f()
                   }
                   """
-        ).indented(),
+          )
+          .indented(),
         kotlin(
-          "test/test/pkg/B.kt",
-          """
+            "test/test/pkg/B.kt",
+            """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
                   class B {
@@ -850,7 +899,8 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                     }
                   }
                   """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()

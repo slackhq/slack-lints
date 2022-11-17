@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -29,12 +16,12 @@ import com.android.tools.lint.detector.api.UastLintUtils.Companion.tryResolveUDe
 import com.android.tools.lint.detector.api.isJava
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
+import java.util.EnumSet
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UCallableReferenceExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UQualifiedReferenceExpression
-import java.util.EnumSet
 
 /**
  * This is a [Detector] for detecting direct usages of Kotlin coroutines'
@@ -44,53 +31,50 @@ import java.util.EnumSet
 class RawDispatchersUsageDetector : Detector(), SourceCodeScanner {
 
   companion object {
-    private val SCOPES = Implementation(
-      RawDispatchersUsageDetector::class.java,
-      EnumSet.of(Scope.JAVA_FILE)
-    )
+    private val SCOPES =
+      Implementation(RawDispatchersUsageDetector::class.java, EnumSet.of(Scope.JAVA_FILE))
 
-    val ISSUE: Issue = Issue.create(
-      "RawDispatchersUse",
-      "Use SlackDispatchers.",
-      """
+    val ISSUE: Issue =
+      Issue.create(
+        "RawDispatchersUse",
+        "Use SlackDispatchers.",
+        """
         Direct use of `Dispatchers.*` APIs are discouraged as they are difficult to test. Prefer using \
         `SlackDispatchers`.
       """,
-      Category.CORRECTNESS,
-      6,
-      Severity.ERROR,
-      SCOPES
-    )
+        Category.CORRECTNESS,
+        6,
+        Severity.ERROR,
+        SCOPES
+      )
 
     private const val DISPATCHERS_CLASS = "kotlinx.coroutines.Dispatchers"
-    private val PROPERTY_GETTERS = setOf(
-      "getDefault",
-      "getIO",
-      "getMain",
-      "getUnconfined",
-      "Default",
-      "IO",
-      "Main",
-      "Unconfined"
-    )
+    private val PROPERTY_GETTERS =
+      setOf(
+        "getDefault",
+        "getIO",
+        "getMain",
+        "getUnconfined",
+        "Default",
+        "IO",
+        "Main",
+        "Unconfined"
+      )
   }
 
-  override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(
-    UCallExpression::class.java,
-    UCallableReferenceExpression::class.java,
-    UQualifiedReferenceExpression::class.java
-  )
+  override fun getApplicableUastTypes(): List<Class<out UElement>> =
+    listOf(
+      UCallExpression::class.java,
+      UCallableReferenceExpression::class.java,
+      UQualifiedReferenceExpression::class.java
+    )
 
   override fun createUastHandler(context: JavaContext): UElementHandler? {
     // Only applicable on Kotlin files
     if (isJava(context.psiFile)) return null
 
     fun report(node: UElement) {
-      context.report(
-        ISSUE,
-        context.getLocation(node),
-        ISSUE.getBriefDescription(TextFormat.TEXT)
-      )
+      context.report(ISSUE, context.getLocation(node), ISSUE.getBriefDescription(TextFormat.TEXT))
     }
 
     fun String?.isDispatcherGetter(): Boolean {
@@ -126,9 +110,7 @@ class RawDispatchersUsageDetector : Detector(), SourceCodeScanner {
       override fun visitCallableReferenceExpression(node: UCallableReferenceExpression) {
         if (node.callableName.isDispatcherGetter()) {
           val qualifierType = node.qualifierType ?: return
-          if (qualifierType is PsiClassType &&
-            qualifierType.resolve().isDispatchersClass()
-          )
+          if (qualifierType is PsiClassType && qualifierType.resolve().isDispatchersClass())
             report(node)
         }
       }

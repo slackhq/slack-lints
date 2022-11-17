@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.client.api.TYPE_BOOLEAN
@@ -38,18 +25,18 @@ import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
 import com.android.tools.lint.detector.api.getPrimitiveType
 import com.android.tools.lint.detector.api.isKotlin
+import java.util.EnumSet
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UTypeReferenceExpression
 import org.jetbrains.uast.kotlin.KotlinReceiverUParameter
 import slack.lint.DaggerKotlinIssuesDetector.Companion.ISSUE_BINDS_CAN_BE_EXTENSION_FUNCTION
-import java.util.EnumSet
 
 /**
  * This is a simple lint check to catch common Dagger+Kotlin usage issues.
  *
- * - [ISSUE_BINDS_CAN_BE_EXTENSION_FUNCTION] covers `@Binds` functions where the target binding can be a an extension
- * function receiver instead.
+ * - [ISSUE_BINDS_CAN_BE_EXTENSION_FUNCTION] covers `@Binds` functions where the target binding can
+ * be a an extension function receiver instead.
  */
 @Suppress("UnstableApiUsage")
 class DaggerKotlinIssuesDetector : Detector(), SourceCodeScanner {
@@ -62,38 +49,36 @@ class DaggerKotlinIssuesDetector : Detector(), SourceCodeScanner {
     // doesn't require both of them together.
     // From discussion on lint-dev https://groups.google.com/d/msg/lint-dev/ULQMzW1ZlP0/1dG4Vj3-AQAJ
     // This was supposed to be fixed in AS 3.4 but still required as recently as 3.6-alpha10.
-    private val SCOPES = Implementation(
-      DaggerKotlinIssuesDetector::class.java,
-      EnumSet.of(Scope.JAVA_FILE, Scope.TEST_SOURCES),
-      EnumSet.of(Scope.JAVA_FILE),
-      EnumSet.of(Scope.TEST_SOURCES)
-    )
+    private val SCOPES =
+      Implementation(
+        DaggerKotlinIssuesDetector::class.java,
+        EnumSet.of(Scope.JAVA_FILE, Scope.TEST_SOURCES),
+        EnumSet.of(Scope.JAVA_FILE),
+        EnumSet.of(Scope.TEST_SOURCES)
+      )
 
-    private val ISSUE_BINDS_CAN_BE_EXTENSION_FUNCTION: Issue = Issue.create(
-      "BindsCanBeExtensionFunction",
-      "@Binds-annotated functions can be extension functions.",
-      "@Binds-annotated functions can be extension functions to simplify code readability.",
-      Category.USABILITY,
-      6,
-      Severity.INFORMATIONAL,
-      SCOPES
-    )
+    private val ISSUE_BINDS_CAN_BE_EXTENSION_FUNCTION: Issue =
+      Issue.create(
+        "BindsCanBeExtensionFunction",
+        "@Binds-annotated functions can be extension functions.",
+        "@Binds-annotated functions can be extension functions to simplify code readability.",
+        Category.USABILITY,
+        6,
+        Severity.INFORMATIONAL,
+        SCOPES
+      )
 
-    private val JB_NULLABILITY_ANNOTATIONS = setOf(
-      "org.jetbrains.annotations.Nullable",
-      "org.jetbrains.annotations.NotNull"
-    )
+    private val JB_NULLABILITY_ANNOTATIONS =
+      setOf("org.jetbrains.annotations.Nullable", "org.jetbrains.annotations.NotNull")
 
     private const val BINDS_ANNOTATION = "dagger.Binds"
 
-    val issues: Array<Issue> = arrayOf(
-      ISSUE_BINDS_CAN_BE_EXTENSION_FUNCTION
-    )
+    val issues: Array<Issue> = arrayOf(ISSUE_BINDS_CAN_BE_EXTENSION_FUNCTION)
 
     /**
-     * Tries to convert a type to an idiomatic kotlin type. This is a little annoying as UAST gives us the JVM type,
-     * so kotlin intrinsics are... tricky. Collections and generics will still get whacked at the moment, but this tries
-     * to cover the common cases at least.
+     * Tries to convert a type to an idiomatic kotlin type. This is a little annoying as UAST gives
+     * us the JVM type, so kotlin intrinsics are... tricky. Collections and generics will still get
+     * whacked at the moment, but this tries to cover the common cases at least.
      *
      * See https://groups.google.com/forum/#!topic/lint-dev/5KLM_YbFQlo
      */
@@ -129,13 +114,12 @@ class DaggerKotlinIssuesDetector : Detector(), SourceCodeScanner {
         if (!node.isConstructor && node.hasAnnotation(BINDS_ANNOTATION)) {
           val firstParam = node.uastParameters[0]
           if (firstParam !is KotlinReceiverUParameter) {
-            val annotations = firstParam.uAnnotations
-              .filterNot { it.qualifiedName in JB_NULLABILITY_ANNOTATIONS }
-              .takeIf { it.isNotEmpty() }
-              ?.joinToString(" ", postfix = " ") {
-                "@receiver:${it.qualifiedName}"
-              }
-              .orEmpty()
+            val annotations =
+              firstParam.uAnnotations
+                .filterNot { it.qualifiedName in JB_NULLABILITY_ANNOTATIONS }
+                .takeIf { it.isNotEmpty() }
+                ?.joinToString(" ", postfix = " ") { "@receiver:${it.qualifiedName}" }
+                .orEmpty()
             val type = firstParam.typeReference!!.toKotlinPrimitiveSourceString()
             context.report(
               ISSUE_BINDS_CAN_BE_EXTENSION_FUNCTION,

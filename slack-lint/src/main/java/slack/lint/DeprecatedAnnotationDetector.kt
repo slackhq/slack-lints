@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.client.api.LintClient
@@ -36,12 +23,13 @@ private const val BRIEF_DESCRIPTION_PREFIX_DEFAULT = "This class or method"
 private const val BRIEF_DESCRIPTION_SUFFIX = " is deprecated; consider using an alternative."
 
 /**
- * Raises a warning whenever we use deprecated methods or classes. Generally used for keeping track of health score.
- *
+ * Raises a warning whenever we use deprecated methods or classes. Generally used for keeping track
+ * of health score.
  */
 class DeprecatedAnnotationDetector : AnnotatedClassOrMethodUsageDetector() {
 
-  override val annotationNames = listOf(DEPRECATED_ANNOTATION_NAME_KOTLIN, DEPRECATED_ANNOTATION_NAME_JAVA)
+  override val annotationNames =
+    listOf(DEPRECATED_ANNOTATION_NAME_KOTLIN, DEPRECATED_ANNOTATION_NAME_JAVA)
   override val issue = ISSUE_DEPRECATED_CALL
 
   // Only enable on CLI
@@ -64,8 +52,9 @@ class DeprecatedAnnotationDetector : AnnotatedClassOrMethodUsageDetector() {
     if (isEnabled && applicableAnnotations().contains(qualifiedName)) {
       val issueToReport = issue
       val location = context.getLocation(usage)
-      val messagePrefix = referenced?.let(UastLintUtils.Companion::getQualifiedName)
-        ?: BRIEF_DESCRIPTION_PREFIX_DEFAULT
+      val messagePrefix =
+        referenced?.let(UastLintUtils.Companion::getQualifiedName)
+          ?: BRIEF_DESCRIPTION_PREFIX_DEFAULT
       report(
         context,
         issueToReport,

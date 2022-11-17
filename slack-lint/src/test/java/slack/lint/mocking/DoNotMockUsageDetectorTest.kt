@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
 import org.junit.Test
@@ -20,29 +7,34 @@ import slack.lint.BaseSlackLintTest
 
 class DoNotMockUsageDetectorTest : BaseSlackLintTest() {
 
-  private val slackDoNotMock = kotlin(
-    """
+  private val slackDoNotMock =
+    kotlin(
+        """
       package slack.lint.annotations
 
       annotation class DoNotMock(val value: String = "BECAUSE REASONS")
     """
-  ).indented()
+      )
+      .indented()
 
-  private val epDoNotMock = kotlin(
-    """
+  private val epDoNotMock =
+    kotlin(
+        """
       package com.google.errorprone.annotations
 
       annotation class DoNotMock(val value: String = "BECAUSE REASONS")
     """
-  ).indented()
+      )
+      .indented()
 
   override fun getDetector() = ErrorProneDoNotMockDetector()
   override fun getIssues() = listOf(ErrorProneDoNotMockDetector.ISSUE)
 
   @Test
   fun kotlinTests() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
       package slack.test
 
       import com.google.errorprone.annotations.DoNotMock
@@ -67,7 +59,8 @@ class DoNotMockUsageDetectorTest : BaseSlackLintTest() {
         fun fake(): TestClass4? = null
       }
     """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*mockFileStubs(), slackDoNotMock, epDoNotMock, source)
@@ -81,7 +74,8 @@ class DoNotMockUsageDetectorTest : BaseSlackLintTest() {
           @DoNotMock
           ~~~~~~~~~~
           2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -93,14 +87,16 @@ class DoNotMockUsageDetectorTest : BaseSlackLintTest() {
           @@ -20 +20
           - @DoNotMock
           + @slack.lint.annotations.DoNotMock
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun javaTests() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
       package slack.test;
 
       import com.google.errorprone.annotations.DoNotMock;
@@ -121,7 +117,8 @@ class DoNotMockUsageDetectorTest : BaseSlackLintTest() {
       interface TestClass4 {
       }
     """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*mockFileStubs(), slackDoNotMock, epDoNotMock, source)
@@ -135,7 +132,8 @@ class DoNotMockUsageDetectorTest : BaseSlackLintTest() {
           @DoNotMock
           ~~~~~~~~~~
           2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -147,7 +145,8 @@ class DoNotMockUsageDetectorTest : BaseSlackLintTest() {
           @@ -17 +17
           - @DoNotMock
           + @slack.lint.annotations.DoNotMock
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 }

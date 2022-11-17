@@ -1,35 +1,21 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.text
 
 import com.android.tools.lint.checks.infrastructure.TestMode
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
-/**
- * Tests [SpanMarkPointMissingMaskDetector].
- */
+/** Tests [SpanMarkPointMissingMaskDetector]. */
 class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
 
   override val skipTestModes: Array<TestMode> = arrayOf(TestMode.PARENTHESIZED)
   override fun getDetector() = SpanMarkPointMissingMaskDetector()
   override fun getIssues() = listOf(SpanMarkPointMissingMaskDetector.ISSUE)
 
-  private val androidTextStubs = kotlin(
-    """
+  private val androidTextStubs =
+    kotlin(
+        """
         package android.text
 
         object Spanned {
@@ -40,12 +26,14 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
             const val SPAN_POINT_MARK_MASK = 0xFF
         }
       """
-  ).indented()
+      )
+      .indented()
 
   @Test
   fun `conforming expression - has clean report`() {
-    val testFile = kotlin(
-      """
+    val testFile =
+      kotlin(
+          """
               package slack.text
 
               import android.text.Spanned
@@ -56,7 +44,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                   }
               }
             """
-    ).indented()
+        )
+        .indented()
     lint()
       .files(androidTextStubs, testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
@@ -85,8 +74,9 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
   }
 
   private fun testViolatingExpressionLeft(markPoint: String) {
-    val testFile = kotlin(
-      """
+    val testFile =
+      kotlin(
+          """
               package slack.text
 
               import android.text.Spanned
@@ -97,7 +87,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                   }
               }
             """
-    ).indented()
+        )
+        .indented()
     lint()
       .files(androidTextStubs, testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
@@ -108,7 +99,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                 return spanned.getSpanFlags(Object()) == $markPoint || Spanned.x()
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -116,7 +108,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
           @@ -7 +7
           -       return spanned.getSpanFlags(Object()) == $markPoint || Spanned.x()
           +       return ((spanned.getSpanFlags(Object())) and android.text.Spanned.SPAN_POINT_MARK_MASK) == $markPoint || Spanned.x()
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -141,8 +134,9 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
   }
 
   private fun testViolatingExpressionRight(markPoint: String) {
-    val testFile = kotlin(
-      """
+    val testFile =
+      kotlin(
+          """
               package slack.text
 
               import android.text.Spanned.$markPoint
@@ -153,7 +147,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                   }
               }
             """
-    ).indented()
+        )
+        .indented()
     lint()
       .files(androidTextStubs, testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
@@ -164,7 +159,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                 return $markPoint == spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -172,15 +168,17 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
           @@ -7 +7
           -       return $markPoint == spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
           +       return $markPoint == ((spanned.getSpanFlags(Object())) and android.text.Spanned.SPAN_POINT_MARK_MASK) || isBoolean1() && isBoolean2()
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun `violating expression with fully qualified - creates error and fix`() {
     val markPoint = "android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE"
-    val testFile = kotlin(
-      """
+    val testFile =
+      kotlin(
+          """
               package slack.text
 
               class MyClass {
@@ -189,7 +187,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                   }
               }
             """
-    ).indented()
+        )
+        .indented()
     lint()
       .files(androidTextStubs, testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
@@ -200,7 +199,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                 return $markPoint == spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -208,15 +208,17 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
           @@ -5 +5
           -       return $markPoint == spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
           +       return $markPoint == ((spanned.getSpanFlags(Object())) and android.text.Spanned.SPAN_POINT_MARK_MASK) || isBoolean1() && isBoolean2()
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun `violating expression with not equal - creates error and fix`() {
     val markPoint = "android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE"
-    val testFile = kotlin(
-      """
+    val testFile =
+      kotlin(
+          """
               package slack.text
 
               class MyClass {
@@ -225,7 +227,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                   }
               }
             """
-    ).indented()
+        )
+        .indented()
     lint()
       .files(androidTextStubs, testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
@@ -236,7 +239,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                 return $markPoint != spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -244,15 +248,17 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
           @@ -5 +5
           -       return $markPoint != spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
           +       return $markPoint != ((spanned.getSpanFlags(Object())) and android.text.Spanned.SPAN_POINT_MARK_MASK) || isBoolean1() && isBoolean2()
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun `violating expression with identity equality- creates error and fix`() {
     val markPoint = "android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE"
-    val testFile = kotlin(
-      """
+    val testFile =
+      kotlin(
+          """
               package slack.text
 
               class MyClass {
@@ -261,7 +267,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                   }
               }
             """
-    ).indented()
+        )
+        .indented()
     lint()
       .files(androidTextStubs, testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
@@ -272,7 +279,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                 return $markPoint === spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -280,15 +288,17 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
           @@ -5 +5
           -       return $markPoint === spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
           +       return $markPoint === ((spanned.getSpanFlags(Object())) and android.text.Spanned.SPAN_POINT_MARK_MASK) || isBoolean1() && isBoolean2()
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun `violating expression with not identity equality - creates error and fix`() {
     val markPoint = "android.text.Spanned.SPAN_INCLUSIVE_INCLUSIVE"
-    val testFile = kotlin(
-      """
+    val testFile =
+      kotlin(
+          """
               package slack.text
 
               class MyClass {
@@ -297,7 +307,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                   }
               }
             """
-    ).indented()
+        )
+        .indented()
     lint()
       .files(androidTextStubs, testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
@@ -308,7 +319,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
                 return $markPoint !== spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -316,7 +328,8 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
           @@ -5 +5
           -       return $markPoint !== spanned.getSpanFlags(Object()) || isBoolean1() && isBoolean2()
           +       return $markPoint !== ((spanned.getSpanFlags(Object())) and android.text.Spanned.SPAN_POINT_MARK_MASK) || isBoolean1() && isBoolean2()
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 }

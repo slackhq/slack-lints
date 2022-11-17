@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2020 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2020 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import org.junit.Test
@@ -23,9 +10,10 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
     // Stub of dispatchers.
     // Use a combination of string constants and getters to ensure coverage for both
     // Also add an extension function to check we don't try to lint those.
-    //language=kotlin
-    private val DISPATCHERS_STUB = kotlin(
-      """
+    // language=kotlin
+    private val DISPATCHERS_STUB =
+      kotlin(
+        """
       package kotlinx.coroutines
 
       object Dispatchers {
@@ -45,8 +33,9 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
       fun Dispatchers.someExtension() {
 
       }
-      """.trimIndent()
-    )
+      """
+          .trimIndent()
+      )
   }
 
   override fun getDetector() = RawDispatchersUsageDetector()
@@ -59,7 +48,7 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
       .files(
         DISPATCHERS_STUB,
         kotlin(
-          """
+            """
             package test.pkg
 
             import kotlinx.coroutines.Dispatchers
@@ -75,8 +64,10 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
               Dispatchers::Unconfined
               Dispatchers::Main
             }
-          """.trimIndent()
-        ).indented()
+          """
+              .trimIndent()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -107,7 +98,8 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
             Dispatchers::Main
             ~~~~~~~~~~~~~~~~~
           8 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -118,8 +110,8 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
       .files(
         DISPATCHERS_STUB,
         kotlin(
-          "test/test/pkg/Test.kt",
-          """
+            "test/test/pkg/Test.kt",
+            """
             package test.pkg
 
             import kotlinx.coroutines.Dispatchers
@@ -135,8 +127,10 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
               Dispatchers::Unconfined
               Dispatchers::Main
             }
-          """.trimIndent()
-        ).indented()
+          """
+              .trimIndent()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()

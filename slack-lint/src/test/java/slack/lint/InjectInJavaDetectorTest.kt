@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import org.junit.Test
@@ -20,28 +7,34 @@ import org.junit.Test
 class InjectInJavaDetectorTest : BaseSlackLintTest() {
 
   companion object {
-    private val JAVAX_STUBS = kotlin(
-      """
+    private val JAVAX_STUBS =
+      kotlin(
+        """
       package javax.inject
 
       annotation class Inject
-      """.trimIndent()
-    )
-    private val DAGGER_STUBS = kotlin(
       """
+          .trimIndent()
+      )
+    private val DAGGER_STUBS =
+      kotlin(
+        """
       package dagger
 
       annotation class Module
-      """.trimIndent()
-    )
-    private val ASSISTED_STUBS = kotlin(
       """
+          .trimIndent()
+      )
+    private val ASSISTED_STUBS =
+      kotlin(
+        """
       package dagger.assisted
 
       annotation class AssistedInject
       annotation class AssistedFactory
-      """.trimIndent()
-    )
+      """
+          .trimIndent()
+      )
   }
 
   override fun getDetector() = InjectInJavaDetector()
@@ -56,7 +49,7 @@ class InjectInJavaDetectorTest : BaseSlackLintTest() {
         DAGGER_STUBS,
         ASSISTED_STUBS,
         kotlin(
-          """
+            """
             package test.pkg
 
             import javax.inject.Inject
@@ -84,7 +77,8 @@ class InjectInJavaDetectorTest : BaseSlackLintTest() {
             @Module
             object ExampleModule
           """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -98,7 +92,7 @@ class InjectInJavaDetectorTest : BaseSlackLintTest() {
         DAGGER_STUBS,
         ASSISTED_STUBS,
         java(
-          """
+            """
             package test.pkg;
 
             import javax.inject.Inject;
@@ -135,7 +129,8 @@ class InjectInJavaDetectorTest : BaseSlackLintTest() {
             }
 
           """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -160,7 +155,8 @@ class InjectInJavaDetectorTest : BaseSlackLintTest() {
             @Module static abstract class ExampleModule {
             ~~~~~~~
           6 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 }

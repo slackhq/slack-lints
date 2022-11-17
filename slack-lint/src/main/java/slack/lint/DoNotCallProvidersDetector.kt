@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -25,10 +12,10 @@ import com.android.tools.lint.detector.api.Scope
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
+import java.util.EnumSet
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.getParentOfType
-import java.util.EnumSet
 
 @Suppress("UnstableApiUsage")
 class DoNotCallProvidersDetector : Detector(), SourceCodeScanner {
@@ -41,44 +28,49 @@ class DoNotCallProvidersDetector : Detector(), SourceCodeScanner {
     // doesn't require both of them together.
     // From discussion on lint-dev https://groups.google.com/d/msg/lint-dev/ULQMzW1ZlP0/1dG4Vj3-AQAJ
     // This was supposed to be fixed in AS 3.4 but still required as recently as 3.6-alpha10.
-    private val SCOPES = Implementation(
-      DoNotCallProvidersDetector::class.java,
-      EnumSet.of(Scope.JAVA_FILE, Scope.TEST_SOURCES),
-      EnumSet.of(Scope.JAVA_FILE),
-      EnumSet.of(Scope.TEST_SOURCES)
-    )
+    private val SCOPES =
+      Implementation(
+        DoNotCallProvidersDetector::class.java,
+        EnumSet.of(Scope.JAVA_FILE, Scope.TEST_SOURCES),
+        EnumSet.of(Scope.JAVA_FILE),
+        EnumSet.of(Scope.TEST_SOURCES)
+      )
 
-    val ISSUE: Issue = Issue.create(
-      "DoNotCallProviders",
-      "Dagger provider methods should not be called directly by user code.",
-      """
+    val ISSUE: Issue =
+      Issue.create(
+        "DoNotCallProviders",
+        "Dagger provider methods should not be called directly by user code.",
+        """
           Dagger provider methods should not be called directly by user code. These are intended solely for use \
           by Dagger-generated code and it is programmer error to call them from user code.
       """,
-      Category.CORRECTNESS,
-      6,
-      Severity.ERROR,
-      SCOPES
-    )
+        Category.CORRECTNESS,
+        6,
+        Severity.ERROR,
+        SCOPES
+      )
 
-    private val PROVIDER_ANNOTATIONS = setOf("dagger.Binds", "dagger.Provides", "dagger.producers.Produces")
-    private val GENERATED_ANNOTATIONS = setOf("javax.annotation.Generated", "javax.annotation.processing.Generated")
+    private val PROVIDER_ANNOTATIONS =
+      setOf("dagger.Binds", "dagger.Provides", "dagger.producers.Produces")
+    private val GENERATED_ANNOTATIONS =
+      setOf("javax.annotation.Generated", "javax.annotation.processing.Generated")
   }
 
   override fun getApplicableUastTypes() = listOf(UCallExpression::class.java)
 
-  override fun createUastHandler(context: JavaContext) = object : UElementHandler() {
-    override fun visitCallExpression(node: UCallExpression) {
-      val enclosingClass = node.getParentOfType<UClass>() ?: return
-      if (GENERATED_ANNOTATIONS.any(enclosingClass::hasAnnotation)) return
-      val method = node.resolve() ?: return
-      if (PROVIDER_ANNOTATIONS.any(method::hasAnnotation)) {
-        context.report(
-          ISSUE,
-          context.getLocation(node),
-          ISSUE.getBriefDescription(TextFormat.TEXT)
-        )
+  override fun createUastHandler(context: JavaContext) =
+    object : UElementHandler() {
+      override fun visitCallExpression(node: UCallExpression) {
+        val enclosingClass = node.getParentOfType<UClass>() ?: return
+        if (GENERATED_ANNOTATIONS.any(enclosingClass::hasAnnotation)) return
+        val method = node.resolve() ?: return
+        if (PROVIDER_ANNOTATIONS.any(method::hasAnnotation)) {
+          context.report(
+            ISSUE,
+            context.getLocation(node),
+            ISSUE.getBriefDescription(TextFormat.TEXT)
+          )
+        }
       }
     }
-  }
 }

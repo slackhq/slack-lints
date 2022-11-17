@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.detector.api.Detector
@@ -25,8 +12,9 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
   override fun getDetector(): Detector = DeprecatedSqlUsageDetector()
   override fun getIssues(): MutableList<Issue> = mutableListOf(DeprecatedSqlUsageDetector.ISSUE)
 
-  private val sqliteDatabaseClass = java(
-    """
+  private val sqliteDatabaseClass =
+    java(
+      """
         package android.database.sqlite;
 
         public class SQLiteDatabase {
@@ -88,12 +76,13 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
             }
         }
       """
-  )
+    )
 
   @Test
   fun testJavaInspection() {
-    val deprecatedJavaExample = java(
-      """
+    val deprecatedJavaExample =
+      java(
+          """
           package foo;
 
           import android.database.sqlite.SQLiteDatabase;
@@ -104,7 +93,8 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
             }
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(deprecatedJavaExample, sqliteDatabaseClass)
@@ -115,14 +105,16 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
               db.execSQL("DROP TABLE IF EXISTS foo");
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun testKotlinInspection() {
-    val deprecatedKotlinExample = kotlin(
-      """
+    val deprecatedKotlinExample =
+      kotlin(
+          """
           package foo
 
           import android.database.sqlite.SQLiteDatabase
@@ -133,7 +125,8 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
             }
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(deprecatedKotlinExample, sqliteDatabaseClass)
@@ -144,14 +137,16 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
               db.execSQL("DROP TABLE IF EXISTS foo")
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun testInnocentJava() {
-    val innocentJavaExample = java(
-      """
+    val innocentJavaExample =
+      java(
+          """
           package foo;
 
           import android.database.sqlite.SQLiteDatabase;
@@ -162,18 +157,17 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
             }
           }
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(innocentJavaExample, sqliteDatabaseClass)
-      .run()
-      .expectClean()
+    lint().files(innocentJavaExample, sqliteDatabaseClass).run().expectClean()
   }
 
   @Test
   fun testInnocentKotlin() {
-    val innocentKotlinExample = kotlin(
-      """
+    val innocentKotlinExample =
+      kotlin(
+          """
           package foo
 
           object SqlUsageTestFailure {
@@ -187,11 +181,9 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
             fun update(feature: String) = Unit
           }
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(innocentKotlinExample, sqliteDatabaseClass)
-      .run()
-      .expectClean()
+    lint().files(innocentKotlinExample, sqliteDatabaseClass).run().expectClean()
   }
 }

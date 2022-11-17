@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2022 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2022 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.eithernet
 
 import com.android.tools.lint.checks.infrastructure.LintDetectorTest.kotlin
@@ -20,13 +7,11 @@ import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
 private val API_RESULT =
-  kotlin(
-    """
+  kotlin("""
   package com.slack.eithernet
 
   interface ApiResult<out T : Any, out E : Any>
-"""
-  )
+""")
     .indented()
 
 class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
@@ -40,7 +25,7 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
       .files(
         API_RESULT,
         java(
-          """
+            """
         package test;
 
         import com.slack.eithernet.ApiResult;
@@ -55,12 +40,12 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
           String getString();
         }
       """
-        )
+          )
           .indented(),
 
         // Non-interface version
         java(
-          """
+            """
         package test;
 
         import com.slack.eithernet.ApiResult;
@@ -82,7 +67,7 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
           public abstract String getString();
         }
       """
-        )
+          )
           .indented(),
       )
       .run()
@@ -98,7 +83,8 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
           ApiResult<String, Exception> getResult();
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         3 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -108,7 +94,7 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
       .files(
         API_RESULT,
         kotlin(
-          """
+            """
         package test
 
         import com.slack.eithernet.ApiResult
@@ -127,12 +113,12 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
           val stringValue: String
         }
       """
-        )
+          )
           .indented(),
 
         // Non-interface version
         kotlin(
-          """
+            """
         package test
 
         import com.slack.eithernet.ApiResult
@@ -156,7 +142,7 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
           abstract fun getString(): String
         }
       """
-        )
+          )
           .indented(),
       )
       .run()
@@ -181,7 +167,8 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
           suspend fun getResultSuspended(): ApiResult<String, Exception>
                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         6 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -191,7 +178,7 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
       .files(
         API_RESULT,
         kotlin(
-          """
+            """
         package test
 
         import com.slack.eithernet.ApiResult
@@ -205,7 +192,7 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
           ): ApiResult<Unit, String>
         }
       """
-        )
+          )
           .indented(),
       )
       .run()
@@ -218,7 +205,8 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
             ): ApiResult<Unit, String>
                ~~~~~~~~~~~~~~~~~~~~~~~
           2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 }

@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2022 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2022 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.eithernet
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -108,7 +95,8 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
 
       private val PsiType?.isEitherNetType: Boolean
         get() {
-          return PsiTypesUtil.getPsiClass(this)?.qualifiedName?.startsWith(EITHERNET_PACKAGE) == true
+          return PsiTypesUtil.getPsiClass(this)?.qualifiedName?.startsWith(EITHERNET_PACKAGE) ==
+            true
         }
     }
 
@@ -118,7 +106,7 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
         id = "DoNotExposeEitherNetInRepositories",
         briefDescription = "Repository APIs should not expose EitherNet types directly.",
         explanation =
-        "EitherNet (and networking in general) should be an implementation detail of the repository layer.",
+          "EitherNet (and networking in general) should be an implementation detail of the repository layer.",
         category = Category.CORRECTNESS,
         priority = 0,
         severity = Severity.ERROR,

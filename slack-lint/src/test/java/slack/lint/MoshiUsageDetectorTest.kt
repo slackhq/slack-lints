@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.checks.infrastructure.TestMode
@@ -20,17 +7,20 @@ import org.junit.Test
 
 class MoshiUsageDetectorTest : BaseSlackLintTest() {
 
-  private val keepAnnotation = java(
-    """
+  private val keepAnnotation =
+    java(
+        """
         package androidx.annotation;
 
         public @interface Keep {
         }
       """
-  ).indented()
+      )
+      .indented()
 
-  private val jsonClassAnnotation = java(
-    """
+  private val jsonClassAnnotation =
+    java(
+        """
         package com.squareup.moshi;
 
         public @interface JsonClass {
@@ -38,45 +28,55 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           String generator() default "";
         }
       """
-  ).indented()
+      )
+      .indented()
 
-  private val jsonAnnotation = java(
-    """
+  private val jsonAnnotation =
+    java(
+        """
       package com.squareup.moshi;
 
       public @interface Json {
         String name();
       }
     """
-  ).indented()
+      )
+      .indented()
 
-  private val jsonQualifierAnnotation = java(
-    """
+  private val jsonQualifierAnnotation =
+    java(
+        """
       package com.squareup.moshi;
 
       public @interface JsonQualifier {
       }
     """
-  ).indented()
+      )
+      .indented()
 
-  private val typeLabel = kotlin(
-    """
+  private val typeLabel =
+    kotlin(
+        """
       package dev.zacsweers.moshix.sealed.annotations
 
       annotation class TypeLabel(val label: String, val alternateLabels: Array<String> = [])
     """
-  ).indented()
+      )
+      .indented()
 
-  private val defaultObject = kotlin(
-    """
+  private val defaultObject =
+    kotlin(
+        """
       package dev.zacsweers.moshix.sealed.annotations
 
       annotation class DefaultObject
     """
-  ).indented()
+      )
+      .indented()
 
-  private val adaptedBy = kotlin(
-    """
+  private val adaptedBy =
+    kotlin(
+        """
       package dev.zacsweers.moshix.adapters
 
       import kotlin.reflect.KClass
@@ -86,10 +86,12 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         val nullSafe: Boolean = true
       )
     """
-  ).indented()
+      )
+      .indented()
 
-  private val jsonAdapter = java(
-    """
+  private val jsonAdapter =
+    java(
+        """
       package com.squareup.moshi;
 
       public class JsonAdapter<T> {
@@ -98,22 +100,25 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         }
       }
     """
-  ).indented()
+      )
+      .indented()
 
-  override val skipTestModes: Array<TestMode> = arrayOf(
-    TestMode.WHITESPACE,
-    // Aliases are impossible to test correctly because you have to maintain completely different
-    // expected fixes and source inputs
-    TestMode.TYPE_ALIAS,
-    TestMode.IMPORT_ALIAS
-  )
+  override val skipTestModes: Array<TestMode> =
+    arrayOf(
+      TestMode.WHITESPACE,
+      // Aliases are impossible to test correctly because you have to maintain completely different
+      // expected fixes and source inputs
+      TestMode.TYPE_ALIAS,
+      TestMode.IMPORT_ALIAS
+    )
   override fun getDetector() = MoshiUsageDetector()
   override fun getIssues() = MoshiUsageDetector.issues().toList()
 
   @Test
   fun simpleCorrect() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -122,18 +127,17 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           data class TestClass(@Json(name = "bar") val foo: String)
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(*testFiles(), source)
-      .run()
-      .expectClean()
+    lint().files(*testFiles(), source).run().expectClean()
   }
 
   @Test
   fun sealed_correct() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -165,18 +169,17 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
 
           interface ARandomInterface
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(*testFiles(), source)
-      .run()
-      .expectClean()
+    lint().files(*testFiles(), source).run().expectClean()
   }
 
   @Test
   fun sealed_interface_correct() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -208,18 +211,17 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
 
           interface ARandomInterface
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(*testFiles(), source)
-      .run()
-      .expectClean()
+    lint().files(*testFiles(), source).run().expectClean()
   }
 
   @Test
   fun sealed_generic() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -237,7 +239,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           data class SubtypeTwo(val foo: String) : BaseType<String>()
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -248,14 +251,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         data class Subtype<T>(val foo: T) : BaseType<T>()
                           ~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun sealed_missing_base_type() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -272,7 +277,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @DefaultObject
           object Default
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -289,7 +295,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @DefaultObject
         ~~~~~~~~~~~~~~
         3 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -305,14 +312,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -14 +14
         - @DefaultObject
         +
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun sealed_double_annotation() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -326,7 +335,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @DefaultObject
           object Default : BaseType()
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -340,7 +350,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @DefaultObject
         ~~~~~~~~~~~~~~
         2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -352,14 +363,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -11 +11
         - @DefaultObject
         +
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun sealed_missing_type_label() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -372,7 +385,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
 
           object ObjectSubType : BaseType()
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -386,14 +400,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         object ObjectSubType : BaseType()
                ~~~~~~~~~~~~~
         2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun sealed_must_be_sealed() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -401,7 +417,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true, generator = "sealed:type")
           abstract class BaseType
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -412,14 +429,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         abstract class BaseType
                        ~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun sealed_blank_type() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -427,7 +446,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true, generator = "sealed:")
           sealed class BaseType
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -438,14 +458,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @JsonClass(generateAdapter = true, generator = "sealed:")
                                                         ~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun empty_generator() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -453,7 +475,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true, generator = "")
           data class Example(val value: String)
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -464,14 +487,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true, generator = "")
                                                          ~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun blank_generator() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -479,7 +504,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true, generator = " ")
           data class Example(val value: String)
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -490,14 +516,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @JsonClass(generateAdapter = true, generator = " ")
                                                         ~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun private_constructor() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -508,7 +536,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           data class Example2 protected constructor(val value: String)
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -522,7 +551,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         data class Example2 protected constructor(val value: String)
                             ~~~~~~~~~
         2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -535,14 +565,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         - data class Example2 protected constructor(val value: String)
         @@ -10 +9
         + data class Example2 internal constructor(val value: String)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun params_that_need_init() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -551,7 +583,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           class Example(val value: String, nonProp: String, @Transient val transientProp: String)
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -568,14 +601,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         class Example(val value: String, nonProp: String, @Transient val transientProp: String)
               ~~~~~~~
         3 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun private_prop() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -583,7 +618,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           data class Example(private val value: String, protected val value2: String)
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -597,7 +633,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         data class Example(private val value: String, protected val value2: String)
                                                       ~~~~~~~~~
         2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -611,14 +648,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         - data class Example(private val value: String, protected val value2: String)
         @@ -7 +6
         + data class Example(private val value: String, internal val value2: String)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun mutable_prop() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -626,7 +665,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           data class Example(var value: String)
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -637,7 +677,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         data class Example(var value: String)
                            ~~~
         0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -646,14 +687,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         - data class Example(var value: String)
         @@ -7 +6
         + data class Example(val value: String)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun generateAdapter_should_be_true() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -661,7 +704,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = false)
           data class Example(val value: String)
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -672,14 +716,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @JsonClass(generateAdapter = false)
                                      ~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun empty_json_name() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -688,7 +734,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           data class Example(@Json(name = "") val value: String)
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -699,14 +746,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           data class Example(@Json(name = "") val value: String)
                                           ~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun blank_json_name() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -715,7 +764,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           data class Example(@Json(name = " ") val value: String)
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -726,14 +776,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           data class Example(@Json(name = " ") val value: String)
                                            ~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun jsonNameSiteTargets() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -744,7 +796,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             @field:Json(name = "foo") val value: String
           )
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -755,7 +808,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             @field:Json(name = "foo") val value: String
              ~~~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -763,14 +817,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -8 +8
         -   @field:Json(name = "foo") val value: String
         +   @Json(name = "foo") val value: String
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun jsonNameMultiple() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -781,7 +837,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
           )
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -798,7 +855,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
                                                                                        ~~~~~~~~~~~~~~~~~~~~~~~
           3 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -814,15 +872,17 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -8 +8
         -   @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
         +   @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo")  val value: String
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   // Tweaked multiple site targets test, where we intentionally leave one for a secondary cleanup
   @Test
   fun jsonNameMultipleAllSiteTargets() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -833,7 +893,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
           )
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -847,7 +908,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
                                                                    ~~~~~~~~~~~~~~~~~~~~~~~
           2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -859,14 +921,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -8 +8
         -   @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
         +   @field:Json(name = "foo") @property:Json(name = "foo")  val value: String
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun snake_case_name() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -878,7 +942,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "taken") val already_annotated_is_ignored: String
           )
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -889,7 +954,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           val snake_case: String,
               ~~~~~~~~~~
         0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -897,14 +963,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -8 +8
         -   val snake_case: String,
         +   @Json(name = "snake_case") val snakeCase: String,
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun missing_primary() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -912,7 +980,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           class Example
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -926,14 +995,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         class Example
               ~~~~~~~
         2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun missing_primary_ok_in_sealed() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -941,18 +1012,17 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true, generator = "sealed:type")
           sealed class Example
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(*testFiles(), source)
-      .run()
-      .expectClean()
+    lint().files(*testFiles(), source).run().expectClean()
   }
 
   @Test
   fun unsupportedClasses() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -971,7 +1041,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             interface UnsupportedInterface
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -991,7 +1062,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         4 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -1011,7 +1083,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -15 +15
         -   @JsonClass(generateAdapter = true)
         +
-        """.trimIndent()
+        """
+          .trimIndent()
           // Weirdness here because spotless strips the trailing whitespace after the '+'
           .lineSequence()
           .map { line ->
@@ -1027,8 +1100,9 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
 
   @Test
   fun unsupportedClasses_okWithAdaptedBy() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import androidx.annotation.Keep
@@ -1052,18 +1126,17 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @Keep
           abstract class CustomFactory : JsonAdapter.Factory
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(*testFiles(), source)
-      .run()
-      .expectClean()
+    lint().files(*testFiles(), source).run().expectClean()
   }
 
   @Test
   fun double_class_annotation() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import androidx.annotation.Keep
@@ -1078,7 +1151,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @Keep
           abstract class CustomFactory : JsonAdapter.Factory
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -1092,7 +1166,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @AdaptedBy(CustomFactory::class)
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -1104,14 +1179,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -9 +9
         - @AdaptedBy(CustomFactory::class)
         +
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun valid_adapters() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import androidx.annotation.Keep
@@ -1144,7 +1221,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           class NotAnAdapter
           abstract class CustomAdapterMissingKeep : JsonAdapter<String>()
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -1161,14 +1239,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @AdaptedBy(CustomAdapterMissingKeep::class)
                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         3 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun unsupportedClasses_okWithCustomGenerator() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -1187,18 +1267,17 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             interface UnsupportedInterface
           }
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(*testFiles(), source)
-      .run()
-      .expectClean()
+    lint().files(*testFiles(), source).run().expectClean()
   }
 
   @Test
   fun unsupported_visibility() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -1211,7 +1290,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             protected data class ProtectedClass(val value: String)
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -1225,7 +1305,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           protected data class ProtectedClass(val value: String)
           ~~~~~~~~~
         2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -1237,14 +1318,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -10 +10
         -   protected data class ProtectedClass(val value: String)
         +   internal data class ProtectedClass(val value: String)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun enum_prop_suggest_moshi() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -1256,7 +1339,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             VALUE
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -1267,14 +1351,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         data class Example(val value: TestEnum)
                                       ~~~~~~~~
         0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun enum_prop_default_unknown() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -1293,7 +1379,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             UNKNOWN, VALUE
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -1310,7 +1397,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           val value5: TestEnum = TestEnum.UNKNOWN,
                                  ~~~~~~~~~~~~~~~~
         3 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -1326,14 +1414,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -11 +11
         -   val value5: TestEnum = TestEnum.UNKNOWN,
         +   val value5: TestEnum,
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun enum_prop_already_moshi() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -1346,18 +1436,17 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             UNKNOWN, VALUE
           }
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(*testFiles(), source)
-      .run()
-      .expectClean()
+    lint().files(*testFiles(), source).run().expectClean()
   }
 
   @Test
   fun objects_cannot_jsonClass() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -1365,7 +1454,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           object Example
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -1376,7 +1466,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @JsonClass(generateAdapter = true)
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -1384,14 +1475,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -5 +5
         - @JsonClass(generateAdapter = true)
         +
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun prefer_data_classes() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -1399,7 +1492,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           class Example(val value: String)
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -1410,21 +1504,22 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         class Example(val value: String)
               ~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun propertyTypes() {
-    val externalType = kotlin(
-      """
+    val externalType =
+      kotlin("""
       package external
 
       class ExternalType
-    """
-    ).indented()
-    val externalTypeAnnotated = kotlin(
-      """
+    """).indented()
+    val externalTypeAnnotated =
+      kotlin(
+          """
       package external
 
       import com.squareup.moshi.JsonClass
@@ -1432,16 +1527,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       @JsonClass(generateAdapter = true)
       data class ExternalTypeAnnotated(val value: String)
     """
-    ).indented()
-    val internalType = kotlin(
-      """
+        )
+        .indented()
+    val internalType = kotlin("""
       package slack
 
       class InternalType
-    """
-    ).indented()
-    val internalTypeAnnotated = kotlin(
-      """
+    """).indented()
+    val internalTypeAnnotated =
+      kotlin(
+          """
       package slack
 
       import androidx.annotation.Keep
@@ -1458,16 +1553,18 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       @Keep
       abstract class InternalTypeAdapter : JsonAdapter.Factory
     """
-    ).indented()
-    val jsonQualifier = kotlin(
-      """
+        )
+        .indented()
+    val jsonQualifier =
+      kotlin("""
       package com.squareup.moshi
 
       annotation class JsonQualifier
-    """
-    ).indented()
-    val customQualifier = kotlin(
-      """
+    """)
+        .indented()
+    val customQualifier =
+      kotlin(
+          """
       package test
 
       import com.squareup.moshi.JsonQualifier
@@ -1475,10 +1572,12 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       @JsonQualifier
       annotation class CustomQualifier
     """
-    ).indented()
+        )
+        .indented()
 
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import androidx.annotation.Keep
@@ -1543,10 +1642,20 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           data class CustomGenericType<T>(val value: T)
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
-      .files(*testFiles(), externalType, externalTypeAnnotated, internalType, internalTypeAnnotated, jsonQualifier, customQualifier, source)
+      .files(
+        *testFiles(),
+        externalType,
+        externalTypeAnnotated,
+        internalType,
+        internalTypeAnnotated,
+        jsonQualifier,
+        customQualifier,
+        source
+      )
       .run()
       .expect(
         """
@@ -1602,7 +1711,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           val platformType: Date,
                             ~~~~
         8 errors, 5 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -1650,14 +1760,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -27 +27
         -   val concreteMap: HashMap<String, String>,
         +   val concreteMap: Map<String, String>,
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun kotlin_jsonQualifierAnnotation_ok() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonQualifier
@@ -1698,7 +1810,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonQualifier
           annotation class WrongRetention
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -1712,7 +1825,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @Target(PROPERTY)
         ~~~~~~~~~~~~~~~~~
         2 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -1720,14 +1834,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -37 +37
         - @Retention(AnnotationRetention.BINARY)
         +
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun java_jsonQualifierAnnotation_ok() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
           package slack.model;
 
           import com.squareup.moshi.JsonQualifier;
@@ -1766,7 +1882,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonQualifier
           public @interface MissingRetention {}
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -1783,7 +1900,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @Target(ElementType.METHOD)
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~
           3 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -1791,14 +1909,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -31 +31
         - @Retention(RetentionPolicy.CLASS)
         + @Retention(RetentionPolicy.RUNTIME)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun redundantJsonName() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.Json
@@ -1807,7 +1927,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           @JsonClass(generateAdapter = true)
           data class Example(@Json(name = "value") val value: String)
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -1818,7 +1939,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           data class Example(@Json(name = "value") val value: String)
                                            ~~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -1827,24 +1949,28 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         - data class Example(@Json(name = "value") val value: String)
         @@ -8 +7
         + data class Example( val value: String)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun serializedNameIssues() {
-    val serializedName = java(
-      """
+    val serializedName =
+      java(
+        """
         package com.google.gson.annotations;
 
         public @interface SerializedName {
           String value();
           String[] alternate() default {};
         }
-      """.trimIndent()
-    )
-    val source = kotlin(
       """
+          .trimIndent()
+      )
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.Json
@@ -1862,7 +1988,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "mixed_alts") @SerializedName("mixed_alts", alternate = ["foo"]) val mixedAlternates: String,
           )
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), serializedName, source)
@@ -1885,7 +2012,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "mixed_alts") @SerializedName("mixed_alts", alternate = ["foo"]) val mixedAlternates: String,
                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           5 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -1897,14 +2025,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         @@ -13 +13
         -   @Json(name = "mixed") @SerializedName("mixed") val mixedSame: String,
         +   @Json(name = "mixed")  val mixedSame: String,
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun duplicateNames() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.Json
@@ -1918,7 +2048,8 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "value2") val anotherValue3: String
           )
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*testFiles(), source)
@@ -1938,18 +2069,20 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "value2") val anotherValue3: String
                                        ~~~~~~~~~~~~~
           4 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
-  private fun testFiles() = arrayOf(
-    keepAnnotation,
-    jsonClassAnnotation,
-    jsonAnnotation,
-    jsonQualifierAnnotation,
-    typeLabel,
-    defaultObject,
-    adaptedBy,
-    jsonAdapter
-  )
+  private fun testFiles() =
+    arrayOf(
+      keepAnnotation,
+      jsonClassAnnotation,
+      jsonAnnotation,
+      jsonQualifierAnnotation,
+      typeLabel,
+      defaultObject,
+      adaptedBy,
+      jsonAdapter
+    )
 }

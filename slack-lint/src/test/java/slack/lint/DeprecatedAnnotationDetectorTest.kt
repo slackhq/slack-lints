@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.detector.api.Detector
@@ -29,7 +16,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
       .files(
         NON_DEPRECATED_CLASS,
         java(
-          """
+            """
                   package slack.test;
 
                   import slack.test.ThisIsNotDeprecated;
@@ -41,7 +28,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -54,7 +42,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
       .files(
         DEPRECATED_CLASS,
         java(
-          """
+            """
                   package slack.test;
 
                   import slack.test.ThisIsDeprecated;
@@ -66,7 +54,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -76,7 +65,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
               new ThisIsDeprecated();
               ~~~~~~~~~~~~~~~~~~~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -86,7 +76,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
       .files(
         DEPRECATED_METHOD,
         java(
-          """
+            """
                   package slack.test;
 
                   import slack.test.ThisIsNotDeprecated;
@@ -98,7 +88,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -111,7 +102,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
       .files(
         DEPRECATED_METHOD,
         java(
-          """
+            """
                   package slack.test;
 
                   import slack.test.ThisIsNotDeprecated;
@@ -123,7 +114,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -133,7 +125,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
               new ThisIsNotDeprecated().thisIsDeprecated();
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -143,7 +136,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
       .files(
         DEPRECATED_METHOD,
         kotlin(
-          """
+            """
                   package slack.test
 
                   import slack.test.ThisIsNotDeprecated
@@ -155,7 +148,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -165,7 +159,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
               ThisIsNotDeprecated().thisIsDeprecated()
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -175,7 +170,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
       .files(
         DEPRECATED_CLASS_KOTLIN,
         kotlin(
-          """
+            """
                   package slack.test
 
                   import slack.test.ThisIsDeprecated
@@ -187,7 +182,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -197,7 +193,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
               ThisIsDeprecated()
               ~~~~~~~~~~~~~~~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -207,7 +204,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
       .files(
         DEPRECATED_METHOD_KOTLIN,
         kotlin(
-          """
+            """
                   package slack.test
 
                   import slack.test.ThisIsNotDeprecated
@@ -219,7 +216,8 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -229,12 +227,14 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
               ThisIsNotDeprecated().thisIsDeprecated()
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
-  private val DEPRECATED_CLASS = java(
-    """
+  private val DEPRECATED_CLASS =
+    java(
+      """
         package slack.test;
 
         @Deprecated()
@@ -242,10 +242,11 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
 
         }
         """
-  )
+    )
 
-  private val NON_DEPRECATED_CLASS = java(
-    """
+  private val NON_DEPRECATED_CLASS =
+    java(
+      """
         package slack.test;
 
         import java.lang.Deprecated;
@@ -254,10 +255,11 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
 
         }
         """
-  )
+    )
 
-  private val DEPRECATED_METHOD = java(
-    """
+  private val DEPRECATED_METHOD =
+    java(
+      """
         package slack.test;
 
         import java.lang.Deprecated;
@@ -269,10 +271,11 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
           public void thisIsNotDeprecated() {}
         }
         """
-  )
+    )
 
-  private val DEPRECATED_CLASS_KOTLIN = kotlin(
-    """
+  private val DEPRECATED_CLASS_KOTLIN =
+    kotlin(
+      """
           package slack.test
 
           import kotlin.Deprecated
@@ -282,10 +285,11 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
 
           }
         """
-  )
+    )
 
-  private val DEPRECATED_METHOD_KOTLIN = kotlin(
-    """
+  private val DEPRECATED_METHOD_KOTLIN =
+    kotlin(
+      """
           package slack.test
 
           import kotlin.Deprecated
@@ -299,5 +303,5 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
             public fun thisIsNotDeprecated() {}
           }
         """
-  )
+    )
 }

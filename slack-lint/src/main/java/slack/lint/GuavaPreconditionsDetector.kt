@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -30,8 +17,8 @@ import org.jetbrains.uast.UQualifiedReferenceExpression
 import slack.lint.util.sourceImplementation
 
 /**
- * Detect usages of Guava's Preconditions and recommend to use the JavaPreconditions
- * that uses Kotlin stdlib alternatives.
+ * Detect usages of Guava's Preconditions and recommend to use the JavaPreconditions that uses
+ * Kotlin stdlib alternatives.
  */
 class GuavaPreconditionsDetector : Detector(), SourceCodeScanner {
 
@@ -54,43 +41,51 @@ class GuavaPreconditionsDetector : Detector(), SourceCodeScanner {
   private fun reportJavaGuavaUsage(context: JavaContext, node: UCallExpression) {
     val issueToReport = ISSUE_GUAVA_CHECKS_USED
 
-    val lintFix = fix()
-      .name("Use Slack's JavaPreconditions checks")
-      .replace()
-      .shortenNames()
-      .range(context.getLocation(node))
-      .text(createLintFixTextReplaceString(node))
-      .with("$FQN_SLACK_JAVA_PRECONDITIONS.${node.methodName}")
-      .autoFix()
-      .build()
+    val lintFix =
+      fix()
+        .name("Use Slack's JavaPreconditions checks")
+        .replace()
+        .shortenNames()
+        .range(context.getLocation(node))
+        .text(createLintFixTextReplaceString(node))
+        .with("$FQN_SLACK_JAVA_PRECONDITIONS.${node.methodName}")
+        .autoFix()
+        .build()
     reportIssue(context, node, issueToReport, lintFix)
   }
 
   private fun reportKotlin(context: JavaContext, node: UCallExpression) {
     val issueToReport = ISSUE_GUAVA_PRECONDITIONS_USED_IN_KOTLIN
 
-    val updatedKotlinCheckMethod = when (node.methodName) {
-      METHOD_GUAVA_CHECK_STATE -> METHOD_KOTLIN_CHECK_STATE
-      METHOD_GUAVA_CHECK_ARGUMENT -> METHOD_KOTLIN_CHECK_ARGUMENT
-      METHOD_GUAVA_CHECK_NOT_NULL -> METHOD_KOTLIN_CHECK_NOT_NULL
-      else -> null
-    }
+    val updatedKotlinCheckMethod =
+      when (node.methodName) {
+        METHOD_GUAVA_CHECK_STATE -> METHOD_KOTLIN_CHECK_STATE
+        METHOD_GUAVA_CHECK_ARGUMENT -> METHOD_KOTLIN_CHECK_ARGUMENT
+        METHOD_GUAVA_CHECK_NOT_NULL -> METHOD_KOTLIN_CHECK_NOT_NULL
+        else -> null
+      }
 
-    val lintFix = updatedKotlinCheckMethod?.let { updatedCheckMethod ->
-      fix()
-        .name("Use Kotlin's standard library checks")
-        .replace()
-        .shortenNames()
-        .range(context.getLocation(node))
-        .text(createLintFixTextReplaceString(node))
-        .with(updatedCheckMethod)
-        .autoFix()
-        .build()
-    }
+    val lintFix =
+      updatedKotlinCheckMethod?.let { updatedCheckMethod ->
+        fix()
+          .name("Use Kotlin's standard library checks")
+          .replace()
+          .shortenNames()
+          .range(context.getLocation(node))
+          .text(createLintFixTextReplaceString(node))
+          .with(updatedCheckMethod)
+          .autoFix()
+          .build()
+      }
     reportIssue(context, node, issueToReport, lintFix)
   }
 
-  private fun reportIssue(context: JavaContext, node: UCallExpression, issue: Issue, quickFix: LintFix? = null) {
+  private fun reportIssue(
+    context: JavaContext,
+    node: UCallExpression,
+    issue: Issue,
+    quickFix: LintFix? = null
+  ) {
     context.report(
       issue,
       context.getNameLocation(node),
@@ -126,34 +121,33 @@ class GuavaPreconditionsDetector : Detector(), SourceCodeScanner {
     private const val METHOD_KOTLIN_CHECK_ARGUMENT = "require"
     private const val METHOD_KOTLIN_CHECK_NOT_NULL = "checkNotNull"
 
-    private val ISSUE_GUAVA_CHECKS_USED: Issue = Issue.create(
-      "GuavaChecksUsed",
-      "Use Slack's JavaPreconditions instead of Guava's Preconditions checks",
-      """Precondition checks in Java should use Slack's internal `JavaPreconditions.kt` \
+    private val ISSUE_GUAVA_CHECKS_USED: Issue =
+      Issue.create(
+        "GuavaChecksUsed",
+        "Use Slack's JavaPreconditions instead of Guava's Preconditions checks",
+        """Precondition checks in Java should use Slack's internal `JavaPreconditions.kt` \
         instead of Guava's Preconditions.
       """,
-      Category.CORRECTNESS,
-      6,
-      Severity.ERROR,
-      implementation = sourceImplementation<GuavaPreconditionsDetector>(true)
-    )
+        Category.CORRECTNESS,
+        6,
+        Severity.ERROR,
+        implementation = sourceImplementation<GuavaPreconditionsDetector>(true)
+      )
 
-    private val ISSUE_GUAVA_PRECONDITIONS_USED_IN_KOTLIN: Issue = Issue.create(
-      "GuavaPreconditionsUsedInKotlin",
-      "Kotlin precondition checks should use the Kotlin standard library checks",
-      """All Kotlin classes that require precondition checks should use the \
+    private val ISSUE_GUAVA_PRECONDITIONS_USED_IN_KOTLIN: Issue =
+      Issue.create(
+        "GuavaPreconditionsUsedInKotlin",
+        "Kotlin precondition checks should use the Kotlin standard library checks",
+        """All Kotlin classes that require precondition checks should use the \
         preconditions checks that are available in the Kotlin standard library in Preconditions.kt.
         """,
-      Category.CORRECTNESS,
-      6,
-      Severity.ERROR,
-      implementation = sourceImplementation<GuavaPreconditionsDetector>(true)
-    )
+        Category.CORRECTNESS,
+        6,
+        Severity.ERROR,
+        implementation = sourceImplementation<GuavaPreconditionsDetector>(true)
+      )
 
     val issues: Array<Issue> =
-      arrayOf(
-        ISSUE_GUAVA_CHECKS_USED,
-        ISSUE_GUAVA_PRECONDITIONS_USED_IN_KOTLIN
-      )
+      arrayOf(ISSUE_GUAVA_CHECKS_USED, ISSUE_GUAVA_PRECONDITIONS_USED_IN_KOTLIN)
   }
 }

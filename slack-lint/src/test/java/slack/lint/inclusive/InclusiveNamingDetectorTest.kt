@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.inclusive
 
 import com.android.tools.lint.checks.infrastructure.TestLintTask
@@ -29,15 +16,15 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
   override fun getIssues(): List<Issue> = InclusiveNamingChecker.ISSUES.toList()
 
   override fun lint(): TestLintTask {
-    return super.lint()
-      .configureOption(InclusiveNamingChecker.BLOCK_LIST, "fork,knife,spoon,spork")
+    return super.lint().configureOption(InclusiveNamingChecker.BLOCK_LIST, "fork,knife,spoon,spork")
   }
 
-  override val skipTestModes: Array<TestMode> = arrayOf(
-    // Aliases are impossible to test correctly because you have to maintain completely different
-    // expected fixes and source inputs
-    TestMode.TYPE_ALIAS,
-  )
+  override val skipTestModes: Array<TestMode> =
+    arrayOf(
+      // Aliases are impossible to test correctly because you have to maintain completely different
+      // expected fixes and source inputs
+      TestMode.TYPE_ALIAS,
+    )
 
   @Test
   fun kotlin() {
@@ -51,8 +38,8 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          "test/ForkHandler.kt",
-          """
+            "test/ForkHandler.kt",
+            """
               class Spork(val sporkBranch: String, sporkParam: String) {
                 val knife = ""
 
@@ -65,7 +52,8 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
                 }
               }
             """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -104,7 +92,8 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
                   .forEach spoonRefs@ {
                            ^
           11 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -119,8 +108,8 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         java(
-          "test/ForkHandler.java",
-          """
+            "test/ForkHandler.java",
+            """
               class ForkHandler {
                 String knife = "";
 
@@ -129,7 +118,8 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
                 }
               }
             """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -153,7 +143,8 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
               String localFork = "";
               ~~~~~~~~~~~~~~~~~~~~~~
           6 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -164,21 +155,23 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         xml(
-          "test_file.xml",
-          """
+            "test_file.xml",
+            """
               <?xml version="1.0" encoding="utf-8"?>
               <com.example.SomeView
                   xmlns:android="http://schemas.android.com/apk/res/android"
                   android:masterAttribute="testing"
                   />
             """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
         """
 
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 }

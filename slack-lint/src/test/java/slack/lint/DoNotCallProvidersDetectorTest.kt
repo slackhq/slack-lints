@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 @file:Suppress("UnstableApiUsage")
 
 package slack.lint
@@ -23,36 +10,42 @@ import org.junit.Test
 class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
 
   private companion object {
-    private val javaxAnnotation = kotlin(
-      """
+    private val javaxAnnotation =
+      kotlin(
+          """
         package javax.annotation
 
         annotation class Generated(val message: String)
       """
-    ).indented()
-    private val daggerStubs = kotlin(
-      """
+        )
+        .indented()
+    private val daggerStubs =
+      kotlin(
+          """
         package dagger
 
         annotation class Binds
         annotation class Provides
         annotation class Module
       """
-    ).indented()
+        )
+        .indented()
 
-    private val daggerProducerStubs = kotlin(
-      """
+    private val daggerProducerStubs =
+      kotlin("""
         package dagger.producers
 
         annotation class Produces
-      """
-    ).indented()
+      """)
+        .indented()
   }
 
   override fun getDetector() = DoNotCallProvidersDetector()
   override fun getIssues() = listOf(DoNotCallProvidersDetector.ISSUE)
 
-  @Ignore("This fails on github actions for some reason, but we're upstreaming this to Dagger anyway")
+  @Ignore(
+    "This fails on github actions for some reason, but we're upstreaming this to Dagger anyway"
+  )
   @Test
   fun kotlin() {
     lint()
@@ -61,7 +54,7 @@ class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
         daggerStubs,
         daggerProducerStubs,
         kotlin(
-          """
+            """
                   package foo
                   import dagger.Binds
                   import dagger.Module
@@ -105,7 +98,8 @@ class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
                     abstract fun moduleInstance(): MyModule
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -124,7 +118,8 @@ class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
                   producer()
                   ~~~~~~~~~~
               4 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -136,7 +131,7 @@ class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
         daggerStubs,
         daggerProducerStubs,
         java(
-          """
+            """
                   package foo;
                   import dagger.Binds;
                   import dagger.Module;
@@ -178,7 +173,8 @@ class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
                     }
                   }
                 """
-        ).indented()
+          )
+          .indented()
       )
       .allowCompilationErrors(false)
       .run()
@@ -194,7 +190,8 @@ class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
                     producer();
                     ~~~~~~~~~~
               3 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 }

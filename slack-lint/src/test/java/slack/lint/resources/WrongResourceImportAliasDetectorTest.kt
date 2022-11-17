@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2022 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2022 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.resources
 
 import com.android.tools.lint.checks.infrastructure.TestLintTask
@@ -39,7 +26,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package slack.pkg.subpackage
 
           import slack.l10n.R as L10nR
@@ -53,7 +40,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
            }
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -65,14 +52,14 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package slack.pkg.subpackage
 
           import slack.l10n.R as L10R
 
           class MyClass
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -82,7 +69,8 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
         import slack.l10n.R as L10R
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -90,7 +78,8 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
         @@ -3 +3
         - import slack.l10n.R as L10R
         + import slack.l10n.R as L10nR
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -99,7 +88,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package slack.pkg.subpackage
 
           import slack.uikit.resources.R as SlackKitR
@@ -113,7 +102,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
            }
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -123,7 +112,8 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
         import slack.l10n.R as L10R
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -134,7 +124,8 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
         @@ -9 +9
         -         val appName = getString(L10R.string.app_name)
         +         val appName = getString(L10nR.string.app_name)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -143,7 +134,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package slack.pkg.subpackage
 
           import slack.l10n.R as L10R
@@ -157,7 +148,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
            }
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -167,7 +158,8 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
         import slack.l10n.R as L10R
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -178,7 +170,8 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
         @@ -8 +8
         -         val appName = getString(L10R.string.app_name) + "-" + getString(L10R.string.suffix)
         +         val appName = getString(L10nR.string.app_name) + "-" + getString(L10nR.string.suffix)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -187,7 +180,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package slack.pkg.subpackage
 
           import slack.uikit.resources.R as SKR
@@ -202,7 +195,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
            }
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -212,7 +205,8 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
         import slack.uikit.resources.R as SKR
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -223,7 +217,8 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
         @@ -9 +9
         -         getColor(SKR.color.transparent).let { println(it) }
         +         getColor(SlackKitR.color.transparent).let { println(it) }
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -232,7 +227,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package slack.pkg.subpackage
 
           import slack.pkg.subpkg.R as SubPkgR
@@ -245,7 +240,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
            }
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -257,7 +252,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         java(
-          """
+            """
           package slack.pkg.subpackage;
 
           import slack.l10n.R;
@@ -270,7 +265,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
            }
           """
-        )
+          )
           .indented()
       )
       .run()

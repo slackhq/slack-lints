@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.text
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -37,20 +24,23 @@ import slack.lint.util.sourceImplementation
 class SpanMarkPointMissingMaskDetector : Detector(), SourceCodeScanner {
 
   companion object {
-    val ISSUE = Issue.create(
-      id = "SpanMarkPointMissingMask",
-      briefDescription = "Check that Span flags use the bitwise mask SPAN_POINT_MARK_MASK when being compared to.",
-      explanation = """
+    val ISSUE =
+      Issue.create(
+        id = "SpanMarkPointMissingMask",
+        briefDescription =
+          "Check that Span flags use the bitwise mask SPAN_POINT_MARK_MASK when being compared to.",
+        explanation =
+          """
         Spans flags can have priority or other bits set. \
         Ensure that Span flags are checked using \
         `currentFlag and Spanned.SPAN_POINT_MARK_MASK == desiredFlag` \
         rather than just `currentFlag == desiredFlag`
       """,
-      category = Category.CORRECTNESS,
-      priority = 4,
-      severity = Severity.ERROR,
-      implementation = sourceImplementation<SpanMarkPointMissingMaskDetector>()
-    )
+        category = Category.CORRECTNESS,
+        priority = 4,
+        severity = Severity.ERROR,
+        implementation = sourceImplementation<SpanMarkPointMissingMaskDetector>()
+      )
   }
 
   override fun getApplicableUastTypes() = listOf(UBinaryExpression::class.java)
@@ -59,30 +49,34 @@ class SpanMarkPointMissingMaskDetector : Detector(), SourceCodeScanner {
 }
 
 private const val SPANNED_CLASS = "android.text.Spanned"
-private val MARK_POINT_FIELDS = setOf(
-  "$SPANNED_CLASS.SPAN_INCLUSIVE_INCLUSIVE",
-  "$SPANNED_CLASS.SPAN_INCLUSIVE_EXCLUSIVE",
-  "$SPANNED_CLASS.SPAN_EXCLUSIVE_INCLUSIVE",
-  "$SPANNED_CLASS.SPAN_EXCLUSIVE_EXCLUSIVE",
-)
+private val MARK_POINT_FIELDS =
+  setOf(
+    "$SPANNED_CLASS.SPAN_INCLUSIVE_INCLUSIVE",
+    "$SPANNED_CLASS.SPAN_INCLUSIVE_EXCLUSIVE",
+    "$SPANNED_CLASS.SPAN_EXCLUSIVE_INCLUSIVE",
+    "$SPANNED_CLASS.SPAN_EXCLUSIVE_EXCLUSIVE",
+  )
 private const val MASK_CLASS = "$SPANNED_CLASS.SPAN_POINT_MARK_MASK"
 
-/**
- * Reports violations of SpanMarkPointMissingMask.
- */
+/** Reports violations of SpanMarkPointMissingMask. */
 private class ReportingHandler(private val context: JavaContext) : UElementHandler() {
   override fun visitBinaryExpression(node: UBinaryExpression) {
-    if (node.operator == UastBinaryOperator.EQUALS ||
-      node.operator == UastBinaryOperator.NOT_EQUALS ||
-      node.operator == UastBinaryOperator.IDENTITY_EQUALS ||
-      node.operator == UastBinaryOperator.IDENTITY_NOT_EQUALS
+    if (
+      node.operator == UastBinaryOperator.EQUALS ||
+        node.operator == UastBinaryOperator.NOT_EQUALS ||
+        node.operator == UastBinaryOperator.IDENTITY_EQUALS ||
+        node.operator == UastBinaryOperator.IDENTITY_NOT_EQUALS
     ) {
       checkExpressions(node, node.leftOperand, node.rightOperand)
       checkExpressions(node, node.rightOperand, node.leftOperand)
     }
   }
 
-  private fun checkExpressions(node: UBinaryExpression, markPointCheck: UExpression, maskCheck: UExpression) {
+  private fun checkExpressions(
+    node: UBinaryExpression,
+    markPointCheck: UExpression,
+    maskCheck: UExpression
+  ) {
     if (markPointCheck.isMarkPointFieldName() && !maskCheck.isMaskClass()) {
       context.report(
         ISSUE,
@@ -90,7 +84,8 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
         """
           Do not check against ${markPointCheck.sourcePsi?.text} directly. \
           Instead mask flag with Spanned.SPAN_POINT_MARK_MASK to only check MARK_POINT flags.
-        """.trimIndent(),
+        """
+          .trimIndent(),
         LintFix.create()
           .replace()
           .name("Use bitwise mask")
@@ -102,7 +97,8 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
   }
 }
 
-private fun UExpression.isMarkPointFieldName(): Boolean = this.getQualifiedName() in MARK_POINT_FIELDS
+private fun UExpression.isMarkPointFieldName(): Boolean =
+  this.getQualifiedName() in MARK_POINT_FIELDS
 
 private fun UExpression.getQualifiedName(): String? {
   return (this as? UReferenceExpression)

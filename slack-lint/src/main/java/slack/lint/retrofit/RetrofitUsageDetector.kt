@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.retrofit
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -34,7 +21,8 @@ import slack.lint.util.sourceImplementation
 
 /**
  * A simple detector that validates basic Retrofit usage.
- * - Retrofit endpoints must be annotated with a retrofit method API unless they're an extension function or private.
+ * - Retrofit endpoints must be annotated with a retrofit method API unless they're an extension
+ * function or private.
  * - `@FormUrlEncoded` must use `@POST`, `@PUT`, or `@PATCH`.
  * - `@Body` parameter requires `@POST`, `@PUT`, or `@PATCH`.
  * - `@Field` parameters require it to be annotated with `@FormUrlEncoded`.
@@ -47,13 +35,15 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
   override fun createUastHandler(context: JavaContext): UElementHandler {
     return object : UElementHandler() {
       override fun visitMethod(node: UMethod) {
-        val httpAnnotation = HTTP_ANNOTATIONS
-          .mapNotNull { node.findAnnotation(it) }
-          .firstOrNull()
-          ?: return
+        val httpAnnotation =
+          HTTP_ANNOTATIONS.mapNotNull { node.findAnnotation(it) }.firstOrNull() ?: return
 
         val returnType = node.safeReturnType(context)
-        if (returnType == null || returnType == PsiType.VOID || returnType.canonicalText == "kotlin.Unit") {
+        if (
+          returnType == null ||
+            returnType == PsiType.VOID ||
+            returnType.canonicalText == "kotlin.Unit"
+        ) {
           node.report(
             "Retrofit endpoints should return something other than Unit/void.",
             context.getNameLocation(node)
@@ -71,12 +61,8 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
           return
         }
 
-        val hasPath = (
-          httpAnnotation.findAttributeValue("value")
-            ?.evaluate() as? String
-          )
-          ?.isNotBlank()
-          ?: false
+        val hasPath =
+          (httpAnnotation.findAttributeValue("value")?.evaluate() as? String)?.isNotBlank() ?: false
 
         var hasBodyParam = false
         var hasFieldParams = false
@@ -91,18 +77,21 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
             } else {
               hasBodyParam = true
             }
-          } else if (parameter.hasAnnotation(FQCN_FIELD) || parameter.hasAnnotation(FQCN_FIELD_MAP)) {
+          } else if (
+            parameter.hasAnnotation(FQCN_FIELD) || parameter.hasAnnotation(FQCN_FIELD_MAP)
+          ) {
             hasFieldParams = true
             if (!isFormUrlEncoded) {
               val currentText = node.text
               node.report(
                 "@Field(Map) param requires @FormUrlEncoded.",
-                quickFixData = LintFix.create()
-                  .replace()
-                  .text(currentText)
-                  .with("@$FQCN_FORM_ENCODED\n$currentText")
-                  .autoFix()
-                  .build()
+                quickFixData =
+                  LintFix.create()
+                    .replace()
+                    .text(currentText)
+                    .with("@$FQCN_FORM_ENCODED\n$currentText")
+                    .autoFix()
+                    .build()
               )
             }
           } else if (parameter.hasAnnotation(FQCN_URL)) {
@@ -117,16 +106,13 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
         if (isFormUrlEncoded) {
           if (!hasFieldParams) {
             val annotation = annotationsByFqcn.getValue(FQCN_FORM_ENCODED)
-            annotation
-              .report(
-                "@FormUrlEncoded but has no @Field(Map) parameters.",
-                quickFixData = LintFix.create()
-                  .removeNode(context, annotation.sourcePsiElement!!)
-              )
+            annotation.report(
+              "@FormUrlEncoded but has no @Field(Map) parameters.",
+              quickFixData = LintFix.create().removeNode(context, annotation.sourcePsiElement!!)
+            )
           }
         } else if (isBodyMethod && !hasBodyParam && !hasFieldParams) {
-          httpAnnotation
-            .report("This annotation requires an `@Body` parameter.")
+          httpAnnotation.report("This annotation requires an `@Body` parameter.")
         }
         if (!hasPath && !hasUrlParam) {
           httpAnnotation.report("Http path is empty but has no @Url parameter.")
@@ -138,45 +124,43 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
         location: Location = context.getLocation(this),
         quickFixData: LintFix? = null
       ) {
-        context.report(
-          ISSUE,
-          location,
-          briefDescription,
-          quickfixData = quickFixData
-        )
+        context.report(ISSUE, location, briefDescription, quickfixData = quickFixData)
       }
     }
   }
 
   companion object {
-    private val HTTP_ANNOTATIONS = setOf(
-      "retrofit2.http.DELETE",
-      "retrofit2.http.GET",
-      "retrofit2.http.HEAD",
-      "retrofit2.http.OPTIONS",
-      "retrofit2.http.PATCH",
-      "retrofit2.http.POST",
-      "retrofit2.http.PUT",
-    )
-    private val HTTP_BODY_ANNOTATIONS = setOf(
-      "retrofit2.http.PATCH",
-      "retrofit2.http.POST",
-      "retrofit2.http.PUT",
-    )
+    private val HTTP_ANNOTATIONS =
+      setOf(
+        "retrofit2.http.DELETE",
+        "retrofit2.http.GET",
+        "retrofit2.http.HEAD",
+        "retrofit2.http.OPTIONS",
+        "retrofit2.http.PATCH",
+        "retrofit2.http.POST",
+        "retrofit2.http.PUT",
+      )
+    private val HTTP_BODY_ANNOTATIONS =
+      setOf(
+        "retrofit2.http.PATCH",
+        "retrofit2.http.POST",
+        "retrofit2.http.PUT",
+      )
     private const val FQCN_FORM_ENCODED = "retrofit2.http.FormUrlEncoded"
     private const val FQCN_FIELD = "retrofit2.http.Field"
     private const val FQCN_FIELD_MAP = "retrofit2.http.FieldMap"
     private const val FQCN_BODY = "retrofit2.http.Body"
     private const val FQCN_URL = "retrofit2.http.Url"
 
-    val ISSUE: Issue = Issue.create(
-      "RetrofitUsage",
-      "This is replaced by the caller.",
-      "This linter reports various common configuration issues with Retrofit.",
-      Category.CORRECTNESS,
-      10,
-      Severity.ERROR,
-      sourceImplementation<RetrofitUsageDetector>()
-    )
+    val ISSUE: Issue =
+      Issue.create(
+        "RetrofitUsage",
+        "This is replaced by the caller.",
+        "This linter reports various common configuration issues with Retrofit.",
+        Category.CORRECTNESS,
+        10,
+        Severity.ERROR,
+        sourceImplementation<RetrofitUsageDetector>()
+      )
   }
 }

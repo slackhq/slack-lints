@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.checks.infrastructure.LintDetectorTest
@@ -23,9 +10,6 @@ import com.android.tools.lint.checks.infrastructure.TestMode
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Issue
 import com.android.utils.SdkUtils
-import junit.framework.TestCase
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
 import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.File
@@ -33,6 +17,9 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.net.MalformedURLException
+import junit.framework.TestCase
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
 
 @Suppress("UnstableApiUsage")
 @RunWith(JUnit4::class)
@@ -44,12 +31,11 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
   open val lintClientName: String? = null
 
   /**
-   * Lint periodically adds new "TestModes" to LintDetectorTest. These modes act as a sort of
-   * chaos testing mechanism, adding different common variations of code (extra spaces, extra
-   * parens, etc) to the test files to ensure that lints are robust against them. They also
-   * make it quite difficult to test against and need extra work sometimes to properly support, so
-   * we expose this property to allow tests to skip certain modes that need more work in subsequent
-   * PRs.
+   * Lint periodically adds new "TestModes" to LintDetectorTest. These modes act as a sort of chaos
+   * testing mechanism, adding different common variations of code (extra spaces, extra parens, etc)
+   * to the test files to ensure that lints are robust against them. They also make it quite
+   * difficult to test against and need extra work sometimes to properly support, so we expose this
+   * property to allow tests to skip certain modes that need more work in subsequent PRs.
    */
   open val skipTestModes: Array<TestMode>? = null
 
@@ -64,18 +50,11 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
   override fun lint(): TestLintTask {
     val sdkLocation = System.getProperty("android.sdk")
     val lintTask = super.lint()
-    lintClientName?.let {
-      lintTask.clientFactory { TestLintClient(it) }
-    }
-    sdkLocation?.let {
-      lintTask.sdkHome(File(it))
-    }
+    lintClientName?.let { lintTask.clientFactory { TestLintClient(it) } }
+    sdkLocation?.let { lintTask.sdkHome(File(it)) }
     lintTask.allowCompilationErrors(false)
 
-    skipTestModes
-      ?.let { testModesToSkip ->
-        lintTask.skipTestModes(*testModesToSkip)
-      }
+    skipTestModes?.let { testModesToSkip -> lintTask.skipTestModes(*testModesToSkip) }
     return lintTask
   }
 

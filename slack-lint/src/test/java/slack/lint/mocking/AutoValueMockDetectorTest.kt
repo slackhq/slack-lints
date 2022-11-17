@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
 import org.junit.Test
@@ -20,8 +7,9 @@ import slack.lint.BaseSlackLintTest
 
 class AutoValueMockDetectorTest : BaseSlackLintTest() {
 
-  private val autoValueAnnotationClass = kotlin(
-    """
+  private val autoValueAnnotationClass =
+    kotlin(
+      """
         package com.google.auto.value
 
         annotation class AutoValue {
@@ -29,10 +17,11 @@ class AutoValueMockDetectorTest : BaseSlackLintTest() {
           annotation class Builder
         }
       """
-  )
+    )
 
-  private val testClass = java(
-    """
+  private val testClass =
+    java(
+        """
       package slack.test;
 
       import com.google.auto.value.AutoValue;
@@ -48,16 +37,18 @@ class AutoValueMockDetectorTest : BaseSlackLintTest() {
         }
       }
     """
-  ).indented()
+      )
+      .indented()
 
   override fun getDetector() = AutoValueMockDetector()
   override fun getIssues() = listOf(AutoValueMockDetector.ISSUE)
 
   @Test
   fun kotlinTests() {
-    val source = kotlin(
-      "test/test/slack/test/TestClass.kt",
-      """
+    val source =
+      kotlin(
+          "test/test/slack/test/TestClass.kt",
+          """
           package slack.test
 
           import org.mockito.Mock
@@ -86,11 +77,13 @@ class AutoValueMockDetectorTest : BaseSlackLintTest() {
             }
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*mockFileStubs(), autoValueAnnotationClass, testClass, source)
-      .allowCompilationErrors() // Until AGP 7.1.0 https://groups.google.com/g/lint-dev/c/BigCO8sMhKU
+      .allowCompilationErrors() // Until AGP 7.1.0
+      // https://groups.google.com/g/lint-dev/c/BigCO8sMhKU
       .run()
       .expect(
         """
@@ -131,15 +124,17 @@ class AutoValueMockDetectorTest : BaseSlackLintTest() {
               val builderLocalMock3 = org.mockito.Mockito.mock(classRef)
                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           12 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun javaTests() {
-    val source = java(
-      "test/test/slack/test/TestClass.java",
-      """
+    val source =
+      java(
+          "test/test/slack/test/TestClass.java",
+          """
           package slack.test;
 
           import org.mockito.Mock;
@@ -167,7 +162,8 @@ class AutoValueMockDetectorTest : BaseSlackLintTest() {
             }
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(*mockFileStubs(), autoValueAnnotationClass, testClass, source)
@@ -205,7 +201,8 @@ class AutoValueMockDetectorTest : BaseSlackLintTest() {
               TestClass.Builder builderLocalMock2 = mock(builderClassRef);
                                                     ~~~~~~~~~~~~~~~~~~~~~
           10 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 }

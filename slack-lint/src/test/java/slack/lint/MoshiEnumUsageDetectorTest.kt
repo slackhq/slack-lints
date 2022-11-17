@@ -1,26 +1,14 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import org.junit.Test
 
 class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
 
-  private val jsonClassAnnotation = java(
-    """
+  private val jsonClassAnnotation =
+    java(
+        """
         package com.squareup.moshi;
 
         public @interface JsonClass {
@@ -28,25 +16,29 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           String generator() default "";
         }
       """
-  ).indented()
+      )
+      .indented()
 
-  private val jsonAnnotation = java(
-    """
+  private val jsonAnnotation =
+    java(
+        """
       package com.squareup.moshi;
 
       public @interface Json {
         String name();
       }
     """
-  ).indented()
+      )
+      .indented()
 
   override fun getDetector() = MoshiUsageDetector()
   override fun getIssues() = MoshiUsageDetector.issues().toList()
 
   @Test
   fun java_correct() {
-    val correctJava = java(
-      """
+    val correctJava =
+      java(
+          """
           package slack.model;
 
           import com.squareup.moshi.JsonClass;
@@ -56,18 +48,17 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             UNKNOWN, TEST
           }
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(jsonClassAnnotation, jsonAnnotation, correctJava)
-      .run()
-      .expectClean()
+    lint().files(jsonClassAnnotation, jsonAnnotation, correctJava).run().expectClean()
   }
 
   @Test
   fun java_expected_unknown_is_ok() {
-    val correctJava = java(
-      """
+    val correctJava =
+      java(
+          """
           package slack.model;
 
           import com.squareup.moshi.JsonClass;
@@ -78,18 +69,17 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             UNKNOWN, TEST, @Json(name = "UNKNOWN") EXPECTED_UNKNOWN
           }
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(jsonClassAnnotation, jsonAnnotation, correctJava)
-      .run()
-      .expectClean()
+    lint().files(jsonClassAnnotation, jsonAnnotation, correctJava).run().expectClean()
   }
 
   @Test
   fun java_ignored() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
           package slack.model;
 
           import com.squareup.moshi.JsonClass;
@@ -98,18 +88,17 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             TEST
           }
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(jsonClassAnnotation, jsonAnnotation, source)
-      .run()
-      .expectClean()
+    lint().files(jsonClassAnnotation, jsonAnnotation, source).run().expectClean()
   }
 
   @Test
   fun java_generateAdapter_isTrue() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
           package slack.model;
 
           import com.squareup.moshi.JsonClass;
@@ -119,7 +108,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             UNKNOWN, TEST
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -130,7 +120,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         @JsonClass(generateAdapter = true)
                                      ~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -138,14 +129,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         @@ -5 +5
         - @JsonClass(generateAdapter = true)
         + @JsonClass(generateAdapter = false)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun java_custom_generator_is_ignored() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
           package slack.model;
 
           import com.squareup.moshi.JsonClass;
@@ -155,18 +148,17 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             TEST
           }
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(jsonClassAnnotation, jsonAnnotation, source)
-      .run()
-      .expectClean()
+    lint().files(jsonClassAnnotation, jsonAnnotation, source).run().expectClean()
   }
 
   @Test
   fun java_unknown_annotated() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
           package slack.model;
 
           import com.squareup.moshi.JsonClass;
@@ -179,7 +171,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             TEST
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -190,14 +183,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         public enum TestEnum {
                     ~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun java_unknown_wrong_order() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
           package slack.model;
 
           import com.squareup.moshi.JsonClass;
@@ -208,7 +203,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             UNKNOWN
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -219,14 +215,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           UNKNOWN
           ~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun java_unknown_wrong_order_inferred_enum() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
         package slack.model;
 
         import com.squareup.moshi.JsonClass;
@@ -239,7 +237,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           UNKNOWN
         }
       """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -250,14 +249,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           UNKNOWN
           ~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun java_json_but_missing_json_class() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
         package slack.model;
 
         import com.squareup.moshi.JsonClass;
@@ -269,7 +270,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           TEST;
         }
       """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -280,14 +282,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         public enum TestEnum {
                     ~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun java_lower_casing() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
         package slack.model;
 
         import com.squareup.moshi.JsonClass;
@@ -298,7 +302,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           test
         }
       """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -309,14 +314,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             test
             ~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun java_lower_casing_already_annotated() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
         package slack.model;
 
         import com.squareup.moshi.Json;
@@ -328,7 +335,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           @Json(name = "taken") test
         }
       """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -339,7 +347,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "taken") test
                                   ~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -347,14 +356,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         @@ -9 +9
         -   @Json(name = "taken") test
         +   @Json(name = "taken") TEST
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun java_json_name_blank() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
         package slack.model;
 
         import com.squareup.moshi.Json;
@@ -366,7 +377,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           @Json(name = " ") TEST
         }
       """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -377,14 +389,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = " ") TEST
                          ~~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun java_json_name_empty() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
         package slack.model;
 
         import com.squareup.moshi.Json;
@@ -396,7 +410,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           @Json(name = "") TEST
         }
       """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -407,14 +422,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "") TEST
                          ~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun java_redundantJsonName() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
           package slack.model;
 
           import com.squareup.moshi.Json;
@@ -426,7 +443,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "VALUE") VALUE
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -437,7 +455,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "VALUE") VALUE
                          ~~~~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -445,14 +464,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         @@ -9 +9
         -   @Json(name = "VALUE") VALUE
         +    VALUE
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun java_duplicateJsonNames() {
-    val source = java(
-      """
+    val source =
+      java(
+          """
           package slack.model;
 
           import com.squareup.moshi.Json;
@@ -467,7 +488,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "value2") VALUE_3;
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonAnnotation, jsonClassAnnotation, source)
@@ -487,14 +509,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "value2") VALUE_3;
                                    ~~~~~~~
           4 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun kotlin_correct() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -504,18 +528,17 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             UNKNOWN, TEST
           }
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(jsonClassAnnotation, jsonAnnotation, source)
-      .run()
-      .expectClean()
+    lint().files(jsonClassAnnotation, jsonAnnotation, source).run().expectClean()
   }
 
   @Test
   fun kotlin_expected_unknown_is_ok() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -526,18 +549,17 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             UNKNOWN, TEST, @Json(name = "UNKNOWN") EXPECTED_UNKNOWN
           }
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(jsonClassAnnotation, jsonAnnotation, source)
-      .run()
-      .expectClean()
+    lint().files(jsonClassAnnotation, jsonAnnotation, source).run().expectClean()
   }
 
   @Test
   fun kotlin_ignored() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -546,18 +568,17 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             TEST
           }
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(jsonClassAnnotation, jsonAnnotation, source)
-      .run()
-      .expectClean()
+    lint().files(jsonClassAnnotation, jsonAnnotation, source).run().expectClean()
   }
 
   @Test
   fun kotlin_generateAdapter_isTrue() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -567,7 +588,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             UNKNOWN, TEST
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -578,7 +600,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         @JsonClass(generateAdapter = true)
                                      ~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -586,14 +609,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         @@ -5 +5
         - @JsonClass(generateAdapter = true)
         + @JsonClass(generateAdapter = false)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun kotlin_custom_generator_is_ignored() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -603,18 +628,17 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             TEST
           }
         """
-    ).indented()
+        )
+        .indented()
 
-    lint()
-      .files(jsonClassAnnotation, jsonAnnotation, source)
-      .run()
-      .expectClean()
+    lint().files(jsonClassAnnotation, jsonAnnotation, source).run().expectClean()
   }
 
   @Test
   fun kotlin_unknown_annotated() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -627,7 +651,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             TEST
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -638,14 +663,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         enum class TestEnum {
                    ~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun kotlin_unknown_wrong_order() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.JsonClass
@@ -656,7 +683,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             UNKNOWN
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -667,14 +695,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           UNKNOWN
           ~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun kotlin_unknown_wrong_order_inferred_enum() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
         package slack.model
 
         import com.squareup.moshi.JsonClass
@@ -687,7 +717,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           UNKNOWN
         }
       """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -698,14 +729,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           UNKNOWN
           ~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun kotlin_json_but_missing_json_class() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
         package slack.model
 
         import com.squareup.moshi.JsonClass
@@ -717,7 +750,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           TEST
         }
       """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -728,14 +762,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         enum class TestEnum {
                    ~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun kotlin_lower_casing() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
         package slack.model
 
         import com.squareup.moshi.JsonClass
@@ -746,7 +782,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           test
         }
       """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -757,7 +794,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             test
             ~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -765,14 +803,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         @@ -8 +8
         -   test
         +   @com.squareup.moshi.Json(name = "test") TEST
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun kotlin_lower_casing_already_annotated() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
         package slack.model
 
         import com.squareup.moshi.Json
@@ -784,7 +824,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           @Json(name = "taken") test
         }
       """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -795,7 +836,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "taken") test
                                   ~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -803,14 +845,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         @@ -9 +9
         -   @Json(name = "taken") test
         +   @Json(name = "taken") TEST
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun kotlin_json_name_blank() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
         package slack.model
 
         import com.squareup.moshi.Json
@@ -822,7 +866,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           @Json(name = " ") TEST
         }
       """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -833,14 +878,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = " ") TEST
                           ~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun kotlin_json_name_empty() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
         package slack.model
 
         import com.squareup.moshi.Json
@@ -852,7 +899,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
           @Json(name = "") TEST
         }
       """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -863,14 +911,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "") TEST
                          ~~
           1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun kotlin_redundantJsonName() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.Json
@@ -882,7 +932,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "VALUE") VALUE
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonClassAnnotation, jsonAnnotation, source)
@@ -893,7 +944,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "VALUE") VALUE
                           ~~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -901,14 +953,16 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         @@ -9 +9
         -   @Json(name = "VALUE") VALUE
         +    VALUE
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
   @Test
   fun kotlin_duplicateJsonNames() {
-    val source = kotlin(
-      """
+    val source =
+      kotlin(
+          """
           package slack.model
 
           import com.squareup.moshi.Json
@@ -923,7 +977,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "value2") VALUE_3
           }
         """
-    ).indented()
+        )
+        .indented()
 
     lint()
       .files(jsonAnnotation, jsonClassAnnotation, source)
@@ -943,7 +998,8 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
             @Json(name = "value2") VALUE_3
                                    ~~~~~~~
           4 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 }

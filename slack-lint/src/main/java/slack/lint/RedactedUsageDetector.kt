@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -40,11 +27,7 @@ import slack.lint.util.sourceImplementation
 class RedactedUsageDetector : Detector(), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> {
-    return listOf(
-      UClass::class.java,
-      UMethod::class.java,
-      UField::class.java
-    )
+    return listOf(UClass::class.java, UMethod::class.java, UField::class.java)
   }
 
   override fun createUastHandler(context: JavaContext): UElementHandler? {
@@ -77,15 +60,16 @@ class RedactedUsageDetector : Detector(), SourceCodeScanner {
     // We check simple name only rather than any specific redacted annotation
     private const val NAME_REDACTED = "redacted"
 
-    private val JAVA_USAGE: Issue = Issue.create(
-      "RedactedInJavaUsage",
-      "@Redacted is only supported in Kotlin classes!",
-      "@Redacted is only supported in Kotlin classes!",
-      Category.CORRECTNESS,
-      9,
-      Severity.ERROR,
-      sourceImplementation<RedactedUsageDetector>()
-    )
+    private val JAVA_USAGE: Issue =
+      Issue.create(
+        "RedactedInJavaUsage",
+        "@Redacted is only supported in Kotlin classes!",
+        "@Redacted is only supported in Kotlin classes!",
+        Category.CORRECTNESS,
+        9,
+        Severity.ERROR,
+        sourceImplementation<RedactedUsageDetector>()
+      )
 
     val ISSUES = arrayOf(JAVA_USAGE)
   }

@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.inclusive
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -41,13 +28,14 @@ class InclusiveNamingSourceCodeScanner : Detector(), SourceCodeScanner {
     blocklist = InclusiveNamingChecker.loadBlocklist(context)
   }
 
-  override fun getApplicableUastTypes() = listOf(
-    UFile::class.java,
-    UClass::class.java,
-    UMethod::class.java,
-    UVariable::class.java,
-    ULabeledExpression::class.java
-  )
+  override fun getApplicableUastTypes() =
+    listOf(
+      UFile::class.java,
+      UClass::class.java,
+      UMethod::class.java,
+      UVariable::class.java,
+      ULabeledExpression::class.java
+    )
 
   override fun createUastHandler(context: JavaContext): UElementHandler? {
     if (blocklist.isEmpty()) return null
@@ -72,24 +60,25 @@ class InclusiveNamingSourceCodeScanner : Detector(), SourceCodeScanner {
 
       // Covers parameters, properties, fields, and local vars
       override fun visitVariable(node: UVariable) {
-        val type = when (node) {
-          is UField -> {
-            if (isKotlin(node)) {
-              "property"
-            } else {
-              "field"
+        val type =
+          when (node) {
+            is UField -> {
+              if (isKotlin(node)) {
+                "property"
+              } else {
+                "field"
+              }
             }
-          }
-          is ULocalVariable -> "local variable"
-          is UParameter -> {
-            if (node.sourcePsi is KtProperty) {
-              "property"
-            } else {
-              "parameter"
+            is ULocalVariable -> "local variable"
+            is UParameter -> {
+              if (node.sourcePsi is KtProperty) {
+                "property"
+              } else {
+                "parameter"
+              }
             }
+            else -> return
           }
-          else -> return
-        }
         checker.check(node, node.name, type)
       }
 

@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2022 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2022 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.resources
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -47,18 +34,20 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
   }
 
   override fun afterCheckFile(context: Context) {
-    // Collect all the fixes and apply them to one issue on the import to avoid renaming the import alias with a fix
+    // Collect all the fixes and apply them to one issue on the import to avoid renaming the import
+    // alias with a fix
     // and leaving the R references still referencing the old import alias or vice versa.
     rootIssueData?.let {
       context.report(
         ISSUE,
         it.nameLocation,
         "Use ${it.alias} as an import alias here",
-        quickfixData = fix()
-          .name("Replace import alias")
-          // Apply the fixes in reverse so that the ranges/locations don't change.
-          .composite(*fixes.reversed().toTypedArray())
-          .autoFix()
+        quickfixData =
+          fix()
+            .name("Replace import alias")
+            // Apply the fixes in reverse so that the ranges/locations don't change.
+            .composite(*fixes.reversed().toTypedArray())
+            .autoFix()
       )
 
       reset()
@@ -70,7 +59,8 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
     fixes.clear()
   }
 
-  override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UImportStatement::class.java, USimpleNameReferenceExpression::class.java)
+  override fun getApplicableUastTypes(): List<Class<out UElement>> =
+    listOf(UImportStatement::class.java, USimpleNameReferenceExpression::class.java)
 
   override fun createUastHandler(context: JavaContext): UElementHandler {
     return object : UElementHandler() {
@@ -124,11 +114,7 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
       }
 
       private fun createReferenceLintFix(node: USimpleNameReferenceExpression): LintFix {
-        return fix()
-          .replace()
-          .range(context.getLocation(node))
-          .with(rootIssueData?.alias)
-          .build()
+        return fix().replace().range(context.getLocation(node)).with(rootIssueData?.alias).build()
       }
     }
   }
@@ -137,15 +123,16 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
 
     val ISSUE: Issue =
       Issue.create(
-        "WrongResourceImportAlias",
-        "Wrong import alias for this R class.",
-        "R class import aliases should be consistent across the codebase. For example: \n" +
-          "import slack.l10n.R as L10nR\n" +
-          "import slack.uikit.R as UiKitR",
-        Category.CORRECTNESS,
-        6,
-        Severity.ERROR,
-        sourceImplementation<WrongResourceImportAliasDetector>()
-      ).setOptions(listOf(IMPORT_ALIASES))
+          "WrongResourceImportAlias",
+          "Wrong import alias for this R class.",
+          "R class import aliases should be consistent across the codebase. For example: \n" +
+            "import slack.l10n.R as L10nR\n" +
+            "import slack.uikit.R as UiKitR",
+          Category.CORRECTNESS,
+          6,
+          Severity.ERROR,
+          sourceImplementation<WrongResourceImportAliasDetector>()
+        )
+        .setOptions(listOf(IMPORT_ALIASES))
   }
 }

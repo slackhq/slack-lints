@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -43,11 +30,8 @@ class InjectWithUsageDetector : Detector(), SourceCodeScanner {
     return object : UElementHandler() {
       override fun visitClass(node: UClass) {
         node.findAnnotation(FQCN_INJECT_WITH)?.let { injectWith ->
-          val implementsAnvilInjectable = InheritanceUtil.isInheritor(
-            node,
-            true,
-            FQCN_ANVIL_INJECTABLE
-          )
+          val implementsAnvilInjectable =
+            InheritanceUtil.isInheritor(node, true, FQCN_ANVIL_INJECTABLE)
           if (!implementsAnvilInjectable) {
             context.report(
               ANVIL_INJECTABLE_ISSUE,
@@ -57,21 +41,15 @@ class InjectWithUsageDetector : Detector(), SourceCodeScanner {
             )
           }
 
-          val scopeAttribute = (
-            injectWith.findAttributeValue(
-              "scope"
-            ) as? KotlinUClassLiteralExpression
-            ) ?: return
+          val scopeAttribute =
+            (injectWith.findAttributeValue("scope") as? KotlinUClassLiteralExpression) ?: return
 
           val scopeType = scopeAttribute.type ?: return
           val scopeClass = context.evaluator.getTypeClass(scopeType) ?: return
 
           if (needsToImplementLoggedInUserProvider(scopeClass)) {
-            val implementsLoggedInUserProvider = InheritanceUtil.isInheritor(
-              node,
-              true,
-              FQCN_LOGGED_IN_USER_PROVIDER
-            )
+            val implementsLoggedInUserProvider =
+              InheritanceUtil.isInheritor(node, true, FQCN_LOGGED_IN_USER_PROVIDER)
             if (!implementsLoggedInUserProvider) {
               context.report(
                 LOGGED_IN_USER_PROVIDER_ISSUE,
@@ -93,31 +71,31 @@ class InjectWithUsageDetector : Detector(), SourceCodeScanner {
     private const val FQCN_USER_SCOPE = "slack.di.UserScope"
     private const val FQCN_LOGGED_IN_USER_PROVIDER = "slack.foundation.auth.LoggedInUserProvider"
 
-    private val LOGGED_IN_USER_PROVIDER_ISSUE: Issue = Issue.create(
-      "InjectWithScopeRequiredLoggedInUserProvider",
-      "@InjectWith-annotated classes must implement LoggedInUserProvider (or extend something that does) if they target UserScope or OrgScope.",
-      "`@InjectWith`-annotated classes must implement LoggedInUserProvider (or extend something that does) if they target UserScope or OrgScope.",
-      Category.CORRECTNESS,
-      9,
-      Severity.ERROR,
-      sourceImplementation<InjectWithUsageDetector>()
-    )
+    private val LOGGED_IN_USER_PROVIDER_ISSUE: Issue =
+      Issue.create(
+        "InjectWithScopeRequiredLoggedInUserProvider",
+        "@InjectWith-annotated classes must implement LoggedInUserProvider (or extend something that does) if they target UserScope or OrgScope.",
+        "`@InjectWith`-annotated classes must implement LoggedInUserProvider (or extend something that does) if they target UserScope or OrgScope.",
+        Category.CORRECTNESS,
+        9,
+        Severity.ERROR,
+        sourceImplementation<InjectWithUsageDetector>()
+      )
 
-    private val ANVIL_INJECTABLE_ISSUE: Issue = Issue.create(
-      "InjectWithTypeMustImplementAnvilInjectable",
-      "@InjectWith-annotated classes must implement AnvilInjectable (or extend something that does).",
-      "`@InjectWith`-annotated classes must implement AnvilInjectable (or extend something that does).",
-      Category.CORRECTNESS,
-      9,
-      Severity.ERROR,
-      sourceImplementation<InjectWithUsageDetector>()
-    )
+    private val ANVIL_INJECTABLE_ISSUE: Issue =
+      Issue.create(
+        "InjectWithTypeMustImplementAnvilInjectable",
+        "@InjectWith-annotated classes must implement AnvilInjectable (or extend something that does).",
+        "`@InjectWith`-annotated classes must implement AnvilInjectable (or extend something that does).",
+        Category.CORRECTNESS,
+        9,
+        Severity.ERROR,
+        sourceImplementation<InjectWithUsageDetector>()
+      )
 
     val ISSUES = arrayOf(LOGGED_IN_USER_PROVIDER_ISSUE, ANVIL_INJECTABLE_ISSUE)
 
-    private val LOGGED_IN_SCOPES = setOf(
-      FQCN_ORG_SCOPE, FQCN_USER_SCOPE
-    )
+    private val LOGGED_IN_SCOPES = setOf(FQCN_ORG_SCOPE, FQCN_USER_SCOPE)
 
     private fun needsToImplementLoggedInUserProvider(scope: PsiClass): Boolean {
       return scope.qualifiedName in LOGGED_IN_SCOPES

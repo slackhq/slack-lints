@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 @file:Suppress("UnstableApiUsage")
 
 package slack.lint.inclusive
@@ -28,12 +15,12 @@ import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.StringOption
 import com.android.tools.lint.detector.api.TextFormat
 import com.android.tools.lint.detector.api.XmlContext
+import java.util.Locale
 import org.jetbrains.uast.UElement
 import org.w3c.dom.Node
 import slack.lint.util.Priorities
 import slack.lint.util.resourcesImplementation
 import slack.lint.util.sourceImplementation
-import java.util.Locale
 
 sealed class InclusiveNamingChecker<C : Context, N> {
   companion object {
@@ -54,18 +41,19 @@ sealed class InclusiveNamingChecker<C : Context, N> {
 
     private fun Implementation.toIssue(): Issue {
       return Issue.create(
-        "InclusiveNaming",
-        "Use inclusive naming.",
-        """
+          "InclusiveNaming",
+          "Use inclusive naming.",
+          """
           We try to use inclusive naming at Slack. Terms such as blacklist, whitelist, master, slave, etc, while maybe \
           widely used today, can be socially charged and make others feel excluded or uncomfortable.
         """
-          .trimIndent(),
-        Category.CORRECTNESS,
-        Priorities.NORMAL,
-        Severity.ERROR,
-        this
-      ).setOptions(listOf(BLOCK_LIST))
+            .trimIndent(),
+          Category.CORRECTNESS,
+          Priorities.NORMAL,
+          Severity.ERROR,
+          this
+        )
+        .setOptions(listOf(BLOCK_LIST))
     }
 
     /** Loads a comma-separated list of blocked words from the [BLOCK_LIST] option. */

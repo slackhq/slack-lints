@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2021 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2021 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.util
 
 import com.android.tools.lint.client.api.JavaEvaluator
@@ -37,6 +24,7 @@ import com.intellij.psi.PsiClassType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiType
 import com.intellij.psi.PsiWildcardType
+import java.util.EnumSet
 import org.jetbrains.kotlin.asJava.classes.KtLightClassForFacade
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -49,14 +37,15 @@ import org.jetbrains.uast.UReferenceExpression
 import org.jetbrains.uast.USimpleNameReferenceExpression
 import org.jetbrains.uast.kotlin.KotlinUClass
 import org.jetbrains.uast.tryResolve
-import java.util.EnumSet
 
 /**
  * @param qualifiedName the qualified name of the desired interface type
  * @param nameFilter an optional name filter, used to check when to stop searching up the type
+ * ```
  *                   hierarchy. This is useful if you want to only check direct implementers in
  *                   certain packages. Called with a fully qualified class name; return false if
  *                   you want to stop searching up the type tree, true to continue.
+ * ```
  */
 internal fun PsiClass.implements(
   qualifiedName: String,
@@ -73,19 +62,15 @@ internal fun PsiClass.implements(
     return false
   }
 
-  return this.superTypes
-    .filterNotNull()
-    .any { classType ->
-      classType.resolve()
-        ?.implements(qualifiedName, nameFilter)
-        ?: false
-    }
+  return this.superTypes.filterNotNull().any { classType ->
+    classType.resolve()?.implements(qualifiedName, nameFilter) ?: false
+  }
 }
 
 /**
- *  @return whether or not the [this] is a Kotlin `companion object` type.
+ * @return whether or not the [this] is a Kotlin `companion object` type.
  *
- *  @see [isKotlinObject]
+ * @see [isKotlinObject]
  */
 internal fun UClass.isCompanionObject(evaluator: JavaEvaluator): Boolean {
   if (this is KotlinUClass && sourcePsi is KtObjectDeclaration && name == "Companion") {
@@ -103,7 +88,8 @@ internal fun UClass.isCompanionObject(evaluator: JavaEvaluator): Boolean {
  */
 internal fun UClass.isKotlinObject() = this is KotlinUClass && sourcePsi is KtObjectDeclaration
 
-internal fun UClass.isKotlinTopLevelFacadeClass() = this is KotlinUClass && javaPsi is KtLightClassForFacade
+internal fun UClass.isKotlinTopLevelFacadeClass() =
+  this is KotlinUClass && javaPsi is KtLightClassForFacade
 
 internal fun UClass.isInnerClass(evaluator: JavaEvaluator): Boolean {
   // If it has no containing class, it's top-level and therefore not inner
@@ -115,7 +101,8 @@ internal fun UClass.isInnerClass(evaluator: JavaEvaluator): Boolean {
   // If it's Kotlin and "inner", then it's definitely an inner class
   if (this is KotlinUClass && evaluator.hasModifier(this, KtTokens.INNER_KEYWORD)) return true
 
-  // We could check the containing class's innerClasses to look for a match here, but we've logically ruled
+  // We could check the containing class's innerClasses to look for a match here, but we've
+  // logically ruled
   // out this possibility above
   return false
 }
@@ -139,10 +126,7 @@ internal inline fun <reified T> sourceImplementation(
       EnumSet.of(Scope.TEST_SOURCES)
     )
   } else {
-    Implementation(
-      T::class.java,
-      EnumSet.of(Scope.JAVA_FILE)
-    )
+    Implementation(T::class.java, EnumSet.of(Scope.JAVA_FILE))
   }
 }
 
@@ -235,26 +219,20 @@ internal fun String.toScreamingSnakeCase(): String {
 }
 
 /** List of platform types that Moshi's reflective adapter refuses. From ClassJsonAdapter. */
-private val PLATFORM_PACKAGES = setOf(
-  "android",
-  "androidx",
-  "java",
-  "javax",
-  "kotlin",
-  "kotlinx",
-  "scala"
-)
+private val PLATFORM_PACKAGES =
+  setOf("android", "androidx", "java", "javax", "kotlin", "kotlinx", "scala")
 
-private val BOXED_PRIMITIVES = setOf(
-  TYPE_INTEGER_WRAPPER,
-  TYPE_BOOLEAN_WRAPPER,
-  TYPE_BYTE_WRAPPER,
-  TYPE_SHORT_WRAPPER,
-  TYPE_LONG_WRAPPER,
-  TYPE_DOUBLE_WRAPPER,
-  TYPE_FLOAT_WRAPPER,
-  TYPE_CHARACTER_WRAPPER
-)
+private val BOXED_PRIMITIVES =
+  setOf(
+    TYPE_INTEGER_WRAPPER,
+    TYPE_BOOLEAN_WRAPPER,
+    TYPE_BYTE_WRAPPER,
+    TYPE_SHORT_WRAPPER,
+    TYPE_LONG_WRAPPER,
+    TYPE_DOUBLE_WRAPPER,
+    TYPE_FLOAT_WRAPPER,
+    TYPE_CHARACTER_WRAPPER
+  )
 
 internal fun PsiClass.isBoxedPrimitive(): Boolean {
   val fqcn = qualifiedName ?: return false
@@ -281,8 +259,7 @@ internal fun PsiClass.isPlatformType(): Boolean {
  * Given reference expressions, try to unwrap the simple name expression (useful if the reference is
  * always the same type, like an enum).
  *
- * `Foo.BAR` -> BAR
- * `BAR` -> BAR
+ * `Foo.BAR` -> BAR `BAR` -> BAR
  */
 internal fun UExpression.unwrapSimpleNameReferenceExpression(): USimpleNameReferenceExpression {
   return when (this) {
@@ -325,7 +302,7 @@ internal fun UExpression.resolveQualifiedNameOrNull(): String? {
  * ```
  * Object foo(Continuation<? super String> continuation)
  * ```
-*/
+ */
 internal fun UMethod.safeReturnType(context: JavaContext): PsiType? {
   if (language == KotlinLanguage.INSTANCE && context.evaluator.isSuspend(this)) {
     val classReference = parameterList.parameters.lastOrNull()?.type as? PsiClassType ?: return null

@@ -24,7 +24,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         DRAWABLE_STUB,
         CONTEXT_COMPAT_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import android.content.Context
@@ -37,7 +37,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             }
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -59,7 +60,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         TEST_OBSERVER_STUB,
         RX_RULE_STUB,
         kotlin(
-          """
+            """
           package cash
 
           import io.reactivex.rxjava3.core.Observable
@@ -77,7 +78,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             fun observable(): Observable<String> = TODO()
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -89,7 +91,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .files(
         VIEW_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import android.view.View;
@@ -100,7 +102,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             }
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -120,7 +123,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .files(
         VIEW_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import android.view.View;
@@ -133,7 +136,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             }
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -145,7 +149,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .files(
         VIEWPAGER2_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import androidx.viewpager2.widget.ViewPager2;
@@ -156,7 +160,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             }
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -169,7 +174,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         VIEWCOMPAT_STUB,
         VIEWPAGER2_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import androidx.viewpager2.widget.ViewPager2;
@@ -181,7 +186,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             }
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .skipTestModes(FULLY_QUALIFIED, IMPORT_ALIAS) // TODO relies on non-qualified matching.
       .run()
@@ -203,7 +209,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         VIEW_STUB,
         VIEWPAGER2_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import androidx.viewpager2.widget.ViewPager2;
@@ -215,7 +221,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             }
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .skipTestModes(FULLY_QUALIFIED, IMPORT_ALIAS) // TODO relies on non-qualified matching.
       .run()
@@ -235,7 +242,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package foo
 
           import java.util.LinkedList
@@ -244,7 +251,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             val stuff = LinkedList<String>()
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -263,7 +271,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package foo
 
           import java.util.Stack
@@ -272,7 +280,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             val stuff = Stack<String>()
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -291,7 +300,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package foo
 
           import java.util.Vector
@@ -300,7 +309,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             val stuff = Vector<String>()
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -320,7 +330,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .files(
         SCHEDULERS_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import io.reactivex.rxjava3.schedulers.Schedulers
@@ -329,7 +339,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             val scheduler = Schedulers.newThread()
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -350,7 +361,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .files(
         BUILD_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import android.os.Build
@@ -364,7 +375,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             val s = S
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -393,7 +405,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package foo
 
           import java.time.Instant
@@ -402,7 +414,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             val now = Instant.now()
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -426,7 +439,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         COMPLETABLE_STUB,
         RX_COMPLETABLE_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import kotlinx.coroutines.rx3.rxCompletable
@@ -435,7 +448,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             val now = rxCompletable {}
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -459,7 +473,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         SINGLE_STUB,
         RX_SINGLE_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import kotlinx.coroutines.rx3.rxSingle
@@ -468,7 +482,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             val now = rxSingle { "a" }
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -491,7 +506,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         MAYBE_STUB,
         RX_MAYBE_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import kotlinx.coroutines.rx3.rxMaybe
@@ -500,7 +515,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             val now = rxMaybe { "a" }
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -525,7 +541,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         PRODUCER_STUB,
         RX_OBSERVABLE_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import kotlinx.coroutines.rx3.rxObservable
@@ -534,7 +550,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             val now = rxObservable { send("a") }
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -558,7 +575,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         COMPLETABLE_STUB,
         RX_COMPLETABLE_STUB,
         kotlin(
-          """
+            """
           package foo
 
           import kotlinx.coroutines.rx3.rxCompletable
@@ -569,7 +586,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             val now = rxCompletable(MyDispatcher) {}
           }
           """
-        ).indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -578,7 +596,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   companion object {
     private val OBSERVABLE_STUB =
       java(
-        """
+          """
         package io.reactivex.rxjava3.core;
 
         import io.reactivex.rxjava3.observers.TestObserver;
@@ -589,22 +607,24 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           public final TestObserver<T> test(boolean dispose) {}
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val TEST_OBSERVER_STUB =
       java(
-        """
+          """
         package io.reactivex.rxjava3.observers;
 
         public class TestObserver<T> {
           public final assertValue(T value) {}
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val RX_RULE_STUB =
       kotlin(
-        """
+          """
         package com.squareup.util.rx3.test
 
         import io.reactivex.rxjava3.core.Observable
@@ -615,11 +635,12 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
 
         fun <T: Any> Observable<T>.test(rxRule: RxRule): RecordingObserver<T>
       """
-      ).indented()
+        )
+        .indented()
 
     private val CONTEXT_COMPAT_STUB =
       java(
-        """
+          """
         package androidx.core.content;
 
         import android.graphics.drawable.Drawable;
@@ -629,29 +650,30 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           public static Drawable getDrawable(Context context, int id) {}
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val DRAWABLE_STUB =
       java(
-        """
+          """
         package android.graphics.drawable;
 
         public class Drawable {}
       """
-      ).indented()
+        )
+        .indented()
 
     private val CONTEXT_STUB =
-      java(
-        """
+      java("""
         package android.content;
 
         public class Context {}
-      """
-      ).indented()
+      """)
+        .indented()
 
     private val VIEW_STUB =
       java(
-        """
+          """
         package android.view;
 
         public class View {
@@ -663,33 +685,36 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           public interface OnClickListener {}
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val VIEWCOMPAT_STUB =
       java(
-        """
+          """
         package androidx.core.view;
 
         public class ViewCompat {
           public static int generateViewId() { return 0; }
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val VIEWPAGER2_STUB =
       java(
-        """
+          """
         package androidx.viewpager2.widget;
 
         public class ViewPager2 {
           public void setId(int id) {}
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val SCHEDULERS_STUB =
       java(
-        """
+          """
         package io.reactivex.rxjava3.schedulers;
 
         public final class Schedulers {
@@ -698,46 +723,47 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val COROUTINE_CONTEXT_STUB =
-      kotlin(
-        """
+      kotlin("""
         package kotlin.coroutines
 
         interface CoroutineContext
-      """
-      ).indented()
+      """)
+        .indented()
     private val EMPTY_COROUTINE_CONTEXT_STUB =
       kotlin(
-        """
+          """
         package kotlin.coroutines
 
         object EmptyCoroutineContext : CoroutineContext
       """
-      ).indented()
+        )
+        .indented()
     private val COROUTINE_SCOPE_STUB =
-      kotlin(
-        """
+      kotlin("""
         package kotlinx.coroutines
 
         interface CoroutineScope
-      """
-      ).indented()
+      """)
+        .indented()
     private val COMPLETABLE_STUB =
       java(
-        """
+          """
         package io.reactivex.rxjava3.core;
 
         public final class Completable {
           Completable() {}
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val RX_COMPLETABLE_STUB =
       kotlin(
-        """
+          """
         package kotlinx.coroutines.rx3
 
         import kotlin.coroutines.CoroutineContext
@@ -753,22 +779,24 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           return Completable
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val SINGLE_STUB =
       java(
-        """
+          """
         package io.reactivex.rxjava3.core;
 
         public final class Single<T> {
           Single() {}
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val RX_SINGLE_STUB =
       kotlin(
-        """
+          """
         package kotlinx.coroutines.rx3
 
         import kotlin.coroutines.CoroutineContext
@@ -784,22 +812,24 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           return Single<T>()
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val MAYBE_STUB =
       java(
-        """
+          """
         package io.reactivex.rxjava3.core;
 
         public final class Maybe<T> {
           Maybe() {}
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val RX_MAYBE_STUB =
       kotlin(
-        """
+          """
         package kotlinx.coroutines.rx3
 
         import kotlin.coroutines.CoroutineContext
@@ -815,22 +845,24 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           return Maybe<T>()
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val PRODUCER_STUB =
       kotlin(
-        """
+          """
         package kotlinx.coroutines.channels
 
         object ProducerScope<T> {
           suspend fun send(value: T)
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val RX_OBSERVABLE_STUB =
       kotlin(
-        """
+          """
         package kotlinx.coroutines.rx3
 
         import kotlin.coroutines.CoroutineContext
@@ -847,11 +879,12 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           return Observable<T>()
         }
       """
-      ).indented()
+        )
+        .indented()
 
     private val BUILD_STUB =
       java(
-        """
+          """
         package android.os;
 
         public final class Build {
@@ -863,6 +896,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
         }
       """
-      ).indented()
+        )
+        .indented()
   }
 }

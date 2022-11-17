@@ -1,18 +1,5 @@
-/*
- * Copyright (C) 2022 Slack Technologies, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *    https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright (C) 2022 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint.resources
 
 import com.android.tools.lint.checks.infrastructure.TestLintTask
@@ -39,7 +26,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package lint.test.pkg.subpackage
 
           import slack.l10n.R as L10nR
@@ -53,7 +40,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
            }
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -65,14 +52,14 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package lint.test.pkg
 
           import slack.l10n.R
 
           class MyClass
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -82,7 +69,8 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
         import slack.l10n.R
         ~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -90,7 +78,8 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
         @@ -3 +3
         - import slack.l10n.R
         + import slack.l10n.R as L10nR
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -99,7 +88,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package lint.test.pkg
 
           import slack.l10n.R
@@ -112,7 +101,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
            }
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -122,7 +111,8 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
         import slack.l10n.R
         ~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -133,7 +123,8 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
         @@ -8 +8
         -         val appName = getString(R.string.app_name)
         +         val appName = getString(L10nR.string.app_name)
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -142,7 +133,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package lint.test.pkg
 
           import slack.l10n.R
@@ -156,7 +147,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
            }
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -166,7 +157,8 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
         import slack.l10n.R
         ~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -179,7 +171,8 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
         -         getColor(R.color.transparent).let { println(it) }
         +         val appName = getString(L10nR.string.app_name) + "-" + getString(L10nR.string.suffix)
         +         getColor(L10nR.color.transparent).let { println(it) }
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -188,7 +181,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package lint.test.pkg
 
           import slack.l10n.R
@@ -204,7 +197,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
            }
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -214,7 +207,8 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
         import slack.l10n.R
         ~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs(
         """
@@ -228,7 +222,8 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
         @@ -10 +10
         -               getColor(R.color.transparent).let { println(it) }
         +               getColor(L10nR.color.transparent).let { println(it) }
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -237,7 +232,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           package lint.test.pkg
 
           import lint.test.subpkg.R
@@ -250,7 +245,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
            }
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -260,7 +255,8 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
         import lint.test.subpkg.R
         ~~~~~~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
       .expectFixDiffs("")
   }
@@ -270,7 +266,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         java(
-          """
+            """
           package lint.test.pkg;
 
           import lint.test.subpkg.R;
@@ -283,7 +279,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
 
            }
           """
-        )
+          )
           .indented()
       )
       .run()
