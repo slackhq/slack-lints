@@ -10,9 +10,6 @@ these in the open](https://slack.engineering/developing-in-the-open/) to knowled
 As such, our issue tracker is closed and we don't normally accept external PRs, but we welcome your
 questions in the discussions section of the project!
 
-We may later publish some of these lints. If you're interested in this, feel free to raise in
-a discussions post or vote for existing suggestions.
-
 ## Highlights
 
 ### Do Not Mock

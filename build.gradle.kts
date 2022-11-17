@@ -15,7 +15,7 @@
  */
 import com.diffplug.gradle.spotless.KotlinExtension
 import com.diffplug.gradle.spotless.SpotlessExtension
-import com.vanniktech.maven.publish.MavenPublishPluginExtension
+import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -116,29 +116,16 @@ subprojects {
   pluginManager.withPlugin("com.vanniktech.maven.publish") {
     apply(plugin = "org.jetbrains.dokka")
 
-    tasks.named<DokkaTask>("dokkaHtml") {
+    tasks.withType<DokkaTask>().configureEach {
       outputDirectory.set(rootDir.resolve("../docs/0.x"))
       dokkaSourceSets.configureEach {
         skipDeprecated.set(true)
       }
     }
 
-    configure<MavenPublishPluginExtension> {
-      // Prevent publishing to MavenCentral
-      sonatypeHost = null
-    }
-
-    // Add our maven repository repo
-    configure<PublishingExtension> {
-      val url = providers.gradleProperty("SlackRepositoryUrl")
-        .get()
-      repositories {
-        maven {
-          name = "SlackRepository"
-          setUrl(url)
-          credentials(PasswordCredentials::class.java)
-        }
-      }
+    configure<MavenPublishBaseExtension> {
+      publishToMavenCentral(automaticRelease = true)
+      signAllPublications()
     }
   }
 }
