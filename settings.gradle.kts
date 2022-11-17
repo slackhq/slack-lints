@@ -26,6 +26,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "slack-lints"
 
-include(":slack-lint")
-
-include(":slack-lint-annotations")
+include(":slack-lint-checks", ":slack-lint-annotations")
