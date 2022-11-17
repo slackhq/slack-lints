@@ -61,7 +61,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         className = "io.reactivex.rxjava3.core.Flowable",
         functionName = "hide",
         errorMessage =
-        "There should be no reason to defend against downcasting an Observable to " +
+        "There should be no reason to defend against downcasting an Flowable to " +
           "an implementation type like FlowableProcessor in a closed codebase. Doing this incurs " +
           "needless runtime memory and performance overhead. FlowableProcessor extends from " +
           "Flowable and can be supplied to functions accepting Flowable directly. When " +
