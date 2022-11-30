@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UImportStatement
 import org.jetbrains.uast.USimpleNameReferenceExpression
+import org.jetbrains.uast.getContainingUFile
 import org.jetbrains.uast.getQualifiedParentOrThis
 import slack.lint.resources.ImportAliasesLoader.IMPORT_ALIASES
 import slack.lint.resources.model.RootIssueData
@@ -69,12 +70,17 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
         val importDirective = node.sourcePsi as? KtImportDirective ?: return
 
         if (importDirective.importedName?.identifier == "R" && importDirective.aliasName == null) {
-          val packageName = context.project.`package` ?: return
+          val packageName = context.project.`package`
+          val filePackageName = node.getContainingUFile()?.packageName
 
           val importedFqName = importDirective.importedFqName
           val parentImportedFqName = importedFqName?.parent()?.asString()
 
-          val isLocalResourceImport = parentImportedFqName?.let { it == packageName } ?: true
+          val isLocalResourceImport =
+            parentImportedFqName?.let {
+              if (packageName != null) it == packageName else filePackageName?.startsWith(it)
+            }
+              ?: true
           if (!isLocalResourceImport) {
             val importedFqNameString = requireNotNull(importedFqName).asString()
             val alias = importAliases[importedFqNameString]
