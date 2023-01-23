@@ -57,7 +57,7 @@ jobs:
 
       # Test only on latest because test outputs change wildly between lint versions
       - name: Check
-        if: matrix.ci_lint_version == '30.4.0-alpha03'
+        if: matrix.ci_lint_version == '31.1.0-alpha01'
         uses: gradle/gradle-build-action@v2
         with:
           arguments: check --stacktrace
