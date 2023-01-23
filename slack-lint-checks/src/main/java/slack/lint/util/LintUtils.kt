@@ -168,7 +168,7 @@ internal fun String.snakeToCamel(): String {
       } else {
         letterSeen = true
         if (capNext) {
-          append(c.toUpperCase())
+          append(c.uppercaseChar())
           capNext = false
         } else {
           append(c)
@@ -210,7 +210,7 @@ internal fun String.toScreamingSnakeCase(): String {
           append(c)
         } else {
           prevWasLower = true
-          append(c.toUpperCase())
+          append(c.uppercaseChar())
         }
       }
     }

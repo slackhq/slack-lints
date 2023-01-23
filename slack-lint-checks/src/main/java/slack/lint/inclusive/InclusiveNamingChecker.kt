@@ -75,7 +75,7 @@ sealed class InclusiveNamingChecker<C : Context, N> {
 
   fun check(node: N, name: String?, type: String, isFile: Boolean = false) {
     if (name == null) return
-    val lowerCased = name.toLowerCase(Locale.US)
+    val lowerCased = name.lowercase(Locale.US)
     blocklist
       .find { it in lowerCased }
       ?.let { matched ->

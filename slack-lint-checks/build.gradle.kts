@@ -33,9 +33,10 @@ dependencies {
 
 tasks.withType<KotlinCompile>().configureEach {
   kotlinOptions {
-    // Lint still requires 1.4 (regardless of what version the project uses), so this forces a lower
+    // Lint 8.1.0-alpha01 forces Kotlin (regardless of what version the project uses), so this
+    // forces a lower
     // language level for now. Similar to `targetCompatibility` for Java.
-    apiVersion = "1.4"
-    languageVersion = "1.4"
+    apiVersion = "1.7"
+    languageVersion = "1.7"
   }
 }
