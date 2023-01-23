@@ -19,7 +19,7 @@ import slack.lint.util.sourceImplementation
 /**
  * A simple detector that ensures that...
  * - Classes annotated with `@InjectWith` implement `LoggedInUserProvider` if the target scope is
- * `UserScope` or `OrgScope`.
+ *   `UserScope` or `OrgScope`.
  * - Classes annotated with `@InjectWith` implement `AnvilInjectable`.
  */
 class InjectWithUsageDetector : Detector(), SourceCodeScanner {

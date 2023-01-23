@@ -138,6 +138,7 @@ abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
   /**
    * @property type a [PsiClass] object representing the class that should not be mocked.
    * @property reason The reason this class should not be mocked, which may be as simple as "it is
+   *
    * ```
    *                  annotated to forbid mocking" but may also provide a suggested workaround.
    * ```
