@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ci_java_version: ['17']
+        ci_java_version: ['19']
         ci_lint_version: ['30.3.1', '30.4.0-beta05', '31.0.0-alpha08']
     env:
       DEP_OVERRIDES: 'true'
@@ -74,5 +74,5 @@ jobs:
           path: build-reports.zip
 
       - name: Publish snapshot (main branch only)
-        if: github.repository == 'slackhq/slack-lint-checks' && github.ref == 'refs/heads/main' && matrix.ci_lint_version == '31.0.0-alpha08' && matrix.ci_java_version == '17'
+        if: github.repository == 'slackhq/slack-lint-checks' && github.ref == 'refs/heads/main' && matrix.ci_lint_version == '31.0.0-alpha08' && matrix.ci_java_version == '19'
         run: ./gradlew publish -PmavenCentralUsername=${{ secrets.SONATYPEUSERNAME }} -PmavenCentralPassword=${{ secrets.SONATYPEPASSWORD }}
