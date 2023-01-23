@@ -3,16 +3,14 @@
 package slack.lint
 
 import com.android.tools.lint.client.api.LintClient
-import com.android.tools.lint.detector.api.AnnotationUsageType
+import com.android.tools.lint.detector.api.AnnotationInfo
+import com.android.tools.lint.detector.api.AnnotationUsageInfo
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Implementation
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.UastLintUtils
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiMethod
-import org.jetbrains.uast.UAnnotation
 import org.jetbrains.uast.UElement
 import slack.lint.util.Priorities
 import slack.lint.util.sourceImplementation
@@ -38,27 +36,20 @@ class DeprecatedAnnotationDetector : AnnotatedClassOrMethodUsageDetector() {
 
   override fun visitAnnotationUsage(
     context: JavaContext,
-    usage: UElement,
-    type: AnnotationUsageType,
-    annotation: UAnnotation,
-    qualifiedName: String,
-    method: PsiMethod?,
-    referenced: PsiElement?,
-    annotations: List<UAnnotation>,
-    allMemberAnnotations: List<UAnnotation>,
-    allClassAnnotations: List<UAnnotation>,
-    allPackageAnnotations: List<UAnnotation>
+    element: UElement,
+    annotationInfo: AnnotationInfo,
+    usageInfo: AnnotationUsageInfo
   ) {
-    if (isEnabled && applicableAnnotations().contains(qualifiedName)) {
+    if (isEnabled && applicableAnnotations().contains(annotationInfo.qualifiedName)) {
       val issueToReport = issue
-      val location = context.getLocation(usage)
+      val location = context.getLocation(element)
       val messagePrefix =
-        referenced?.let(UastLintUtils.Companion::getQualifiedName)
+        usageInfo.referenced?.let(UastLintUtils.Companion::getQualifiedName)
           ?: BRIEF_DESCRIPTION_PREFIX_DEFAULT
       report(
         context,
         issueToReport,
-        usage,
+        element,
         location,
         messagePrefix + BRIEF_DESCRIPTION_SUFFIX,
         null

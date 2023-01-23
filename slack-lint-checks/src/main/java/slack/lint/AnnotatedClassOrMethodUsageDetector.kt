@@ -3,14 +3,13 @@
 package slack.lint
 
 import com.android.tools.lint.checks.AbstractAnnotationDetector
+import com.android.tools.lint.detector.api.AnnotationInfo
+import com.android.tools.lint.detector.api.AnnotationUsageInfo
 import com.android.tools.lint.detector.api.AnnotationUsageType
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiMethod
-import org.jetbrains.uast.UAnnotation
 import org.jetbrains.uast.UElement
 
 /**
@@ -30,6 +29,7 @@ abstract class AnnotatedClassOrMethodUsageDetector :
   override fun isApplicableAnnotationUsage(type: AnnotationUsageType): Boolean {
     // If it's not enabled, no need to scan further
     if (!isEnabled) return false
+    @Suppress("DEPRECATION") // METHOD_CALL_CLASS doesn't have a replacement
     return type == AnnotationUsageType.METHOD_CALL ||
       type == AnnotationUsageType.METHOD_CALL_CLASS ||
       type == AnnotationUsageType.METHOD_CALL_PARAMETER
@@ -37,24 +37,17 @@ abstract class AnnotatedClassOrMethodUsageDetector :
 
   override fun visitAnnotationUsage(
     context: JavaContext,
-    usage: UElement,
-    type: AnnotationUsageType,
-    annotation: UAnnotation,
-    qualifiedName: String,
-    method: PsiMethod?,
-    referenced: PsiElement?,
-    annotations: List<UAnnotation>,
-    allMemberAnnotations: List<UAnnotation>,
-    allClassAnnotations: List<UAnnotation>,
-    allPackageAnnotations: List<UAnnotation>
+    element: UElement,
+    annotationInfo: AnnotationInfo,
+    usageInfo: AnnotationUsageInfo
   ) {
-    if (isEnabled && applicableAnnotations().contains(qualifiedName)) {
+    if (isEnabled && applicableAnnotations().contains(annotationInfo.qualifiedName)) {
       val issueToReport = issue
-      val location = context.getLocation(usage)
+      val location = context.getLocation(element)
       report(
         context,
         issueToReport,
-        usage,
+        element,
         location,
         issueToReport.getBriefDescription(TextFormat.TEXT),
         null

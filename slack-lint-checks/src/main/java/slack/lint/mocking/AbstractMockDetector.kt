@@ -6,6 +6,8 @@ import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.SourceCodeScanner
+import com.android.tools.lint.detector.api.isJava
+import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
 import org.jetbrains.kotlin.psi.KtProperty
@@ -17,8 +19,6 @@ import org.jetbrains.uast.UField
 import org.jetbrains.uast.UReferenceExpression
 import org.jetbrains.uast.UVariable
 import org.jetbrains.uast.getParentOfType
-import org.jetbrains.uast.java.JavaUField
-import org.jetbrains.uast.kotlin.KotlinUField
 
 /**
  * A base detector class for detecting different kinds of mocking behavior. Subclasses can indicate
@@ -97,14 +97,14 @@ abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
 
       // Checks properties and fields, usually annotated with @Mock/@Spy
       override fun visitField(node: UField) {
-        if (node is KotlinUField) {
+        if (isKotlin(node)) {
           val sourcePsi = node.sourcePsi ?: return
           if (sourcePsi is KtProperty && isMockAnnotated(node)) {
             val type = context.evaluator.getTypeClass(node.type) ?: return
             checkMock(node, type)
             return
           }
-        } else if (node is JavaUField && isMockAnnotated(node)) {
+        } else if (isJava(node) && isMockAnnotated(node)) {
           val type = context.evaluator.getTypeClass(node.type) ?: return
           checkMock(node, type)
           return
