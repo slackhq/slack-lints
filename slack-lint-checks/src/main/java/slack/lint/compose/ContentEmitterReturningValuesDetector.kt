@@ -4,13 +4,10 @@ package slack.lint.compose
 
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.Category
-import com.android.tools.lint.detector.api.Context
-import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
-import com.android.tools.lint.detector.api.StringOption
 import com.android.tools.lint.detector.api.TextFormat
 import com.android.tools.lint.detector.api.isKotlin
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -24,17 +21,9 @@ import slack.lint.compose.util.isComposable
 import slack.lint.util.Priorities
 import slack.lint.util.sourceImplementation
 
-class ContentEmitterReturningValuesDetector : Detector(), SourceCodeScanner {
+class ContentEmitterReturningValuesDetector : ContentEmitterAwareDetector(), SourceCodeScanner {
 
   companion object {
-
-    internal val PROVIDED_CONTENT_EMITTERS =
-      StringOption(
-        "content-emitters",
-        "A comma-separated list of known content-emitting composables.",
-        null,
-        "This property should define a comma-separated list of known content-emitting composables."
-      )
 
     val ISSUE =
       Issue.create(
@@ -55,32 +44,13 @@ class ContentEmitterReturningValuesDetector : Detector(), SourceCodeScanner {
           implementation = sourceImplementation<ContentEmitterReturningValuesDetector>()
         )
         .setOptions(listOf(PROVIDED_CONTENT_EMITTERS))
-
-    /**
-     * Loads a comma-separated list of allowed names from the [PROVIDED_CONTENT_EMITTERS] option.
-     */
-    fun loadProvidedContentEmitters(context: Context): Set<String> {
-      return PROVIDED_CONTENT_EMITTERS.getValue(context.configuration)
-        ?.splitToSequence(",")
-        .orEmpty()
-        .map(String::trim)
-        .filter(String::isNotBlank)
-        .toSet()
-    }
-  }
-
-  private lateinit var providedContentEmitters: Set<String>
-
-  override fun beforeCheckRootProject(context: Context) {
-    super.beforeCheckRootProject(context)
-    providedContentEmitters = loadProvidedContentEmitters(context)
   }
 
   internal val KtFunction.directUiEmitterCount: Int
     get() =
       bodyBlockExpression?.let { block ->
         block.statements.filterIsInstance<KtCallExpression>().count {
-          it.emitsContent(providedContentEmitters)
+          it.emitsContent(providedContentEmitters())
         }
       }
         ?: 0
@@ -89,7 +59,7 @@ class ContentEmitterReturningValuesDetector : Detector(), SourceCodeScanner {
     val bodyBlock = bodyBlockExpression ?: return 0
     return bodyBlock.statements.filterIsInstance<KtCallExpression>().count { callExpression ->
       // If it's a direct hit on our list, it should count directly
-      if (callExpression.emitsContent(providedContentEmitters)) return@count true
+      if (callExpression.emitsContent(providedContentEmitters())) return@count true
 
       val name = callExpression.calleeExpression?.text ?: return@count false
       // If the hit is in the provided mapping, it means it is using a composable that we know emits
