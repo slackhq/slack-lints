@@ -18,7 +18,7 @@ class ContentEmitterReturningValuesDetectorTest : BaseSlackLintTest() {
   override fun lint(): TestLintTask {
     return super.lint()
       .configureOption(
-        ContentEmitterReturningValuesDetector.PROVIDED_CONTENT_EMITTERS,
+        ContentEmitterAwareDetector.PROVIDED_CONTENT_EMITTERS,
         "Potato,Banana"
       )
   }
