@@ -17,10 +17,7 @@ class ContentEmitterReturningValuesDetectorTest : BaseSlackLintTest() {
 
   override fun lint(): TestLintTask {
     return super.lint()
-      .configureOption(
-        ContentEmitterAwareDetector.PROVIDED_CONTENT_EMITTERS,
-        "Potato,Banana"
-      )
+      .configureOption(ContentEmitterAwareDetector.PROVIDED_CONTENT_EMITTERS, "Potato,Banana")
   }
 
   // This mode is irrelevant to our test and totally untestable with stringy outputs

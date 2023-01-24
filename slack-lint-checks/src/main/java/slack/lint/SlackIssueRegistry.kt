@@ -7,6 +7,7 @@ import com.android.tools.lint.client.api.Vendor
 import com.android.tools.lint.detector.api.CURRENT_API
 import com.android.tools.lint.detector.api.Issue
 import com.google.auto.service.AutoService
+import slack.lint.compose.ComposeModifierMissingDetector
 import slack.lint.compose.CompositionLocalNamingDetector
 import slack.lint.compose.CompositionLocalUsageDetector
 import slack.lint.compose.ContentEmitterReturningValuesDetector
@@ -69,5 +70,6 @@ class SlackIssueRegistry : IssueRegistry() {
       CompositionLocalUsageDetector.ISSUE,
       CompositionLocalNamingDetector.ISSUE,
       ContentEmitterReturningValuesDetector.ISSUE,
+      ComposeModifierMissingDetector.ISSUE,
     )
 }
