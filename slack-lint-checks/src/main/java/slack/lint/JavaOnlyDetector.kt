@@ -72,8 +72,8 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
     }
     return object : UElementHandler() {
       override fun visitClass(node: UClass) {
-        val hasJavaOnly = context.evaluator.findAnnotation(node, JAVA_ONLY) != null
-        val hasKotlinOnly = context.evaluator.findAnnotation(node, KOTLIN_ONLY) != null
+        val hasJavaOnly = context.evaluator.getAnnotation(node, JAVA_ONLY) != null
+        val hasKotlinOnly = context.evaluator.getAnnotation(node, KOTLIN_ONLY) != null
         if (hasJavaOnly && hasKotlinOnly) {
           context.report(
             ISSUE,
@@ -90,7 +90,7 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
             return
           }
           node.baseClassType.resolve()?.let { psiClass ->
-            context.evaluator.findAnnotation(psiClass, JAVA_ONLY)?.run {
+            context.evaluator.getAnnotation(psiClass, JAVA_ONLY)?.run {
               val message = anonymousTypeString(psiClass, "anonymous")
               context.report(ISSUE, context.getLocation(node.sourcePsi!!), message)
             }
@@ -115,7 +115,7 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
       ): Pair<String, LintFix>? {
         return listOfNotNull(node.javaPsi.superClass, *node.interfaces)
           .mapNotNull { psiClass ->
-            context.evaluator.findAnnotation(psiClass, targetAnnotation)?.run {
+            context.evaluator.getAnnotation(psiClass, targetAnnotation)?.run {
               val message =
                 "Type subclasses/implements ${UastLintUtils.getClassName(psiClass)} in ${psiClass.containingFile.name} which is annotated @$targetAnnotationSimpleName, it should also be annotated."
               val source = node.text
@@ -141,7 +141,7 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
         node.functionalInterfaceType?.let { type ->
           if (type is PsiClassType) {
             type.resolve()?.let { psiClass ->
-              context.evaluator.findAnnotation(psiClass, JAVA_ONLY)?.let {
+              context.evaluator.getAnnotation(psiClass, JAVA_ONLY)?.let {
                 val message = anonymousTypeString(psiClass, "lambda")
                 context.report(ISSUE, context.getLocation(node.sourcePsi!!), message)
                 return
@@ -156,8 +156,8 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
       }
 
       override fun visitMethod(node: UMethod) {
-        val hasJavaOnly = context.evaluator.findAnnotation(node, JAVA_ONLY) != null
-        val hasKotlinOnly = context.evaluator.findAnnotation(node, KOTLIN_ONLY) != null
+        val hasJavaOnly = context.evaluator.getAnnotation(node, JAVA_ONLY) != null
+        val hasKotlinOnly = context.evaluator.getAnnotation(node, KOTLIN_ONLY) != null
         if (hasJavaOnly && hasKotlinOnly) {
           context.report(
             ISSUE,
@@ -181,11 +181,13 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
         targetAnnotationSimpleName: String
       ): Pair<String, LintFix>? {
         return context.evaluator.getSuperMethod(node)?.let { method ->
-          context.evaluator.findAnnotation(method, targetAnnotation)?.run {
+          context.evaluator.getAnnotation(method, targetAnnotation)?.run {
             val message =
-              "Function overrides ${method.name} in ${UastLintUtils.getClassName(
-              method.containingClass!!
-            )} which is annotated @$targetAnnotationSimpleName, it should also be annotated."
+              "Function overrides ${method.name} in ${
+                UastLintUtils.getClassName(
+                  method.containingClass!!
+                )
+              } which is annotated @$targetAnnotationSimpleName, it should also be annotated."
             val modifier = node.modifierList.children.joinToString(separator = " ") { it.text }
             return@let message to
               fix()
@@ -237,7 +239,7 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
           return it.extractValue()
         }
         context.evaluator.getPackage(this)?.let { pkg ->
-          context.evaluator.findAnnotation(pkg, KOTLIN_ONLY)?.toUElementOfType<UAnnotation>()?.let {
+          context.evaluator.getAnnotation(pkg, KOTLIN_ONLY)?.let {
             return it.extractValue()
           }
         }

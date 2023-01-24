@@ -34,9 +34,8 @@ import slack.lint.DaggerKotlinIssuesDetector.Companion.ISSUE_BINDS_CAN_BE_EXTENS
 
 /**
  * This is a simple lint check to catch common Dagger+Kotlin usage issues.
- *
  * - [ISSUE_BINDS_CAN_BE_EXTENSION_FUNCTION] covers `@Binds` functions where the target binding can
- * be a an extension function receiver instead.
+ *   be a an extension function receiver instead.
  */
 @Suppress("UnstableApiUsage")
 class DaggerKotlinIssuesDetector : Detector(), SourceCodeScanner {

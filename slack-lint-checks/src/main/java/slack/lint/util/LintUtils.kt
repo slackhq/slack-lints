@@ -41,6 +41,7 @@ import org.jetbrains.uast.tryResolve
 /**
  * @param qualifiedName the qualified name of the desired interface type
  * @param nameFilter an optional name filter, used to check when to stop searching up the type
+ *
  * ```
  *                   hierarchy. This is useful if you want to only check direct implementers in
  *                   certain packages. Called with a fully qualified class name; return false if
@@ -69,7 +70,6 @@ internal fun PsiClass.implements(
 
 /**
  * @return whether or not the [this] is a Kotlin `companion object` type.
- *
  * @see [isKotlinObject]
  */
 internal fun UClass.isCompanionObject(evaluator: JavaEvaluator): Boolean {
@@ -83,7 +83,6 @@ internal fun UClass.isCompanionObject(evaluator: JavaEvaluator): Boolean {
 
 /**
  * @return whether or not [this] is a Kotlin `object` type.
- *
  * @see [isCompanionObject]
  */
 internal fun UClass.isKotlinObject() = this is KotlinUClass && sourcePsi is KtObjectDeclaration
@@ -169,7 +168,7 @@ internal fun String.snakeToCamel(): String {
       } else {
         letterSeen = true
         if (capNext) {
-          append(c.toUpperCase())
+          append(c.uppercaseChar())
           capNext = false
         } else {
           append(c)
@@ -211,7 +210,7 @@ internal fun String.toScreamingSnakeCase(): String {
           append(c)
         } else {
           prevWasLower = true
-          append(c.toUpperCase())
+          append(c.uppercaseChar())
         }
       }
     }
@@ -279,6 +278,7 @@ internal fun UExpression.unwrapSimpleNameReferenceExpression(): USimpleNameRefer
  *     if (aVar == CONSTANT)
  *                 ^^^^^^^^
  * ```
+ *
  * The qualified name of the underlined expression will be "org.x.Clazz.CONSTANT".
  */
 internal fun UExpression.resolveQualifiedNameOrNull(): String? {

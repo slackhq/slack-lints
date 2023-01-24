@@ -55,7 +55,7 @@ allprojects {
 
 subprojects {
   pluginManager.withPlugin("java") {
-    configure<JavaPluginExtension> { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
+    configure<JavaPluginExtension> { toolchain { languageVersion.set(JavaLanguageVersion.of(19)) } }
 
     tasks.withType<JavaCompile>().configureEach { options.release.set(11) }
   }
@@ -65,8 +65,8 @@ subprojects {
       kotlinOptions {
         jvmTarget = "11"
         // TODO re-enable once lint uses Kotlin 1.5
-        //        allWarningsAsErrors = true
-        //        freeCompilerArgs = freeCompilerArgs + listOf("-progressive")
+        //  allWarningsAsErrors = true
+        //  freeCompilerArgs = freeCompilerArgs + listOf("-progressive")
       }
     }
   }

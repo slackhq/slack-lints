@@ -22,7 +22,7 @@ import slack.lint.util.sourceImplementation
 /**
  * A simple detector that validates basic Retrofit usage.
  * - Retrofit endpoints must be annotated with a retrofit method API unless they're an extension
- * function or private.
+ *   function or private.
  * - `@FormUrlEncoded` must use `@POST`, `@PUT`, or `@PATCH`.
  * - `@Body` parameter requires `@POST`, `@PUT`, or `@PATCH`.
  * - `@Field` parameters require it to be annotated with `@FormUrlEncoded`.
