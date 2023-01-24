@@ -9,13 +9,14 @@ import com.android.tools.lint.detector.api.Issue
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
-class CompositionLocalNamingDetectorTest : BaseSlackLintTest() {
+class ComposeCompositionLocalNamingDetectorTest : BaseSlackLintTest() {
 
-  override fun getDetector(): Detector = CompositionLocalNamingDetector()
-  override fun getIssues(): List<Issue> = listOf(CompositionLocalNamingDetector.ISSUE)
+  override fun getDetector(): Detector = ComposeCompositionLocalNamingDetector()
+  override fun getIssues(): List<Issue> = listOf(ComposeCompositionLocalNamingDetector.ISSUE)
 
   override fun lint(): TestLintTask {
-    return super.lint().configureOption(CompositionLocalNamingDetector.ALLOW_LIST, "Banana,Potato")
+    return super.lint()
+      .configureOption(ComposeCompositionLocalNamingDetector.ALLOW_LIST, "Banana,Potato")
   }
 
   // This mode is irrelevant to our test and totally untestable with stringy outputs
@@ -36,10 +37,10 @@ class CompositionLocalNamingDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/test.kt:2: Error: CompositionLocals should be named using the Local prefix as an adjective, followed by a descriptive noun. [CompositionLocalNaming]
+        src/test.kt:2: Error: CompositionLocals should be named using the Local prefix as an adjective, followed by a descriptive noun. [ComposeCompositionLocalNaming]
                         val AppleLocal = staticCompositionLocalOf<String> { "Apple" }
                             ~~~~~~~~~~
-        src/test.kt:3: Error: CompositionLocals should be named using the Local prefix as an adjective, followed by a descriptive noun. [CompositionLocalNaming]
+        src/test.kt:3: Error: CompositionLocals should be named using the Local prefix as an adjective, followed by a descriptive noun. [ComposeCompositionLocalNaming]
                         val Plum: String = staticCompositionLocalOf { "Plum" }
                             ~~~~
         2 errors, 0 warnings

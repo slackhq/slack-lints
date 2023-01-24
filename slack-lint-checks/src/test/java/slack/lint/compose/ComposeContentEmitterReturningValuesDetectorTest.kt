@@ -10,10 +10,10 @@ import org.intellij.lang.annotations.Language
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
-class ContentEmitterReturningValuesDetectorTest : BaseSlackLintTest() {
+class ComposeContentEmitterReturningValuesDetectorTest : BaseSlackLintTest() {
 
-  override fun getDetector(): Detector = ContentEmitterReturningValuesDetector()
-  override fun getIssues(): List<Issue> = listOf(ContentEmitterReturningValuesDetector.ISSUE)
+  override fun getDetector(): Detector = ComposeContentEmitterReturningValuesDetector()
+  override fun getIssues(): List<Issue> = listOf(ComposeContentEmitterReturningValuesDetector.ISSUE)
 
   override fun lint(): TestLintTask {
     return super.lint()
@@ -87,10 +87,10 @@ class ContentEmitterReturningValuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test.kt:1: Error: Composable functions should either emit content into the composition or return a value, but not both. [ContentEmitterReturningValues]
+          src/test.kt:1: Error: Composable functions should either emit content into the composition or return a value, but not both. [ComposeContentEmitterReturningValues]
           @Composable
           ^
-          src/test.kt:6: Error: Composable functions should either emit content into the composition or return a value, but not both. [ContentEmitterReturningValues]
+          src/test.kt:6: Error: Composable functions should either emit content into the composition or return a value, but not both. [ComposeContentEmitterReturningValues]
           @Composable
           ^
           2 errors, 0 warnings
@@ -134,10 +134,10 @@ class ContentEmitterReturningValuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test.kt:5: Error: Composable functions should either emit content into the composition or return a value, but not both. [ContentEmitterReturningValues]
+          src/test.kt:5: Error: Composable functions should either emit content into the composition or return a value, but not both. [ComposeContentEmitterReturningValues]
           @Composable
           ^
-          src/test.kt:18: Error: Composable functions should either emit content into the composition or return a value, but not both. [ContentEmitterReturningValues]
+          src/test.kt:18: Error: Composable functions should either emit content into the composition or return a value, but not both. [ComposeContentEmitterReturningValues]
           @Composable
           ^
           2 errors, 0 warnings
@@ -169,7 +169,7 @@ class ContentEmitterReturningValuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test.kt:1: Error: Composable functions should either emit content into the composition or return a value, but not both. [ContentEmitterReturningValues]
+          src/test.kt:1: Error: Composable functions should either emit content into the composition or return a value, but not both. [ComposeContentEmitterReturningValues]
           @Composable
           ^
           1 errors, 0 warnings

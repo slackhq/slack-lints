@@ -21,13 +21,14 @@ import slack.lint.compose.util.isComposable
 import slack.lint.util.Priorities
 import slack.lint.util.sourceImplementation
 
-class ContentEmitterReturningValuesDetector : ContentEmitterAwareDetector(), SourceCodeScanner {
+class ComposeContentEmitterReturningValuesDetector :
+  ContentEmitterAwareDetector(), SourceCodeScanner {
 
   companion object {
 
     val ISSUE =
       Issue.create(
-          id = "ContentEmitterReturningValues",
+          id = "ComposeContentEmitterReturningValues",
           briefDescription =
             "Composable functions should either emit content into the composition or return a value, but not both.",
           explanation =
@@ -41,7 +42,7 @@ class ContentEmitterReturningValuesDetector : ContentEmitterAwareDetector(), Sou
           category = Category.PRODUCTIVITY,
           priority = Priorities.NORMAL,
           severity = Severity.ERROR,
-          implementation = sourceImplementation<ContentEmitterReturningValuesDetector>()
+          implementation = sourceImplementation<ComposeContentEmitterReturningValuesDetector>()
         )
         .setOptions(listOf(PROVIDED_CONTENT_EMITTERS))
   }

@@ -19,7 +19,7 @@ import slack.lint.compose.util.declaresCompositionLocal
 import slack.lint.util.Priorities
 import slack.lint.util.sourceImplementation
 
-class CompositionLocalUsageDetector : Detector(), SourceCodeScanner {
+class ComposeCompositionLocalUsageDetector : Detector(), SourceCodeScanner {
 
   companion object {
 
@@ -33,7 +33,7 @@ class CompositionLocalUsageDetector : Detector(), SourceCodeScanner {
 
     val ISSUE =
       Issue.create(
-          id = "CompositionLocalUsage",
+          id = "ComposeCompositionLocalUsage",
           briefDescription = "CompositionLocals are discouraged.",
           explanation =
             """
@@ -45,7 +45,7 @@ class CompositionLocalUsageDetector : Detector(), SourceCodeScanner {
           category = Category.PRODUCTIVITY,
           priority = Priorities.NORMAL,
           severity = Severity.ERROR,
-          implementation = sourceImplementation<CompositionLocalUsageDetector>()
+          implementation = sourceImplementation<ComposeCompositionLocalUsageDetector>()
         )
         .setOptions(listOf(ALLOW_LIST))
 

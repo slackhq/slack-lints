@@ -7,10 +7,10 @@ import com.android.tools.lint.client.api.Vendor
 import com.android.tools.lint.detector.api.CURRENT_API
 import com.android.tools.lint.detector.api.Issue
 import com.google.auto.service.AutoService
+import slack.lint.compose.ComposeCompositionLocalNamingDetector
+import slack.lint.compose.ComposeCompositionLocalUsageDetector
+import slack.lint.compose.ComposeContentEmitterReturningValuesDetector
 import slack.lint.compose.ComposeModifierMissingDetector
-import slack.lint.compose.CompositionLocalNamingDetector
-import slack.lint.compose.CompositionLocalUsageDetector
-import slack.lint.compose.ContentEmitterReturningValuesDetector
 import slack.lint.denylistedapis.DenyListedApiDetector
 import slack.lint.eithernet.DoNotExposeEitherNetInRepositoriesDetector
 import slack.lint.inclusive.InclusiveNamingChecker
@@ -67,9 +67,9 @@ class SlackIssueRegistry : IssueRegistry() {
       MissingResourceImportAliasDetector.ISSUE,
       WrongResourceImportAliasDetector.ISSUE,
       DenyListedApiDetector.ISSUE,
-      CompositionLocalUsageDetector.ISSUE,
-      CompositionLocalNamingDetector.ISSUE,
-      ContentEmitterReturningValuesDetector.ISSUE,
+      ComposeCompositionLocalUsageDetector.ISSUE,
+      ComposeCompositionLocalNamingDetector.ISSUE,
+      ComposeContentEmitterReturningValuesDetector.ISSUE,
       ComposeModifierMissingDetector.ISSUE,
     )
 }

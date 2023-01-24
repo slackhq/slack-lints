@@ -19,7 +19,7 @@ import slack.lint.compose.util.declaresCompositionLocal
 import slack.lint.util.Priorities
 import slack.lint.util.sourceImplementation
 
-class CompositionLocalNamingDetector : Detector(), SourceCodeScanner {
+class ComposeCompositionLocalNamingDetector : Detector(), SourceCodeScanner {
 
   companion object {
 
@@ -33,7 +33,7 @@ class CompositionLocalNamingDetector : Detector(), SourceCodeScanner {
 
     val ISSUE =
       Issue.create(
-          id = "CompositionLocalNaming",
+          id = "ComposeCompositionLocalNaming",
           briefDescription =
             "CompositionLocals should be named using the `Local` prefix as an adjective, followed by a descriptive noun.",
           explanation =
@@ -46,7 +46,7 @@ class CompositionLocalNamingDetector : Detector(), SourceCodeScanner {
           category = Category.PRODUCTIVITY,
           priority = Priorities.NORMAL,
           severity = Severity.ERROR,
-          implementation = sourceImplementation<CompositionLocalNamingDetector>()
+          implementation = sourceImplementation<ComposeCompositionLocalNamingDetector>()
         )
         .setOptions(listOf(ALLOW_LIST))
 

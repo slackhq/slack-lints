@@ -9,14 +9,14 @@ import com.android.tools.lint.detector.api.Issue
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
-class CompositionLocalUsageDetectorTest : BaseSlackLintTest() {
+class ComposeCompositionLocalUsageDetectorTest : BaseSlackLintTest() {
 
-  override fun getDetector(): Detector = CompositionLocalUsageDetector()
-  override fun getIssues(): List<Issue> = listOf(CompositionLocalUsageDetector.ISSUE)
+  override fun getDetector(): Detector = ComposeCompositionLocalUsageDetector()
+  override fun getIssues(): List<Issue> = listOf(ComposeCompositionLocalUsageDetector.ISSUE)
 
   override fun lint(): TestLintTask {
     return super.lint()
-      .configureOption(CompositionLocalUsageDetector.ALLOW_LIST, "LocalBanana,LocalPotato")
+      .configureOption(ComposeCompositionLocalUsageDetector.ALLOW_LIST, "LocalBanana,LocalPotato")
   }
 
   // This mode is irrelevant to our test and totally untestable with stringy outputs
@@ -40,16 +40,16 @@ class CompositionLocalUsageDetectorTest : BaseSlackLintTest() {
       .expectErrorCount(4)
       .expect(
         """
-        src/test.kt:2: Error: CompositionLocals are discouraged. [CompositionLocalUsage]
+        src/test.kt:2: Error: CompositionLocals are discouraged. [ComposeCompositionLocalUsage]
                         private val LocalApple = staticCompositionLocalOf<String> { "Apple" }
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test.kt:3: Error: CompositionLocals are discouraged. [CompositionLocalUsage]
+        src/test.kt:3: Error: CompositionLocals are discouraged. [ComposeCompositionLocalUsage]
                         internal val LocalPlum: String = staticCompositionLocalOf { "Plum" }
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test.kt:4: Error: CompositionLocals are discouraged. [CompositionLocalUsage]
+        src/test.kt:4: Error: CompositionLocals are discouraged. [ComposeCompositionLocalUsage]
                         val LocalPrune = compositionLocalOf { "Prune" }
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test.kt:5: Error: CompositionLocals are discouraged. [CompositionLocalUsage]
+        src/test.kt:5: Error: CompositionLocals are discouraged. [ComposeCompositionLocalUsage]
                         private val LocalKiwi: String = compositionLocalOf { "Kiwi" }
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         4 errors, 0 warnings
