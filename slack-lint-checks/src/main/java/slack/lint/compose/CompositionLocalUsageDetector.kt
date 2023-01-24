@@ -26,9 +26,9 @@ class CompositionLocalUsageDetector : Detector(), SourceCodeScanner {
     internal val ALLOW_LIST =
       StringOption(
         "allowed-composition-locals",
-        "A comma-separated list of CompositionLocal names that should be allowed.",
+        "A comma-separated list of CompositionLocals that should be allowed.",
         null,
-        "This property should define a comma-separated list of CompositionLocal names that should be allowed."
+        "This property should define a comma-separated list of CompositionLocals that should be allowed."
       )
 
     val ISSUE =
