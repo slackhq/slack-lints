@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.compose.util
 
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtFunction
@@ -9,48 +10,46 @@ import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
-// val KtFunction.emitsContent: Boolean
-//    get() {
-//        return if (isComposable) {
-//            sequence {
-//                tailrec suspend fun SequenceScope<KtCallExpression>.scan(elements:
-// List<PsiElement>) {
-//                    if (elements.isEmpty()) return
-//                    val toProcess = elements
-//                        .mapNotNull { current ->
-//                            if (current is KtCallExpression) {
-//                                if (current.emitExplicitlyNoContent) {
-//                                    null
-//                                } else {
-//                                    yield(current)
-//                                    current
-//                                }
-//                            } else {
-//                                current
-//                            }
-//                        }
-//                        .flatMap { it.children.toList() }
-//                    return scan(toProcess)
-//                }
-//                scan(listOf(this@emitsContent))
-//            }.any { it.emitsContent }
-//        } else {
-//            false
-//        }
-//    }
+fun KtFunction.emitsContent(providedContentEmitters: Set<String>): Boolean {
+  return if (isComposable) {
+    sequence {
+        tailrec suspend fun SequenceScope<KtCallExpression>.scan(elements: List<PsiElement>) {
+          if (elements.isEmpty()) return
+          val toProcess =
+            elements
+              .mapNotNull { current ->
+                if (current is KtCallExpression) {
+                  if (current.emitExplicitlyNoContent) {
+                    null
+                  } else {
+                    yield(current)
+                    current
+                  }
+                } else {
+                  current
+                }
+              }
+              .flatMap { it.children.toList() }
+          return scan(toProcess)
+        }
+        scan(listOf(this@emitsContent))
+      }
+      .any { it.emitsContent(providedContentEmitters) }
+  } else {
+    false
+  }
+}
 
 private val KtCallExpression.emitExplicitlyNoContent: Boolean
   get() = calleeExpression?.text in ComposableNonEmittersList
 
-// val KtCallExpression.emitsContent: Boolean
-//    get() {
-//        val methodName = calleeExpression?.text ?: return false
-//        val providedContentEmitters = config().getSet("contentEmitters", emptySet())
-//        return ComposableEmittersList.contains(methodName) ||
-//            ComposableEmittersListRegex.matches(methodName) ||
-//            providedContentEmitters.contains(methodName) ||
-//            containsComposablesWithModifiers
-//    }
+fun KtCallExpression.emitsContent(providedContentEmitters: Set<String>): Boolean {
+  val methodName = calleeExpression?.text ?: return false
+  return ComposableEmittersList.contains(methodName) ||
+    ComposableEmittersListRegex.matches(methodName) ||
+    providedContentEmitters.contains(methodName) ||
+    containsComposablesWithModifiers
+}
 
 private val KtCallExpression.containsComposablesWithModifiers: Boolean
   get() = valueArguments.filter { it.isNamed() }.any { it.getArgumentName()?.text == "modifier" }
