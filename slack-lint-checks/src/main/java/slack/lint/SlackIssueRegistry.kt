@@ -17,6 +17,7 @@ import slack.lint.compose.ComposeMultipleContentEmittersDetector
 import slack.lint.compose.ComposeNamingDetector
 import slack.lint.compose.ComposeParameterOrderDetector
 import slack.lint.compose.ComposeRememberMissingDetector
+import slack.lint.compose.ComposeUnstableCollectionsDetector
 import slack.lint.denylistedapis.DenyListedApiDetector
 import slack.lint.eithernet.DoNotExposeEitherNetInRepositoriesDetector
 import slack.lint.inclusive.InclusiveNamingChecker
@@ -84,6 +85,7 @@ class SlackIssueRegistry : IssueRegistry() {
       ComposeParameterOrderDetector.ISSUE,
       ComposeRememberMissingDetector.ISSUE,
       ComposeMultipleContentEmittersDetector.ISSUE,
+      ComposeUnstableCollectionsDetector.ISSUE,
       // </editor-fold>
     )
 }
