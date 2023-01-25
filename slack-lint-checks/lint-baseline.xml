@@ -542,6 +542,116 @@
 
     <issue
         id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
+        errorLine1="              .trimIndent(),"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeCompositionLocalNamingDetector.kt"
+            line="44"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
+        errorLine1="              .trimIndent(),"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeCompositionLocalUsageDetector.kt"
+            line="44"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
+        errorLine1="              .trimIndent(),"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeContentEmitterReturningValuesDetector.kt"
+            line="47"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
+        errorLine1="              .trimIndent(),"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeModifierMissingDetector.kt"
+            line="43"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
+        errorLine1="              .trimIndent(),"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeModifierReusedDetector.kt"
+            line="50"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
+        errorLine1="            .trimIndent(),"
+        errorLine2="             ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeModifierWithoutDefaultDetector.kt"
+            line="35"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
+        errorLine1="              .trimIndent(),"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeMultipleContentEmittersDetector.kt"
+            line="46"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
+        errorLine1="            .trimIndent(),"
+        errorLine2="             ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeMutableParametersDetector.kt"
+            line="29"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
+        errorLine1="              .trimIndent(),"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeNamingDetector.kt"
+            line="45"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
+        errorLine1="              .trimIndent(),"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeNamingDetector.kt"
+            line="64"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
         message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `kotlin()` test file construction"
         errorLine1="              .trimIndent()"
         errorLine2="               ~~~~~~~~~~~~">
@@ -866,7 +976,7 @@
         errorLine2="~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/util/LintUtils.kt"
-            line="38"
+            line="40"
             column="1"/>
     </issue>
 
@@ -877,7 +987,7 @@
         errorLine2="              ~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/util/LintUtils.kt"
-            line="76"
+            line="78"
             column="15"/>
     </issue>
 
@@ -888,7 +998,7 @@
         errorLine2="                                               ~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/util/LintUtils.kt"
-            line="88"
+            line="90"
             column="48"/>
     </issue>
 
@@ -899,7 +1009,7 @@
         errorLine2="          ~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/util/LintUtils.kt"
-            line="91"
+            line="93"
             column="11"/>
     </issue>
 
@@ -910,7 +1020,7 @@
         errorLine2="              ~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/util/LintUtils.kt"
-            line="101"
+            line="103"
             column="15"/>
     </issue>
 

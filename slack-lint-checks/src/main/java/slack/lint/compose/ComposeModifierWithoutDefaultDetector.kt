@@ -25,8 +25,7 @@ class ComposeModifierWithoutDefaultDetector : ComposableFunctionDetector(), Sour
     val ISSUE =
       Issue.create(
         id = "ComposeModifierWithoutDefault",
-        briefDescription =
-          "This @Composable function has a modifier parameter but it doesn't have a default value.",
+        briefDescription = "Missing Modifier default value",
         explanation =
           """
               This @Composable function has a modifier parameter but it doesn't have a default value.\
@@ -61,7 +60,7 @@ class ComposeModifierWithoutDefaultDetector : ComposableFunctionDetector(), Sour
           ISSUE,
           modifierParameter,
           context.getLocation(modifierParameter),
-          ISSUE.getBriefDescription(TextFormat.TEXT),
+          ISSUE.getExplanation(TextFormat.TEXT),
           fix()
             .replace()
             .name("Add '= Modifier' default value.")

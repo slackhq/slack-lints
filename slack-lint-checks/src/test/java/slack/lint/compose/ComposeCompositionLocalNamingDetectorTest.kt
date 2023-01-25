@@ -37,10 +37,10 @@ class ComposeCompositionLocalNamingDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/test.kt:2: Error: CompositionLocals should be named using the Local prefix as an adjective, followed by a descriptive noun. [ComposeCompositionLocalNaming]
+        src/test.kt:2: Error: CompositionLocals should be named using the Local prefix as an adjective, followed by a descriptive noun.See https://twitter.github.io/compose-rules/rules/#naming-compositionlocals-properly for more information. [ComposeCompositionLocalNaming]
                         val AppleLocal = staticCompositionLocalOf<String> { "Apple" }
                             ~~~~~~~~~~
-        src/test.kt:3: Error: CompositionLocals should be named using the Local prefix as an adjective, followed by a descriptive noun. [ComposeCompositionLocalNaming]
+        src/test.kt:3: Error: CompositionLocals should be named using the Local prefix as an adjective, followed by a descriptive noun.See https://twitter.github.io/compose-rules/rules/#naming-compositionlocals-properly for more information. [ComposeCompositionLocalNaming]
                         val Plum: String = staticCompositionLocalOf { "Plum" }
                             ~~~~
         2 errors, 0 warnings

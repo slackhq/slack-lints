@@ -34,9 +34,8 @@ class ComposeUnstableCollectionsDetector : ComposableFunctionDetector(), SourceC
     val ISSUE =
       Issue.create(
         id = "ComposeModifierWithoutDefault",
-        briefDescription =
-          "The Compose Compiler cannot infer the stability of a parameter if a stdlib collection type is used in it, even if the item type is stable.",
-        explanation = "<This is replaced when reported>",
+        briefDescription = "Immutable collections should be used in Composables",
+        explanation = "This is replaced when reported",
         category = Category.PRODUCTIVITY,
         priority = Priorities.NORMAL,
         severity = Severity.ERROR,

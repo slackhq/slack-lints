@@ -32,9 +32,8 @@ class ComposeRememberMissingDetector : ComposableFunctionDetector(), SourceCodeS
     val ISSUE =
       Issue.create(
         id = "ComposeRememberMissing",
-        briefDescription =
-          "Using a State value in a @Composable function without it being inside of a remember function.",
-        explanation = "<This is replaced when reported>",
+        briefDescription = "State values should be remembered",
+        explanation = "This is replaced when reported",
         category = Category.PRODUCTIVITY,
         priority = Priorities.NORMAL,
         severity = Severity.ERROR,

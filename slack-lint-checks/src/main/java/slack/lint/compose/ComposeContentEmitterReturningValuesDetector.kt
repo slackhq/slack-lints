@@ -36,8 +36,7 @@ constructor(
     val ISSUE =
       Issue.create(
           id = "ComposeContentEmitterReturningValues",
-          briefDescription =
-            "Composable functions should either emit content into the composition or return a value, but not both.",
+          briefDescription = "Composable functions should emit XOR return",
           explanation =
             """
             Composable functions should either emit content into the composition or return a value, but not both.\
@@ -114,7 +113,7 @@ constructor(
             ISSUE,
             composable,
             context.getLocation(composable),
-            ISSUE.getBriefDescription(TextFormat.TEXT)
+            ISSUE.getExplanation(TextFormat.TEXT)
           )
         }
 
@@ -152,7 +151,7 @@ constructor(
               ISSUE,
               composable,
               context.getLocation(composable),
-              ISSUE.getBriefDescription(TextFormat.TEXT)
+              ISSUE.getExplanation(TextFormat.TEXT)
             )
           }
       }

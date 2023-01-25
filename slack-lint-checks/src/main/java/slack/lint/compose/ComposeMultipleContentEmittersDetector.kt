@@ -36,8 +36,7 @@ constructor(
     val ISSUE =
       Issue.create(
           id = "ComposeMultipleContentEmitters",
-          briefDescription =
-            "Composable functions should only be emitting content into the composition from one source at their top level.",
+          briefDescription = "Composables should only be emit from one source",
           explanation =
             """
             Composable functions should only be emitting content into the composition from one source at their top level.\
@@ -113,7 +112,7 @@ constructor(
             ISSUE,
             composable,
             context.getLocation(composable),
-            ISSUE.getBriefDescription(TextFormat.TEXT)
+            ISSUE.getExplanation(TextFormat.TEXT)
           )
         }
 
@@ -152,7 +151,7 @@ constructor(
               ISSUE,
               composable,
               context.getLocation(composable),
-              ISSUE.getBriefDescription(TextFormat.TEXT)
+              ISSUE.getExplanation(TextFormat.TEXT)
             )
           }
       }

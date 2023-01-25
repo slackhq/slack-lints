@@ -38,11 +38,10 @@ constructor(
     val ISSUE =
       Issue.create(
           id = "ComposeModifierReused",
-          briefDescription =
-            "Modifiers should only be used once and by the root level layout of a Composable. This is true even if appended to or with other modifiers e.g. 'modifier.fillMaxWidth()'.",
+          briefDescription = "Modifiers should only be used once",
           explanation =
             """
-              Modifiers should only be used once and by the root level layout of a Composable. This is true even if appended to or with other modifiers e.g. 'modifier.fillMaxWidth()'.\
+              Modifiers should only be used once and by the root level layout of a Composable. This is true even if appended to or with other modifiers e.g. `modifier.fillMaxWidth()`.\
               \
               Use Modifier (with a capital 'M') to construct a new Modifier that you can pass to other composables.\
               \
@@ -107,7 +106,7 @@ constructor(
           ISSUE,
           callExpression,
           context.getLocation(callExpression),
-          ISSUE.getBriefDescription(TextFormat.TEXT)
+          ISSUE.getExplanation(TextFormat.TEXT)
         )
       }
   }

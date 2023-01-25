@@ -26,18 +26,18 @@ class ComposeCompositionLocalUsageDetector : Detector(), SourceCodeScanner {
     internal val ALLOW_LIST =
       StringOption(
         "allowed-composition-locals",
-        "A comma-separated list of CompositionLocals that should be allowed.",
+        "A comma-separated list of CompositionLocals that should be allowed",
         null,
-        "This property should define a comma-separated list of CompositionLocals that should be allowed."
+        "This property should define a comma-separated list of `CompositionLocal`s that should be allowed."
       )
 
     val ISSUE =
       Issue.create(
           id = "ComposeCompositionLocalUsage",
-          briefDescription = "CompositionLocals are discouraged.",
+          briefDescription = "CompositionLocals are discouraged",
           explanation =
             """
-                  CompositionLocals are implicit dependencies and creating new ones should be avoided.\
+                  `CompositionLocal`s are implicit dependencies and creating new ones should be avoided.\
                   \
                   See https://twitter.github.io/compose-rules/rules/#compositionlocals for more information.
               """
@@ -79,7 +79,7 @@ class ComposeCompositionLocalUsageDetector : Detector(), SourceCodeScanner {
             ISSUE,
             node,
             context.getLocation(node),
-            ISSUE.getBriefDescription(TextFormat.TEXT)
+            ISSUE.getExplanation(TextFormat.TEXT)
           )
         }
       }

@@ -33,8 +33,7 @@ constructor(
     val ISSUE =
       Issue.create(
           id = "ComposeModifierMissing",
-          briefDescription =
-            "This @Composable function emits content but doesn't have a modifier parameter.",
+          briefDescription = "Missing modifier parameter",
           explanation =
             """
               This @Composable function emits content but doesn't have a modifier parameter.\
@@ -76,7 +75,7 @@ constructor(
         ISSUE,
         function,
         context.getNameLocation(function),
-        ISSUE.getBriefDescription(TextFormat.TEXT)
+        ISSUE.getExplanation(TextFormat.TEXT)
       )
     }
   }

@@ -90,10 +90,10 @@ class ComposeMultipleContentEmittersDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test.kt:1: Error: Composable functions should only be emitting content into the composition from one source at their top level. [ComposeMultipleContentEmitters]
+          src/test.kt:1: Error: Composable functions should only be emitting content into the composition from one source at their top level.See https://twitter.github.io/compose-rules/rules/#do-not-emit-multiple-pieces-of-content for more information. [ComposeMultipleContentEmitters]
           @Composable
           ^
-          src/test.kt:6: Error: Composable functions should only be emitting content into the composition from one source at their top level. [ComposeMultipleContentEmitters]
+          src/test.kt:6: Error: Composable functions should only be emitting content into the composition from one source at their top level.See https://twitter.github.io/compose-rules/rules/#do-not-emit-multiple-pieces-of-content for more information. [ComposeMultipleContentEmitters]
           @Composable
           ^
           2 errors, 0 warnings
@@ -137,10 +137,10 @@ class ComposeMultipleContentEmittersDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test.kt:5: Error: Composable functions should only be emitting content into the composition from one source at their top level. [ComposeMultipleContentEmitters]
+          src/test.kt:5: Error: Composable functions should only be emitting content into the composition from one source at their top level.See https://twitter.github.io/compose-rules/rules/#do-not-emit-multiple-pieces-of-content for more information. [ComposeMultipleContentEmitters]
           @Composable
           ^
-          src/test.kt:18: Error: Composable functions should only be emitting content into the composition from one source at their top level. [ComposeMultipleContentEmitters]
+          src/test.kt:18: Error: Composable functions should only be emitting content into the composition from one source at their top level.See https://twitter.github.io/compose-rules/rules/#do-not-emit-multiple-pieces-of-content for more information. [ComposeMultipleContentEmitters]
           @Composable
           ^
           2 errors, 0 warnings
@@ -172,7 +172,7 @@ class ComposeMultipleContentEmittersDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test.kt:1: Error: Composable functions should only be emitting content into the composition from one source at their top level. [ComposeMultipleContentEmitters]
+          src/test.kt:1: Error: Composable functions should only be emitting content into the composition from one source at their top level.See https://twitter.github.io/compose-rules/rules/#do-not-emit-multiple-pieces-of-content for more information. [ComposeMultipleContentEmitters]
           @Composable
           ^
           1 errors, 0 warnings

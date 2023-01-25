@@ -26,7 +26,7 @@ class ComposeCompositionLocalNamingDetector : Detector(), SourceCodeScanner {
     internal val ALLOW_LIST =
       StringOption(
         "allowed-composition-local-names",
-        "A comma-separated list of CompositionLocal names that should be allowed.",
+        "A comma-separated list of CompositionLocal names that should be allowed",
         null,
         "This property should define a comma-separated list of CompositionLocal names that should be allowed."
       )
@@ -34,11 +34,10 @@ class ComposeCompositionLocalNamingDetector : Detector(), SourceCodeScanner {
     val ISSUE =
       Issue.create(
           id = "ComposeCompositionLocalNaming",
-          briefDescription =
-            "CompositionLocals should be named using the `Local` prefix as an adjective, followed by a descriptive noun.",
+          briefDescription = "CompositionLocals should be named using the `Local` prefix",
           explanation =
             """
-                  CompositionLocals should be named using the `Local` prefix as an adjective, followed by a descriptive noun.\
+                  `CompositionLocals` should be named using the `Local` prefix as an adjective, followed by a descriptive noun.\
                   \
                   See https://twitter.github.io/compose-rules/rules/#naming-compositionlocals-properly for more information.
               """
@@ -82,7 +81,7 @@ class ComposeCompositionLocalNamingDetector : Detector(), SourceCodeScanner {
               ISSUE,
               node,
               context.getNameLocation(node),
-              ISSUE.getBriefDescription(TextFormat.TEXT)
+              ISSUE.getExplanation(TextFormat.TEXT)
             )
           }
         }

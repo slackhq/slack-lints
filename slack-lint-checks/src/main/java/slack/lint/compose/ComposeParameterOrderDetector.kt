@@ -39,9 +39,8 @@ class ComposeParameterOrderDetector : ComposableFunctionDetector(), SourceCodeSc
     val ISSUE =
       Issue.create(
         id = "ComposeModifierWithoutDefault",
-        briefDescription =
-          "Parameters in a composable function should be ordered following this pattern: params without defaults, modifiers, params with defaults and optionally, a trailing function that might not have a default param.",
-        explanation = "<This is replaced when reported>",
+        briefDescription = "Composable function parameters should be ordered",
+        explanation = "This is replaced when reported",
         category = Category.PRODUCTIVITY,
         priority = Priorities.NORMAL,
         severity = Severity.ERROR,

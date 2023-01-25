@@ -26,7 +26,7 @@ constructor(
     internal val ALLOWED_COMPOSABLE_FUNCTION_NAMES =
       StringOption(
         "allowed-composable-function-names",
-        "A comma-separated list of regexes of allowed composable function names.",
+        "A comma-separated list of regexes of allowed composable function names",
         null,
         "This property should define comma-separated list of regexes of allowed composable function names."
       )
@@ -34,8 +34,7 @@ constructor(
     private val ISSUE_UPPERCASE =
       Issue.create(
           id = "ComposeNaming",
-          briefDescription =
-            "Composable functions that return Unit should start with an uppercase letter.",
+          briefDescription = "Unit Composables should be uppercase",
           explanation =
             """
               Composable functions that return Unit should start with an uppercase letter.\
@@ -54,8 +53,7 @@ constructor(
     private val ISSUE_LOWERCASE =
       Issue.create(
           id = "ComposeNaming",
-          briefDescription =
-            "Composable functions that return a value should start with a lowercase letter.",
+          briefDescription = "Value-returning Composables should be lowercase",
           explanation =
             """
               Composable functions that return a value should start with a lowercase letter.\
@@ -90,7 +88,7 @@ constructor(
           ISSUE_LOWERCASE,
           function,
           context.getNameLocation(function),
-          ISSUE_LOWERCASE.getBriefDescription(TextFormat.TEXT)
+          ISSUE_LOWERCASE.getExplanation(TextFormat.TEXT)
         )
       }
     } else {
@@ -101,7 +99,7 @@ constructor(
           ISSUE_UPPERCASE,
           function,
           context.getNameLocation(function),
-          ISSUE_UPPERCASE.getBriefDescription(TextFormat.TEXT)
+          ISSUE_UPPERCASE.getExplanation(TextFormat.TEXT)
         )
       }
     }

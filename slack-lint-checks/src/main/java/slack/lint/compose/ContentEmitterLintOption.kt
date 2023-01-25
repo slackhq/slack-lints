@@ -15,7 +15,7 @@ class ContentEmitterLintOption(option: StringOption) : StringSetLintOption(optio
     fun newOption(): StringOption {
       return StringOption(
         "content-emitters",
-        "A comma-separated list of known content-emitting composables.",
+        "A comma-separated list of known content-emitting composables",
         null,
         "This property should define a comma-separated list of known content-emitting composables."
       )
