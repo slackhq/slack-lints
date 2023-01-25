@@ -46,4 +46,4 @@ val KtCallableDeclaration.isTypeUnstableCollection: Boolean
   get() = typeReference?.text?.matchesAnyOf(KnownUnstableCollectionTypesRegex) == true
 
 val KnownUnstableCollectionTypesRegex =
-  sequenceOf("Set<.*>\\??", "List<.*>\\??", "Map<.*>\\??").map { Regex(it) }
+  sequenceOf("Collection<.*>\\??", "Set<.*>\\??", "List<.*>\\??", "Map<.*>\\??").map { Regex(it) }
