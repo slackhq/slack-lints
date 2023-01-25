@@ -71,7 +71,7 @@ constructor(
 
     // In case we didn't find any `modifier` parameters, we check if it emits content and report the
     // error if so.
-    if (function.emitsContent(contentEmitterOption.providedContentEmitters)) {
+    if (function.emitsContent(contentEmitterOption.value)) {
       context.report(
         ISSUE,
         function,

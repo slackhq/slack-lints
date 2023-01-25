@@ -58,7 +58,7 @@ constructor(
     get() =
       bodyBlockExpression?.let { block ->
         block.statements.filterIsInstance<KtCallExpression>().count {
-          it.emitsContent(contentEmitterOption.providedContentEmitters)
+          it.emitsContent(contentEmitterOption.value)
         }
       }
         ?: 0
@@ -67,8 +67,7 @@ constructor(
     val bodyBlock = bodyBlockExpression ?: return 0
     return bodyBlock.statements.filterIsInstance<KtCallExpression>().count { callExpression ->
       // If it's a direct hit on our list, it should count directly
-      if (callExpression.emitsContent(contentEmitterOption.providedContentEmitters))
-        return@count true
+      if (callExpression.emitsContent(contentEmitterOption.value)) return@count true
 
       val name = callExpression.calleeExpression?.text ?: return@count false
       // If the hit is in the provided mapping, it means it is using a composable that we know emits

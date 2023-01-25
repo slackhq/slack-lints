@@ -2,19 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.compose
 
-import com.android.tools.lint.client.api.Configuration
 import com.android.tools.lint.detector.api.StringOption
-import slack.lint.util.LintOption
-import slack.lint.util.loadAsSet
 
-class ContentEmitterLintOption(private val option: StringOption) : LintOption {
-  var providedContentEmitters: Set<String> = emptySet()
-    private set
-
-  override fun load(configuration: Configuration) {
-    providedContentEmitters = option.loadAsSet(configuration)
-  }
-
+class ContentEmitterLintOption(option: StringOption) : StringSetLintOption(option) {
   companion object {
     /**
      * We reuse the content-emitters option in lint but it has this annoying behavior where options
