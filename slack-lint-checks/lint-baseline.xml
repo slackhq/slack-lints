@@ -652,6 +652,17 @@
 
     <issue
         id="LintImplTrimIndent"
+        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
+        errorLine1="              .trimIndent(),"
+        errorLine2="               ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposePreviewPublicDetector.kt"
+            line="50"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="LintImplTrimIndent"
         message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users. Instead, call `.indented()` on the surrounding `kotlin()` test file construction"
         errorLine1="              .trimIndent()"
         errorLine2="               ~~~~~~~~~~~~">
