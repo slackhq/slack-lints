@@ -6,6 +6,7 @@ import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
+import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
@@ -18,9 +19,16 @@ import slack.lint.compose.util.returnsValue
 import slack.lint.util.Priorities
 import slack.lint.util.sourceImplementation
 
-class ComposeModifierMissingDetector : ComposableFunctionDetector() {
+class ComposeModifierMissingDetector
+@JvmOverloads
+constructor(
+  private val contentEmitterOption: ContentEmitterLintOption =
+    ContentEmitterLintOption(CONTENT_EMITTER_OPTION)
+) : ComposableFunctionDetector(contentEmitterOption), SourceCodeScanner {
 
   companion object {
+
+    val CONTENT_EMITTER_OPTION = ContentEmitterLintOption.newOption()
 
     val ISSUE =
       Issue.create(
@@ -39,7 +47,7 @@ class ComposeModifierMissingDetector : ComposableFunctionDetector() {
           severity = Severity.ERROR,
           implementation = sourceImplementation<ComposeModifierMissingDetector>()
         )
-        .setOptions(listOf(PROVIDED_CONTENT_EMITTERS))
+        .setOptions(listOf(CONTENT_EMITTER_OPTION))
   }
 
   override fun visitComposable(context: JavaContext, function: KtFunction) {
@@ -63,7 +71,7 @@ class ComposeModifierMissingDetector : ComposableFunctionDetector() {
 
     // In case we didn't find any `modifier` parameters, we check if it emits content and report the
     // error if so.
-    if (function.emitsContent(providedContentEmitters())) {
+    if (function.emitsContent(contentEmitterOption.providedContentEmitters)) {
       context.report(
         ISSUE,
         function,

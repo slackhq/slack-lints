@@ -18,13 +18,20 @@ import slack.lint.compose.util.emitsContent
 import slack.lint.compose.util.findChildrenByClass
 import slack.lint.compose.util.hasReceiverType
 import slack.lint.compose.util.isComposable
+import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.Priorities
 import slack.lint.util.sourceImplementation
 
-class ComposeContentEmitterReturningValuesDetector :
-  ContentEmitterAwareDetector(), SourceCodeScanner {
+class ComposeContentEmitterReturningValuesDetector
+@JvmOverloads
+constructor(
+  private val contentEmitterOption: ContentEmitterLintOption =
+    ContentEmitterLintOption(CONTENT_EMITTER_OPTION)
+) : OptionLoadingDetector(contentEmitterOption), SourceCodeScanner {
 
   companion object {
+
+    val CONTENT_EMITTER_OPTION = ContentEmitterLintOption.newOption()
 
     val ISSUE =
       Issue.create(
@@ -44,14 +51,14 @@ class ComposeContentEmitterReturningValuesDetector :
           severity = Severity.ERROR,
           implementation = sourceImplementation<ComposeContentEmitterReturningValuesDetector>()
         )
-        .setOptions(listOf(PROVIDED_CONTENT_EMITTERS))
+        .setOptions(listOf(CONTENT_EMITTER_OPTION))
   }
 
   internal val KtFunction.directUiEmitterCount: Int
     get() =
       bodyBlockExpression?.let { block ->
         block.statements.filterIsInstance<KtCallExpression>().count {
-          it.emitsContent(providedContentEmitters())
+          it.emitsContent(contentEmitterOption.providedContentEmitters)
         }
       }
         ?: 0
@@ -60,7 +67,8 @@ class ComposeContentEmitterReturningValuesDetector :
     val bodyBlock = bodyBlockExpression ?: return 0
     return bodyBlock.statements.filterIsInstance<KtCallExpression>().count { callExpression ->
       // If it's a direct hit on our list, it should count directly
-      if (callExpression.emitsContent(providedContentEmitters())) return@count true
+      if (callExpression.emitsContent(contentEmitterOption.providedContentEmitters))
+        return@count true
 
       val name = callExpression.calleeExpression?.text ?: return@count false
       // If the hit is in the provided mapping, it means it is using a composable that we know emits

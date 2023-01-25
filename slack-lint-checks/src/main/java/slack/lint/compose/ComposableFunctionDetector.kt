@@ -9,8 +9,11 @@ import com.android.tools.lint.detector.api.isKotlin
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.uast.UMethod
 import slack.lint.compose.util.isComposable
+import slack.lint.util.LintOption
+import slack.lint.util.OptionLoadingDetector
 
-abstract class ComposableFunctionDetector : ContentEmitterAwareDetector(), SourceCodeScanner {
+abstract class ComposableFunctionDetector(vararg options: LintOption) :
+  OptionLoadingDetector(*options), SourceCodeScanner {
 
   final override fun getApplicableUastTypes() = listOf(UMethod::class.java)
 

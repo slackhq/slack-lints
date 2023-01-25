@@ -12,7 +12,6 @@ import com.android.tools.lint.client.api.TYPE_FLOAT_WRAPPER
 import com.android.tools.lint.client.api.TYPE_INTEGER_WRAPPER
 import com.android.tools.lint.client.api.TYPE_LONG_WRAPPER
 import com.android.tools.lint.client.api.TYPE_SHORT_WRAPPER
-import com.android.tools.lint.detector.api.Context
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Implementation
 import com.android.tools.lint.detector.api.JavaContext
@@ -316,10 +315,11 @@ internal fun UMethod.safeReturnType(context: JavaContext): PsiType? {
   }
 }
 
-/**
- * Loads a [StringOption] as a [delimiter]-delimited [Set] of strings.
- */
-internal fun StringOption.loadAsSet(configuration: Configuration, delimiter: String = ","): Set<String> {
+/** Loads a [StringOption] as a [delimiter]-delimited [Set] of strings. */
+internal fun StringOption.loadAsSet(
+  configuration: Configuration,
+  delimiter: String = ","
+): Set<String> {
   return getValue(configuration)
     ?.splitToSequence(delimiter)
     .orEmpty()
