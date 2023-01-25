@@ -3,6 +3,7 @@
 package slack.lint.compose
 
 import com.android.tools.lint.detector.api.StringOption
+import slack.lint.util.StringSetLintOption
 
 class ContentEmitterLintOption(option: StringOption) : StringSetLintOption(option) {
   companion object {

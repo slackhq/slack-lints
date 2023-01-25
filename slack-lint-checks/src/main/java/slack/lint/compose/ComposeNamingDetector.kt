@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.psi.KtFunction
 import slack.lint.compose.util.hasReceiverType
 import slack.lint.compose.util.returnsValue
 import slack.lint.util.Priorities
+import slack.lint.util.StringSetLintOption
 import slack.lint.util.sourceImplementation
 
 class ComposeNamingDetector
