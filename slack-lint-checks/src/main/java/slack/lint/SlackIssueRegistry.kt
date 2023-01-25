@@ -14,6 +14,7 @@ import slack.lint.compose.ComposeModifierMissingDetector
 import slack.lint.compose.ComposeModifierReusedDetector
 import slack.lint.compose.ComposeModifierWithoutDefaultDetector
 import slack.lint.compose.ComposeMultipleContentEmittersDetector
+import slack.lint.compose.ComposeMutableParametersDetector
 import slack.lint.compose.ComposeNamingDetector
 import slack.lint.compose.ComposeParameterOrderDetector
 import slack.lint.compose.ComposeRememberMissingDetector
@@ -86,6 +87,7 @@ class SlackIssueRegistry : IssueRegistry() {
       ComposeRememberMissingDetector.ISSUE,
       ComposeMultipleContentEmittersDetector.ISSUE,
       ComposeUnstableCollectionsDetector.ISSUE,
+      ComposeMutableParametersDetector.ISSUE,
       // </editor-fold>
     )
 }
