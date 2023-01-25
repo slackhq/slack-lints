@@ -18,6 +18,7 @@ import slack.lint.compose.ComposeMutableParametersDetector
 import slack.lint.compose.ComposeNamingDetector
 import slack.lint.compose.ComposeParameterOrderDetector
 import slack.lint.compose.ComposePreviewNamingDetector
+import slack.lint.compose.ComposePreviewPublicDetector
 import slack.lint.compose.ComposeRememberMissingDetector
 import slack.lint.compose.ComposeUnstableCollectionsDetector
 import slack.lint.denylistedapis.DenyListedApiDetector
@@ -90,6 +91,7 @@ class SlackIssueRegistry : IssueRegistry() {
       ComposeUnstableCollectionsDetector.ISSUE,
       ComposeMutableParametersDetector.ISSUE,
       ComposePreviewNamingDetector.ISSUE,
+      ComposePreviewPublicDetector.ISSUE,
       // </editor-fold>
     )
 }
