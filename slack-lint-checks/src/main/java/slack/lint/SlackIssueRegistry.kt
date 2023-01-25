@@ -12,6 +12,7 @@ import slack.lint.compose.ComposeCompositionLocalUsageDetector
 import slack.lint.compose.ComposeContentEmitterReturningValuesDetector
 import slack.lint.compose.ComposeModifierMissingDetector
 import slack.lint.compose.ComposeModifierReusedDetector
+import slack.lint.compose.ComposeModifierWithoutDefaultDetector
 import slack.lint.compose.ComposeNamingDetector
 import slack.lint.denylistedapis.DenyListedApiDetector
 import slack.lint.eithernet.DoNotExposeEitherNetInRepositoriesDetector
@@ -75,5 +76,6 @@ class SlackIssueRegistry : IssueRegistry() {
       ComposeModifierMissingDetector.ISSUE,
       *ComposeNamingDetector.ISSUES,
       ComposeModifierReusedDetector.ISSUE,
+      ComposeModifierWithoutDefaultDetector.ISSUE,
     )
 }
