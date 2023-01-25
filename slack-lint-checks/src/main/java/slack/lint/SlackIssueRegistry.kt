@@ -13,6 +13,7 @@ import slack.lint.compose.ComposeContentEmitterReturningValuesDetector
 import slack.lint.compose.ComposeModifierMissingDetector
 import slack.lint.compose.ComposeModifierReusedDetector
 import slack.lint.compose.ComposeModifierWithoutDefaultDetector
+import slack.lint.compose.ComposeMultipleContentEmittersDetector
 import slack.lint.compose.ComposeNamingDetector
 import slack.lint.compose.ComposeParameterOrderDetector
 import slack.lint.compose.ComposeRememberMissingDetector
@@ -72,6 +73,7 @@ class SlackIssueRegistry : IssueRegistry() {
       MissingResourceImportAliasDetector.ISSUE,
       WrongResourceImportAliasDetector.ISSUE,
       DenyListedApiDetector.ISSUE,
+      // <editor-fold desc="Compose Detectors">
       ComposeCompositionLocalUsageDetector.ISSUE,
       ComposeCompositionLocalNamingDetector.ISSUE,
       ComposeContentEmitterReturningValuesDetector.ISSUE,
@@ -81,5 +83,7 @@ class SlackIssueRegistry : IssueRegistry() {
       ComposeModifierWithoutDefaultDetector.ISSUE,
       ComposeParameterOrderDetector.ISSUE,
       ComposeRememberMissingDetector.ISSUE,
+      ComposeMultipleContentEmittersDetector.ISSUE,
+      // </editor-fold>
     )
 }
