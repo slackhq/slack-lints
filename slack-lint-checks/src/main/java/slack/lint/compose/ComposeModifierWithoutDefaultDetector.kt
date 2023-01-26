@@ -28,8 +28,8 @@ class ComposeModifierWithoutDefaultDetector : ComposableFunctionDetector(), Sour
         briefDescription = "Missing Modifier default value",
         explanation =
           """
-              This @Composable function has a modifier parameter but it doesn't have a default value.\
-              \
+              This @Composable function has a modifier parameter but it doesn't have a default value. \
+               \
               See https://twitter.github.io/compose-rules/rules/#modifiers-should-have-default-parameters for more information.
             """
             .trimIndent(),

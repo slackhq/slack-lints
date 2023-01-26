@@ -37,8 +37,8 @@ class ComposeCompositionLocalUsageDetector : Detector(), SourceCodeScanner {
           briefDescription = "CompositionLocals are discouraged",
           explanation =
             """
-                  `CompositionLocal`s are implicit dependencies and creating new ones should be avoided.\
-                  \
+                  `CompositionLocal`s are implicit dependencies and creating new ones should be avoided. \
+                   \
                   See https://twitter.github.io/compose-rules/rules/#compositionlocals for more information.
               """
               .trimIndent(),

@@ -22,8 +22,8 @@ class ComposePreviewNamingDetector : Detector(), SourceCodeScanner {
   companion object {
     fun createMessage(count: Int, suggestedSuffix: String): String =
       """
-            Preview annotations with $count preview annotations should end with the `$suggestedSuffix` suffix.\
-            \
+            Preview annotations with $count preview annotations should end with the `$suggestedSuffix` suffix. \
+             \
             See https://twitter.github.io/compose-rules/rules/#naming-multipreview-annotations-properly for more information.
         """
         .trimIndent()
