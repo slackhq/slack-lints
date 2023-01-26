@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.2.1
+-----
+
+_2023-01-26_
+
+- **Fix**: Improve and fix a number of explanation string formatting in the new compose lints.
+
 0.2.0
 -----
 
