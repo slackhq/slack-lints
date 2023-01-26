@@ -66,12 +66,10 @@ class ComposePreviewPublicDetectorTest : BaseSlackLintTest() {
       .expect(
         """
           src/test.kt:1: Error: Composables annotated with @Preview that are used only for previewing the UI should not be public.
-
           See https://twitter.github.io/compose-rules/rules/#preview-composables-should-not-be-public for more information. [ComposePreviewPublic]
           @Preview
           ^
           src/test.kt:4: Error: Composables annotated with @Preview that are used only for previewing the UI should not be public.
-
           See https://twitter.github.io/compose-rules/rules/#preview-composables-should-not-be-public for more information. [ComposePreviewPublic]
           @CombinedPreviews
           ^
@@ -117,12 +115,10 @@ class ComposePreviewPublicDetectorTest : BaseSlackLintTest() {
       .expect(
         """
           src/test.kt:1: Error: Composables annotated with @Preview that are used only for previewing the UI should not be public.
-
           See https://twitter.github.io/compose-rules/rules/#preview-composables-should-not-be-public for more information. [ComposePreviewPublic]
           @Preview
           ^
           src/test.kt:5: Error: Composables annotated with @Preview that are used only for previewing the UI should not be public.
-
           See https://twitter.github.io/compose-rules/rules/#preview-composables-should-not-be-public for more information. [ComposePreviewPublic]
           @CombinedPreviews
           ^

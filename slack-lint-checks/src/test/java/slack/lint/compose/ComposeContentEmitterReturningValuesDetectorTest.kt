@@ -92,13 +92,11 @@ class ComposeContentEmitterReturningValuesDetectorTest : BaseSlackLintTest() {
         """
           src/test.kt:1: Error: Composable functions should either emit content into the composition or return a value, but not both.
           If a composable should offer additional control surfaces to its caller, those control surfaces or callbacks should be provided as parameters to the composable function by the caller.
-
           See https://twitter.github.io/compose-rules/rules/#do-not-emit-content-and-return-a-result for more information. [ComposeContentEmitterReturningValues]
           @Composable
           ^
           src/test.kt:6: Error: Composable functions should either emit content into the composition or return a value, but not both.
           If a composable should offer additional control surfaces to its caller, those control surfaces or callbacks should be provided as parameters to the composable function by the caller.
-
           See https://twitter.github.io/compose-rules/rules/#do-not-emit-content-and-return-a-result for more information. [ComposeContentEmitterReturningValues]
           @Composable
           ^
@@ -145,13 +143,11 @@ class ComposeContentEmitterReturningValuesDetectorTest : BaseSlackLintTest() {
         """
           src/test.kt:5: Error: Composable functions should either emit content into the composition or return a value, but not both.
           If a composable should offer additional control surfaces to its caller, those control surfaces or callbacks should be provided as parameters to the composable function by the caller.
-
           See https://twitter.github.io/compose-rules/rules/#do-not-emit-content-and-return-a-result for more information. [ComposeContentEmitterReturningValues]
           @Composable
           ^
           src/test.kt:18: Error: Composable functions should either emit content into the composition or return a value, but not both.
           If a composable should offer additional control surfaces to its caller, those control surfaces or callbacks should be provided as parameters to the composable function by the caller.
-
           See https://twitter.github.io/compose-rules/rules/#do-not-emit-content-and-return-a-result for more information. [ComposeContentEmitterReturningValues]
           @Composable
           ^
@@ -186,7 +182,6 @@ class ComposeContentEmitterReturningValuesDetectorTest : BaseSlackLintTest() {
         """
           src/test.kt:1: Error: Composable functions should either emit content into the composition or return a value, but not both.
           If a composable should offer additional control surfaces to its caller, those control surfaces or callbacks should be provided as parameters to the composable function by the caller.
-
           See https://twitter.github.io/compose-rules/rules/#do-not-emit-content-and-return-a-result for more information. [ComposeContentEmitterReturningValues]
           @Composable
           ^

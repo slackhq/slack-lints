@@ -38,7 +38,6 @@ class ComposeCompositionLocalNamingDetector : Detector(), SourceCodeScanner {
           explanation =
             """
               `CompositionLocals` should be named using the `Local` prefix as an adjective, followed by a descriptive noun.
-
               See https://twitter.github.io/compose-rules/rules/#naming-compositionlocals-properly for more information.
             """,
           category = Category.PRODUCTIVITY,

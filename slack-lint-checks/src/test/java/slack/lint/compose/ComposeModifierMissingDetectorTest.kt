@@ -56,17 +56,14 @@ class ComposeModifierMissingDetectorTest : BaseSlackLintTest() {
       .expect(
         """
           src/test.kt:2: Error: This @Composable function emits content but doesn't have a modifier parameter.
-
           See https://twitter.github.io/compose-rules/rules/#when-should-i-expose-modifier-parameters for more information. [ComposeModifierMissing]
           fun Something1() {
               ~~~~~~~~~~
           src/test.kt:7: Error: This @Composable function emits content but doesn't have a modifier parameter.
-
           See https://twitter.github.io/compose-rules/rules/#when-should-i-expose-modifier-parameters for more information. [ComposeModifierMissing]
           fun Something2() {
               ~~~~~~~~~~
           src/test.kt:12: Error: This @Composable function emits content but doesn't have a modifier parameter.
-
           See https://twitter.github.io/compose-rules/rules/#when-should-i-expose-modifier-parameters for more information. [ComposeModifierMissing]
           fun Something3(): Unit {
               ~~~~~~~~~~
@@ -103,12 +100,10 @@ class ComposeModifierMissingDetectorTest : BaseSlackLintTest() {
       .expect(
         """
           src/test.kt:2: Error: This @Composable function emits content but doesn't have a modifier parameter.
-
           See https://twitter.github.io/compose-rules/rules/#when-should-i-expose-modifier-parameters for more information. [ComposeModifierMissing]
           fun Something1() {
               ~~~~~~~~~~
           src/test.kt:7: Error: This @Composable function emits content but doesn't have a modifier parameter.
-
           See https://twitter.github.io/compose-rules/rules/#when-should-i-expose-modifier-parameters for more information. [ComposeModifierMissing]
           fun Something2(): Unit {
               ~~~~~~~~~~
@@ -288,7 +283,6 @@ class ComposeModifierMissingDetectorTest : BaseSlackLintTest() {
       .expect(
         """
           src/test.kt:2: Error: This @Composable function emits content but doesn't have a modifier parameter.
-
           See https://twitter.github.io/compose-rules/rules/#when-should-i-expose-modifier-parameters for more information. [ComposeModifierMissing]
           fun MyDialog() {
               ~~~~~~~~

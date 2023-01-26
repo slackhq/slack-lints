@@ -71,17 +71,14 @@ class ComposePreviewNamingDetectorTest : BaseSlackLintTest() {
       .expect(
         """
           src/Banana.kt:1: Error: Preview annotations with 1 preview annotations should end with the Preview suffix.
-
           See https://twitter.github.io/compose-rules/rules/#naming-multipreview-annotations-properly for more information. [ComposePreviewNaming]
           @Preview
           ^
           src/Banana.kt:3: Error: Preview annotations with 1 preview annotations should end with the Preview suffix.
-
           See https://twitter.github.io/compose-rules/rules/#naming-multipreview-annotations-properly for more information. [ComposePreviewNaming]
           @Preview
           ^
           src/Banana.kt:5: Error: Preview annotations with 1 preview annotations should end with the Preview suffix.
-
           See https://twitter.github.io/compose-rules/rules/#naming-multipreview-annotations-properly for more information. [ComposePreviewNaming]
           @BananaPreview
           ^
@@ -111,12 +108,10 @@ class ComposePreviewNamingDetectorTest : BaseSlackLintTest() {
       .expect(
         """
           src/BananaPreview.kt:1: Error: Preview annotations with 2 preview annotations should end with the Previews suffix.
-
           See https://twitter.github.io/compose-rules/rules/#naming-multipreview-annotations-properly for more information. [ComposePreviewNaming]
           @Preview
           ^
           src/BananaPreview.kt:4: Error: Preview annotations with 2 preview annotations should end with the Previews suffix.
-
           See https://twitter.github.io/compose-rules/rules/#naming-multipreview-annotations-properly for more information. [ComposePreviewNaming]
           @BananaPreview
           ^
