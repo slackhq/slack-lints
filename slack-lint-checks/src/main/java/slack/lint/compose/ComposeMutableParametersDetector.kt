@@ -23,10 +23,9 @@ class ComposeMutableParametersDetector : ComposableFunctionDetector(), SourceCod
           """
               Using mutable objects as state in Compose will cause your users to see incorrect or stale data in your app.
               Mutable objects that are not observable, such as `ArrayList<T>` or a mutable data class, cannot be observed by Compose to trigger recomposition when they change.
-              
+
               See https://twitter.github.io/compose-rules/rules/#when-should-i-expose-modifier-parameters for more information.
-            """
-            .trimIndent(),
+            """,
         category = Category.PRODUCTIVITY,
         priority = Priorities.NORMAL,
         severity = Severity.ERROR,

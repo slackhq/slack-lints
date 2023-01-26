@@ -40,16 +40,24 @@ class ComposeCompositionLocalUsageDetectorTest : BaseSlackLintTest() {
       .expectErrorCount(4)
       .expect(
         """
-        src/test.kt:2: Error: `CompositionLocal`s are implicit dependencies and creating new ones should be avoided.See https://twitter.github.io/compose-rules/rules/#compositionlocals for more information. [ComposeCompositionLocalUsage]
+        src/test.kt:2: Error: `CompositionLocal`s are implicit dependencies and creating new ones should be avoided.
+
+        See https://twitter.github.io/compose-rules/rules/#compositionlocals for more information. [ComposeCompositionLocalUsage]
                         private val LocalApple = staticCompositionLocalOf<String> { "Apple" }
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test.kt:3: Error: `CompositionLocal`s are implicit dependencies and creating new ones should be avoided.See https://twitter.github.io/compose-rules/rules/#compositionlocals for more information. [ComposeCompositionLocalUsage]
+        src/test.kt:3: Error: `CompositionLocal`s are implicit dependencies and creating new ones should be avoided.
+
+        See https://twitter.github.io/compose-rules/rules/#compositionlocals for more information. [ComposeCompositionLocalUsage]
                         internal val LocalPlum: String = staticCompositionLocalOf { "Plum" }
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test.kt:4: Error: `CompositionLocal`s are implicit dependencies and creating new ones should be avoided.See https://twitter.github.io/compose-rules/rules/#compositionlocals for more information. [ComposeCompositionLocalUsage]
+        src/test.kt:4: Error: `CompositionLocal`s are implicit dependencies and creating new ones should be avoided.
+
+        See https://twitter.github.io/compose-rules/rules/#compositionlocals for more information. [ComposeCompositionLocalUsage]
                         val LocalPrune = compositionLocalOf { "Prune" }
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test.kt:5: Error: `CompositionLocal`s are implicit dependencies and creating new ones should be avoided.See https://twitter.github.io/compose-rules/rules/#compositionlocals for more information. [ComposeCompositionLocalUsage]
+        src/test.kt:5: Error: `CompositionLocal`s are implicit dependencies and creating new ones should be avoided.
+
+        See https://twitter.github.io/compose-rules/rules/#compositionlocals for more information. [ComposeCompositionLocalUsage]
                         private val LocalKiwi: String = compositionLocalOf { "Kiwi" }
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         4 errors, 0 warnings

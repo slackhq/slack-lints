@@ -40,10 +40,9 @@ constructor(
           explanation =
             """
             Composable functions should only be emitting content into the composition from one source at their top level.
-            
+
             See https://twitter.github.io/compose-rules/rules/#do-not-emit-multiple-pieces-of-content for more information.
-        """
-              .trimIndent(),
+        """,
           category = Category.PRODUCTIVITY,
           priority = Priorities.NORMAL,
           severity = Severity.ERROR,

@@ -48,10 +48,16 @@ class ComposeRememberMissingDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test.kt:3: Error: Using mutableStateOf in a @Composable function without it being inside of a remember function.If you don't remember the state instance, a new state instance will be created when the function is recomposed.See https://twitter.github.io/compose-rules/rules/#state-should-be-remembered-in-composables for more information. [ComposeRememberMissing]
+          src/test.kt:3: Error: Using mutableStateOf in a @Composable function without it being inside of a remember function.
+          If you don't remember the state instance, a new state instance will be created when the function is recomposed.
+
+          See https://twitter.github.io/compose-rules/rules/#state-should-be-remembered-in-composables for more information. [ComposeRememberMissing]
               val something = mutableStateOf("X")
                               ~~~~~~~~~~~~~~~~~~~
-          src/test.kt:6: Error: Using mutableStateOf in a @Composable function without it being inside of a remember function.If you don't remember the state instance, a new state instance will be created when the function is recomposed.See https://twitter.github.io/compose-rules/rules/#state-should-be-remembered-in-composables for more information. [ComposeRememberMissing]
+          src/test.kt:6: Error: Using mutableStateOf in a @Composable function without it being inside of a remember function.
+          If you don't remember the state instance, a new state instance will be created when the function is recomposed.
+
+          See https://twitter.github.io/compose-rules/rules/#state-should-be-remembered-in-composables for more information. [ComposeRememberMissing]
           fun MyComposable(something: State<String> = mutableStateOf("X")) {
                                                       ~~~~~~~~~~~~~~~~~~~
           2 errors, 0 warnings
@@ -125,10 +131,16 @@ class ComposeRememberMissingDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test.kt:3: Error: Using derivedStateOf in a @Composable function without it being inside of a remember function.If you don't remember the state instance, a new state instance will be created when the function is recomposed.See https://twitter.github.io/compose-rules/rules/#state-should-be-remembered-in-composables for more information. [ComposeRememberMissing]
+          src/test.kt:3: Error: Using derivedStateOf in a @Composable function without it being inside of a remember function.
+          If you don't remember the state instance, a new state instance will be created when the function is recomposed.
+
+          See https://twitter.github.io/compose-rules/rules/#state-should-be-remembered-in-composables for more information. [ComposeRememberMissing]
               val something = derivedStateOf { "X" }
                               ~~~~~~~~~~~~~~~~~~~~~~
-          src/test.kt:6: Error: Using derivedStateOf in a @Composable function without it being inside of a remember function.If you don't remember the state instance, a new state instance will be created when the function is recomposed.See https://twitter.github.io/compose-rules/rules/#state-should-be-remembered-in-composables for more information. [ComposeRememberMissing]
+          src/test.kt:6: Error: Using derivedStateOf in a @Composable function without it being inside of a remember function.
+          If you don't remember the state instance, a new state instance will be created when the function is recomposed.
+
+          See https://twitter.github.io/compose-rules/rules/#state-should-be-remembered-in-composables for more information. [ComposeRememberMissing]
           fun MyComposable(something: State<String> = derivedStateOf { "X" }) {
                                                       ~~~~~~~~~~~~~~~~~~~~~~
           2 errors, 0 warnings

@@ -29,10 +29,9 @@ class ComposeModifierWithoutDefaultDetector : ComposableFunctionDetector(), Sour
         explanation =
           """
               This @Composable function has a modifier parameter but it doesn't have a default value.
-              
+
               See https://twitter.github.io/compose-rules/rules/#modifiers-should-have-default-parameters for more information.
-            """
-            .trimIndent(),
+            """,
         category = Category.PRODUCTIVITY,
         priority = Priorities.NORMAL,
         severity = Severity.ERROR,
