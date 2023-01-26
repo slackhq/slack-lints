@@ -37,11 +37,9 @@ class ComposeCompositionLocalNamingDetector : Detector(), SourceCodeScanner {
           briefDescription = "CompositionLocals should be named using the `Local` prefix",
           explanation =
             """
-                  `CompositionLocals` should be named using the `Local` prefix as an adjective, followed by a descriptive noun.\
-                  \
-                  See https://twitter.github.io/compose-rules/rules/#naming-compositionlocals-properly for more information.
-              """
-              .trimIndent(),
+              `CompositionLocals` should be named using the `Local` prefix as an adjective, followed by a descriptive noun.
+              See https://twitter.github.io/compose-rules/rules/#naming-compositionlocals-properly for more information.
+            """,
           category = Category.PRODUCTIVITY,
           priority = Priorities.NORMAL,
           severity = Severity.ERROR,

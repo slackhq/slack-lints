@@ -47,6 +47,50 @@
 
     <issue
         id="LintImplTextFormat"
+        message="Multi-line issue explanation strings will interpret line separators as hard breaks, and this looks like a continuation of the same paragraph. Consider using \ at the end of the previous line to indicate that the lines should be joined, or add a blank line between unrelated sentences, or suppress this issue type here."
+        errorLine1="            Composable functions should either emit content into the composition or return a value, but not both."
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeContentEmitterReturningValuesDetector.kt"
+            line="42"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Multi-line issue explanation strings will interpret line separators as hard breaks, and this looks like a continuation of the same paragraph. Consider using \ at the end of the previous line to indicate that the lines should be joined, or add a blank line between unrelated sentences, or suppress this issue type here."
+        errorLine1="              Using mutable objects as state in Compose will cause your users to see incorrect or stale data in your app."
+        errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeMutableParametersDetector.kt"
+            line="24"
+            column="15"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Multi-line issue explanation strings will interpret line separators as hard breaks, and this looks like a continuation of the same paragraph. Consider using \ at the end of the previous line to indicate that the lines should be joined, or add a blank line between unrelated sentences, or suppress this issue type here."
+        errorLine1="              Composable functions that return Unit should start with an uppercase letter."
+        errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeNamingDetector.kt"
+            line="40"
+            column="15"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Multi-line issue explanation strings will interpret line separators as hard breaks, and this looks like a continuation of the same paragraph. Consider using \ at the end of the previous line to indicate that the lines should be joined, or add a blank line between unrelated sentences, or suppress this issue type here."
+        errorLine1="              Composable functions that return a value should start with a lowercase letter."
+        errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/compose/ComposeNamingDetector.kt"
+            line="58"
+            column="15"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
         message="The issue summary should *not* end with a period (think of it as a headline)"
         errorLine1="        &quot;@Binds-annotated functions can be extension functions.&quot;,"
         errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
@@ -538,127 +582,6 @@
             file="src/main/java/slack/lint/resources/WrongResourceImportAliasDetector.kt"
             line="130"
             column="38"/>
-    </issue>
-
-    <issue
-        id="LintImplTrimIndent"
-        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
-        errorLine1="              .trimIndent(),"
-        errorLine2="               ~~~~~~~~~~~~">
-        <location
-            file="src/main/java/slack/lint/compose/ComposeCompositionLocalNamingDetector.kt"
-            line="44"
-            column="16"/>
-    </issue>
-
-    <issue
-        id="LintImplTrimIndent"
-        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
-        errorLine1="              .trimIndent(),"
-        errorLine2="               ~~~~~~~~~~~~">
-        <location
-            file="src/main/java/slack/lint/compose/ComposeCompositionLocalUsageDetector.kt"
-            line="44"
-            column="16"/>
-    </issue>
-
-    <issue
-        id="LintImplTrimIndent"
-        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
-        errorLine1="              .trimIndent(),"
-        errorLine2="               ~~~~~~~~~~~~">
-        <location
-            file="src/main/java/slack/lint/compose/ComposeContentEmitterReturningValuesDetector.kt"
-            line="47"
-            column="16"/>
-    </issue>
-
-    <issue
-        id="LintImplTrimIndent"
-        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
-        errorLine1="              .trimIndent(),"
-        errorLine2="               ~~~~~~~~~~~~">
-        <location
-            file="src/main/java/slack/lint/compose/ComposeModifierMissingDetector.kt"
-            line="43"
-            column="16"/>
-    </issue>
-
-    <issue
-        id="LintImplTrimIndent"
-        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
-        errorLine1="              .trimIndent(),"
-        errorLine2="               ~~~~~~~~~~~~">
-        <location
-            file="src/main/java/slack/lint/compose/ComposeModifierReusedDetector.kt"
-            line="50"
-            column="16"/>
-    </issue>
-
-    <issue
-        id="LintImplTrimIndent"
-        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
-        errorLine1="            .trimIndent(),"
-        errorLine2="             ~~~~~~~~~~~~">
-        <location
-            file="src/main/java/slack/lint/compose/ComposeModifierWithoutDefaultDetector.kt"
-            line="35"
-            column="14"/>
-    </issue>
-
-    <issue
-        id="LintImplTrimIndent"
-        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
-        errorLine1="              .trimIndent(),"
-        errorLine2="               ~~~~~~~~~~~~">
-        <location
-            file="src/main/java/slack/lint/compose/ComposeMultipleContentEmittersDetector.kt"
-            line="46"
-            column="16"/>
-    </issue>
-
-    <issue
-        id="LintImplTrimIndent"
-        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
-        errorLine1="            .trimIndent(),"
-        errorLine2="             ~~~~~~~~~~~~">
-        <location
-            file="src/main/java/slack/lint/compose/ComposeMutableParametersDetector.kt"
-            line="29"
-            column="14"/>
-    </issue>
-
-    <issue
-        id="LintImplTrimIndent"
-        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
-        errorLine1="              .trimIndent(),"
-        errorLine2="               ~~~~~~~~~~~~">
-        <location
-            file="src/main/java/slack/lint/compose/ComposeNamingDetector.kt"
-            line="45"
-            column="16"/>
-    </issue>
-
-    <issue
-        id="LintImplTrimIndent"
-        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
-        errorLine1="              .trimIndent(),"
-        errorLine2="               ~~~~~~~~~~~~">
-        <location
-            file="src/main/java/slack/lint/compose/ComposeNamingDetector.kt"
-            line="64"
-            column="16"/>
-    </issue>
-
-    <issue
-        id="LintImplTrimIndent"
-        message="No need to call `.trimIndent()` in issue registration strings; they are already trimmed by indent by lint when displaying to users"
-        errorLine1="              .trimIndent(),"
-        errorLine2="               ~~~~~~~~~~~~">
-        <location
-            file="src/main/java/slack/lint/compose/ComposePreviewPublicDetector.kt"
-            line="50"
-            column="16"/>
     </issue>
 
     <issue

@@ -78,20 +78,20 @@ class SlackIssueRegistry : IssueRegistry() {
       WrongResourceImportAliasDetector.ISSUE,
       DenyListedApiDetector.ISSUE,
       // <editor-fold desc="Compose Detectors">
-      ComposeCompositionLocalUsageDetector.ISSUE,
+      *ComposeNamingDetector.ISSUES,
       ComposeCompositionLocalNamingDetector.ISSUE,
+      ComposeCompositionLocalUsageDetector.ISSUE,
       ComposeContentEmitterReturningValuesDetector.ISSUE,
       ComposeModifierMissingDetector.ISSUE,
-      *ComposeNamingDetector.ISSUES,
       ComposeModifierReusedDetector.ISSUE,
       ComposeModifierWithoutDefaultDetector.ISSUE,
-      ComposeParameterOrderDetector.ISSUE,
-      ComposeRememberMissingDetector.ISSUE,
       ComposeMultipleContentEmittersDetector.ISSUE,
-      ComposeUnstableCollectionsDetector.ISSUE,
       ComposeMutableParametersDetector.ISSUE,
+      ComposeParameterOrderDetector.ISSUE,
       ComposePreviewNamingDetector.ISSUE,
       ComposePreviewPublicDetector.ISSUE,
+      ComposeRememberMissingDetector.ISSUE,
+      ComposeUnstableCollectionsDetector.ISSUE,
       // </editor-fold>
     )
 }
