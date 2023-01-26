@@ -7,6 +7,20 @@ import com.android.tools.lint.client.api.Vendor
 import com.android.tools.lint.detector.api.CURRENT_API
 import com.android.tools.lint.detector.api.Issue
 import com.google.auto.service.AutoService
+import slack.lint.compose.ComposeCompositionLocalNamingDetector
+import slack.lint.compose.ComposeCompositionLocalUsageDetector
+import slack.lint.compose.ComposeContentEmitterReturningValuesDetector
+import slack.lint.compose.ComposeModifierMissingDetector
+import slack.lint.compose.ComposeModifierReusedDetector
+import slack.lint.compose.ComposeModifierWithoutDefaultDetector
+import slack.lint.compose.ComposeMultipleContentEmittersDetector
+import slack.lint.compose.ComposeMutableParametersDetector
+import slack.lint.compose.ComposeNamingDetector
+import slack.lint.compose.ComposeParameterOrderDetector
+import slack.lint.compose.ComposePreviewNamingDetector
+import slack.lint.compose.ComposePreviewPublicDetector
+import slack.lint.compose.ComposeRememberMissingDetector
+import slack.lint.compose.ComposeUnstableCollectionsDetector
 import slack.lint.denylistedapis.DenyListedApiDetector
 import slack.lint.eithernet.DoNotExposeEitherNetInRepositoriesDetector
 import slack.lint.inclusive.InclusiveNamingChecker
@@ -63,5 +77,21 @@ class SlackIssueRegistry : IssueRegistry() {
       MissingResourceImportAliasDetector.ISSUE,
       WrongResourceImportAliasDetector.ISSUE,
       DenyListedApiDetector.ISSUE,
+      // <editor-fold desc="Compose Detectors">
+      ComposeCompositionLocalUsageDetector.ISSUE,
+      ComposeCompositionLocalNamingDetector.ISSUE,
+      ComposeContentEmitterReturningValuesDetector.ISSUE,
+      ComposeModifierMissingDetector.ISSUE,
+      *ComposeNamingDetector.ISSUES,
+      ComposeModifierReusedDetector.ISSUE,
+      ComposeModifierWithoutDefaultDetector.ISSUE,
+      ComposeParameterOrderDetector.ISSUE,
+      ComposeRememberMissingDetector.ISSUE,
+      ComposeMultipleContentEmittersDetector.ISSUE,
+      ComposeUnstableCollectionsDetector.ISSUE,
+      ComposeMutableParametersDetector.ISSUE,
+      ComposePreviewNamingDetector.ISSUE,
+      ComposePreviewPublicDetector.ISSUE,
+      // </editor-fold>
     )
 }

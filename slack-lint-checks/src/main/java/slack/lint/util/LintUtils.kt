@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.util
 
+import com.android.tools.lint.client.api.Configuration
 import com.android.tools.lint.client.api.JavaEvaluator
 import com.android.tools.lint.client.api.TYPE_BOOLEAN_WRAPPER
 import com.android.tools.lint.client.api.TYPE_BYTE_WRAPPER
@@ -18,6 +19,7 @@ import com.android.tools.lint.detector.api.LintFix
 import com.android.tools.lint.detector.api.ResourceXmlDetector
 import com.android.tools.lint.detector.api.Scope
 import com.android.tools.lint.detector.api.SourceCodeScanner
+import com.android.tools.lint.detector.api.StringOption
 import com.android.tools.lint.detector.api.UastLintUtils
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
@@ -311,4 +313,17 @@ internal fun UMethod.safeReturnType(context: JavaContext): PsiType? {
   } else {
     return returnType
   }
+}
+
+/** Loads a [StringOption] as a [delimiter]-delimited [Set] of strings. */
+internal fun StringOption.loadAsSet(
+  configuration: Configuration,
+  delimiter: String = ","
+): Set<String> {
+  return getValue(configuration)
+    ?.splitToSequence(delimiter)
+    .orEmpty()
+    .map(String::trim)
+    .filter(String::isNotBlank)
+    .toSet()
 }
