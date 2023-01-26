@@ -24,9 +24,9 @@ class ComposeUnstableCollectionsDetector : ComposableFunctionDetector(), SourceC
 
     fun createErrorMessage(type: String, rawType: String, variable: String) =
       """
-        The Compose Compiler cannot infer the stability of a parameter if a $type is used in it, even if the item type is stable. \
-        You should use Kotlinx Immutable Collections instead: `$variable: Immutable$type` or create an `@Immutable` wrapper for this class: `@Immutable data class ${variable.capitalized}$rawType(val items: $type)` \
-         \
+        The Compose Compiler cannot infer the stability of a parameter if a $type is used in it, even if the item type is stable.
+        You should use Kotlinx Immutable Collections instead: `$variable: Immutable$type` or create an `@Immutable` wrapper for this class: `@Immutable data class ${variable.capitalized}$rawType(val items: $type)`
+        
         See https://twitter.github.io/compose-rules/rules/#avoid-using-unstable-collections for more information.
       """
         .trimIndent()
