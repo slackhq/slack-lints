@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.2.2
+-----
+
+_2023-02-09_
+
+- **Removed**: Compose lints have been removed and published in a separate project: https://github.com/slackhq/compose-lints
+
 0.2.1
 -----
 
