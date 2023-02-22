@@ -6,14 +6,25 @@ This repository contains a collection of custom Android/Kotlin lint checks we us
 While we do publish artifacts to Maven Central, some of the lints checks may only really be relevant to Slack's codebase. We [develop
 these in the open](https://slack.engineering/developing-in-the-open/) to knowledge-share with the community.
 
-## Highlights
+## Installation
+
+Add the dependency to the `lintChecks` configuration. Note for non-android projects, you must apply the `com.android.lint` Gradle plugin to use this.
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.slack.lint/slack-lint-checks.svg)](https://mvnrepository.com/artifact/com.slack.lint/slack-lint-checks)
+
+```kotlin
+dependencies {
+  lintChecks("com.slack.lint:slack-lint-checks:<version>")
+}
+```
+
+## Overview
 
 ### Do Not Mock
 
 The `slack.lint.mocking` package contains several detectors and utilities for detecting mocking
 of types that should not be mocked. This is similar to ErrorProne's `DoNotMockChecker` and acts as
-an enforcement layer to APIs and classes annotated with `@DoNotMock`. This also detects common types
-that should never be mocked, such as Kotlin `data` classes or AutoValue classes.
+an enforcement layer to APIs and classes annotated with `@DoNotMock`. This also detects common types that should never be mocked, such as Kotlin `data` classes or AutoValue classes.
 
 ### Inclusivity
 
