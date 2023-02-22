@@ -36,11 +36,13 @@ configurable list of non-inclusive names.
 `MoshiUsageDetector` contains a wealth of checks for common programmer errors when writing classes
 for use with [Moshi](https://github.com/square/moshi) and [MoshiX](https://github.com/ZacSweers/MoshiX).
 
-### And more!
+### Misc
 
 * `JavaOnlyDetector` - detects use of Java-only APIs from Kotlin. Based on the original unreleased implementation in [uber/lint-checks](https://github.com/uber/lint-checks).
 * `DaggerKotlinIssuesDetector` - detects some known issues when using [Dagger](https://github.com/google/dagger) in Kotlin code.
 * `RetrofitUsageDetector` - detects some common issues when using [Retrofit](https://github.com/square/retrofit).
+* `DenyListedApi` – detects use of APIs that just shouldn't be used.
+* `MustUseNamedParams` – can be used on functions that should _always_ use named parameters. Useful for APIs that have a lot of parameters and/or may change their order and you want to keep changes source-compatible.
 * ...and a plethora of others!
 
 License
