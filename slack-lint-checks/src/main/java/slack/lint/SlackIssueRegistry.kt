@@ -14,6 +14,7 @@ import slack.lint.mocking.AutoValueMockDetector
 import slack.lint.mocking.DataClassMockDetector
 import slack.lint.mocking.DoNotMockMockDetector
 import slack.lint.mocking.ErrorProneDoNotMockDetector
+import slack.lint.parcel.ParcelizeFunctionPropertyDetector
 import slack.lint.resources.FullyQualifiedResourceDetector
 import slack.lint.resources.MissingResourceImportAliasDetector
 import slack.lint.resources.WrongResourceImportAliasDetector
@@ -63,5 +64,6 @@ class SlackIssueRegistry : IssueRegistry() {
       MissingResourceImportAliasDetector.ISSUE,
       WrongResourceImportAliasDetector.ISSUE,
       DenyListedApiDetector.ISSUE,
+      ParcelizeFunctionPropertyDetector.ISSUE,
     )
 }
