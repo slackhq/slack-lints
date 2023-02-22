@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.2.3
+-----
+
+_2023-02-22_
+
+- **New**: `ParcelizeFunctionProperty` check that errors when a `@Parcelize` class has a function property.
+
 0.2.2
 -----
 
