@@ -246,6 +246,20 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           ),
         arguments = listOf("*"),
       ),
+      DenyListedEntry(
+        className = "java.util.Date",
+        functionName = MatchAll,
+        fieldName = MatchAll,
+        errorMessage =
+          "Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Date in Java 8+."
+      ),
+      DenyListedEntry(
+        className = "java.text.DateFormat",
+        functionName = MatchAll,
+        fieldName = MatchAll,
+        errorMessage =
+          "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+."
+      ),
     )
 
   override fun getApplicableUastTypes() = config.applicableTypes()
