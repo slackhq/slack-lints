@@ -8,7 +8,7 @@ lint = "31.1.0-alpha01"
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.21.0" }
 dokka = { id = "org.jetbrains.dokka", version = "1.8.10" }
 lint = { id = "com.android.lint", version = "7.4.0" }
-ksp = { id = "com.google.devtools.ksp", version = "1.8.0-1.0.8" }
+ksp = { id = "com.google.devtools.ksp", version = "1.8.21-1.0.11" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.23.2" }
 spotless = { id = "com.diffplug.spotless", version = "6.18.0" }
 
