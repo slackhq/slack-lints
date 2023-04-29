@@ -25,6 +25,7 @@ class RestrictCallsToDetectorTest : BaseSlackLintTest() {
   }
 
   override fun getDetector() = RestrictCallsToDetector()
+
   override fun getIssues() = listOf(RestrictCallsToDetector.ISSUE)
 
   @Test

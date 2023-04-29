@@ -41,6 +41,7 @@ class AutoValueMockDetectorTest : BaseSlackLintTest() {
       .indented()
 
   override fun getDetector() = AutoValueMockDetector()
+
   override fun getIssues() = listOf(AutoValueMockDetector.ISSUE)
 
   @Test

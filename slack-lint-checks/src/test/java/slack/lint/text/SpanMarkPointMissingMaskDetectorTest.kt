@@ -10,7 +10,9 @@ import slack.lint.BaseSlackLintTest
 class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
 
   override val skipTestModes: Array<TestMode> = arrayOf(TestMode.PARENTHESIZED)
+
   override fun getDetector() = SpanMarkPointMissingMaskDetector()
+
   override fun getIssues() = listOf(SpanMarkPointMissingMaskDetector.ISSUE)
 
   private val androidTextStubs =

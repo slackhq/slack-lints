@@ -24,7 +24,9 @@ class MainScopeUsageDetectorTest : BaseSlackLintTest() {
   }
 
   override val skipTestModes: Array<TestMode> = arrayOf(TestMode.WHITESPACE)
+
   override fun getDetector() = MainScopeUsageDetector()
+
   override fun getIssues() = listOf(MainScopeUsageDetector.ISSUE)
 
   @Test

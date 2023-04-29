@@ -32,6 +32,7 @@ class DoNotMockUsageDetectorTest : BaseSlackLintTest() {
       .indented()
 
   override fun getDetector() = ErrorProneDoNotMockDetector()
+
   override fun getIssues() = listOf(ErrorProneDoNotMockDetector.ISSUE)
 
   @Test

@@ -32,6 +32,7 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .indented()
 
   override fun getDetector() = MoshiUsageDetector()
+
   override fun getIssues() = MoshiUsageDetector.issues().toList()
 
   @Test

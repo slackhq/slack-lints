@@ -112,7 +112,9 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       TestMode.TYPE_ALIAS,
       TestMode.IMPORT_ALIAS,
     )
+
   override fun getDetector() = MoshiUsageDetector()
+
   override fun getIssues() = MoshiUsageDetector.issues().toList()
 
   @Test

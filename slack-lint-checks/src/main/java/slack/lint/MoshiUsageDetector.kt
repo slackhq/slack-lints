@@ -1156,6 +1156,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
     // since we can't easily highlight them in nested generics. We can remove this if we figure
     // out a good way to do it.
     private const val HINT = "%HINT%"
+
     private fun String.withHint(hint: String?): String {
       return replace(HINT, hint.orEmpty())
     }

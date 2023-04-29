@@ -27,7 +27,9 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .indented()
 
   override val skipTestModes: Array<TestMode> = arrayOf(TestMode.WHITESPACE, TestMode.PARENTHESIZED)
+
   override fun getDetector() = RxSubscribeOnMainDetector()
+
   override fun getIssues() = listOf(RxSubscribeOnMainDetector.ISSUE)
 
   @Test
