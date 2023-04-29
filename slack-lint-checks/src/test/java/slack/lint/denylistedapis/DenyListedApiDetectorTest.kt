@@ -496,6 +496,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           .trimIndent()
       )
   }
+
   @Test
   fun rxMaybeParameterless() {
     lint()
@@ -529,6 +530,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           .trimIndent()
       )
   }
+
   @Test
   fun rxObservableParameterless() {
     lint()

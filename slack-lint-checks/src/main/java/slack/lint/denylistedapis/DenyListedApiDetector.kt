@@ -249,9 +249,11 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
     )
 
   override fun getApplicableUastTypes() = config.applicableTypes()
+
   override fun createUastHandler(context: JavaContext) = config.visitor(context)
 
   override fun getApplicableElements() = config.applicableLayoutInflaterElements.keys
+
   override fun visitElement(context: XmlContext, element: Element) =
     config.visitor(context, element)
 

@@ -10,6 +10,7 @@ import org.junit.Test
 class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
 
   override fun getDetector(): Detector = DeprecatedSqlUsageDetector()
+
   override fun getIssues(): MutableList<Issue> = mutableListOf(DeprecatedSqlUsageDetector.ISSUE)
 
   private val sqliteDatabaseClass =

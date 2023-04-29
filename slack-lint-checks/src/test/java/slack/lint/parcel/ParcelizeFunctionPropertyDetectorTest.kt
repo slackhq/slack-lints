@@ -32,6 +32,7 @@ class ParcelizeFunctionPropertyDetectorTest : BaseSlackLintTest() {
   }
 
   override fun getDetector() = ParcelizeFunctionPropertyDetector()
+
   override fun getIssues() = listOf(ParcelizeFunctionPropertyDetector.ISSUE)
 
   @Test

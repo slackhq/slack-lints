@@ -13,6 +13,7 @@ import slack.lint.BaseSlackLintTest
 class InclusiveNamingDetectorTest : BaseSlackLintTest() {
 
   override fun getDetector(): Detector = InclusiveNamingSourceCodeScanner()
+
   override fun getIssues(): List<Issue> = InclusiveNamingChecker.ISSUES.toList()
 
   override fun lint(): TestLintTask {

@@ -35,7 +35,9 @@ class DaggerKotlinIssuesDetectorTest : BaseSlackLintTest() {
   }
 
   override val skipTestModes: Array<TestMode> = arrayOf(TestMode.WHITESPACE)
+
   override fun getDetector() = DaggerKotlinIssuesDetector()
+
   override fun getIssues() = DaggerKotlinIssuesDetector.issues.toList()
 
   @Test

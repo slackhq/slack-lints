@@ -49,6 +49,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
       .indented()
 
   override fun getDetector() = FragmentDaggerFieldInjectionDetector()
+
   override fun getIssues() = FragmentDaggerFieldInjectionDetector.issues.toList()
 
   @Test

@@ -70,7 +70,9 @@ sealed class InclusiveNamingChecker<C : Context, N> {
   abstract val context: C
   abstract val blocklist: Set<String>
   protected abstract val issue: Issue
+
   abstract fun locationFor(node: N): Location
+
   open fun shouldReport(node: N, location: Location, name: String, isFile: Boolean): Boolean = true
 
   fun check(node: N, name: String?, type: String, isFile: Boolean = false) {
@@ -144,6 +146,7 @@ sealed class InclusiveNamingChecker<C : Context, N> {
   class XmlChecker(override val context: XmlContext, override val blocklist: Set<String>) :
     InclusiveNamingChecker<XmlContext, Node>() {
     override val issue: Issue = RESOURCES_ISSUE
+
     override fun locationFor(node: Node): Location {
       return context.getLocation(node)
     }

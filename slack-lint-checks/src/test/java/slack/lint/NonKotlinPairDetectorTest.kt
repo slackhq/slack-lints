@@ -315,6 +315,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
         """
       )
   }
+
   private val KOTLIN_PAIR =
     kotlin(
       """
