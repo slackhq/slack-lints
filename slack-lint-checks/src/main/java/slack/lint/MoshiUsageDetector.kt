@@ -52,7 +52,7 @@ import org.jetbrains.uast.toUElementOfType
 import slack.lint.moshi.MoshiLintUtil.hasMoshiAnnotation
 import slack.lint.util.isBoxedPrimitive
 import slack.lint.util.isInnerClass
-import slack.lint.util.isKotlinObject
+import slack.lint.util.isObject
 import slack.lint.util.isObjectOrAny
 import slack.lint.util.isPlatformType
 import slack.lint.util.isString
@@ -195,14 +195,14 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         if (usesCustomGenerator) return
 
         val isUnsupportedType =
-          node.isKotlinObject() ||
+          node.isObject ||
             node.isAnnotationType ||
             node.isInterface ||
             node.isInnerClass(context.evaluator) ||
             context.evaluator.isAbstract(node)
 
         if (isUnsupportedType) {
-          if (node.isKotlinObject()) {
+          if (node.isObject) {
             // Kotlin objects are ok in certain cases, so we give a more specific error message
             context.report(
               ISSUE_OBJECT,
@@ -857,7 +857,6 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
     // Check for a leftover `@SerializedName`
     member.findAnnotation(FQCN_SERIALIZED_NAME)?.let { serializedName ->
       val name = serializedName.findAttributeValue("value")?.evaluate() as String
-      @Suppress("UNCHECKED_CAST")
       val alternateCount =
         (serializedName.findAttributeValue("alternate")?.sourcePsi
             as? KtCollectionLiteralExpression)
@@ -925,7 +924,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                 return@let
               } else {
                 // Always required in Java
-                this!!
+                error("Not possible")
               }
           }
       if (retentionValue.identifier != "RUNTIME") {
@@ -1046,7 +1045,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           )
         }
       }
-    } else if (hasJsonAnnotatedConstant) {
+    } else {
       // If an @Json is present but not @JsonClass, suggest it
       context.report(
         ISSUE_ENUM_JSON_CLASS_MISSING,
