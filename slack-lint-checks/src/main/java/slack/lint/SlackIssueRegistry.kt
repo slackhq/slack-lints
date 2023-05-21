@@ -28,7 +28,7 @@ class SlackIssueRegistry : IssueRegistry() {
   override val vendor: Vendor = Vendor(vendorName = "slack", identifier = "slack-lint")
 
   override val api: Int = CURRENT_API
-  override val minApi: Int = 12 // 7.2.0-beta02
+  override val minApi: Int = CURRENT_API
 
   @Suppress("SpreadOperator")
   override val issues: List<Issue> =
