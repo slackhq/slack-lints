@@ -24,6 +24,7 @@ import com.android.tools.lint.detector.api.UastLintUtils
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiModifierListOwner
 import com.intellij.psi.PsiType
 import com.intellij.psi.PsiWildcardType
 import java.util.EnumSet
@@ -91,6 +92,11 @@ internal fun UClass.isKotlinObject() = this is KotlinUClass && sourcePsi is KtOb
 
 internal fun UClass.isKotlinTopLevelFacadeClass() =
   this is KotlinUClass && javaPsi is KtLightClassForFacade
+
+/** @return whether or not [owner] is a Kotlin `value` class. */
+internal fun JavaEvaluator.isValueClass(owner: PsiModifierListOwner?): Boolean {
+  return hasModifier(owner, KtTokens.VALUE_KEYWORD)
+}
 
 internal fun UClass.isInnerClass(evaluator: JavaEvaluator): Boolean {
   // If it has no containing class, it's top-level and therefore not inner

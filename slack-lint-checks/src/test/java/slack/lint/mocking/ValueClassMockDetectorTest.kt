@@ -5,19 +5,24 @@ package slack.lint.mocking
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
-class DataClassMockDetectorTest : BaseSlackLintTest() {
+class ValueClassMockDetectorTest : BaseSlackLintTest() {
 
   private val testClass =
-    kotlin("""
+    kotlin(
+        """
       package slack.test
 
-      data class TestClass(val foo: String)
-    """)
+      import kotlin.jvm.JvmInline
+
+      @JvmInline
+      value class TestClass(val foo: String)
+    """
+      )
       .indented()
 
-  override fun getDetector() = DataClassMockDetector()
+  override fun getDetector() = ValueClassMockDetector()
 
-  override fun getIssues() = listOf(DataClassMockDetector.ISSUE)
+  override fun getIssues() = listOf(ValueClassMockDetector.ISSUE)
 
   @Test
   fun kotlinTests() {
@@ -36,17 +41,17 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
             @Spy lateinit var fieldSpy: TestClass
 
             fun example() {
-              val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
-              val localSpy1 = org.mockito.Mockito.spy(localMock1)
-              val localMock2 = mock<TestClass>()
-              val classRef = TestClass::class.java
-              val localMock3 = org.mockito.Mockito.mock(classRef)
+//              val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
+              val localSpy1 = org.mockito.Mockito.spy(1u)
+//              val localMock2 = mock<TestClass>()
+//              val classRef = TestClass::class.java
+//              val localMock3 = org.mockito.Mockito.mock(classRef)
 
-              val dynamicMock = mock<TestClass> {
-
-              }
-              val assigned: TestClass = mock()
-              val fake = TestClass("this is fine")
+//              val dynamicMock = mock<TestClass> {
+//
+//              }
+//              val assigned: TestClass = mock()
+//              val fake = TestClass("this is fine")
             }
           }
         """
@@ -60,28 +65,28 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.kt:8: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:8: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
             @Mock lateinit var fieldMock: TestClass
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:9: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:9: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
             @Spy lateinit var fieldSpy: TestClass
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:12: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:12: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
               val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:13: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:13: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
               val localSpy1 = org.mockito.Mockito.spy(localMock1)
                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:14: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:14: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
               val localMock2 = mock<TestClass>()
                                ~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:16: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:16: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
               val localMock3 = org.mockito.Mockito.mock(classRef)
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:18: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:18: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
               val dynamicMock = mock<TestClass> {
                                 ^
-          test/test/slack/test/TestClass.kt:21: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:21: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
               val assigned: TestClass = mock()
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           8 errors, 0 warnings
@@ -124,19 +129,19 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.java:9: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.java:9: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
             @Mock TestClass fieldMock;
             ~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:10: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.java:10: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
             @Spy TestClass fieldSpy;
             ~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:13: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.java:13: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
               TestClass localMock = mock(TestClass.class);
                                     ~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:14: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.java:14: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
               TestClass localSpy = spy(localMock);
                                    ~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:16: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.java:16: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
               TestClass localMock2 = mock(classRef);
                                      ~~~~~~~~~~~~~~
           5 errors, 0 warnings
