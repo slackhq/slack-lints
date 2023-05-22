@@ -59,14 +59,17 @@ val lintJvmTargetString: String = libs.versions.lintJvmTarget.get()
 val runtimeJvmTargetString: String = libs.versions.runtimeJvmTarget.get()
 
 subprojects {
-  val jvmTargetString = if (path == ":slack-lint-checks") {
-    lintJvmTargetString
-  } else {
-    runtimeJvmTargetString
-  }
+  val jvmTargetString =
+    if (path == ":slack-lint-checks") {
+      lintJvmTargetString
+    } else {
+      runtimeJvmTargetString
+    }
   val jvmTargetInt = jvmTargetString.toInt()
   pluginManager.withPlugin("java") {
-    configure<JavaPluginExtension> { toolchain { languageVersion.set(JavaLanguageVersion.of(jdk)) } }
+    configure<JavaPluginExtension> {
+      toolchain { languageVersion.set(JavaLanguageVersion.of(jdk)) }
+    }
 
     tasks.withType<JavaCompile>().configureEach { options.release.set(jvmTargetInt) }
   }
