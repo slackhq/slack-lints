@@ -55,8 +55,6 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
 
     lint()
       .files(*mockFileStubs(), testClass, source)
-      .allowCompilationErrors() // Until AGP 7.1.0
-      // https://groups.google.com/g/lint-dev/c/BigCO8sMhKU
       .run()
       .expect(
         """
