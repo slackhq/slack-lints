@@ -10,25 +10,12 @@ import org.junit.Test
 class JavaOnlyDetectorTest : BaseSlackLintTest() {
 
   companion object {
-    val JAVA_ONLY: TestFile =
-      java(
-          "test/slack/lint/annotations/JavaOnly.java",
+    val ANNOTATIONS: TestFile =
+      kotlin(
           """
-          package slack.lint.annotations;
-          public @interface JavaOnly {
-            String value() default "Description";
-          }
-          """
-        )
-        .indented()
-    val KOTLIN_ONLY: TestFile =
-      java(
-          "test/slack/lint/annotations/KotlinOnly.java",
-          """
-          package slack.lint.annotations;
-          public @interface KotlinOnly {
-            String value() default "Description";
-          }
+          package slack.lint.annotations
+          annotation class KotlinOnly(val reason: String)
+          annotation class JavaOnly(val reason: String)
           """
         )
         .indented()
@@ -46,7 +33,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/Test.kt",
             """
@@ -89,7 +76,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         java(
             "test/test/pkg/package-info.java",
             """
@@ -139,8 +126,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
-        KOTLIN_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/Test.kt",
             """
@@ -171,8 +157,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
-        KOTLIN_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/Test.kt",
             """
@@ -203,7 +188,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        KOTLIN_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -252,7 +237,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        KOTLIN_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -285,7 +270,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -334,7 +319,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -367,7 +352,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        KOTLIN_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -416,7 +401,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        KOTLIN_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -449,7 +434,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -498,7 +483,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -538,7 +523,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/I.kt",
             """
@@ -593,7 +578,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -633,7 +618,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -673,7 +658,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -704,7 +689,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -737,7 +722,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -770,7 +755,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -812,7 +797,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -845,7 +830,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """
@@ -880,7 +865,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
     lint()
       .detector(JavaOnlyDetector())
       .files(
-        JAVA_ONLY,
+        ANNOTATIONS,
         kotlin(
             "test/test/pkg/A.kt",
             """

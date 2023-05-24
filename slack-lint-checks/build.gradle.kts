@@ -1,5 +1,6 @@
 // Copyright (C) 2021 Slack Technologies, LLC
 // SPDX-License-Identifier: Apache-2.0
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -32,11 +33,10 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
-  kotlinOptions {
-    // Lint 8.1.0-alpha01 forces Kotlin (regardless of what version the project uses), so this
-    // forces a lower
-    // language level for now. Similar to `targetCompatibility` for Java.
-    apiVersion = "1.7"
-    languageVersion = "1.7"
+  compilerOptions {
+    // Lint forces Kotlin (regardless of what version the project uses), so this
+    // forces a matching language level for now. Similar to `targetCompatibility` for Java.
+    apiVersion.set(KotlinVersion.KOTLIN_1_8)
+    languageVersion.set(KotlinVersion.KOTLIN_1_8)
   }
 }

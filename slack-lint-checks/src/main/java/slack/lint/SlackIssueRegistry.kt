@@ -25,10 +25,16 @@ import slack.lint.text.SpanMarkPointMissingMaskDetector
 @AutoService(IssueRegistry::class)
 class SlackIssueRegistry : IssueRegistry() {
 
-  override val vendor: Vendor = Vendor(vendorName = "slack", identifier = "slack-lint")
+  override val vendor: Vendor =
+    Vendor(
+      vendorName = "slack",
+      identifier = "slack-lint",
+      feedbackUrl = "https://github.com/slackhq/slack-lints",
+      contact = "https://github.com/slackhq/slack-lints",
+    )
 
   override val api: Int = CURRENT_API
-  override val minApi: Int = 12 // 7.2.0-beta02
+  override val minApi: Int = CURRENT_API
 
   @Suppress("SpreadOperator")
   override val issues: List<Issue> =

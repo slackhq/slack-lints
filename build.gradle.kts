@@ -5,6 +5,7 @@ import com.diffplug.gradle.spotless.SpotlessExtension
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -53,25 +54,38 @@ allprojects {
   }
 }
 
-subprojects {
-  pluginManager.withPlugin("java") {
-    configure<JavaPluginExtension> { toolchain { languageVersion.set(JavaLanguageVersion.of(19)) } }
+val jdk = libs.versions.jdk.get().toInt()
+val lintJvmTargetString: String = libs.versions.lintJvmTarget.get()
+val runtimeJvmTargetString: String = libs.versions.runtimeJvmTarget.get()
 
-    tasks.withType<JavaCompile>().configureEach { options.release.set(11) }
+subprojects {
+  val jvmTargetString =
+    if (path == ":slack-lint-checks") {
+      lintJvmTargetString
+    } else {
+      runtimeJvmTargetString
+    }
+  val jvmTargetInt = jvmTargetString.toInt()
+  pluginManager.withPlugin("java") {
+    configure<JavaPluginExtension> {
+      toolchain { languageVersion.set(JavaLanguageVersion.of(jdk)) }
+    }
+
+    tasks.withType<JavaCompile>().configureEach { options.release.set(jvmTargetInt) }
   }
 
   pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
     tasks.withType<KotlinCompile>().configureEach {
-      kotlinOptions {
-        jvmTarget = "11"
-        // TODO re-enable once lint uses Kotlin 1.5
-        //  allWarningsAsErrors = true
-        //  freeCompilerArgs = freeCompilerArgs + listOf("-progressive")
+      compilerOptions {
+        jvmTarget.set(JvmTarget.fromTarget(jvmTargetString))
+        // TODO re-enable if lint ever targets latest kotlin versions
+        //  allWarningsAsErrors.set(true)
+        //  freeCompilerArgs.add("-progressive")
       }
     }
   }
 
-  tasks.withType<Detekt>().configureEach { jvmTarget = "11" }
+  tasks.withType<Detekt>().configureEach { jvmTarget = jvmTargetString }
 
   pluginManager.withPlugin("com.vanniktech.maven.publish") {
     apply(plugin = "org.jetbrains.dokka")
