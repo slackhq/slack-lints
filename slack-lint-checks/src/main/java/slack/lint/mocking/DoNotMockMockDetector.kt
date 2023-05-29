@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
+import com.android.tools.lint.client.api.JavaEvaluator
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
@@ -34,7 +35,11 @@ class DoNotMockMockDetector : AbstractMockDetector() {
     private const val FQCN_EP_DNM = "com.google.errorprone.annotations.DoNotMock"
   }
 
-  override fun checkType(context: JavaContext, mockedType: PsiClass): Reason? {
+  override fun checkType(
+    context: JavaContext,
+    evaluator: JavaEvaluator,
+    mockedType: PsiClass
+  ): Reason? {
     val uMockedType = mockedType.toUElementOfType<UClass>() ?: return null
     val doNotMockAnnotation =
       uMockedType.findAnnotation(FQCN_SLACK_DNM)
