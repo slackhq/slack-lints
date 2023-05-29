@@ -25,7 +25,13 @@ import kotlinx.metadata.jvm.Metadata as MetadataWithNullableArgs
 import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
-import org.jetbrains.uast.*
+import org.jetbrains.uast.UAnnotated
+import org.jetbrains.uast.UAnnotation
+import org.jetbrains.uast.UClass
+import org.jetbrains.uast.UElement
+import org.jetbrains.uast.UExpression
+import org.jetbrains.uast.findContaining
+import org.jetbrains.uast.toUElementOfType
 
 /**
  * A delegating [JavaEvaluator] that implements more comprehensive checks for Kotlin classes via

@@ -32,9 +32,9 @@ class SealedClassMockDetector : AbstractMockDetector() {
   override val annotations: Set<String> = emptySet()
 
   override fun checkType(
-          context: JavaContext,
-          evaluator: MetadataJavaEvaluator,
-          mockedType: PsiClass
+    context: JavaContext,
+    evaluator: MetadataJavaEvaluator,
+    mockedType: PsiClass
   ): Reason? {
     // Check permitsList to cover Java 17 sealed types too
     return if (evaluator.isSealed(mockedType) || mockedType.permitsList != null) {

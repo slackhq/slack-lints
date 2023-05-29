@@ -33,9 +33,9 @@ class RecordClassMockDetector : AbstractMockDetector() {
   override val annotations: Set<String> = emptySet()
 
   override fun checkType(
-          context: JavaContext,
-          evaluator: MetadataJavaEvaluator,
-          mockedType: PsiClass
+    context: JavaContext,
+    evaluator: MetadataJavaEvaluator,
+    mockedType: PsiClass
   ): Reason? {
     val isRecord =
       if (isJava(mockedType.language)) {

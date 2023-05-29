@@ -50,7 +50,7 @@ import org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression
 import org.jetbrains.uast.toUElement
 import org.jetbrains.uast.toUElementOfType
 import slack.lint.moshi.MoshiLintUtil.hasMoshiAnnotation
-import slack.lint.util.*
+import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.isBoxedPrimitive
 import slack.lint.util.isInnerClass
 import slack.lint.util.isObjectOrAny
@@ -536,9 +536,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
   }
 
   private fun validateAdaptedByAnnotation(
-          context: JavaContext,
-          evaluator: MetadataJavaEvaluator,
-          adaptedByAnnotation: UAnnotation
+    context: JavaContext,
+    evaluator: MetadataJavaEvaluator,
+    adaptedByAnnotation: UAnnotation
   ) {
     // Check the adapter is a valid adapter type
     val adapterAttribute =
@@ -567,13 +567,13 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
   }
 
   private fun checkMoshiType(
-          context: JavaContext,
-          evaluator: MetadataJavaEvaluator,
-          psiType: PsiType,
-          parameter: UParameter,
-          typeNode: UElement,
-          defaultValueExpression: KtExpression?,
-          nestedGenericCheck: Boolean = true
+    context: JavaContext,
+    evaluator: MetadataJavaEvaluator,
+    psiType: PsiType,
+    parameter: UParameter,
+    typeNode: UElement,
+    defaultValueExpression: KtExpression?,
+    nestedGenericCheck: Boolean = true
   ) {
 
     if (psiType is PsiPrimitiveType) return

@@ -36,9 +36,9 @@ class DoNotMockMockDetector : AbstractMockDetector() {
   }
 
   override fun checkType(
-          context: JavaContext,
-          evaluator: MetadataJavaEvaluator,
-          mockedType: PsiClass
+    context: JavaContext,
+    evaluator: MetadataJavaEvaluator,
+    mockedType: PsiClass
   ): Reason? {
     val uMockedType = mockedType.toUElementOfType<UClass>() ?: return null
     val doNotMockAnnotation =

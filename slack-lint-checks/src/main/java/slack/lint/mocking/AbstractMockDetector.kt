@@ -41,9 +41,9 @@ abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
   open val annotations: Set<String> = emptySet()
 
   open fun checkType(
-          context: JavaContext,
-          evaluator: MetadataJavaEvaluator,
-          mockedType: PsiClass
+    context: JavaContext,
+    evaluator: MetadataJavaEvaluator,
+    mockedType: PsiClass
   ): Reason? {
     return null
   }

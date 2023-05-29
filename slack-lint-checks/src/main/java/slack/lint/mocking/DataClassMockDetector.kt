@@ -32,9 +32,9 @@ class DataClassMockDetector : AbstractMockDetector() {
   override val annotations: Set<String> = emptySet()
 
   override fun checkType(
-          context: JavaContext,
-          evaluator: MetadataJavaEvaluator,
-          mockedType: PsiClass
+    context: JavaContext,
+    evaluator: MetadataJavaEvaluator,
+    mockedType: PsiClass
   ): Reason? {
     return if (evaluator.isData(mockedType)) {
       Reason(

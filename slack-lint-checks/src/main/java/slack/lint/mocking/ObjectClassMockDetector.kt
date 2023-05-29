@@ -32,9 +32,9 @@ class ObjectClassMockDetector : AbstractMockDetector() {
   override val annotations: Set<String> = emptySet()
 
   override fun checkType(
-          context: JavaContext,
-          evaluator: MetadataJavaEvaluator,
-          mockedType: PsiClass
+    context: JavaContext,
+    evaluator: MetadataJavaEvaluator,
+    mockedType: PsiClass
   ): Reason? {
     return if (evaluator.isObject(mockedType)) {
       Reason(mockedType, "object classes are singletons, so mocking them should not be necessary")
