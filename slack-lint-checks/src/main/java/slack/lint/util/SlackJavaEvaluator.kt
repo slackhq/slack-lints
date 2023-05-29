@@ -24,12 +24,8 @@ import kotlinx.metadata.jvm.KotlinClassMetadata
 import kotlinx.metadata.jvm.Metadata as MetadataWithNullableArgs
 import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.uast.UAnnotated
-import org.jetbrains.uast.UAnnotation
-import org.jetbrains.uast.UClass
-import org.jetbrains.uast.UElement
-import org.jetbrains.uast.UExpression
-import org.jetbrains.uast.findContaining
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.uast.*
 
 /**
  * A delegating [JavaEvaluator] that implements more comprehensive checks for Kotlin classes via
@@ -46,7 +42,7 @@ class SlackJavaEvaluator(private val file: String, private val delegate: JavaEva
 
   private companion object {
     // Not an exhaustive list, but at least the ones we look at currently
-    private val KOTLIN_CLASS_MODIFIER_TOKENS =
+    private val KOTLIN_METADATA_TOKENS =
       mapOf(
         KtTokens.DATA_KEYWORD to TokenData(Flag.Class.IS_DATA),
         KtTokens.SEALED_KEYWORD to
@@ -128,16 +124,39 @@ class SlackJavaEvaluator(private val file: String, private val delegate: JavaEva
     delegate.implementsInterface(cls, interfaceName, strict)
   // endregion
 
+  /** Deep isObject check that checks if the given [cls] */
+  fun isObject(cls: PsiClass?): Boolean {
+    if (cls == null) return false
+
+    cls.toUElementOfType<UClass>()?.let { uClass ->
+      if (uClass.sourcePsi is KtObjectDeclaration) {
+        return true
+      } else if (canCheckMetadata(cls)) {
+        val (flag, applicableClassKinds) = KOTLIN_METADATA_TOKENS.getValue(KtTokens.OBJECT_KEYWORD)
+        if (uClass.classKind in applicableClassKinds) {
+          uClass.getOrParseMetadata()?.let { kmClass ->
+            return flag(kmClass.flags)
+          }
+        }
+      }
+    }
+    return false
+  }
+
+  private fun canCheckMetadata(element: PsiElement): Boolean {
+    return checkMetadata && element is PsiCompiledElement
+  }
+
   override fun hasModifier(owner: PsiModifierListOwner?, keyword: KtModifierKeywordToken): Boolean {
     val superValue = super.hasModifier(owner, keyword)
     // If it's not a compiled element or not a PsiClass, trust the super value and move on
-    if (!checkMetadata || owner !is PsiCompiledElement || owner !is PsiClass) {
+    if (owner !is PsiClass || !canCheckMetadata(owner)) {
       return superValue
     }
 
     // We're working with an externally compiled element and it's a PsiClass, so we can do more
     // thorough checks here.
-    KOTLIN_CLASS_MODIFIER_TOKENS[keyword]?.let { (flag, applicableClassKinds) ->
+    KOTLIN_METADATA_TOKENS[keyword]?.let { (flag, applicableClassKinds) ->
       owner.findContaining(UClass::class.java)?.let { cls ->
         // Only parse if the target class kind is applicable to the token we're checking. For
         // example - when checking `data` tokens, they're not applicable to interfaces or enums.
