@@ -132,7 +132,7 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
     delegate.implementsInterface(cls, interfaceName, strict)
   // endregion
 
-  /** Deep isObject check that checks if the given [cls] */
+  /** Deep isObject check that checks if the given [cls] is an `object` class. */
   fun isObject(cls: PsiClass?): Boolean {
     if (cls == null) return false
 
