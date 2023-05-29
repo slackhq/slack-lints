@@ -41,6 +41,8 @@ import org.jetbrains.uast.toUElementOfType
  * Kotlin language features in externally-compiled elements. This means that constructs like `data
  * classes` or similar are not visible. Using kotlinx-metadata, we can parse the [Metadata]
  * annotations on the containing classes and read these language features from them.
+ *
+ * This is necessary due to https://issuetracker.google.com/issues/283654244.
  */
 @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
 class MetadataJavaEvaluator(private val file: String, private val delegate: JavaEvaluator) :
