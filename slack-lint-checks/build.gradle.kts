@@ -31,6 +31,9 @@ dependencies {
   ksp(libs.autoService.ksp)
   implementation(libs.autoService.annotations)
   shade(libs.kotlin.metadata) { exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib") }
+
+  // Dupe the dep because the shaded version is compileOnly in the eyes of the gradle configurations
+  testImplementation(libs.kotlin.metadata)
   testImplementation(libs.bundles.lintTest)
   testImplementation(libs.junit)
 
