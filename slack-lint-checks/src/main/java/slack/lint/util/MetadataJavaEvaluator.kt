@@ -136,7 +136,7 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
   fun isObject(cls: PsiClass?): Boolean {
     if (cls == null) return false
 
-    cls.toUElementOfType<UClass>()?.let { uClass ->
+    (cls as? UClass ?: cls.toUElementOfType<UClass>())?.let { uClass ->
       if (uClass.sourcePsi is KtObjectDeclaration) {
         return true
       } else if (canCheckMetadata(cls)) {
