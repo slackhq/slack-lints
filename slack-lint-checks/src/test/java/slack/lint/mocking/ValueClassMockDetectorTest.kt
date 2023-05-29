@@ -2,9 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
+import org.junit.Ignore
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
+@Ignore("https://issuetracker.google.com/issues/283715187")
 class ValueClassMockDetectorTest : BaseSlackLintTest() {
 
   private val testClass =

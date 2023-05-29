@@ -13,6 +13,7 @@ import slack.lint.util.isValueClass
 import slack.lint.util.sourceImplementation
 
 /** A [AbstractMockDetector] that checks for mocking Kotlin value classes. */
+// TODO not currently enabled because of https://issuetracker.google.com/issues/283715187
 class ValueClassMockDetector : AbstractMockDetector() {
   companion object {
     val ISSUE: Issue =
