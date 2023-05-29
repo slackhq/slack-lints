@@ -42,8 +42,8 @@ class RecordClassMockDetector : AbstractMockDetector() {
         // Java
         mockedType.isRecord
       } else {
-        // Kotlin
-        evaluator.isData(mockedType) && mockedType.hasAnnotation("kotlin.jvm.JvmRecord")
+        // Kotlin. Check the annotation first as the isData check may check metadata
+        mockedType.hasAnnotation("kotlin.jvm.JvmRecord") && evaluator.isData(mockedType)
       }
     return if (isRecord) {
       Reason(
