@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
-import com.android.tools.lint.client.api.JavaEvaluator
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.JavaContext
@@ -43,7 +42,7 @@ abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
 
   open fun checkType(
     context: JavaContext,
-    evaluator: JavaEvaluator,
+    evaluator: SlackJavaEvaluator,
     mockedType: PsiClass
   ): Reason? {
     return null

@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
-import com.android.tools.lint.client.api.JavaEvaluator
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.intellij.psi.PsiClass
 import org.jetbrains.uast.UElement
+import slack.lint.util.SlackJavaEvaluator
 import slack.lint.util.sourceImplementation
 
 /** A [AbstractMockDetector] that checks for mocking Kotlin data classes. */
@@ -33,7 +33,7 @@ class DataClassMockDetector : AbstractMockDetector() {
 
   override fun checkType(
     context: JavaContext,
-    evaluator: JavaEvaluator,
+    evaluator: SlackJavaEvaluator,
     mockedType: PsiClass
   ): Reason? {
     return if (evaluator.isData(mockedType)) {

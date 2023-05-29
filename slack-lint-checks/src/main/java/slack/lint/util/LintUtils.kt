@@ -31,7 +31,6 @@ import com.intellij.psi.PsiWildcardType
 import java.util.EnumSet
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.UMethod
@@ -66,15 +65,6 @@ internal fun PsiClass.implements(
     classType.resolve()?.implements(qualifiedName, nameFilter) ?: false
   }
 }
-
-/** @return whether or not this is a Kotlin `object` type. */
-internal val UClass.isObject: Boolean
-  get() {
-    return sourcePsi is KtObjectDeclaration
-  }
-
-internal fun UClass.isKotlinTopLevelFacadeClass() =
-  this is KotlinUClass && javaPsi is KtLightClassForFacade
 
 /** @return whether or not [owner] is a Kotlin `value` class. */
 internal fun JavaEvaluator.isValueClass(owner: PsiModifierListOwner?): Boolean {

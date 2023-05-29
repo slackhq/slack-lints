@@ -8,6 +8,7 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.intellij.psi.PsiClass
 import org.jetbrains.uast.UElement
+import slack.lint.util.SlackJavaEvaluator
 import slack.lint.util.isValueClass
 import slack.lint.util.sourceImplementation
 
@@ -31,8 +32,12 @@ class ValueClassMockDetector : AbstractMockDetector() {
 
   override val annotations: Set<String> = emptySet()
 
-  override fun checkType(context: JavaContext, mockedType: PsiClass): Reason? {
-    return if (context.evaluator.isValueClass(mockedType)) {
+  override fun checkType(
+    context: JavaContext,
+    evaluator: SlackJavaEvaluator,
+    mockedType: PsiClass
+  ): Reason? {
+    return if (evaluator.isValueClass(mockedType)) {
       Reason(
         mockedType,
         "value classes represent inlined types, so mocking them should not be necessary"

@@ -9,6 +9,7 @@ import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.isJava
 import com.intellij.psi.PsiClass
 import org.jetbrains.uast.UElement
+import slack.lint.util.SlackJavaEvaluator
 import slack.lint.util.sourceImplementation
 
 /** A [AbstractMockDetector] that checks for mocking record classes. */
@@ -31,14 +32,18 @@ class RecordClassMockDetector : AbstractMockDetector() {
 
   override val annotations: Set<String> = emptySet()
 
-  override fun checkType(context: JavaContext, mockedType: PsiClass): Reason? {
+  override fun checkType(
+    context: JavaContext,
+    evaluator: SlackJavaEvaluator,
+    mockedType: PsiClass
+  ): Reason? {
     val isRecord =
       if (isJava(mockedType.language)) {
         // Java
         mockedType.isRecord
       } else {
         // Kotlin
-        context.evaluator.isData(mockedType) && mockedType.hasAnnotation("kotlin.jvm.JvmRecord")
+        evaluator.isData(mockedType) && mockedType.hasAnnotation("kotlin.jvm.JvmRecord")
       }
     return if (isRecord) {
       Reason(
