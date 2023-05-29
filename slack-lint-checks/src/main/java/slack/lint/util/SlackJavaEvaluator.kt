@@ -172,37 +172,40 @@ class SlackJavaEvaluator(private val file: String, private val delegate: JavaEva
   }
 
   private fun UAnnotation.parseMetadata(classNameHint: String): KmClass? {
-    val metadataAnnotation =
-      MetadataWithNullableArgs(
-        kind = findAttributeValue("k")?.parseIntMember(),
-        metadataVersion = findAttributeValue("mv")?.parseIntArray(),
-        data1 = findAttributeValue("d1")?.parseStringArray(),
-        data2 = findAttributeValue("d2")?.parseStringArray(),
-        extraString = findAttributeValue("xs")?.parseStringMember(),
-        packageName = findAttributeValue("pn")?.parseStringMember(),
-        extraInt = findAttributeValue("xi")?.parseIntMember(),
-      )
-    val metadata = KotlinClassMetadata.read(metadataAnnotation)
-    return when (metadata) {
-      is KotlinClassMetadata.Class -> metadata.toKmClass()
-      is KotlinClassMetadata.FileFacade -> null
-      is KotlinClassMetadata.MultiFileClassFacade -> null
-      is KotlinClassMetadata.MultiFileClassPart -> null
-      is KotlinClassMetadata.SyntheticClass -> null
-      is KotlinClassMetadata.Unknown -> null
-      null -> {
-        slackLintLog("Could not load metadata for $classNameHint from file $file")
+    return when (val parsedMetadata = KotlinClassMetadata.read(toMetadataAnnotation())) {
+      is KotlinClassMetadata.Class -> {
+        parsedMetadata.toKmClass().also {
+          slackLintLog("Loaded KmClass for $classNameHint from file $file")
+        }
+      }
+      else -> {
+        if (parsedMetadata == null) {
+          // Extremely weird case, log this specifically
+          slackLintLog("Could not load metadata for $classNameHint from file $file")
+        } else {
+          slackLintLog(
+            """
+              Could not load KmClass for $classNameHint from file $file.
+              Metadata was $parsedMetadata
+            """
+              .trimIndent()
+          )
+        }
         null
       }
-    }.also {
-      if (it == null) {
-        slackLintLog(
-          "Could not load KmClass for $classNameHint from file $file. Metadata was $metadata"
-        )
-      } else {
-        slackLintLog("Loaded KmClass for $classNameHint from file $file")
-      }
     }
+  }
+
+  private fun UAnnotation.toMetadataAnnotation(): Metadata {
+    return MetadataWithNullableArgs(
+      kind = findAttributeValue("k")?.parseIntMember(),
+      metadataVersion = findAttributeValue("mv")?.parseIntArray(),
+      data1 = findAttributeValue("d1")?.parseStringArray(),
+      data2 = findAttributeValue("d2")?.parseStringArray(),
+      extraString = findAttributeValue("xs")?.parseStringMember(),
+      packageName = findAttributeValue("pn")?.parseStringMember(),
+      extraInt = findAttributeValue("xi")?.parseIntMember(),
+    )
   }
 
   private val PsiLiteralExpression.intValue: Int
