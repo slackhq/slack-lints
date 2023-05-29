@@ -43,12 +43,9 @@ import org.jetbrains.uast.tryResolve
 /**
  * @param qualifiedName the qualified name of the desired interface type
  * @param nameFilter an optional name filter, used to check when to stop searching up the type
- *
- * ```
- *                   hierarchy. This is useful if you want to only check direct implementers in
- *                   certain packages. Called with a fully qualified class name; return false if
- *                   you want to stop searching up the type tree, true to continue.
- * ```
+ *   hierarchy. This is useful if you want to only check direct implementers in certain packages.
+ *   Called with a fully qualified class name; return false if you want to stop searching up the
+ *   type tree, true to continue.
  */
 internal fun PsiClass.implements(
   qualifiedName: String,
@@ -318,4 +315,27 @@ internal fun StringOption.loadAsSet(
     .map(String::trim)
     .filter(String::isNotBlank)
     .toSet()
+}
+
+internal inline fun <T, reified R> Array<out T>.mapArray(transform: (T) -> R): Array<R> =
+  Array(this.size) { i -> transform(this[i]) }
+
+internal inline fun <T> measureTimeMillisWithResult(block: () -> T): Pair<Long, T> {
+  val start = System.currentTimeMillis()
+  val result = block()
+  return Pair(System.currentTimeMillis() - start, result)
+}
+
+private val logVerbosely by lazy {
+  System.getProperty("slack.lint.logVerbosely", "false").toBoolean()
+}
+
+/**
+ * Logs to std if [logVerbosely] is enabled. Useful for debugging and should not generally be
+ * enabled.
+ */
+internal fun slackLintLog(message: String) {
+  if (logVerbosely) {
+    println("SlackLint: $message")
+  }
 }
