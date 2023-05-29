@@ -8,7 +8,7 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.intellij.psi.PsiClass
 import org.jetbrains.uast.UElement
-import slack.lint.util.SlackJavaEvaluator
+import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.sourceImplementation
 
 /** A [AbstractMockDetector] that checks for mocking Kotlin sealed classes. */
@@ -32,9 +32,9 @@ class SealedClassMockDetector : AbstractMockDetector() {
   override val annotations: Set<String> = emptySet()
 
   override fun checkType(
-    context: JavaContext,
-    evaluator: SlackJavaEvaluator,
-    mockedType: PsiClass
+          context: JavaContext,
+          evaluator: MetadataJavaEvaluator,
+          mockedType: PsiClass
   ): Reason? {
     // Check permitsList to cover Java 17 sealed types too
     return if (evaluator.isSealed(mockedType) || mockedType.permitsList != null) {

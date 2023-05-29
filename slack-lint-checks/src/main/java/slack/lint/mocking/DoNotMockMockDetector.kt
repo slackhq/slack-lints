@@ -10,7 +10,7 @@ import com.intellij.psi.PsiClass
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.toUElementOfType
-import slack.lint.util.SlackJavaEvaluator
+import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.sourceImplementation
 
 /** A [AbstractMockDetector] that checks for mocking `@DoNotMock`-annotated classes. */
@@ -36,9 +36,9 @@ class DoNotMockMockDetector : AbstractMockDetector() {
   }
 
   override fun checkType(
-    context: JavaContext,
-    evaluator: SlackJavaEvaluator,
-    mockedType: PsiClass
+          context: JavaContext,
+          evaluator: MetadataJavaEvaluator,
+          mockedType: PsiClass
   ): Reason? {
     val uMockedType = mockedType.toUElementOfType<UClass>() ?: return null
     val doNotMockAnnotation =

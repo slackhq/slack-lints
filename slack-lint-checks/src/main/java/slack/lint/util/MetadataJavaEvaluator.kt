@@ -37,7 +37,7 @@ import org.jetbrains.uast.*
  * annotations on the containing classes and read these language features from them.
  */
 @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
-class SlackJavaEvaluator(private val file: String, private val delegate: JavaEvaluator) :
+class MetadataJavaEvaluator(private val file: String, private val delegate: JavaEvaluator) :
   JavaEvaluator() {
 
   private companion object {

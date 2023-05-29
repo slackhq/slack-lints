@@ -69,7 +69,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
   override fun getApplicableUastTypes() = listOf(UClass::class.java)
 
   override fun createUastHandler(context: JavaContext): UElementHandler {
-    val slackEvaluator = SlackJavaEvaluator(context.file.name, context.evaluator)
+    val slackEvaluator = MetadataJavaEvaluator(context.file.name, context.evaluator)
     return object : UElementHandler() {
       override fun visitClass(node: UClass) {
         // Enums get checked in both languages because it's easy enough
@@ -536,9 +536,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
   }
 
   private fun validateAdaptedByAnnotation(
-    context: JavaContext,
-    evaluator: SlackJavaEvaluator,
-    adaptedByAnnotation: UAnnotation
+          context: JavaContext,
+          evaluator: MetadataJavaEvaluator,
+          adaptedByAnnotation: UAnnotation
   ) {
     // Check the adapter is a valid adapter type
     val adapterAttribute =
@@ -567,13 +567,13 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
   }
 
   private fun checkMoshiType(
-    context: JavaContext,
-    evaluator: SlackJavaEvaluator,
-    psiType: PsiType,
-    parameter: UParameter,
-    typeNode: UElement,
-    defaultValueExpression: KtExpression?,
-    nestedGenericCheck: Boolean = true
+          context: JavaContext,
+          evaluator: MetadataJavaEvaluator,
+          psiType: PsiType,
+          parameter: UParameter,
+          typeNode: UElement,
+          defaultValueExpression: KtExpression?,
+          nestedGenericCheck: Boolean = true
   ) {
 
     if (psiType is PsiPrimitiveType) return
