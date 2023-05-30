@@ -7,27 +7,24 @@ import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.intellij.psi.PsiClass
-import org.jetbrains.uast.UElement
 import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.sourceImplementation
 
-/** A [AbstractMockDetector] that checks for mocking Kotlin object classes. */
-class ObjectClassMockDetector : AbstractMockDetector() {
-  companion object {
-    val ISSUE: Issue =
-      Issue.create(
-        "DoNotMockObjectClass",
-        "object classes are singletons, so mocking them should not be necessary",
-        """
-        object classes are global singletons, so mocking them should not be necessary. \
-        Use the object instance instead.
-      """,
-        Category.CORRECTNESS,
-        6,
-        Severity.ERROR,
-        sourceImplementation<ObjectClassMockDetector>()
-      )
-  }
+/** A [MockDetector.TypeChecker] that checks for mocking Kotlin object classes. */
+object ObjectClassMockDetector : MockDetector.TypeChecker {
+  override val issue: Issue =
+    Issue.create(
+      "DoNotMockObjectClass",
+      "object classes are singletons, so mocking them should not be necessary",
+      """
+      object classes are global singletons, so mocking them should not be necessary. \
+      Use the object instance instead.
+    """,
+      Category.CORRECTNESS,
+      6,
+      Severity.ERROR,
+      sourceImplementation<MockDetector>()
+    )
 
   override val annotations: Set<String> = emptySet()
 
@@ -35,20 +32,14 @@ class ObjectClassMockDetector : AbstractMockDetector() {
     context: JavaContext,
     evaluator: MetadataJavaEvaluator,
     mockedType: PsiClass
-  ): Reason? {
+  ): MockDetector.Reason? {
     return if (evaluator.isObject(mockedType)) {
-      Reason(mockedType, "object classes are singletons, so mocking them should not be necessary")
+      MockDetector.Reason(
+        mockedType,
+        "object classes are singletons, so mocking them should not be necessary"
+      )
     } else {
       null
     }
-  }
-
-  override fun report(
-    context: JavaContext,
-    mockedType: PsiClass,
-    mockNode: UElement,
-    reason: Reason
-  ) {
-    context.report(ISSUE, context.getLocation(mockNode), reason.reason)
   }
 }

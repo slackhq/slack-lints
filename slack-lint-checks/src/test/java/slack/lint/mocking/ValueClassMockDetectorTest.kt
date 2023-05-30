@@ -22,9 +22,9 @@ class ValueClassMockDetectorTest : BaseSlackLintTest() {
       )
       .indented()
 
-  override fun getDetector() = ValueClassMockDetector()
+  override fun getDetector() = MockDetector()
 
-  override fun getIssues() = listOf(ValueClassMockDetector.ISSUE)
+  override fun getIssues() = MockDetector.ISSUES.toList()
 
   @Test
   fun kotlinTests() {

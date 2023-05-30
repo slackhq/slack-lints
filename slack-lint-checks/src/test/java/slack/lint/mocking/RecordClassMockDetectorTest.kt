@@ -41,9 +41,9 @@ class RecordClassMockDetectorTest : BaseSlackLintTest() {
       //            testJavaClass
     )
 
-  override fun getDetector() = RecordClassMockDetector()
+  override fun getDetector() = MockDetector()
 
-  override fun getIssues() = listOf(RecordClassMockDetector.ISSUE)
+  override fun getIssues() = MockDetector.ISSUES.toList()
 
   @Test
   fun kotlinTests() {
