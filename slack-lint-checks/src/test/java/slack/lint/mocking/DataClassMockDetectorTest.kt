@@ -15,9 +15,9 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
     """)
       .indented()
 
-  override fun getDetector() = DataClassMockDetector()
+  override fun getDetector() = MockDetector()
 
-  override fun getIssues() = listOf(DataClassMockDetector.ISSUE)
+  override fun getIssues() = MockDetector.ISSUES.toList()
 
   @Test
   fun kotlinTests() {

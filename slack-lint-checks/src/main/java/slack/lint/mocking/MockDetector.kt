@@ -4,12 +4,14 @@ package slack.lint.mocking
 
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.Detector
+import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.isJava
 import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
+import com.intellij.util.containers.map2Array
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.uast.UAnnotated
 import org.jetbrains.uast.UCallExpression
@@ -22,10 +24,13 @@ import org.jetbrains.uast.getParentOfType
 import slack.lint.util.MetadataJavaEvaluator
 
 /**
- * A base detector class for detecting different kinds of mocking behavior. Subclasses can indicate
- * annotated types that should be reported or implement [checkType] for more dynamic control.
+ * A detector for detecting different kinds of mocking behavior. Implementations of [TypeChecker]
+ * can indicate annotated types that should be reported via [TypeChecker.checkType] or
+ * [TypeChecker.annotations] for more dynamic control.
+ *
+ * New [TypeChecker] implementations should be added to [TYPE_CHECKERS] to run in this.
  */
-abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
+class MockDetector : Detector(), SourceCodeScanner {
   companion object {
     val MOCK_ANNOTATIONS = setOf("org.mockito.Mock", "org.mockito.Spy")
     val MOCK_CLASSES =
@@ -35,29 +40,28 @@ abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
         "slack.test.mockito.MockitoHelpersKt"
       )
     val MOCK_METHODS = setOf("mock", "spy")
+
+    private val TYPE_CHECKERS =
+      listOf(
+        // Loosely defined in the order of most likely to be hit
+        DataClassMockDetector,
+        DoNotMockMockDetector,
+        SealedClassMockDetector,
+        AutoValueMockDetector,
+        ObjectClassMockDetector,
+        RecordClassMockDetector,
+      )
+    val ISSUES = TYPE_CHECKERS.map2Array { it.issue }
   }
-
-  /** Set of annotation FQCNs that should not be mocked */
-  open val annotations: Set<String> = emptySet()
-
-  open fun checkType(
-    context: JavaContext,
-    evaluator: MetadataJavaEvaluator,
-    mockedType: PsiClass
-  ): Reason? {
-    return null
-  }
-
-  abstract fun report(
-    context: JavaContext,
-    mockedType: PsiClass,
-    mockNode: UElement,
-    reason: Reason
-  )
 
   override fun getApplicableUastTypes() = listOf(UCallExpression::class.java, UField::class.java)
 
-  override fun createUastHandler(context: JavaContext): UElementHandler {
+  override fun createUastHandler(context: JavaContext): UElementHandler? {
+    val checkers =
+      TYPE_CHECKERS.filter { context.isEnabled(it.issue) }
+        .ifEmpty {
+          return null
+        }
     val slackEvaluator = MetadataJavaEvaluator(context.file.name, context.evaluator)
     return object : UElementHandler() {
 
@@ -121,23 +125,39 @@ abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
         return MOCK_ANNOTATIONS.any { node.findAnnotation(it) != null }
       }
 
+      // TODO add the type expression to the report
       private fun checkMock(node: UElement, type: PsiClass) {
-        val reason = checkType(context, slackEvaluator, type)
-        if (reason != null) {
-          report(context, type, node, reason)
-          return
-        }
-        val disallowedAnnotation = annotations.find { type.hasAnnotation(it) } ?: return
-        report(
-          context,
-          type,
-          node,
-          Reason(
-            type,
+        for (checker in checkers) {
+          val reason = checker.checkType(context, slackEvaluator, type)
+          if (reason != null) {
+            context.report(checker.issue, context.getLocation(node), reason.reason)
+            continue
+          }
+          val disallowedAnnotation = checker.annotations.find { type.hasAnnotation(it) } ?: continue
+          context.report(
+            checker.issue,
+            context.getLocation(node),
             "Mocked type is annotated with non-mockable annotation $disallowedAnnotation."
           )
-        )
+          return
+        }
       }
+    }
+  }
+
+  interface TypeChecker {
+    val issue: Issue
+
+    /** Set of annotation FQCNs that should not be mocked */
+    val annotations: Set<String>
+      get() = emptySet()
+
+    fun checkType(
+      context: JavaContext,
+      evaluator: MetadataJavaEvaluator,
+      mockedType: PsiClass
+    ): Reason? {
+      return null
     }
   }
 

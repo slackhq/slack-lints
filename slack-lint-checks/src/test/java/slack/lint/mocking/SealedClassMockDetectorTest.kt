@@ -36,9 +36,9 @@ class SealedClassMockDetectorTest : BaseSlackLintTest() {
       //      javaTestClass,
     )
 
-  override fun getDetector() = SealedClassMockDetector()
+  override fun getDetector() = MockDetector()
 
-  override fun getIssues() = listOf(SealedClassMockDetector.ISSUE)
+  override fun getIssues() = MockDetector.ISSUES.toList()
 
   @Test
   fun kotlinTests() {

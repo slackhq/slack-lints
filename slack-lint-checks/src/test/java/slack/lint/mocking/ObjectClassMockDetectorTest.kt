@@ -14,9 +14,9 @@ class ObjectClassMockDetectorTest : BaseSlackLintTest() {
       object TestClass
     """).indented()
 
-  override fun getDetector() = ObjectClassMockDetector()
+  override fun getDetector() = MockDetector()
 
-  override fun getIssues() = listOf(ObjectClassMockDetector.ISSUE)
+  override fun getIssues() = MockDetector.ISSUES.toList()
 
   @Test
   fun kotlinTests() {

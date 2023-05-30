@@ -8,27 +8,24 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.isJava
 import com.intellij.psi.PsiClass
-import org.jetbrains.uast.UElement
 import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.sourceImplementation
 
-/** A [AbstractMockDetector] that checks for mocking record classes. */
-class RecordClassMockDetector : AbstractMockDetector() {
-  companion object {
-    val ISSUE: Issue =
-      Issue.create(
-        "DoNotMockRecordClass",
-        "record classes represent pure data classes, so mocking them should not be necessary.",
-        """
-        record classes represent pure data classes, so mocking them should not be necessary. \
-        Construct a real instance of the class instead.
-      """,
-        Category.CORRECTNESS,
-        6,
-        Severity.ERROR,
-        sourceImplementation<RecordClassMockDetector>()
-      )
-  }
+/** A [MockDetector.TypeChecker] that checks for mocking record classes. */
+object RecordClassMockDetector : MockDetector.TypeChecker {
+  override val issue: Issue =
+    Issue.create(
+      "DoNotMockRecordClass",
+      "record classes represent pure data classes, so mocking them should not be necessary.",
+      """
+      record classes represent pure data classes, so mocking them should not be necessary. \
+      Construct a real instance of the class instead.
+    """,
+      Category.CORRECTNESS,
+      6,
+      Severity.ERROR,
+      sourceImplementation<MockDetector>()
+    )
 
   override val annotations: Set<String> = emptySet()
 
@@ -36,7 +33,7 @@ class RecordClassMockDetector : AbstractMockDetector() {
     context: JavaContext,
     evaluator: MetadataJavaEvaluator,
     mockedType: PsiClass
-  ): Reason? {
+  ): MockDetector.Reason? {
     val isRecord =
       if (isJava(mockedType.language)) {
         // Java
@@ -46,21 +43,12 @@ class RecordClassMockDetector : AbstractMockDetector() {
         mockedType.hasAnnotation("kotlin.jvm.JvmRecord") && evaluator.isData(mockedType)
       }
     return if (isRecord) {
-      Reason(
+      MockDetector.Reason(
         mockedType,
         "record classes represent pure value classes, so mocking them should not be necessary"
       )
     } else {
       null
     }
-  }
-
-  override fun report(
-    context: JavaContext,
-    mockedType: PsiClass,
-    mockNode: UElement,
-    reason: Reason
-  ) {
-    context.report(ISSUE, context.getLocation(mockNode), reason.reason)
   }
 }
