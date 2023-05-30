@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
-import com.android.tools.lint.client.api.JavaEvaluator
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.JavaContext
@@ -20,7 +19,7 @@ import org.jetbrains.uast.UField
 import org.jetbrains.uast.UReferenceExpression
 import org.jetbrains.uast.UVariable
 import org.jetbrains.uast.getParentOfType
-import slack.lint.util.SlackJavaEvaluator
+import slack.lint.util.MetadataJavaEvaluator
 
 /**
  * A base detector class for detecting different kinds of mocking behavior. Subclasses can indicate
@@ -43,7 +42,7 @@ abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
 
   open fun checkType(
     context: JavaContext,
-    evaluator: JavaEvaluator,
+    evaluator: MetadataJavaEvaluator,
     mockedType: PsiClass
   ): Reason? {
     return null
@@ -59,7 +58,7 @@ abstract class AbstractMockDetector : Detector(), SourceCodeScanner {
   override fun getApplicableUastTypes() = listOf(UCallExpression::class.java, UField::class.java)
 
   override fun createUastHandler(context: JavaContext): UElementHandler {
-    val slackEvaluator = SlackJavaEvaluator(context.file.name, context.evaluator)
+    val slackEvaluator = MetadataJavaEvaluator(context.file.name, context.evaluator)
     return object : UElementHandler() {
 
       // Checks for mock()/spy() calls

@@ -11,21 +11,21 @@ import org.jetbrains.uast.UElement
 import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.sourceImplementation
 
-/** A [AbstractMockDetector] that checks for mocking Kotlin data classes. */
-class DataClassMockDetector : AbstractMockDetector() {
+/** A [AbstractMockDetector] that checks for mocking Kotlin object classes. */
+class ObjectClassMockDetector : AbstractMockDetector() {
   companion object {
     val ISSUE: Issue =
       Issue.create(
-        "DoNotMockDataClass",
-        "data classes represent pure data classes, so mocking them should not be necessary.",
+        "DoNotMockObjectClass",
+        "object classes are singletons, so mocking them should not be necessary",
         """
-        data classes represent pure data classes, so mocking them should not be necessary. \
-        Construct a real instance of the class instead.
+        object classes are global singletons, so mocking them should not be necessary. \
+        Use the object instance instead.
       """,
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<DataClassMockDetector>()
+        sourceImplementation<ObjectClassMockDetector>()
       )
   }
 
@@ -36,11 +36,8 @@ class DataClassMockDetector : AbstractMockDetector() {
     evaluator: MetadataJavaEvaluator,
     mockedType: PsiClass
   ): Reason? {
-    return if (evaluator.isData(mockedType)) {
-      Reason(
-        mockedType,
-        "data classes represent pure value classes, so mocking them should not be necessary"
-      )
+    return if (evaluator.isObject(mockedType)) {
+      Reason(mockedType, "object classes are singletons, so mocking them should not be necessary")
     } else {
       null
     }

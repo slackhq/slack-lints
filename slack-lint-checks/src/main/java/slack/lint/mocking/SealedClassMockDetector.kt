@@ -11,21 +11,21 @@ import org.jetbrains.uast.UElement
 import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.sourceImplementation
 
-/** A [AbstractMockDetector] that checks for mocking Kotlin data classes. */
-class DataClassMockDetector : AbstractMockDetector() {
+/** A [AbstractMockDetector] that checks for mocking Kotlin sealed classes. */
+class SealedClassMockDetector : AbstractMockDetector() {
   companion object {
     val ISSUE: Issue =
       Issue.create(
-        "DoNotMockDataClass",
-        "data classes represent pure data classes, so mocking them should not be necessary.",
+        "DoNotMockSealedClass",
+        "sealed classes have a restricted type hierarchy, use a subtype instead",
         """
-        data classes represent pure data classes, so mocking them should not be necessary. \
-        Construct a real instance of the class instead.
+        sealed classes have a restricted type hierarchy, so creating new unrestricted mocks \
+        will break runtime expectations. Use a subtype instead.
       """,
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<DataClassMockDetector>()
+        sourceImplementation<SealedClassMockDetector>()
       )
   }
 
@@ -36,11 +36,9 @@ class DataClassMockDetector : AbstractMockDetector() {
     evaluator: MetadataJavaEvaluator,
     mockedType: PsiClass
   ): Reason? {
-    return if (evaluator.isData(mockedType)) {
-      Reason(
-        mockedType,
-        "data classes represent pure value classes, so mocking them should not be necessary"
-      )
+    // Check permitsList to cover Java 17 sealed types too
+    return if (evaluator.isSealed(mockedType) || mockedType.permitsList != null) {
+      Reason(mockedType, "sealed classes have a restricted type hierarchy, use a subtype instead.")
     } else {
       null
     }

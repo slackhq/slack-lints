@@ -5,19 +5,18 @@ package slack.lint.mocking
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
-class DataClassMockDetectorTest : BaseSlackLintTest() {
+class ObjectClassMockDetectorTest : BaseSlackLintTest() {
 
   private val testClass =
     kotlin("""
       package slack.test
 
-      data class TestClass(val foo: String)
-    """)
-      .indented()
+      object TestClass
+    """).indented()
 
-  override fun getDetector() = DataClassMockDetector()
+  override fun getDetector() = ObjectClassMockDetector()
 
-  override fun getIssues() = listOf(DataClassMockDetector.ISSUE)
+  override fun getIssues() = listOf(ObjectClassMockDetector.ISSUE)
 
   @Test
   fun kotlinTests() {
@@ -60,28 +59,28 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.kt:8: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:8: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
             @Mock lateinit var fieldMock: TestClass
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:9: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:9: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
             @Spy lateinit var fieldSpy: TestClass
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:12: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:12: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
               val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:13: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:13: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
               val localSpy1 = org.mockito.Mockito.spy(localMock1)
                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:14: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:14: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
               val localMock2 = mock<TestClass>()
                                ~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:16: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:16: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
               val localMock3 = org.mockito.Mockito.mock(classRef)
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:18: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:18: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
               val dynamicMock = mock<TestClass> {
                                 ^
-          test/test/slack/test/TestClass.kt:21: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.kt:21: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
               val assigned: TestClass = mock()
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           8 errors, 0 warnings
@@ -124,19 +123,19 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.java:9: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.java:9: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
             @Mock TestClass fieldMock;
             ~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:10: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.java:10: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
             @Spy TestClass fieldSpy;
             ~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:13: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.java:13: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
               TestClass localMock = mock(TestClass.class);
                                     ~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:14: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.java:14: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
               TestClass localSpy = spy(localMock);
                                    ~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:16: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+          test/test/slack/test/TestClass.java:16: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
               TestClass localMock2 = mock(classRef);
                                      ~~~~~~~~~~~~~~
           5 errors, 0 warnings

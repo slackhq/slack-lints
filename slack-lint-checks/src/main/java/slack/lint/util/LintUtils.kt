@@ -25,12 +25,12 @@ import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiModifierListOwner
 import com.intellij.psi.PsiType
 import com.intellij.psi.PsiWildcardType
 import java.util.EnumSet
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.UMethod
@@ -66,11 +66,10 @@ internal fun PsiClass.implements(
   }
 }
 
-/** @return whether or not this is a Kotlin `object` type. */
-internal val UClass.isObject: Boolean
-  get() {
-    return sourcePsi is KtObjectDeclaration
-  }
+/** @return whether or not [owner] is a Kotlin `value` class. */
+internal fun JavaEvaluator.isValueClass(owner: PsiModifierListOwner?): Boolean {
+  return hasModifier(owner, KtTokens.VALUE_KEYWORD)
+}
 
 internal fun UClass.isInnerClass(evaluator: JavaEvaluator): Boolean {
   // If it has no containing class, it's top-level and therefore not inner

@@ -6,26 +6,27 @@ import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
+import com.android.tools.lint.detector.api.isJava
 import com.intellij.psi.PsiClass
 import org.jetbrains.uast.UElement
 import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.sourceImplementation
 
-/** A [AbstractMockDetector] that checks for mocking Kotlin data classes. */
-class DataClassMockDetector : AbstractMockDetector() {
+/** A [AbstractMockDetector] that checks for mocking record classes. */
+class RecordClassMockDetector : AbstractMockDetector() {
   companion object {
     val ISSUE: Issue =
       Issue.create(
-        "DoNotMockDataClass",
-        "data classes represent pure data classes, so mocking them should not be necessary.",
+        "DoNotMockRecordClass",
+        "record classes represent pure data classes, so mocking them should not be necessary.",
         """
-        data classes represent pure data classes, so mocking them should not be necessary. \
+        record classes represent pure data classes, so mocking them should not be necessary. \
         Construct a real instance of the class instead.
       """,
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<DataClassMockDetector>()
+        sourceImplementation<RecordClassMockDetector>()
       )
   }
 
@@ -36,10 +37,18 @@ class DataClassMockDetector : AbstractMockDetector() {
     evaluator: MetadataJavaEvaluator,
     mockedType: PsiClass
   ): Reason? {
-    return if (evaluator.isData(mockedType)) {
+    val isRecord =
+      if (isJava(mockedType.language)) {
+        // Java
+        mockedType.isRecord
+      } else {
+        // Kotlin. Check the annotation first as the isData check may check metadata
+        mockedType.hasAnnotation("kotlin.jvm.JvmRecord") && evaluator.isData(mockedType)
+      }
+    return if (isRecord) {
       Reason(
         mockedType,
-        "data classes represent pure value classes, so mocking them should not be necessary"
+        "record classes represent pure value classes, so mocking them should not be necessary"
       )
     } else {
       null

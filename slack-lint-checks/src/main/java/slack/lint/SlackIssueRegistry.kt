@@ -14,6 +14,9 @@ import slack.lint.mocking.AutoValueMockDetector
 import slack.lint.mocking.DataClassMockDetector
 import slack.lint.mocking.DoNotMockMockDetector
 import slack.lint.mocking.ErrorProneDoNotMockDetector
+import slack.lint.mocking.ObjectClassMockDetector
+import slack.lint.mocking.RecordClassMockDetector
+import slack.lint.mocking.SealedClassMockDetector
 import slack.lint.parcel.ParcelizeFunctionPropertyDetector
 import slack.lint.resources.FullyQualifiedResourceDetector
 import slack.lint.resources.MissingResourceImportAliasDetector
@@ -53,10 +56,13 @@ class SlackIssueRegistry : IssueRegistry() {
       MainScopeUsageDetector.ISSUE,
       RxSubscribeOnMainDetector.ISSUE,
       *GuavaPreconditionsDetector.issues,
-      DataClassMockDetector.ISSUE,
       AutoValueMockDetector.ISSUE,
+      DataClassMockDetector.ISSUE,
       DoNotMockMockDetector.ISSUE,
       ErrorProneDoNotMockDetector.ISSUE,
+      ObjectClassMockDetector.ISSUE,
+      RecordClassMockDetector.ISSUE,
+      SealedClassMockDetector.ISSUE,
       *MoshiUsageDetector.issues(),
       *FragmentDaggerFieldInjectionDetector.issues,
       *InjectWithUsageDetector.ISSUES,

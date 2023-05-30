@@ -9,23 +9,25 @@ import com.android.tools.lint.detector.api.Severity
 import com.intellij.psi.PsiClass
 import org.jetbrains.uast.UElement
 import slack.lint.util.MetadataJavaEvaluator
+import slack.lint.util.isValueClass
 import slack.lint.util.sourceImplementation
 
-/** A [AbstractMockDetector] that checks for mocking Kotlin data classes. */
-class DataClassMockDetector : AbstractMockDetector() {
+/** A [AbstractMockDetector] that checks for mocking Kotlin value classes. */
+// TODO not currently enabled because of https://issuetracker.google.com/issues/283715187
+class ValueClassMockDetector : AbstractMockDetector() {
   companion object {
     val ISSUE: Issue =
       Issue.create(
-        "DoNotMockDataClass",
-        "data classes represent pure data classes, so mocking them should not be necessary.",
+        "DoNotMockValueClass",
+        "value classes represent inlined types, so mocking them should not be necessary.",
         """
-        data classes represent pure data classes, so mocking them should not be necessary. \
+        value classes represent inlined types, so mocking them should not be necessary. \
         Construct a real instance of the class instead.
       """,
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<DataClassMockDetector>()
+        sourceImplementation<ValueClassMockDetector>()
       )
   }
 
@@ -36,10 +38,10 @@ class DataClassMockDetector : AbstractMockDetector() {
     evaluator: MetadataJavaEvaluator,
     mockedType: PsiClass
   ): Reason? {
-    return if (evaluator.isData(mockedType)) {
+    return if (evaluator.isValueClass(mockedType)) {
       Reason(
         mockedType,
-        "data classes represent pure value classes, so mocking them should not be necessary"
+        "value classes represent inlined types, so mocking them should not be necessary"
       )
     } else {
       null
