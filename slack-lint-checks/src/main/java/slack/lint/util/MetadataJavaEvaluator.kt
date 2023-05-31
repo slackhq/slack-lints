@@ -185,9 +185,15 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
         is UClass -> this
         else -> return null // Only classes are supported right now
       }
+    val fqcn =
+      qualifiedName
+        ?: run {
+          slackLintErrorLog("Qualified name is null for $cls in file $file")
+          return null
+        }
     return cachedClasses
       // Don't use getOrPut. Kotlin's extension may still invoke the body and we don't want that
-      .computeIfAbsent(qualifiedName!!) { key ->
+      .computeIfAbsent(fqcn) { key ->
         val annotation =
           cls.findAnnotation("kotlin.Metadata") ?: return@computeIfAbsent Optional.empty()
         val (durationMillis, metadata) =
