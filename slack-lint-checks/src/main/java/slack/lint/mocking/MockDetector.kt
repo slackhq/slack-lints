@@ -19,8 +19,7 @@ import org.jetbrains.uast.UClassLiteralExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UField
 import org.jetbrains.uast.UReferenceExpression
-import org.jetbrains.uast.UVariable
-import org.jetbrains.uast.getParentOfType
+import org.jetbrains.uast.UastCallKind
 import slack.lint.util.MetadataJavaEvaluator
 
 /**
@@ -67,12 +66,18 @@ class MockDetector : Detector(), SourceCodeScanner {
 
       // Checks for mock()/spy() calls
       override fun visitCallExpression(node: UCallExpression) {
+        // We only want method calls
+        if (node.kind != UastCallKind.METHOD_CALL) return
+
+        // Check our known mock methods
         if (node.methodName in MOCK_METHODS) {
-          var nodeToReport: UElement = node
           val resolvedClass = node.resolve()?.containingClass?.qualifiedName
           // Now resolve the mocked type
           var argumentType: PsiClass? = null
-          if (node.typeArgumentCount == 1) {
+          val expressionType = node.getExpressionType()
+          if (expressionType != null) {
+            argumentType = slackEvaluator.getTypeClass(expressionType)
+          } else if (node.typeArgumentCount == 1) {
             // We can read the type here for the fun <reified T> mock() helpers
             argumentType = slackEvaluator.getTypeClass(node.typeArguments[0])
           } else if (resolvedClass in MOCK_CLASSES && node.valueArgumentCount != 0) {
@@ -93,15 +98,9 @@ class MockDetector : Detector(), SourceCodeScanner {
                 }
               }
             }
-          } else {
-            // Last ditch effort - see if we are assigning to a variable and can get its type
-            // Covers cases like `val dynamicMock: TestClass = mock()`
-            val variable = node.getParentOfType<UVariable>() ?: return
-            nodeToReport = variable
-            argumentType = slackEvaluator.getTypeClass(variable.type)
           }
 
-          argumentType?.let { checkMock(nodeToReport, argumentType) }
+          argumentType?.let { checkMock(node, argumentType) }
         }
       }
 
@@ -125,7 +124,6 @@ class MockDetector : Detector(), SourceCodeScanner {
         return MOCK_ANNOTATIONS.any { node.findAnnotation(it) != null }
       }
 
-      // TODO add the type expression to the report
       private fun checkMock(node: UElement, type: PsiClass) {
         for (checker in checkers) {
           val reason = checker.checkType(context, slackEvaluator, type)

@@ -82,7 +82,7 @@ class ObjectClassMockDetectorTest : BaseSlackLintTest() {
                                 ^
           test/test/slack/test/TestClass.kt:21: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
               val assigned: TestClass = mock()
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                        ~~~~~~
           8 errors, 0 warnings
         """
           .trimIndent()

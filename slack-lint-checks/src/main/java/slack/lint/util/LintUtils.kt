@@ -319,6 +319,9 @@ internal inline fun <T> measureTimeMillisWithResult(block: () -> T): Pair<Long, 
 private val logVerbosely by lazy {
   System.getProperty("slack.lint.logVerbosely", "false").toBoolean()
 }
+private val logErrorsVerbosely by lazy {
+  System.getProperty("slack.lint.logErrorsVerbosely", "true").toBoolean()
+}
 
 /**
  * Logs to std if [logVerbosely] is enabled. Useful for debugging and should not generally be
@@ -327,5 +330,15 @@ private val logVerbosely by lazy {
 internal fun slackLintLog(message: String) {
   if (logVerbosely) {
     println("SlackLint: $message")
+  }
+}
+
+/**
+ * Logs to std if [logErrorsVerbosely] is enabled. Important for errors that you don't necessarily
+ * want to fail the build
+ */
+internal fun slackLintErrorLog(message: String) {
+  if (logErrorsVerbosely) {
+    System.err.println("SlackLint: $message")
   }
 }

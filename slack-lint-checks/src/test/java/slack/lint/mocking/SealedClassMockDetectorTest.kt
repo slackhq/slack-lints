@@ -121,7 +121,7 @@ class SealedClassMockDetectorTest : BaseSlackLintTest() {
                                           ^
           test/test/slack/test/TestClass.kt:21: Error: sealed classes have a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
                         val assigned: TestClass = mock()
-                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                  ~~~~~~
           8 errors, 0 warnings
         """
           .trimIndent()
