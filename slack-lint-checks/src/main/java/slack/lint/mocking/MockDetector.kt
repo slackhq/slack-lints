@@ -44,6 +44,7 @@ class MockDetector : Detector(), SourceCodeScanner {
     private val TYPE_CHECKERS =
       listOf(
         // Loosely defined in the order of most likely to be hit
+        PlatformTypeMockDetector,
         DataClassMockDetector,
         DoNotMockMockDetector,
         SealedClassMockDetector,
@@ -57,6 +58,8 @@ class MockDetector : Detector(), SourceCodeScanner {
   override fun getApplicableUastTypes() = listOf(UCallExpression::class.java, UField::class.java)
 
   override fun createUastHandler(context: JavaContext): UElementHandler? {
+    if (!context.isTestSource) return null
+
     val checkers =
       TYPE_CHECKERS.filter { context.isEnabled(it.issue) }
         .ifEmpty {
