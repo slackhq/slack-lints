@@ -24,7 +24,8 @@ object PlatformTypeMockDetector : MockDetector.TypeChecker {
       Use a real instance or fake instead. Mocking platform types like these can lead \
       to surprising test failures due to mocks that actually behave differently than \
       real instances, especially when passed into real implementations that use them \
-      and expect them to behave in a certain way.
+      and expect them to behave in a certain way. If using Robolectric, consider using \
+      its shadow APIs.
     """,
       Category.CORRECTNESS,
       6,
