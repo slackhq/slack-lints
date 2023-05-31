@@ -106,7 +106,10 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
           test/test/slack/test/TestClass.kt:35: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
                 list = listOf(mock())
                               ~~~~~~
-          10 errors, 0 warnings
+          test/test/slack/test/TestClass.kt:27: Warning: platform type 'java.util.List' should not be mocked [DoNotMockPlatformTypes]
+                mock()
+                ~~~~~~
+          10 errors, 1 warnings
         """
           .trimIndent()
       )
