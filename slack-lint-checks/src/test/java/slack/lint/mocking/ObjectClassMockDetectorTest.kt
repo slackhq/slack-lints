@@ -59,28 +59,28 @@ class ObjectClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.kt:8: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.kt:8: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
             @Mock lateinit var fieldMock: TestClass
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:9: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.kt:9: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
             @Spy lateinit var fieldSpy: TestClass
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:12: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.kt:12: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
               val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:13: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.kt:13: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
               val localSpy1 = org.mockito.Mockito.spy(localMock1)
                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:14: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.kt:14: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
               val localMock2 = mock<TestClass>()
                                ~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:16: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.kt:16: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
               val localMock3 = org.mockito.Mockito.mock(classRef)
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:18: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.kt:18: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
               val dynamicMock = mock<TestClass> {
                                 ^
-          test/test/slack/test/TestClass.kt:21: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.kt:21: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
               val assigned: TestClass = mock()
                                         ~~~~~~
           8 errors, 0 warnings
@@ -123,19 +123,19 @@ class ObjectClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.java:9: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.java:9: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
             @Mock TestClass fieldMock;
             ~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:10: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.java:10: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
             @Spy TestClass fieldSpy;
             ~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:13: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.java:13: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
               TestClass localMock = mock(TestClass.class);
                                     ~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:14: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.java:14: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
               TestClass localSpy = spy(localMock);
                                    ~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:16: Error: object classes are singletons, so mocking them should not be necessary [DoNotMockObjectClass]
+          test/test/slack/test/TestClass.java:16: Error: 'slack.test.TestClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
               TestClass localMock2 = mock(classRef);
                                      ~~~~~~~~~~~~~~
           5 errors, 0 warnings

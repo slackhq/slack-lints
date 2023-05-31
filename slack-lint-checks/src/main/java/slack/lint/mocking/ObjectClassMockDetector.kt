@@ -36,7 +36,7 @@ object ObjectClassMockDetector : MockDetector.TypeChecker {
     return if (evaluator.isObject(mockedType)) {
       MockDetector.Reason(
         mockedType,
-        "object classes are singletons, so mocking them should not be necessary"
+        "'${mockedType.qualifiedName}' is an object, so mocking it should not be necessary"
       )
     } else {
       null

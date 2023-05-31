@@ -37,7 +37,7 @@ object SealedClassMockDetector : MockDetector.TypeChecker {
     return if (evaluator.isSealed(mockedType) || mockedType.permitsList != null) {
       MockDetector.Reason(
         mockedType,
-        "sealed classes have a restricted type hierarchy, use a subtype instead."
+        "'${mockedType.qualifiedName}' is a sealed type and has a restricted type hierarchy, use a subtype instead."
       )
     } else {
       null
