@@ -37,7 +37,7 @@ object DataClassMockDetector : MockDetector.TypeChecker {
     return if (evaluator.isData(mockedType) && !mockedType.hasAnnotation("kotlin.jvm.JvmRecord")) {
       MockDetector.Reason(
         mockedType,
-        "data classes represent pure value classes, so mocking them should not be necessary"
+        "'${mockedType.qualifiedName}' is a data class, so mocking it should not be necessary"
       )
     } else {
       null

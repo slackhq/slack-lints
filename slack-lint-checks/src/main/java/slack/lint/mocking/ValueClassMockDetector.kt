@@ -38,7 +38,7 @@ object ValueClassMockDetector : MockDetector.TypeChecker {
     return if (evaluator.isValueClass(mockedType)) {
       MockDetector.Reason(
         mockedType,
-        "value classes represent inlined types, so mocking them should not be necessary"
+        "'${mockedType.qualifiedName}' is a value class using inlined types, so mocking it should not be necessary"
       )
     } else {
       null

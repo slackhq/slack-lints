@@ -104,28 +104,28 @@ class RecordClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.kt:8: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.kt:8: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                       @Mock lateinit var fieldMock: TestClass
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:9: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.kt:9: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                       @Spy lateinit var fieldSpy: TestClass
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:12: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.kt:12: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                         val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:13: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.kt:13: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                         val localSpy1 = org.mockito.Mockito.spy(localMock1)
                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:14: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.kt:14: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                         val localMock2 = mock<TestClass>()
                                          ~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:16: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.kt:16: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                         val localMock3 = org.mockito.Mockito.mock(classRef)
                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:18: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.kt:18: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                         val dynamicMock = mock<TestClass> {
                                           ^
-          test/test/slack/test/TestClass.kt:21: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.kt:21: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                         val assigned: TestClass = mock()
                                                   ~~~~~~
           8 errors, 0 warnings
@@ -180,19 +180,19 @@ class RecordClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.java:9: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.java:9: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                       @Mock TestClass fieldMock;
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:10: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.java:10: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                       @Spy TestClass fieldSpy;
                       ~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:13: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.java:13: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                         TestClass localMock = mock(TestClass.class);
                                               ~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:14: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.java:14: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                         TestClass localSpy = spy(localMock);
                                              ~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:16: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
+          test/test/slack/test/TestClass.java:16: Error: 'slack.test.TestClass' is a record class, so mocking it should not be necessary [DoNotMockRecordClass]
                         TestClass localMock2 = mock(classRef);
                                                ~~~~~~~~~~~~~~
           5 errors, 0 warnings

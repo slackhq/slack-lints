@@ -45,7 +45,7 @@ object RecordClassMockDetector : MockDetector.TypeChecker {
     return if (isRecord) {
       MockDetector.Reason(
         mockedType,
-        "record classes represent pure value classes, so mocking them should not be necessary"
+        "'${mockedType.qualifiedName}' is a record class, so mocking it should not be necessary"
       )
     } else {
       null
