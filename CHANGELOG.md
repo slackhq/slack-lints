@@ -1,6 +1,26 @@
 Changelog
 =========
 
+0.3.0
+-----
+
+_2023-05-31_
+
+- **New**: Use kotlinx-metadata to parse `Metadata` annotations of `PsiCompiledElement` types to better handle Kotlin language features. Currently used in mock checks and Moshi checks. Please star this issue: https://issuetracker.google.com/issues/283654244.
+- **New**: Add DoNotMock check for `object` types.
+- **New**: Add DoNotMock check for `sealed` types. Subtypes should be used instead.
+- **New**: Add DoNotMock check for `record` types. Same motivation as data classes.
+- **New**: Add DoNotMock check for platform types (e.g. `java.*`, `kotlin.*`, `android.*`, their `*x.*` variants). Prefer real implementations or fakes instead.
+  - This is a big change so this one is just a warning for now.
+- **Enhancement**: `MockDetector` revamp. All mock checks now run within the same detector to better utilize metadata catching.
+- **Enhancement**: Improve mock check location reporting.
+- **Enhancement**: Improve mock check messages to specify the erroring type.
+- **Enhancement**: Add `reason` properties to `@KotlinOnly`/`@JavaOnly` annotations.
+- **Enhancement**: Add more information to the `Vendor` details.
+- Raise min lint API to `14`.
+- Update kotlin to `1.8.21`. Updated language version to this too to match lint.
+- Update lint to `31.2.0-alpha06`.
+
 0.2.3
 -----
 
