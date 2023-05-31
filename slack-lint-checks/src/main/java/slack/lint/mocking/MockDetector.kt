@@ -19,9 +19,7 @@ import org.jetbrains.uast.UClassLiteralExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UField
 import org.jetbrains.uast.UReferenceExpression
-import org.jetbrains.uast.UVariable
 import org.jetbrains.uast.UastCallKind
-import org.jetbrains.uast.getParentOfType
 import slack.lint.util.MetadataJavaEvaluator
 
 /**
@@ -76,7 +74,10 @@ class MockDetector : Detector(), SourceCodeScanner {
           val resolvedClass = node.resolve()?.containingClass?.qualifiedName
           // Now resolve the mocked type
           var argumentType: PsiClass? = null
-          if (node.typeArgumentCount == 1) {
+          val expressionType = node.getExpressionType()
+          if (expressionType != null) {
+            argumentType = slackEvaluator.getTypeClass(expressionType)
+          } else if (node.typeArgumentCount == 1) {
             // We can read the type here for the fun <reified T> mock() helpers
             argumentType = slackEvaluator.getTypeClass(node.typeArguments[0])
           } else if (resolvedClass in MOCK_CLASSES && node.valueArgumentCount != 0) {
@@ -97,11 +98,6 @@ class MockDetector : Detector(), SourceCodeScanner {
                 }
               }
             }
-          } else {
-            // Last ditch effort - see if we are assigning to a variable and can get its type
-            // Covers cases like `val dynamicMock: TestClass = mock()`
-            val variable = node.getParentOfType<UVariable>() ?: return
-            argumentType = slackEvaluator.getTypeClass(variable.type)
           }
 
           argumentType?.let { checkMock(node, argumentType) }
