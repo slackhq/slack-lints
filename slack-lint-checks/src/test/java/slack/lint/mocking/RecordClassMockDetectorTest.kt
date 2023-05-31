@@ -127,7 +127,7 @@ class RecordClassMockDetectorTest : BaseSlackLintTest() {
                                           ^
           test/test/slack/test/TestClass.kt:21: Error: record classes represent pure value classes, so mocking them should not be necessary [DoNotMockRecordClass]
                         val assigned: TestClass = mock()
-                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                  ~~~~~~
           8 errors, 0 warnings
         """
           .trimIndent()

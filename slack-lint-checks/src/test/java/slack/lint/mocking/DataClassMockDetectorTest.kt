@@ -83,7 +83,7 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
                                 ^
           test/test/slack/test/TestClass.kt:21: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
               val assigned: TestClass = mock()
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                        ~~~~~~
           8 errors, 0 warnings
         """
           .trimIndent()
