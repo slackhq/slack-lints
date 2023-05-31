@@ -8,11 +8,13 @@ import slack.lint.BaseSlackLintTest
 class DataClassMockDetectorTest : BaseSlackLintTest() {
 
   private val testClass =
-    kotlin("""
+    kotlin(
+        """
       package slack.test
 
-      data class TestClass(val foo: String)
-    """)
+      data class TestClass(val foo: String, val list: List<TestClass> = emptyList())
+    """
+      )
       .indented()
 
   override fun getDetector() = MockDetector()
@@ -47,6 +49,20 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
               }
               val assigned: TestClass = mock()
               val fake = TestClass("this is fine")
+
+              // Extra tests for location reporting
+              val unnecessaryMockedValues = TestClass(
+                "This is fine",
+                mock()
+              )
+              val unnecessaryNestedMockedValues = TestClass(
+                "This is fine",
+                listOf(mock())
+              )
+              val withNamedArgs = TestClass(
+                foo = "This is fine",
+                list = listOf(mock())
+              )
             }
           }
         """
@@ -84,7 +100,13 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
           test/test/slack/test/TestClass.kt:21: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
               val assigned: TestClass = mock()
                                         ~~~~~~
-          8 errors, 0 warnings
+          test/test/slack/test/TestClass.kt:31: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+                listOf(mock())
+                       ~~~~~~
+          test/test/slack/test/TestClass.kt:35: Error: data classes represent pure value classes, so mocking them should not be necessary [DoNotMockDataClass]
+                list = listOf(mock())
+                              ~~~~~~
+          10 errors, 0 warnings
         """
           .trimIndent()
       )
