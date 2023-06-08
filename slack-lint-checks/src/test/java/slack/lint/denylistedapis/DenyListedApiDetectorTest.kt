@@ -433,8 +433,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxCompletableParameterless() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         COMPLETABLE_STUB,
         RX_COMPLETABLE_STUB,
@@ -467,8 +465,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxSingleParameterless() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         SINGLE_STUB,
         RX_SINGLE_STUB,
@@ -501,8 +497,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxMaybeParameterless() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         MAYBE_STUB,
         RX_MAYBE_STUB,
@@ -535,8 +529,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxObservableParameterless() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         TEST_OBSERVER_STUB,
         OBSERVABLE_STUB,
@@ -571,8 +563,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxCompletableWithParameters() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         COMPLETABLE_STUB,
         RX_COMPLETABLE_STUB,
@@ -728,22 +718,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         )
         .indented()
 
-    private val COROUTINE_CONTEXT_STUB =
-      kotlin("""
-        package kotlin.coroutines
-
-        interface CoroutineContext
-      """)
-        .indented()
-    private val EMPTY_COROUTINE_CONTEXT_STUB =
-      kotlin(
-          """
-        package kotlin.coroutines
-
-        object EmptyCoroutineContext : CoroutineContext
-      """
-        )
-        .indented()
     private val COROUTINE_SCOPE_STUB =
       kotlin("""
         package kotlinx.coroutines
