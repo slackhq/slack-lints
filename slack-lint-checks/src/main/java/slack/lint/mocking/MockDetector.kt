@@ -50,6 +50,7 @@ class MockDetector : Detector(), SourceCodeScanner {
         AutoValueMockDetector,
         ObjectClassMockDetector,
         RecordClassMockDetector,
+        ValueClassMockDetector,
       )
     val ISSUES = TYPE_CHECKERS.map2Array { it.issue }
   }
