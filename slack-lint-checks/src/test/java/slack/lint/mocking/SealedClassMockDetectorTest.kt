@@ -93,8 +93,6 @@ class SealedClassMockDetectorTest : BaseSlackLintTest() {
 
     lint()
       .files(*mockFileStubs(), *testClasses, source)
-      // https://issuetracker.google.com/issues/283693338
-      .allowCompilationErrors()
       .run()
       .expect(
         """

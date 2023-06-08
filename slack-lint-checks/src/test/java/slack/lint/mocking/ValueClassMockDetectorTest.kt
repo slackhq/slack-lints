@@ -62,8 +62,6 @@ class ValueClassMockDetectorTest : BaseSlackLintTest() {
 
     lint()
       .files(*mockFileStubs(), testClass, source)
-      // https://issuetracker.google.com/issues/283693338
-      .allowCompilationErrors()
       .run()
       .expect(
         """
