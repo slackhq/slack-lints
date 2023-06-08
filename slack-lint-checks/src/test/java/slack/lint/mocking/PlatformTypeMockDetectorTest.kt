@@ -11,14 +11,6 @@ class PlatformTypeMockDetectorTest : BaseSlackLintTest() {
     arrayOf(
       kotlin(
         """
-              package android.graphics
-
-              class Typeface
-          """
-          .trimIndent()
-      ),
-      kotlin(
-        """
               package androidx.collection
 
               class ArrayMap<K, V>

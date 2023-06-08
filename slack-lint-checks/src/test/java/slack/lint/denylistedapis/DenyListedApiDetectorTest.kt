@@ -20,8 +20,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun `flag function with params in deny list`() {
     lint()
       .files(
-        CONTEXT_STUB,
-        DRAWABLE_STUB,
         CONTEXT_COMPAT_STUB,
         kotlin(
             """
@@ -89,7 +87,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun `setOnClickListener with null argument in deny list`() {
     lint()
       .files(
-        VIEW_STUB,
         kotlin(
             """
           package foo
@@ -121,7 +118,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun `setOnClickListener with non-null argument not in deny list`() {
     lint()
       .files(
-        VIEW_STUB,
         kotlin(
             """
           package foo
@@ -206,7 +202,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun `setId with View#generateViewId() in deny list`() {
     lint()
       .files(
-        VIEW_STUB,
         VIEWPAGER2_STUB,
         kotlin(
             """
@@ -359,7 +354,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun buildVersionCodes() {
     lint()
       .files(
-        BUILD_STUB,
         kotlin(
             """
           package foo
@@ -645,41 +639,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         )
         .indented()
 
-    private val DRAWABLE_STUB =
-      java(
-          """
-        package android.graphics.drawable;
-
-        public class Drawable {}
-      """
-        )
-        .indented()
-
-    private val CONTEXT_STUB =
-      java("""
-        package android.content;
-
-        public class Context {}
-      """)
-        .indented()
-
-    private val VIEW_STUB =
-      java(
-          """
-        package android.view;
-
-        public class View {
-
-          public static int generateViewId() { return 0; }
-
-          public void setOnClickListener(View.OnClickListener l) {}
-
-          public interface OnClickListener {}
-        }
-      """
-        )
-        .indented()
-
     private val VIEWCOMPAT_STUB =
       java(
           """
@@ -853,23 +812,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             block: suspend ProducerScope<T>.() -> Unit
         ): Observable<T> {
           return Observable<T>()
-        }
-      """
-        )
-        .indented()
-
-    private val BUILD_STUB =
-      java(
-          """
-        package android.os;
-
-        public final class Build {
-          public static final class VERSION_CODES {
-            public static final int P = 28;
-            public static final int Q = 29;
-            public static final int R = 30;
-            public static final int S = 31;
-          }
         }
       """
         )

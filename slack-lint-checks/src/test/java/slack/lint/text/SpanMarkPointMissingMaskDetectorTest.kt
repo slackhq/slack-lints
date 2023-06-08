@@ -15,22 +15,6 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
 
   override fun getIssues() = listOf(SpanMarkPointMissingMaskDetector.ISSUE)
 
-  private val androidTextStubs =
-    kotlin(
-        """
-        package android.text
-
-        object Spanned {
-            const val SPAN_INCLUSIVE_INCLUSIVE = 1
-            const val SPAN_INCLUSIVE_EXCLUSIVE = 2
-            const val SPAN_EXCLUSIVE_INCLUSIVE = 3
-            const val SPAN_EXCLUSIVE_EXCLUSIVE = 4
-            const val SPAN_POINT_MARK_MASK = 0xFF
-        }
-      """
-      )
-      .indented()
-
   @Test
   fun `conforming expression - has clean report`() {
     val testFile =
@@ -48,11 +32,7 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
             """
         )
         .indented()
-    lint()
-      .files(androidTextStubs, testFile)
-      .issues(SpanMarkPointMissingMaskDetector.ISSUE)
-      .run()
-      .expectClean()
+    lint().files(testFile).issues(SpanMarkPointMissingMaskDetector.ISSUE).run().expectClean()
   }
 
   @Test
@@ -92,7 +72,7 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
         )
         .indented()
     lint()
-      .files(androidTextStubs, testFile)
+      .files(testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expect(
@@ -152,7 +132,7 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
         )
         .indented()
     lint()
-      .files(androidTextStubs, testFile)
+      .files(testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expect(
@@ -192,7 +172,7 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
         )
         .indented()
     lint()
-      .files(androidTextStubs, testFile)
+      .files(testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expect(
@@ -232,7 +212,7 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
         )
         .indented()
     lint()
-      .files(androidTextStubs, testFile)
+      .files(testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expect(
@@ -272,7 +252,7 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
         )
         .indented()
     lint()
-      .files(androidTextStubs, testFile)
+      .files(testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expect(
@@ -312,7 +292,7 @@ class SpanMarkPointMissingMaskDetectorTest : BaseSlackLintTest() {
         )
         .indented()
     lint()
-      .files(androidTextStubs, testFile)
+      .files(testFile)
       .issues(SpanMarkPointMissingMaskDetector.ISSUE)
       .run()
       .expect(
