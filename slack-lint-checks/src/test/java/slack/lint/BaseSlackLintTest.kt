@@ -48,7 +48,7 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
   abstract override fun getIssues(): List<Issue>
 
   override fun lint(): TestLintTask {
-    val sdkLocation = System.getProperty("android.sdk")
+    val sdkLocation = System.getProperty("android.sdk") ?: System.getenv("ANDROID_HOME")
     val lintTask = super.lint()
     lintClientName?.let { lintTask.clientFactory { TestLintClient(it) } }
     sdkLocation?.let { lintTask.sdkHome(File(it)) }

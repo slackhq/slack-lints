@@ -153,12 +153,9 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
   fun `Kotlin - Kotlin Pair constructor create has no warnings`() {
     lint()
       .files(
-        KOTLIN_PAIR,
         kotlin(
             """
                   package slack.test
-
-                  import kotlin.Pair
 
                   class TestClass {
 
@@ -315,15 +312,4 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
         """
       )
   }
-
-  private val KOTLIN_PAIR =
-    kotlin(
-      """
-          package kotlin
-          public data class Pair<out A, out B>(
-              public val first: A,
-              public val second: B
-          )
-        """
-    )
 }

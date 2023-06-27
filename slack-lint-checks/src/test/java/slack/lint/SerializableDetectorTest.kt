@@ -6,15 +6,6 @@ import org.junit.Test
 
 class SerializableDetectorTest : BaseSlackLintTest() {
 
-  companion object {
-    private val PARCELABLE_STUB =
-      kotlin("""
-      package android.os
-
-      interface Parcelable
-      """).indented()
-  }
-
   override fun getDetector() = SerializableDetector()
 
   override fun getIssues() = listOf(SerializableDetector.ISSUE)
@@ -25,7 +16,6 @@ class SerializableDetectorTest : BaseSlackLintTest() {
       .detector(RawDispatchersUsageDetector())
       .issues(RawDispatchersUsageDetector.ISSUE)
       .files(
-        PARCELABLE_STUB,
         kotlin("""
             package slack
 
@@ -42,7 +32,6 @@ class SerializableDetectorTest : BaseSlackLintTest() {
   fun kotlin_happyPath_implementsBoth() {
     lint()
       .files(
-        PARCELABLE_STUB,
         kotlin(
             """
             package slack
@@ -64,7 +53,6 @@ class SerializableDetectorTest : BaseSlackLintTest() {
   fun kotlin_implicitPlatformType_isIgnored() {
     lint()
       .files(
-        PARCELABLE_STUB,
         kotlin(
             """
             package slack
@@ -85,7 +73,6 @@ class SerializableDetectorTest : BaseSlackLintTest() {
   fun kotlin_explicitPlatformType_isNotIgnored() {
     lint()
       .files(
-        PARCELABLE_STUB,
         kotlin(
             """
             package slack
@@ -115,7 +102,6 @@ class SerializableDetectorTest : BaseSlackLintTest() {
   fun kotlin_failure() {
     lint()
       .files(
-        PARCELABLE_STUB,
         kotlin(
             """
             package slack
@@ -143,7 +129,6 @@ class SerializableDetectorTest : BaseSlackLintTest() {
   fun kotlin_failure_kotlin_io() {
     lint()
       .files(
-        PARCELABLE_STUB,
         kotlin(
             """
             package slack
@@ -173,7 +158,6 @@ class SerializableDetectorTest : BaseSlackLintTest() {
       .detector(RawDispatchersUsageDetector())
       .issues(RawDispatchersUsageDetector.ISSUE)
       .files(
-        PARCELABLE_STUB,
         java(
             """
             package slack;
@@ -193,7 +177,6 @@ class SerializableDetectorTest : BaseSlackLintTest() {
   fun java_happyPath_implementsBoth() {
     lint()
       .files(
-        PARCELABLE_STUB,
         java(
             """
             package slack;
@@ -216,7 +199,6 @@ class SerializableDetectorTest : BaseSlackLintTest() {
   fun java_failure() {
     lint()
       .files(
-        PARCELABLE_STUB,
         java(
             """
             package slack;
