@@ -579,6 +579,33 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .expectClean()
   }
 
+  @Test
+  fun runCatching() {
+    lint()
+      .files(
+        kotlin(
+            """
+          package foo
+
+          class SomeClass {
+            val result = runCatching {}
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:4: Error: runCatching has hidden issues when used with coroutines as it catches and doesn't rethrow CancellationException. This can interfere with coroutines cancellation handling! Prefer catching specific exceptions based on the current case. [DenyListedApi]
+          val result = runCatching {}
+                       ~~~~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
   companion object {
     private val OBSERVABLE_STUB =
       java(
