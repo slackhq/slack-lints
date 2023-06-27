@@ -246,6 +246,14 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           ),
         arguments = listOf("*"),
       ),
+      DenyListedEntry(
+        className = "kotlin.ResultKt",
+        functionName = "runCatching",
+        errorMessage =
+          "runCatching has hidden issues when used with coroutines as it catches and doesn't rethrow CancellationException. " +
+            "This can interfere with coroutines cancellation handling! " +
+            "Prefer catching specific exceptions based on the current case.",
+      ),
     )
 
   override fun getApplicableUastTypes() = config.applicableTypes()
