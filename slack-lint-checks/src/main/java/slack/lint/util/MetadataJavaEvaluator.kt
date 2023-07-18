@@ -18,10 +18,15 @@ import com.intellij.psi.PsiType
 import java.util.Optional
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.jvm.optionals.getOrNull
-import kotlinx.metadata.Flag
+import kotlinx.metadata.ClassKind
 import kotlinx.metadata.KmClass
+import kotlinx.metadata.Modality
+import kotlinx.metadata.isData
+import kotlinx.metadata.isValue
 import kotlinx.metadata.jvm.KotlinClassMetadata
 import kotlinx.metadata.jvm.Metadata as MetadataWithNullableArgs
+import kotlinx.metadata.kind
+import kotlinx.metadata.modality
 import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -52,21 +57,20 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
     // Not an exhaustive list, but at least the ones we look at currently
     private val KOTLIN_METADATA_TOKENS =
       mapOf(
-        KtTokens.DATA_KEYWORD to TokenData(Flag.Class.IS_DATA),
+        KtTokens.DATA_KEYWORD to TokenData { it.isData },
         KtTokens.SEALED_KEYWORD to
-          TokenData(
-            Flag.IS_SEALED,
-            applicableClassKinds = setOf(JvmClassKind.CLASS, JvmClassKind.INTERFACE)
-          ),
-        KtTokens.OBJECT_KEYWORD to TokenData(Flag.Class.IS_OBJECT),
-        KtTokens.COMPANION_KEYWORD to TokenData(Flag.Class.IS_COMPANION_OBJECT),
-        KtTokens.VALUE_KEYWORD to TokenData(Flag.Class.IS_VALUE),
+          TokenData(applicableClassKinds = setOf(JvmClassKind.CLASS, JvmClassKind.INTERFACE)) {
+            it.modality == Modality.SEALED
+          },
+        KtTokens.OBJECT_KEYWORD to TokenData { it.kind == ClassKind.OBJECT },
+        KtTokens.COMPANION_KEYWORD to TokenData { it.kind == ClassKind.COMPANION_OBJECT },
+        KtTokens.VALUE_KEYWORD to TokenData { it.isValue },
       )
   }
 
   private data class TokenData(
-    val flag: Flag,
-    val applicableClassKinds: Set<JvmClassKind> = setOf(JvmClassKind.CLASS)
+    val applicableClassKinds: Set<JvmClassKind> = setOf(JvmClassKind.CLASS),
+    val isApplicable: (KmClass) -> Boolean,
   )
 
   /** Flag to disable as needed. */
@@ -140,10 +144,11 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
       if (uClass.sourcePsi is KtObjectDeclaration) {
         return true
       } else if (canCheckMetadata(cls)) {
-        val (flag, applicableClassKinds) = KOTLIN_METADATA_TOKENS.getValue(KtTokens.OBJECT_KEYWORD)
+        val (applicableClassKinds, isApplicable) =
+          KOTLIN_METADATA_TOKENS.getValue(KtTokens.OBJECT_KEYWORD)
         if (uClass.classKind in applicableClassKinds) {
           uClass.getOrParseMetadata()?.let { kmClass ->
-            return flag(kmClass.flags)
+            return isApplicable(kmClass)
           }
         }
       }
@@ -164,13 +169,13 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
 
     // We're working with an externally compiled element and it's a PsiClass, so we can do more
     // thorough checks here.
-    KOTLIN_METADATA_TOKENS[keyword]?.let { (flag, applicableClassKinds) ->
+    KOTLIN_METADATA_TOKENS[keyword]?.let { (applicableClassKinds, isApplicable) ->
       owner.findContaining(UClass::class.java)?.let { cls ->
         // Only parse if the target class kind is applicable to the token we're checking. For
         // example - when checking `data` tokens, they're not applicable to interfaces or enums.
         if (cls.classKind in applicableClassKinds) {
           cls.getOrParseMetadata()?.let { kmClass ->
-            return flag(kmClass.flags)
+            return isApplicable(kmClass)
           }
         }
       }
@@ -205,25 +210,28 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
   }
 
   private fun UAnnotation.parseMetadata(classNameHint: String): KmClass? {
-    return when (val parsedMetadata = KotlinClassMetadata.read(toMetadataAnnotation())) {
+    val parsedMetadata =
+      try {
+        KotlinClassMetadata.read(toMetadataAnnotation())
+      } catch (e: IllegalStateException) {
+        // Extremely weird case, log this specifically
+        slackLintLog("Could not load metadata for $classNameHint from file $file")
+        return null
+      }
+    return when (parsedMetadata) {
       is KotlinClassMetadata.Class -> {
         parsedMetadata.toKmClass().also {
           slackLintLog("Loaded KmClass for $classNameHint from file $file")
         }
       }
       else -> {
-        if (parsedMetadata == null) {
-          // Extremely weird case, log this specifically
-          slackLintLog("Could not load metadata for $classNameHint from file $file")
-        } else {
-          slackLintLog(
-            """
-              Could not load KmClass for $classNameHint from file $file.
-              Metadata was $parsedMetadata
-            """
-              .trimIndent()
-          )
-        }
+        slackLintLog(
+          """
+            Could not load KmClass for $classNameHint from file $file.
+            Metadata was $parsedMetadata
+          """
+            .trimIndent()
+        )
         null
       }
     }
