@@ -249,21 +249,30 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
       DenyListedEntry(
         className = "java.util.Date",
         functionName = MatchAll,
-        fieldName = MatchAll,
         errorMessage =
           "Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Date in Java 8+."
       ),
       DenyListedEntry(
         className = "java.text.DateFormat",
-        functionName = MatchAll,
         fieldName = MatchAll,
         errorMessage =
           "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+."
       ),
       DenyListedEntry(
         className = "java.text.SimpleDateFormat",
-        functionName = MatchAll,
         fieldName = MatchAll,
+        errorMessage =
+          "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+."
+      ),
+      DenyListedEntry(
+        className = "java.text.DateFormat",
+        functionName = MatchAll,
+        errorMessage =
+          "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+."
+      ),
+      DenyListedEntry(
+        className = "java.text.SimpleDateFormat",
+        functionName = MatchAll,
         errorMessage =
           "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+."
       ),
