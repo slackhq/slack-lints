@@ -666,7 +666,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             val observableTest = Observable.never<Int>().test()
             val flowableCase = Flowable.never<Int>().blockingFirst()
             val flowableTest = Flowable.never<Int>().test()
-            
+
             fun test() {
               Completable.never().blockingAwait()
               Completable.never().test()
@@ -856,11 +856,11 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           public static Completable never() {
             return new Completable();
           }
-          
+
           public void blockingAwait() {
-            
+
           }
-          
+
           public TestObserver<Void> test() {
             return new TestObserver<>();
           }
@@ -901,11 +901,11 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           public static <T> Single<T> never() {
             return new Single<>();
           }
-          
+
           public T blockingGet() {
             return null;
           }
-          
+
           public TestObserver<T> test() {
             return new TestObserver<>();
           }
@@ -946,11 +946,11 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           public static <T> Maybe<T> never() {
             return new Maybe<>();
           }
-          
+
           public T blockingGet() {
             return null;
           }
-          
+
           public TestObserver<T> test() {
             return new TestObserver<>();
           }
