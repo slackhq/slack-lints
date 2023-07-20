@@ -57,8 +57,6 @@ class PlatformTypeMockDetectorTest : BaseSlackLintTest() {
 
     lint()
       .files(*mockFileStubs(), *stubs, source)
-      // https://issuetracker.google.com/issues/283693338
-      .allowCompilationErrors()
       .run()
       .expect(
         """
