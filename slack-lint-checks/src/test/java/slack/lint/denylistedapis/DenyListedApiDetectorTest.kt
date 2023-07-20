@@ -20,8 +20,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun `flag function with params in deny list`() {
     lint()
       .files(
-        CONTEXT_STUB,
-        DRAWABLE_STUB,
         CONTEXT_COMPAT_STUB,
         kotlin(
             """
@@ -89,7 +87,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun `setOnClickListener with null argument in deny list`() {
     lint()
       .files(
-        VIEW_STUB,
         kotlin(
             """
           package foo
@@ -121,7 +118,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun `setOnClickListener with non-null argument not in deny list`() {
     lint()
       .files(
-        VIEW_STUB,
         kotlin(
             """
           package foo
@@ -206,7 +202,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun `setId with View#generateViewId() in deny list`() {
     lint()
       .files(
-        VIEW_STUB,
         VIEWPAGER2_STUB,
         kotlin(
             """
@@ -359,7 +354,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun buildVersionCodes() {
     lint()
       .files(
-        BUILD_STUB,
         kotlin(
             """
           package foo
@@ -433,8 +427,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxCompletableParameterless() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         COMPLETABLE_STUB,
         RX_COMPLETABLE_STUB,
@@ -467,8 +459,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxSingleParameterless() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         SINGLE_STUB,
         RX_SINGLE_STUB,
@@ -501,8 +491,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxMaybeParameterless() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         MAYBE_STUB,
         RX_MAYBE_STUB,
@@ -535,8 +523,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxObservableParameterless() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         TEST_OBSERVER_STUB,
         OBSERVABLE_STUB,
@@ -571,8 +557,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxCompletableWithParameters() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         COMPLETABLE_STUB,
         RX_COMPLETABLE_STUB,
@@ -593,6 +577,33 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       )
       .run()
       .expectClean()
+  }
+
+  @Test
+  fun runCatching() {
+    lint()
+      .files(
+        kotlin(
+            """
+          package foo
+
+          class SomeClass {
+            val result = runCatching {}
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:4: Error: runCatching has hidden issues when used with coroutines as it catches and doesn't rethrow CancellationException. This can interfere with coroutines cancellation handling! Prefer catching specific exceptions based on the current case. [DenyListedApi]
+          val result = runCatching {}
+                       ~~~~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
   }
 
   companion object {
@@ -655,41 +666,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         )
         .indented()
 
-    private val DRAWABLE_STUB =
-      java(
-          """
-        package android.graphics.drawable;
-
-        public class Drawable {}
-      """
-        )
-        .indented()
-
-    private val CONTEXT_STUB =
-      java("""
-        package android.content;
-
-        public class Context {}
-      """)
-        .indented()
-
-    private val VIEW_STUB =
-      java(
-          """
-        package android.view;
-
-        public class View {
-
-          public static int generateViewId() { return 0; }
-
-          public void setOnClickListener(View.OnClickListener l) {}
-
-          public interface OnClickListener {}
-        }
-      """
-        )
-        .indented()
-
     private val VIEWCOMPAT_STUB =
       java(
           """
@@ -728,22 +704,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         )
         .indented()
 
-    private val COROUTINE_CONTEXT_STUB =
-      kotlin("""
-        package kotlin.coroutines
-
-        interface CoroutineContext
-      """)
-        .indented()
-    private val EMPTY_COROUTINE_CONTEXT_STUB =
-      kotlin(
-          """
-        package kotlin.coroutines
-
-        object EmptyCoroutineContext : CoroutineContext
-      """
-        )
-        .indented()
     private val COROUTINE_SCOPE_STUB =
       kotlin("""
         package kotlinx.coroutines
@@ -879,23 +839,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             block: suspend ProducerScope<T>.() -> Unit
         ): Observable<T> {
           return Observable<T>()
-        }
-      """
-        )
-        .indented()
-
-    private val BUILD_STUB =
-      java(
-          """
-        package android.os;
-
-        public final class Build {
-          public static final class VERSION_CODES {
-            public static final int P = 28;
-            public static final int Q = 29;
-            public static final int R = 30;
-            public static final int S = 31;
-          }
         }
       """
         )

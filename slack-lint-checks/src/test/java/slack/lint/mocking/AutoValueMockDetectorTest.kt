@@ -40,9 +40,9 @@ class AutoValueMockDetectorTest : BaseSlackLintTest() {
       )
       .indented()
 
-  override fun getDetector() = AutoValueMockDetector()
+  override fun getDetector() = MockDetector()
 
-  override fun getIssues() = listOf(AutoValueMockDetector.ISSUE)
+  override fun getIssues() = MockDetector.ISSUES.toList()
 
   @Test
   fun kotlinTests() {

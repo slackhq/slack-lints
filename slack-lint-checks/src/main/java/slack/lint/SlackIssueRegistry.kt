@@ -10,10 +10,8 @@ import com.google.auto.service.AutoService
 import slack.lint.denylistedapis.DenyListedApiDetector
 import slack.lint.eithernet.DoNotExposeEitherNetInRepositoriesDetector
 import slack.lint.inclusive.InclusiveNamingChecker
-import slack.lint.mocking.AutoValueMockDetector
-import slack.lint.mocking.DataClassMockDetector
-import slack.lint.mocking.DoNotMockMockDetector
 import slack.lint.mocking.ErrorProneDoNotMockDetector
+import slack.lint.mocking.MockDetector
 import slack.lint.parcel.ParcelizeFunctionPropertyDetector
 import slack.lint.resources.FullyQualifiedResourceDetector
 import slack.lint.resources.MissingResourceImportAliasDetector
@@ -25,10 +23,16 @@ import slack.lint.text.SpanMarkPointMissingMaskDetector
 @AutoService(IssueRegistry::class)
 class SlackIssueRegistry : IssueRegistry() {
 
-  override val vendor: Vendor = Vendor(vendorName = "slack", identifier = "slack-lint")
+  override val vendor: Vendor =
+    Vendor(
+      vendorName = "slack",
+      identifier = "slack-lint",
+      feedbackUrl = "https://github.com/slackhq/slack-lints",
+      contact = "https://github.com/slackhq/slack-lints",
+    )
 
   override val api: Int = CURRENT_API
-  override val minApi: Int = 12 // 7.2.0-beta02
+  override val minApi: Int = CURRENT_API
 
   @Suppress("SpreadOperator")
   override val issues: List<Issue> =
@@ -47,9 +51,7 @@ class SlackIssueRegistry : IssueRegistry() {
       MainScopeUsageDetector.ISSUE,
       RxSubscribeOnMainDetector.ISSUE,
       *GuavaPreconditionsDetector.issues,
-      DataClassMockDetector.ISSUE,
-      AutoValueMockDetector.ISSUE,
-      DoNotMockMockDetector.ISSUE,
+      *MockDetector.ISSUES,
       ErrorProneDoNotMockDetector.ISSUE,
       *MoshiUsageDetector.issues(),
       *FragmentDaggerFieldInjectionDetector.issues,

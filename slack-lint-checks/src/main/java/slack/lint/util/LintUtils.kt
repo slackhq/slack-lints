@@ -21,34 +21,30 @@ import com.android.tools.lint.detector.api.Scope
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.StringOption
 import com.android.tools.lint.detector.api.UastLintUtils
+import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiModifierListOwner
 import com.intellij.psi.PsiType
 import com.intellij.psi.PsiWildcardType
 import java.util.EnumSet
-import org.jetbrains.kotlin.asJava.classes.KtLightClassForFacade
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UQualifiedReferenceExpression
 import org.jetbrains.uast.UReferenceExpression
 import org.jetbrains.uast.USimpleNameReferenceExpression
-import org.jetbrains.uast.kotlin.KotlinUClass
 import org.jetbrains.uast.tryResolve
 
 /**
  * @param qualifiedName the qualified name of the desired interface type
  * @param nameFilter an optional name filter, used to check when to stop searching up the type
- *
- * ```
- *                   hierarchy. This is useful if you want to only check direct implementers in
- *                   certain packages. Called with a fully qualified class name; return false if
- *                   you want to stop searching up the type tree, true to continue.
- * ```
+ *   hierarchy. This is useful if you want to only check direct implementers in certain packages.
+ *   Called with a fully qualified class name; return false if you want to stop searching up the
+ *   type tree, true to continue.
  */
 internal fun PsiClass.implements(
   qualifiedName: String,
@@ -70,27 +66,10 @@ internal fun PsiClass.implements(
   }
 }
 
-/**
- * @return whether or not the [this] is a Kotlin `companion object` type.
- * @see [isKotlinObject]
- */
-internal fun UClass.isCompanionObject(evaluator: JavaEvaluator): Boolean {
-  if (this is KotlinUClass && sourcePsi is KtObjectDeclaration && name == "Companion") {
-    // best effort until we can update to lint tools 26.6.x. See below
-    return true
-  }
-
-  return evaluator.hasModifier(this, KtTokens.COMPANION_KEYWORD)
+/** @return whether or not [owner] is a Kotlin `value` class. */
+internal fun JavaEvaluator.isValueClass(owner: PsiModifierListOwner?): Boolean {
+  return hasModifier(owner, KtTokens.VALUE_KEYWORD)
 }
-
-/**
- * @return whether or not [this] is a Kotlin `object` type.
- * @see [isCompanionObject]
- */
-internal fun UClass.isKotlinObject() = this is KotlinUClass && sourcePsi is KtObjectDeclaration
-
-internal fun UClass.isKotlinTopLevelFacadeClass() =
-  this is KotlinUClass && javaPsi is KtLightClassForFacade
 
 internal fun UClass.isInnerClass(evaluator: JavaEvaluator): Boolean {
   // If it has no containing class, it's top-level and therefore not inner
@@ -100,7 +79,7 @@ internal fun UClass.isInnerClass(evaluator: JavaEvaluator): Boolean {
   if (isStatic) return false
 
   // If it's Kotlin and "inner", then it's definitely an inner class
-  if (this is KotlinUClass && evaluator.hasModifier(this, KtTokens.INNER_KEYWORD)) return true
+  if (isKotlin(this) && evaluator.hasModifier(this, KtTokens.INNER_KEYWORD)) return true
 
   // We could check the containing class's innerClasses to look for a match here, but we've
   // logically ruled
@@ -108,7 +87,7 @@ internal fun UClass.isInnerClass(evaluator: JavaEvaluator): Boolean {
   return false
 }
 
-@Suppress("UnstableApiUsage", "SpreadOperator")
+@Suppress("SpreadOperator")
 internal inline fun <reified T> sourceImplementation(
   shouldRunOnTestSources: Boolean = true
 ): Implementation where T : Detector, T : SourceCodeScanner {
@@ -131,7 +110,7 @@ internal inline fun <reified T> sourceImplementation(
   }
 }
 
-@Suppress("UnstableApiUsage", "SpreadOperator")
+@Suppress("SpreadOperator")
 internal inline fun <reified T : ResourceXmlDetector> resourcesImplementation(): Implementation {
   return Implementation(T::class.java, Scope.RESOURCE_FILE_SCOPE)
 }
@@ -326,4 +305,40 @@ internal fun StringOption.loadAsSet(
     .map(String::trim)
     .filter(String::isNotBlank)
     .toSet()
+}
+
+internal inline fun <T, reified R> Array<out T>.mapArray(transform: (T) -> R): Array<R> =
+  Array(this.size) { i -> transform(this[i]) }
+
+internal inline fun <T> measureTimeMillisWithResult(block: () -> T): Pair<Long, T> {
+  val start = System.currentTimeMillis()
+  val result = block()
+  return Pair(System.currentTimeMillis() - start, result)
+}
+
+private val logVerbosely by lazy {
+  System.getProperty("slack.lint.logVerbosely", "false").toBoolean()
+}
+private val logErrorsVerbosely by lazy {
+  System.getProperty("slack.lint.logErrorsVerbosely", "true").toBoolean()
+}
+
+/**
+ * Logs to std if [logVerbosely] is enabled. Useful for debugging and should not generally be
+ * enabled.
+ */
+internal fun slackLintLog(message: String) {
+  if (logVerbosely) {
+    println("SlackLint: $message")
+  }
+}
+
+/**
+ * Logs to std if [logErrorsVerbosely] is enabled. Important for errors that you don't necessarily
+ * want to fail the build
+ */
+internal fun slackLintErrorLog(message: String) {
+  if (logErrorsVerbosely) {
+    System.err.println("SlackLint: $message")
+  }
 }

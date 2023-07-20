@@ -50,9 +50,9 @@ import org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression
 import org.jetbrains.uast.toUElement
 import org.jetbrains.uast.toUElementOfType
 import slack.lint.moshi.MoshiLintUtil.hasMoshiAnnotation
+import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.isBoxedPrimitive
 import slack.lint.util.isInnerClass
-import slack.lint.util.isKotlinObject
 import slack.lint.util.isObjectOrAny
 import slack.lint.util.isPlatformType
 import slack.lint.util.isString
@@ -69,6 +69,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
   override fun getApplicableUastTypes() = listOf(UClass::class.java)
 
   override fun createUastHandler(context: JavaContext): UElementHandler {
+    val slackEvaluator = MetadataJavaEvaluator(context.file.name, context.evaluator)
     return object : UElementHandler() {
       override fun visitClass(node: UClass) {
         // Enums get checked in both languages because it's easy enough
@@ -102,7 +103,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             )
           }
 
-          validateAdaptedByAnnotation(context, adaptedByAnnotation)
+          validateAdaptedByAnnotation(context, slackEvaluator, adaptedByAnnotation)
           return
         }
 
@@ -163,7 +164,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                   quickfixData = null
                 )
               }
-              if (!context.evaluator.isSealed(node)) {
+              if (!slackEvaluator.isSealed(node)) {
                 context.report(
                   ISSUE_SEALED_MUST_BE_SEALED,
                   context.getNameLocation(node),
@@ -195,14 +196,14 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         if (usesCustomGenerator) return
 
         val isUnsupportedType =
-          node.isKotlinObject() ||
+          slackEvaluator.isObject(node) ||
             node.isAnnotationType ||
             node.isInterface ||
-            node.isInnerClass(context.evaluator) ||
-            context.evaluator.isAbstract(node)
+            node.isInnerClass(slackEvaluator) ||
+            slackEvaluator.isAbstract(node)
 
         if (isUnsupportedType) {
-          if (node.isKotlinObject()) {
+          if (slackEvaluator.isObject(node)) {
             // Kotlin objects are ok in certain cases, so we give a more specific error message
             context.report(
               ISSUE_OBJECT,
@@ -219,7 +220,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             )
           }
           return
-        } else if (!context.evaluator.isData(node)) {
+        } else if (!slackEvaluator.isData(node)) {
           // These should be data classes unless there's a very specific reason not to
           context.report(
             ISSUE_USE_DATA,
@@ -331,7 +332,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
 
             val propertyAdaptedByAnnotation = parameter.findAnnotation(FQCN_ADAPTED_BY)
             if (propertyAdaptedByAnnotation != null) {
-              validateAdaptedByAnnotation(context, propertyAdaptedByAnnotation)
+              validateAdaptedByAnnotation(context, slackEvaluator, propertyAdaptedByAnnotation)
             }
 
             val shouldCheckPropertyType =
@@ -345,6 +346,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             if (shouldCheckPropertyType) {
               checkMoshiType(
                 context,
+                slackEvaluator,
                 parameter.type,
                 parameter,
                 parameter.typeReference!!,
@@ -480,10 +482,10 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         val sealedSuperTypeFound =
           node.superTypes
             .asSequence()
-            .mapNotNull { context.evaluator.getTypeClass(it)?.toUElementOfType<UClass>() }
+            .mapNotNull { slackEvaluator.getTypeClass(it)?.toUElementOfType<UClass>() }
             .filter { it.getContainingUFile()?.packageName == currentPackage }
             .firstOrNull { superType ->
-              if (context.evaluator.isSealed(superType)) {
+              if (slackEvaluator.isSealed(superType)) {
                 val superJsonClassAnnotation = superType.findAnnotation(FQCN_JSON_CLASS)
                 if (superJsonClassAnnotation != null) {
                   val generatorExpression = superJsonClassAnnotation.findAttributeValue("generator")
@@ -533,13 +535,17 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
     }
   }
 
-  private fun validateAdaptedByAnnotation(context: JavaContext, adaptedByAnnotation: UAnnotation) {
+  private fun validateAdaptedByAnnotation(
+    context: JavaContext,
+    evaluator: MetadataJavaEvaluator,
+    adaptedByAnnotation: UAnnotation
+  ) {
     // Check the adapter is a valid adapter type
     val adapterAttribute =
       (adaptedByAnnotation.findAttributeValue("adapter") as? KotlinUClassLiteralExpression)
         ?: return
     val targetType = adapterAttribute.type ?: return
-    val targetClass = context.evaluator.getTypeClass(targetType) ?: return
+    val targetClass = evaluator.getTypeClass(targetType) ?: return
     val implementsAdapter =
       isInheritor(targetClass, true, FQCN_JSON_ADAPTER) ||
         isInheritor(targetClass, true, FQCN_JSON_ADAPTER_FACTORY)
@@ -562,6 +568,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
 
   private fun checkMoshiType(
     context: JavaContext,
+    evaluator: MetadataJavaEvaluator,
     psiType: PsiType,
     parameter: UParameter,
     typeNode: UElement,
@@ -604,7 +611,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
     if (psiType !is PsiClassType) return
 
     val psiClass =
-      context.evaluator.getTypeClass(psiType)
+      evaluator.getTypeClass(psiType)
         ?: error(
           "Could not load class for ${psiType.className} on ${parameter.getUastParentOfType<UClass>()!!.name}.${parameter.name}"
         )
@@ -693,7 +700,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         //  we just underline the generic type but as mentioned higher up this is hard in PSI.
         //  Requires separately mapping PSI type args to the modeled versions. Example below:
         //    val argsPsi = (typeNode.sourcePsi!!.children[0] as KtUserType).typeArguments
-        checkMoshiType(context, typeArg, parameter, typeNode, null)
+        checkMoshiType(context, evaluator, typeArg, parameter, typeNode, null)
       }
       return
     }
@@ -768,7 +775,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             // It's generic, check each generic.
             // TODO we currently report the whole type even if it's just one bad generic. Ideally
             //  we just underline the generic type but as mentioned higher up this is hard in PSI
-            checkMoshiType(context, typeArg, parameter, typeNode, null)
+            checkMoshiType(context, evaluator, typeArg, parameter, typeNode, null)
           }
         } else {
           return
@@ -857,7 +864,6 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
     // Check for a leftover `@SerializedName`
     member.findAnnotation(FQCN_SERIALIZED_NAME)?.let { serializedName ->
       val name = serializedName.findAttributeValue("value")?.evaluate() as String
-      @Suppress("UNCHECKED_CAST")
       val alternateCount =
         (serializedName.findAttributeValue("alternate")?.sourcePsi
             as? KtCollectionLiteralExpression)
@@ -925,7 +931,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                 return@let
               } else {
                 // Always required in Java
-                this!!
+                error("Not possible")
               }
           }
       if (retentionValue.identifier != "RUNTIME") {
@@ -1027,7 +1033,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
       // This can sometimes come back as the default empty String and sometimes as null if not
       // defined
       val generator = jsonClassAnnotation.findAttributeValue("generator")?.evaluate() as? String
-      usesCustomGenerator = generator != null && generator.isNotBlank()
+      usesCustomGenerator = !generator.isNullOrBlank()
       if (!usesCustomGenerator) {
         val generateAdapter =
           jsonClassAnnotation.findAttributeValue("generateAdapter") as ULiteralExpression
@@ -1046,7 +1052,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           )
         }
       }
-    } else if (hasJsonAnnotatedConstant) {
+    } else {
       // If an @Json is present but not @JsonClass, suggest it
       context.report(
         ISSUE_ENUM_JSON_CLASS_MISSING,
