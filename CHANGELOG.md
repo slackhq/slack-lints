@@ -1,6 +1,18 @@
 Changelog
 =========
 
+0.4.0
+-----
+
+_2023-07-20_
+
+- **New**: Denylist blocking RxJava 3 operators and coroutines' `runBlocking` in favor of `TestObserver` and `runTest`/Turbine.
+- **New**: Denylist coroutines' `runCatching`.
+- **New**: Denylist `java.util.Date`, `java.text.DateFormat`, and `java.text.SimpleDateFormat` in favor of `java.time.*`/`kotlin.time.*`/etc APIs.
+- **Enhancement**: Specifically report denylisted function name only in lint report, not the whole call expression.
+- **Enhancement**: Update kotlinx-metadata to `0.7.0` to better support Kotlin 2.0.
+- Update to lint `31.2.0-alpha13` (lint API `14`).
+
 0.3.0
 -----
 
