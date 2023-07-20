@@ -11,30 +11,6 @@ class PlatformTypeMockDetectorTest : BaseSlackLintTest() {
     arrayOf(
       kotlin(
         """
-              package kotlin
-
-              interface Lazy<T>
-          """
-          .trimIndent()
-      ),
-      kotlin(
-        """
-              package kotlin.io
-
-              class FileTreeWalk
-          """
-          .trimIndent()
-      ),
-      kotlin(
-        """
-              package android.graphics
-
-              class Typeface
-          """
-          .trimIndent()
-      ),
-      kotlin(
-        """
               package androidx.collection
 
               class ArrayMap<K, V>

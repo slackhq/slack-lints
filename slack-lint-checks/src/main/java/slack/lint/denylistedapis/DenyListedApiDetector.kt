@@ -246,6 +246,14 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           ),
         arguments = listOf("*"),
       ),
+      DenyListedEntry(
+        className = "kotlin.ResultKt",
+        functionName = "runCatching",
+        errorMessage =
+          "runCatching has hidden issues when used with coroutines as it catches and doesn't rethrow CancellationException. " +
+            "This can interfere with coroutines cancellation handling! " +
+            "Prefer catching specific exceptions based on the current case.",
+      ),
     )
 
   override fun getApplicableUastTypes() = config.applicableTypes()
@@ -316,7 +324,9 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
               typeConfig.functionEntries.getOrDefault(MatchAll, emptyList())
 
           deniedFunctions.forEach { denyListEntry ->
-            if (
+            if (denyListEntry.allowInTests && context.isTestSource) {
+              return@forEach
+            } else if (
               denyListEntry.parametersMatchWith(function) && denyListEntry.argumentsMatchWith(node)
             ) {
               context.report(
@@ -348,6 +358,9 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
               typeConfig.referenceEntries.getOrDefault(MatchAll, emptyList())
 
           deniedFunctions.forEach { denyListEntry ->
+            if (denyListEntry.allowInTests && context.isTestSource) {
+              return@forEach
+            }
             context.report(
               issue = ISSUE,
               location = context.getLocation(node),
@@ -438,6 +451,11 @@ data class DenyListedEntry(
   /** Argument expressions to match at the call site, or null to match all invocations. */
   val arguments: List<String>? = null,
   val errorMessage: String,
+  /**
+   * Option to allow this issue in tests. Should _only_ be reserved for invocations that make sense
+   * in tests.
+   */
+  val allowInTests: Boolean = false,
 ) {
   init {
     require((functionName == null) xor (fieldName == null)) {
