@@ -606,7 +606,134 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       )
   }
 
+  @Test
+  fun coroutineRunBlocking() {
+    lint()
+      .files(
+        RUN_BLOCKING_STUB,
+        kotlin(
+            """
+          package foo
+
+          import kotlinx.coroutines.runBlocking
+
+          class SomeClass {
+            val result = runBlocking {}
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:6: Error: Blocking calls in coroutines can cause deadlocks and application jank. Prefer making the enclosing function a suspend function or refactoring this in a way to use non-blocking calls. If running in a test, use runTest {} or Turbine to test synchronous values. [DenyListedApi]
+          val result = runBlocking {}
+                       ~~~~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun rxJavaBlocking() {
+    lint()
+      .files(
+        COMPLETABLE_STUB,
+        SINGLE_STUB,
+        MAYBE_STUB,
+        OBSERVABLE_STUB,
+        TEST_OBSERVER_STUB,
+        FLOWABLE_STUB,
+        TEST_SUBSCRIBER_STUB,
+        kotlin(
+            """
+          package foo
+
+          import io.reactivex.rxjava3.core.Completable
+          import io.reactivex.rxjava3.core.Single
+          import io.reactivex.rxjava3.core.Maybe
+          import io.reactivex.rxjava3.core.Observable
+          import io.reactivex.rxjava3.core.Flowable
+
+          class SomeClass {
+            val singleCase = Single.never<Int>().blockingGet()
+            val singleTest = Single.never<Int>().test()
+            val maybeCase = Maybe.never<Int>().blockingGet()
+            val maybeTest = Maybe.never<Int>().test()
+            val observableCase = Observable.never<Int>().blockingFirst()
+            val observableTest = Observable.never<Int>().test()
+            val flowableCase = Flowable.never<Int>().blockingFirst()
+            val flowableTest = Flowable.never<Int>().test()
+            
+            fun test() {
+              Completable.never().blockingAwait()
+              Completable.never().test()
+            }
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:10: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Single, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+          val singleCase = Single.never<Int>().blockingGet()
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/foo/SomeClass.kt:12: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Maybe, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+          val maybeCase = Maybe.never<Int>().blockingGet()
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/foo/SomeClass.kt:14: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Observable, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+          val observableCase = Observable.never<Int>().blockingFirst()
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/foo/SomeClass.kt:16: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Flowable, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+          val flowableCase = Flowable.never<Int>().blockingFirst()
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/foo/SomeClass.kt:20: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Completable, a Disposable to grant control to the caller, or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+            Completable.never().blockingAwait()
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        5 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
   companion object {
+    private val FLOWABLE_STUB =
+      java(
+          """
+        package io.reactivex.rxjava3.core;
+
+        import io.reactivex.rxjava3.subscribers.TestSubscriber;
+
+        public final class Flowable<T> {
+          public static <T> Flowable<T> just(T item) {}
+          public static <T> Flowable<T> never() {
+            return new Flowable<>();
+          }
+          public T blockingFirst() {
+            return null;
+          }
+          public TestSubscriber<T> test() {}
+          public TestSubscriber<T> test(boolean dispose) {}
+        }
+      """
+        )
+        .indented()
+
+    private val TEST_SUBSCRIBER_STUB =
+      java(
+          """
+        package io.reactivex.rxjava3.subscribers;
+
+        public class TestSubscriber<T> {
+          public final assertValue(T value) {}
+        }
+      """
+        )
+        .indented()
     private val OBSERVABLE_STUB =
       java(
           """
@@ -614,10 +741,16 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
 
         import io.reactivex.rxjava3.observers.TestObserver;
 
-        public abstract class Observable<T> {
+        public final class Observable<T> {
           public static <T> Observable<T> just(T item) {}
-          public final TestObserver<T> test() {}
-          public final TestObserver<T> test(boolean dispose) {}
+          public static <T> Observable<T> never() {
+            return new Observable<>();
+          }
+          public T blockingFirst() {
+            return null;
+          }
+          public TestObserver<T> test() {}
+          public TestObserver<T> test(boolean dispose) {}
         }
       """
         )
@@ -628,8 +761,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           """
         package io.reactivex.rxjava3.observers;
 
-        public class TestObserver<T> {
-          public final assertValue(T value) {}
+        public final class TestObserver<T> {
+          public assertValue(T value) {}
         }
       """
         )
@@ -711,6 +844,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         interface CoroutineScope
       """)
         .indented()
+
     private val COMPLETABLE_STUB =
       java(
           """
@@ -718,6 +852,18 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
 
         public final class Completable {
           Completable() {}
+
+          public static Completable never() {
+            return new Completable();
+          }
+          
+          public void blockingAwait() {
+            
+          }
+          
+          public TestObserver<Void> test() {
+            return new TestObserver<>();
+          }
         }
       """
         )
@@ -751,6 +897,18 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
 
         public final class Single<T> {
           Single() {}
+
+          public static <T> Single<T> never() {
+            return new Single<>();
+          }
+          
+          public T blockingGet() {
+            return null;
+          }
+          
+          public TestObserver<T> test() {
+            return new TestObserver<>();
+          }
         }
       """
         )
@@ -784,6 +942,18 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
 
         public final class Maybe<T> {
           Maybe() {}
+
+          public static <T> Maybe<T> never() {
+            return new Maybe<>();
+          }
+          
+          public T blockingGet() {
+            return null;
+          }
+          
+          public TestObserver<T> test() {
+            return new TestObserver<>();
+          }
         }
       """
         )
@@ -817,6 +987,19 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
 
         object ProducerScope<T> {
           suspend fun send(value: T)
+        }
+      """
+        )
+        .indented()
+
+    private val RUN_BLOCKING_STUB =
+      kotlin(
+          """
+        @file:JvmName("BuildersKt")
+        package kotlinx.coroutines
+
+        fun <T> runBlocking(context: CoroutineContext, block: suspend CoroutineScope.() -> T): T {
+          TODO()
         }
       """
         )

@@ -254,6 +254,16 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
             "This can interfere with coroutines cancellation handling! " +
             "Prefer catching specific exceptions based on the current case.",
       ),
+      // Blocking calls
+      DenyListedEntry(
+        className = "kotlinx.coroutines.BuildersKt",
+        functionName = "runBlocking",
+        errorMessage =
+          "Blocking calls in coroutines can cause deadlocks and application jank. " +
+            "Prefer making the enclosing function a suspend function or refactoring this in a way to use non-blocking calls. " +
+            "If running in a test, use runTest {} or Turbine to test synchronous values.",
+      ),
+      *rxJavaBlockingCalls().toTypedArray()
     )
 
   override fun getApplicableUastTypes() = config.applicableTypes()
@@ -467,3 +477,63 @@ data class DenyListedEntry(
     const val MatchAll = "*"
   }
 }
+
+private fun rxJavaBlockingCalls() =
+  listOf(
+      "io.reactivex.rxjava3.core.Completable" to
+        listOf(
+          "blockingAwait",
+        ),
+      "io.reactivex.rxjava3.core.Single" to
+        listOf(
+          "blockingGet",
+          "blockingSubscribe",
+        ),
+      "io.reactivex.rxjava3.core.Maybe" to
+        listOf(
+          "blockingGet",
+          "blockingSubscribe",
+        ),
+      "io.reactivex.rxjava3.core.Observable" to
+        listOf(
+          "blockingFirst",
+          "blockingForEach",
+          "blockingIterable",
+          "blockingLatest",
+          "blockingMostRecent",
+          "blockingNext",
+          "blockingSingle",
+          "blockingSubscribe",
+        ),
+      "io.reactivex.rxjava3.core.Flowable" to
+        listOf(
+          "blockingFirst",
+          "blockingForEach",
+          "blockingIterable",
+          "blockingLatest",
+          "blockingMostRecent",
+          "blockingNext",
+          "blockingSingle",
+          "blockingSubscribe",
+        ),
+    )
+    .flatMap { (className, methods) ->
+      val shortType = className.substringAfterLast('.')
+      val isCompletable = shortType == "Completable"
+      val orMessage =
+        if (!isCompletable) {
+          " Completable (if you want to hide emission values but defer subscription),"
+        } else {
+          ""
+        }
+      methods.map { method ->
+        DenyListedEntry(
+          className = className,
+          functionName = method,
+          errorMessage =
+            "Blocking calls in RxJava can cause deadlocks and application jank. " +
+              "Prefer making the enclosing method/function return this $shortType, a Disposable to grant control to the caller,$orMessage or refactoring this in a way to use non-blocking calls. " +
+              "If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values.",
+        )
+      }
+    }
