@@ -6,5 +6,7 @@ package slack.lint.annotations
  * An annotation that is used to denote methods that should not be called from any context other
  * than Java code. This is important for cases in APIs that support both Kotlin and Java in
  * different ways.
+ *
+ * @property reason An optional reason why this API is intended for Java only.
  */
-annotation class JavaOnly
+annotation class JavaOnly(val reason: String = "")

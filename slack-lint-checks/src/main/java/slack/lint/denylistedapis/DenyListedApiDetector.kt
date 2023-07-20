@@ -260,12 +260,39 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         errorMessage =
           "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+."
       ),
+      DenyListedEntry(
+        className = "java.text.SimpleDateFormat",
+        functionName = MatchAll,
+        fieldName = MatchAll,
+        errorMessage =
+          "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+."
+      ),
+      DenyListedEntry(
+        className = "kotlin.ResultKt",
+        functionName = "runCatching",
+        errorMessage =
+          "runCatching has hidden issues when used with coroutines as it catches and doesn't rethrow CancellationException. " +
+            "This can interfere with coroutines cancellation handling! " +
+            "Prefer catching specific exceptions based on the current case.",
+      ),
+      // Blocking calls
+      DenyListedEntry(
+        className = "kotlinx.coroutines.BuildersKt",
+        functionName = "runBlocking",
+        errorMessage =
+          "Blocking calls in coroutines can cause deadlocks and application jank. " +
+            "Prefer making the enclosing function a suspend function or refactoring this in a way to use non-blocking calls. " +
+            "If running in a test, use runTest {} or Turbine to test synchronous values.",
+      ),
+      *rxJavaBlockingCalls().toTypedArray()
     )
 
   override fun getApplicableUastTypes() = config.applicableTypes()
+
   override fun createUastHandler(context: JavaContext) = config.visitor(context)
 
   override fun getApplicableElements() = config.applicableLayoutInflaterElements.keys
+
   override fun visitElement(context: XmlContext, element: Element) =
     config.visitor(context, element)
 
@@ -328,12 +355,14 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
               typeConfig.functionEntries.getOrDefault(MatchAll, emptyList())
 
           deniedFunctions.forEach { denyListEntry ->
-            if (
+            if (denyListEntry.allowInTests && context.isTestSource) {
+              return@forEach
+            } else if (
               denyListEntry.parametersMatchWith(function) && denyListEntry.argumentsMatchWith(node)
             ) {
               context.report(
                 issue = ISSUE,
-                location = context.getLocation(node),
+                location = context.getNameLocation(node),
                 message = denyListEntry.errorMessage
               )
             }
@@ -360,6 +389,9 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
               typeConfig.referenceEntries.getOrDefault(MatchAll, emptyList())
 
           deniedFunctions.forEach { denyListEntry ->
+            if (denyListEntry.allowInTests && context.isTestSource) {
+              return@forEach
+            }
             context.report(
               issue = ISSUE,
               location = context.getLocation(node),
@@ -450,6 +482,11 @@ data class DenyListedEntry(
   /** Argument expressions to match at the call site, or null to match all invocations. */
   val arguments: List<String>? = null,
   val errorMessage: String,
+  /**
+   * Option to allow this issue in tests. Should _only_ be reserved for invocations that make sense
+   * in tests.
+   */
+  val allowInTests: Boolean = false,
 ) {
   init {
     require((functionName == null) xor (fieldName == null)) {
@@ -461,3 +498,63 @@ data class DenyListedEntry(
     const val MatchAll = "*"
   }
 }
+
+private fun rxJavaBlockingCalls() =
+  listOf(
+      "io.reactivex.rxjava3.core.Completable" to
+        listOf(
+          "blockingAwait",
+        ),
+      "io.reactivex.rxjava3.core.Single" to
+        listOf(
+          "blockingGet",
+          "blockingSubscribe",
+        ),
+      "io.reactivex.rxjava3.core.Maybe" to
+        listOf(
+          "blockingGet",
+          "blockingSubscribe",
+        ),
+      "io.reactivex.rxjava3.core.Observable" to
+        listOf(
+          "blockingFirst",
+          "blockingForEach",
+          "blockingIterable",
+          "blockingLatest",
+          "blockingMostRecent",
+          "blockingNext",
+          "blockingSingle",
+          "blockingSubscribe",
+        ),
+      "io.reactivex.rxjava3.core.Flowable" to
+        listOf(
+          "blockingFirst",
+          "blockingForEach",
+          "blockingIterable",
+          "blockingLatest",
+          "blockingMostRecent",
+          "blockingNext",
+          "blockingSingle",
+          "blockingSubscribe",
+        ),
+    )
+    .flatMap { (className, methods) ->
+      val shortType = className.substringAfterLast('.')
+      val isCompletable = shortType == "Completable"
+      val orMessage =
+        if (!isCompletable) {
+          " Completable (if you want to hide emission values but defer subscription),"
+        } else {
+          ""
+        }
+      methods.map { method ->
+        DenyListedEntry(
+          className = className,
+          functionName = method,
+          errorMessage =
+            "Blocking calls in RxJava can cause deadlocks and application jank. " +
+              "Prefer making the enclosing method/function return this $shortType, a Disposable to grant control to the caller,$orMessage or refactoring this in a way to use non-blocking calls. " +
+              "If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values.",
+        )
+      }
+    }

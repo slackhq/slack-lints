@@ -84,6 +84,7 @@ class InjectInJavaDetectorTest : BaseSlackLintTest() {
       .run()
       .expectClean()
   }
+
   @Test
   fun javaIsNotOk() {
     lint()

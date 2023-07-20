@@ -11,7 +11,7 @@ import com.android.tools.lint.detector.api.LintFix
 import com.android.tools.lint.detector.api.Location
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
-import com.intellij.psi.PsiType
+import com.intellij.psi.PsiTypes
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.sourcePsiElement
@@ -36,12 +36,12 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
     return object : UElementHandler() {
       override fun visitMethod(node: UMethod) {
         val httpAnnotation =
-          HTTP_ANNOTATIONS.mapNotNull { node.findAnnotation(it) }.firstOrNull() ?: return
+          HTTP_ANNOTATIONS.firstNotNullOfOrNull { node.findAnnotation(it) } ?: return
 
         val returnType = node.safeReturnType(context)
         if (
           returnType == null ||
-            returnType == PsiType.VOID ||
+            returnType == PsiTypes.voidType() ||
             returnType.canonicalText == "kotlin.Unit"
         ) {
           node.report(

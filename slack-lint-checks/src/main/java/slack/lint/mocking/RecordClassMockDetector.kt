@@ -6,18 +6,19 @@ import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
+import com.android.tools.lint.detector.api.isJava
 import com.intellij.psi.PsiClass
 import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.sourceImplementation
 
-/** A [MockDetector.TypeChecker] that checks for mocking Kotlin data classes. */
-object DataClassMockDetector : MockDetector.TypeChecker {
+/** A [MockDetector.TypeChecker] that checks for mocking record classes. */
+object RecordClassMockDetector : MockDetector.TypeChecker {
   override val issue: Issue =
     Issue.create(
-      "DoNotMockDataClass",
-      "data classes represent pure data classes, so mocking them should not be necessary.",
+      "DoNotMockRecordClass",
+      "record classes represent pure data classes, so mocking them should not be necessary.",
       """
-      data classes represent pure data classes, so mocking them should not be necessary. \
+      record classes represent pure data classes, so mocking them should not be necessary. \
       Construct a real instance of the class instead.
     """,
       Category.CORRECTNESS,
@@ -33,11 +34,18 @@ object DataClassMockDetector : MockDetector.TypeChecker {
     evaluator: MetadataJavaEvaluator,
     mockedType: PsiClass
   ): MockDetector.Reason? {
-    // Don't warn on records because we have a separate check for that
-    return if (evaluator.isData(mockedType) && !mockedType.hasAnnotation("kotlin.jvm.JvmRecord")) {
+    val isRecord =
+      if (isJava(mockedType.language)) {
+        // Java
+        mockedType.isRecord
+      } else {
+        // Kotlin. Check the annotation first as the isData check may check metadata
+        mockedType.hasAnnotation("kotlin.jvm.JvmRecord") && evaluator.isData(mockedType)
+      }
+    return if (isRecord) {
       MockDetector.Reason(
         mockedType,
-        "'${mockedType.qualifiedName}' is a data class, so mocking it should not be necessary"
+        "'${mockedType.qualifiedName}' is a record class, so mocking it should not be necessary"
       )
     } else {
       null

@@ -10,15 +10,15 @@ import com.intellij.psi.PsiClass
 import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.sourceImplementation
 
-/** A [MockDetector.TypeChecker] that checks for mocking Kotlin data classes. */
-object DataClassMockDetector : MockDetector.TypeChecker {
+/** A [MockDetector.TypeChecker] that checks for mocking Kotlin object classes. */
+object ObjectClassMockDetector : MockDetector.TypeChecker {
   override val issue: Issue =
     Issue.create(
-      "DoNotMockDataClass",
-      "data classes represent pure data classes, so mocking them should not be necessary.",
+      "DoNotMockObjectClass",
+      "object classes are singletons, so mocking them should not be necessary",
       """
-      data classes represent pure data classes, so mocking them should not be necessary. \
-      Construct a real instance of the class instead.
+      object classes are global singletons, so mocking them should not be necessary. \
+      Use the object instance instead.
     """,
       Category.CORRECTNESS,
       6,
@@ -33,11 +33,10 @@ object DataClassMockDetector : MockDetector.TypeChecker {
     evaluator: MetadataJavaEvaluator,
     mockedType: PsiClass
   ): MockDetector.Reason? {
-    // Don't warn on records because we have a separate check for that
-    return if (evaluator.isData(mockedType) && !mockedType.hasAnnotation("kotlin.jvm.JvmRecord")) {
+    return if (evaluator.isObject(mockedType)) {
       MockDetector.Reason(
         mockedType,
-        "'${mockedType.qualifiedName}' is a data class, so mocking it should not be necessary"
+        "'${mockedType.qualifiedName}' is an object, so mocking it should not be necessary"
       )
     } else {
       null

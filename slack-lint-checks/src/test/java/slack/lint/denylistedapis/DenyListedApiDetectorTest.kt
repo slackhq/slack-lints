@@ -20,8 +20,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun `flag function with params in deny list`() {
     lint()
       .files(
-        CONTEXT_STUB,
-        DRAWABLE_STUB,
         CONTEXT_COMPAT_STUB,
         kotlin(
             """
@@ -45,7 +43,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeView.kt:9: Error: Use Context#getDrawableCompat() instead [DenyListedApi]
             ContextCompat.getDrawable(context, 42)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                          ~~~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -89,7 +87,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun `setOnClickListener with null argument in deny list`() {
     lint()
       .files(
-        VIEW_STUB,
         kotlin(
             """
           package foo
@@ -110,7 +107,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeView.kt:7: Error: This fails to also set View#isClickable. Use View#clearOnClickListener() instead [DenyListedApi]
             view.setOnClickListener(null);
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 ~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -121,7 +118,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun `setOnClickListener with non-null argument not in deny list`() {
     lint()
       .files(
-        VIEW_STUB,
         kotlin(
             """
           package foo
@@ -195,7 +191,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeView.kt:8: Error: Use an id defined in resources or a statically created instead of generating with ViewCompat.generateViewId(). See https://issuetracker.google.com/issues/185820237 [DenyListedApi]
             view.setId(ViewCompat.generateViewId())
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 ~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -206,7 +202,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun `setId with View#generateViewId() in deny list`() {
     lint()
       .files(
-        VIEW_STUB,
         VIEWPAGER2_STUB,
         kotlin(
             """
@@ -230,7 +225,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeView.kt:8: Error: Use an id defined in resources or a statically created instead of generating with View.generateViewId(). See https://issuetracker.google.com/issues/185820237 [DenyListedApi]
             view.setId(View.generateViewId())
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 ~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -259,7 +254,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: For a stack/queue/double-ended queue use ArrayDeque, for a list use ArrayList. Both are more efficient internally. [DenyListedApi]
           val stuff = LinkedList<String>()
-                      ~~~~~~~~~~~~~~~~~~~~
+                      ~~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -288,7 +283,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: For a stack use ArrayDeque which is more efficient internally. [DenyListedApi]
           val stuff = Stack<String>()
-                      ~~~~~~~~~~~~~~~
+                      ~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -317,7 +312,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: For a vector use ArrayList or ArrayDeque which are more efficient internally. [DenyListedApi]
           val stuff = Vector<String>()
-                      ~~~~~~~~~~~~~~~~
+                      ~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -347,7 +342,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: Use a scheduler which wraps a cached set of threads. There should be no reason to be arbitrarily creating threads on Android. [DenyListedApi]
           val scheduler = Schedulers.newThread()
-                          ~~~~~~~~~~~~~~~~~~~~~~
+                                     ~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -359,7 +354,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun buildVersionCodes() {
     lint()
       .files(
-        BUILD_STUB,
         kotlin(
             """
           package foo
@@ -433,8 +427,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxCompletableParameterless() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         COMPLETABLE_STUB,
         RX_COMPLETABLE_STUB,
@@ -456,7 +448,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: rxCompletable defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way. [DenyListedApi]
           val now = rxCompletable {}
-                    ~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -467,8 +459,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxSingleParameterless() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         SINGLE_STUB,
         RX_SINGLE_STUB,
@@ -490,18 +480,17 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: rxSingle defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way. [DenyListedApi]
           val now = rxSingle { "a" }
-                    ~~~~~~~~~~~~~~~~
+                    ~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
       )
   }
+
   @Test
   fun rxMaybeParameterless() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         MAYBE_STUB,
         RX_MAYBE_STUB,
@@ -523,18 +512,17 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: rxMaybe defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way. [DenyListedApi]
           val now = rxMaybe { "a" }
-                    ~~~~~~~~~~~~~~~
+                    ~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
       )
   }
+
   @Test
   fun rxObservableParameterless() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         TEST_OBSERVER_STUB,
         OBSERVABLE_STUB,
@@ -558,7 +546,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: rxObservable defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way. [DenyListedApi]
           val now = rxObservable { send("a") }
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -569,8 +557,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   fun rxCompletableWithParameters() {
     lint()
       .files(
-        EMPTY_COROUTINE_CONTEXT_STUB,
-        COROUTINE_CONTEXT_STUB,
         COROUTINE_SCOPE_STUB,
         COMPLETABLE_STUB,
         RX_COMPLETABLE_STUB,
@@ -593,7 +579,161 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .expectClean()
   }
 
+  @Test
+  fun runCatching() {
+    lint()
+      .files(
+        kotlin(
+            """
+          package foo
+
+          class SomeClass {
+            val result = runCatching {}
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:4: Error: runCatching has hidden issues when used with coroutines as it catches and doesn't rethrow CancellationException. This can interfere with coroutines cancellation handling! Prefer catching specific exceptions based on the current case. [DenyListedApi]
+          val result = runCatching {}
+                       ~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun coroutineRunBlocking() {
+    lint()
+      .files(
+        RUN_BLOCKING_STUB,
+        kotlin(
+            """
+          package foo
+
+          import kotlinx.coroutines.runBlocking
+
+          class SomeClass {
+            val result = runBlocking {}
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:6: Error: Blocking calls in coroutines can cause deadlocks and application jank. Prefer making the enclosing function a suspend function or refactoring this in a way to use non-blocking calls. If running in a test, use runTest {} or Turbine to test synchronous values. [DenyListedApi]
+          val result = runBlocking {}
+                       ~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun rxJavaBlocking() {
+    lint()
+      .files(
+        COMPLETABLE_STUB,
+        SINGLE_STUB,
+        MAYBE_STUB,
+        OBSERVABLE_STUB,
+        TEST_OBSERVER_STUB,
+        FLOWABLE_STUB,
+        TEST_SUBSCRIBER_STUB,
+        kotlin(
+            """
+          package foo
+
+          import io.reactivex.rxjava3.core.Completable
+          import io.reactivex.rxjava3.core.Single
+          import io.reactivex.rxjava3.core.Maybe
+          import io.reactivex.rxjava3.core.Observable
+          import io.reactivex.rxjava3.core.Flowable
+
+          class SomeClass {
+            val singleCase = Single.never<Int>().blockingGet()
+            val singleTest = Single.never<Int>().test()
+            val maybeCase = Maybe.never<Int>().blockingGet()
+            val maybeTest = Maybe.never<Int>().test()
+            val observableCase = Observable.never<Int>().blockingFirst()
+            val observableTest = Observable.never<Int>().test()
+            val flowableCase = Flowable.never<Int>().blockingFirst()
+            val flowableTest = Flowable.never<Int>().test()
+
+            fun test() {
+              Completable.never().blockingAwait()
+              Completable.never().test()
+            }
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:10: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Single, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+          val singleCase = Single.never<Int>().blockingGet()
+                                               ~~~~~~~~~~~
+        src/foo/SomeClass.kt:12: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Maybe, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+          val maybeCase = Maybe.never<Int>().blockingGet()
+                                             ~~~~~~~~~~~
+        src/foo/SomeClass.kt:14: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Observable, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+          val observableCase = Observable.never<Int>().blockingFirst()
+                                                       ~~~~~~~~~~~~~
+        src/foo/SomeClass.kt:16: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Flowable, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+          val flowableCase = Flowable.never<Int>().blockingFirst()
+                                                   ~~~~~~~~~~~~~
+        src/foo/SomeClass.kt:20: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Completable, a Disposable to grant control to the caller, or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+            Completable.never().blockingAwait()
+                                ~~~~~~~~~~~~~
+        5 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
   companion object {
+    private val FLOWABLE_STUB =
+      java(
+          """
+        package io.reactivex.rxjava3.core;
+
+        import io.reactivex.rxjava3.subscribers.TestSubscriber;
+
+        public final class Flowable<T> {
+          public static <T> Flowable<T> just(T item) {}
+          public static <T> Flowable<T> never() {
+            return new Flowable<>();
+          }
+          public T blockingFirst() {
+            return null;
+          }
+          public TestSubscriber<T> test() {}
+          public TestSubscriber<T> test(boolean dispose) {}
+        }
+      """
+        )
+        .indented()
+
+    private val TEST_SUBSCRIBER_STUB =
+      java(
+          """
+        package io.reactivex.rxjava3.subscribers;
+
+        public class TestSubscriber<T> {
+          public final assertValue(T value) {}
+        }
+      """
+        )
+        .indented()
     private val OBSERVABLE_STUB =
       java(
           """
@@ -601,10 +741,16 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
 
         import io.reactivex.rxjava3.observers.TestObserver;
 
-        public abstract class Observable<T> {
+        public final class Observable<T> {
           public static <T> Observable<T> just(T item) {}
-          public final TestObserver<T> test() {}
-          public final TestObserver<T> test(boolean dispose) {}
+          public static <T> Observable<T> never() {
+            return new Observable<>();
+          }
+          public T blockingFirst() {
+            return null;
+          }
+          public TestObserver<T> test() {}
+          public TestObserver<T> test(boolean dispose) {}
         }
       """
         )
@@ -615,8 +761,8 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           """
         package io.reactivex.rxjava3.observers;
 
-        public class TestObserver<T> {
-          public final assertValue(T value) {}
+        public final class TestObserver<T> {
+          public assertValue(T value) {}
         }
       """
         )
@@ -648,41 +794,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
 
         public class ContextCompat {
           public static Drawable getDrawable(Context context, int id) {}
-        }
-      """
-        )
-        .indented()
-
-    private val DRAWABLE_STUB =
-      java(
-          """
-        package android.graphics.drawable;
-
-        public class Drawable {}
-      """
-        )
-        .indented()
-
-    private val CONTEXT_STUB =
-      java("""
-        package android.content;
-
-        public class Context {}
-      """)
-        .indented()
-
-    private val VIEW_STUB =
-      java(
-          """
-        package android.view;
-
-        public class View {
-
-          public static int generateViewId() { return 0; }
-
-          public void setOnClickListener(View.OnClickListener l) {}
-
-          public interface OnClickListener {}
         }
       """
         )
@@ -726,22 +837,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         )
         .indented()
 
-    private val COROUTINE_CONTEXT_STUB =
-      kotlin("""
-        package kotlin.coroutines
-
-        interface CoroutineContext
-      """)
-        .indented()
-    private val EMPTY_COROUTINE_CONTEXT_STUB =
-      kotlin(
-          """
-        package kotlin.coroutines
-
-        object EmptyCoroutineContext : CoroutineContext
-      """
-        )
-        .indented()
     private val COROUTINE_SCOPE_STUB =
       kotlin("""
         package kotlinx.coroutines
@@ -749,6 +844,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         interface CoroutineScope
       """)
         .indented()
+
     private val COMPLETABLE_STUB =
       java(
           """
@@ -756,6 +852,18 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
 
         public final class Completable {
           Completable() {}
+
+          public static Completable never() {
+            return new Completable();
+          }
+
+          public void blockingAwait() {
+
+          }
+
+          public TestObserver<Void> test() {
+            return new TestObserver<>();
+          }
         }
       """
         )
@@ -789,6 +897,18 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
 
         public final class Single<T> {
           Single() {}
+
+          public static <T> Single<T> never() {
+            return new Single<>();
+          }
+
+          public T blockingGet() {
+            return null;
+          }
+
+          public TestObserver<T> test() {
+            return new TestObserver<>();
+          }
         }
       """
         )
@@ -822,6 +942,18 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
 
         public final class Maybe<T> {
           Maybe() {}
+
+          public static <T> Maybe<T> never() {
+            return new Maybe<>();
+          }
+
+          public T blockingGet() {
+            return null;
+          }
+
+          public TestObserver<T> test() {
+            return new TestObserver<>();
+          }
         }
       """
         )
@@ -860,6 +992,19 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         )
         .indented()
 
+    private val RUN_BLOCKING_STUB =
+      kotlin(
+          """
+        @file:JvmName("BuildersKt")
+        package kotlinx.coroutines
+
+        fun <T> runBlocking(context: CoroutineContext, block: suspend CoroutineScope.() -> T): T {
+          TODO()
+        }
+      """
+        )
+        .indented()
+
     private val RX_OBSERVABLE_STUB =
       kotlin(
           """
@@ -877,23 +1022,6 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
             block: suspend ProducerScope<T>.() -> Unit
         ): Observable<T> {
           return Observable<T>()
-        }
-      """
-        )
-        .indented()
-
-    private val BUILD_STUB =
-      java(
-          """
-        package android.os;
-
-        public final class Build {
-          public static final class VERSION_CODES {
-            public static final int P = 28;
-            public static final int Q = 29;
-            public static final int R = 30;
-            public static final int S = 31;
-          }
         }
       """
         )

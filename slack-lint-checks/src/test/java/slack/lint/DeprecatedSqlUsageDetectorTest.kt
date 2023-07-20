@@ -10,73 +10,8 @@ import org.junit.Test
 class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
 
   override fun getDetector(): Detector = DeprecatedSqlUsageDetector()
+
   override fun getIssues(): MutableList<Issue> = mutableListOf(DeprecatedSqlUsageDetector.ISSUE)
-
-  private val sqliteDatabaseClass =
-    java(
-      """
-        package android.database.sqlite;
-
-        public class SQLiteDatabase {
-            public int delete(String table, String whereClause, String[] whereArgs) {
-                return 0;
-            }
-
-            public void	execSQL(String sql) { }
-
-            public void	execSQL(String sql, Object[] bindArgs) { }
-
-            public long	insert(String table, String nullColumnHack, ContentValues values) {
-                return 0;
-            }
-
-            public long	insertOrThrow(String table, String nullColumnHack, ContentValues values) {
-                return 0;
-            }
-
-            public long	insertWithOnConflict(String table, String nullColumnHack,
-                                                ContentValues initialValues,
-                                                int conflictAlgorithm) {
-                return 0;
-            }
-
-            public Cursor query(boolean distinct, String table, String[] columns, String selection,
-                                String[] selectionArgs, String groupBy, String having,
-                                String orderBy, String limit) {
-                return null;
-            }
-
-            public Cursor query(String table, String[] columns, String selection,
-                                String[] selectionArgs, String groupBy, String having,
-                                String orderBy, String limit) {
-                return null;
-            }
-
-            public Cursor query(boolean distinct, String table, String[] columns, String selection,
-                                String[] selectionArgs, String groupBy, String having,
-                                String orderBy, String limit,
-                                CancellationSignal cancellationSignal) {
-                return null;
-            }
-
-            public Cursor query(String table, String[] columns, String selection,
-                                String[] selectionArgs, String groupBy, String having,
-                                String orderBy) {
-                return null;
-            }
-
-            public long update(String table, ContentValues values, String whereClause,
-                                String[] whereArgs) {
-                return 0;
-            }
-
-            public long updateWithOnConflict(String table, ContentValues values, String whereClause,
-                                                String[] whereArgs, int conflictAlgorithm) {
-                return 0;
-            }
-        }
-      """
-    )
 
   @Test
   fun testJavaInspection() {
@@ -97,7 +32,7 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
         .indented()
 
     lint()
-      .files(deprecatedJavaExample, sqliteDatabaseClass)
+      .files(deprecatedJavaExample)
       .run()
       .expect(
         """
@@ -129,7 +64,7 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
         .indented()
 
     lint()
-      .files(deprecatedKotlinExample, sqliteDatabaseClass)
+      .files(deprecatedKotlinExample)
       .run()
       .expect(
         """
@@ -160,7 +95,7 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
         )
         .indented()
 
-    lint().files(innocentJavaExample, sqliteDatabaseClass).run().expectClean()
+    lint().files(innocentJavaExample).run().expectClean()
   }
 
   @Test
@@ -184,6 +119,6 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
         )
         .indented()
 
-    lint().files(innocentKotlinExample, sqliteDatabaseClass).run().expectClean()
+    lint().files(innocentKotlinExample).run().expectClean()
   }
 }

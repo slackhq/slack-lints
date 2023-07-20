@@ -41,6 +41,7 @@ class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
   }
 
   override fun getDetector() = DoNotCallProvidersDetector()
+
   override fun getIssues() = listOf(DoNotCallProvidersDetector.ISSUE)
 
   @Ignore(

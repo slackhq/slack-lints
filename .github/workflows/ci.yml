@@ -6,27 +6,19 @@ on:
     branches:
       - main
     paths-ignore:
-      - '*.md'
+      - '**/*.md'
   # Always run on PRs
   pull_request:
+    branches: [ main ]
+  merge_group:
 
 concurrency:
-  group: '${{ github.head_ref }}-${{ github.workflow }}'
+  group: 'ci-${{ github.event.merge_group.head_ref || github.head_ref }}-${{ github.workflow }}'
   cancel-in-progress: true
 
 jobs:
   build:
-    name: ${{ matrix.ci_lint_version }} / JDK ${{ matrix.ci_java_version }}
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        ci_java_version: ['19']
-        ci_lint_version: ['30.4.0', '31.0.0-beta01', '31.1.0-alpha01']
-    env:
-      DEP_OVERRIDES: 'true'
-      DEP_OVERRIDE_LINT: ${{ matrix.ci_lint_version }}
-      DEP_OVERRIDE_KOTLIN: ${{ matrix.ci_kotlin_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -34,45 +26,30 @@ jobs:
       - name: Gradle Wrapper Validation
         uses: gradle/wrapper-validation-action@v1
 
-      - name: Generate cache key
-        run: ./.github/checksum.sh checksum.txt
-
-      - uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ matrix.job }}-${{ hashFiles('checksum.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-${{ matrix.job }}-
-
-      - name: Install JDK ${{ matrix.ci_java_version }}
+      - name: Install JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: ${{ matrix.ci_java_version }}
+          java-version: '19'
 
       - name: Build
         uses: gradle/gradle-build-action@v2
         with:
           arguments: spotlessCheck compileKotlin
 
-      # Test only on latest because test outputs change wildly between lint versions
       - name: Check
-        if: matrix.ci_lint_version == '31.1.0-alpha01'
         uses: gradle/gradle-build-action@v2
         with:
           arguments: check --stacktrace
 
-      - name: (Fail-only) Bundle the build report
-        if: failure()
-        run: find . -type d -name 'reports' | zip -@ -r build-reports.zip
-
-      - name: (Fail-only) Upload the build report
+      - name: (Fail-only) Upload build reports
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: error-report
-          path: build-reports.zip
+          name: reports
+          path: |
+            **/build/reports/**
 
       - name: Publish snapshot (main branch only)
-        if: github.repository == 'slackhq/slack-lint-checks' && github.ref == 'refs/heads/main' && matrix.ci_lint_version == '31.1.0-alpha01' && matrix.ci_java_version == '19'
+        if: github.repository == 'slackhq/slack-lint-checks' && github.ref == 'refs/heads/main'
         run: ./gradlew publish -PmavenCentralUsername=${{ secrets.SONATYPEUSERNAME }} -PmavenCentralPassword=${{ secrets.SONATYPEPASSWORD }}

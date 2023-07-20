@@ -19,19 +19,10 @@ class ParcelizeFunctionPropertyDetectorTest : BaseSlackLintTest() {
       """
         )
         .indented()
-    private val PARCELABLE_STUBS =
-      kotlin(
-          "test/android/os/Parcelable.kt",
-          """
-        package android.os
-
-        interface Parcelable
-      """
-        )
-        .indented()
   }
 
   override fun getDetector() = ParcelizeFunctionPropertyDetector()
+
   override fun getIssues() = listOf(ParcelizeFunctionPropertyDetector.ISSUE)
 
   @Test
@@ -39,7 +30,6 @@ class ParcelizeFunctionPropertyDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         PARCELIZE_STUBS,
-        PARCELABLE_STUBS,
         kotlin(
             """
           package test.pkg

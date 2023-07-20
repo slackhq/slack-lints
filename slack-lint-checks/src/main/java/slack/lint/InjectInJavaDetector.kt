@@ -46,7 +46,9 @@ class InjectInJavaDetector : Detector(), SourceCodeScanner {
       }
 
       override fun visitClass(node: UClass) = checkNode(node)
+
       override fun visitMethod(node: UMethod) = checkNode(node)
+
       override fun visitField(node: UField) = checkNode(node)
     }
   }

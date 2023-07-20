@@ -55,8 +55,9 @@ class DoNotMockMockDetectorTest : BaseSlackLintTest() {
       )
       .indented()
 
-  override fun getDetector() = DoNotMockMockDetector()
-  override fun getIssues() = listOf(DoNotMockMockDetector.ISSUE)
+  override fun getDetector() = MockDetector()
+
+  override fun getIssues() = MockDetector.ISSUES.toList()
 
   @Test
   fun kotlinTests() {

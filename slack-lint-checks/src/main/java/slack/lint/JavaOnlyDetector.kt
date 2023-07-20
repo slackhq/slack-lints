@@ -247,7 +247,7 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
       }
 
       private fun UAnnotation.extractValue(): String {
-        return UastLintUtils.getAnnotationStringValue(this, "value").orEmpty()
+        return UastLintUtils.getAnnotationStringValue(this, "reason").orEmpty()
       }
     }
   }
