@@ -341,7 +341,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
             ) {
               context.report(
                 issue = ISSUE,
-                location = context.getLocation(node),
+                location = context.getNameLocation(node),
                 message = denyListEntry.errorMessage
               )
             }

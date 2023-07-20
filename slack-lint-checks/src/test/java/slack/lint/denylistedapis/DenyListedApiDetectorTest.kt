@@ -43,7 +43,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeView.kt:9: Error: Use Context#getDrawableCompat() instead [DenyListedApi]
             ContextCompat.getDrawable(context, 42)
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                          ~~~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -107,7 +107,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeView.kt:7: Error: This fails to also set View#isClickable. Use View#clearOnClickListener() instead [DenyListedApi]
             view.setOnClickListener(null);
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 ~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -191,7 +191,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeView.kt:8: Error: Use an id defined in resources or a statically created instead of generating with ViewCompat.generateViewId(). See https://issuetracker.google.com/issues/185820237 [DenyListedApi]
             view.setId(ViewCompat.generateViewId())
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 ~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -225,7 +225,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeView.kt:8: Error: Use an id defined in resources or a statically created instead of generating with View.generateViewId(). See https://issuetracker.google.com/issues/185820237 [DenyListedApi]
             view.setId(View.generateViewId())
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                 ~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -254,7 +254,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: For a stack/queue/double-ended queue use ArrayDeque, for a list use ArrayList. Both are more efficient internally. [DenyListedApi]
           val stuff = LinkedList<String>()
-                      ~~~~~~~~~~~~~~~~~~~~
+                      ~~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -283,7 +283,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: For a stack use ArrayDeque which is more efficient internally. [DenyListedApi]
           val stuff = Stack<String>()
-                      ~~~~~~~~~~~~~~~
+                      ~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -312,7 +312,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: For a vector use ArrayList or ArrayDeque which are more efficient internally. [DenyListedApi]
           val stuff = Vector<String>()
-                      ~~~~~~~~~~~~~~~~
+                      ~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -342,7 +342,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: Use a scheduler which wraps a cached set of threads. There should be no reason to be arbitrarily creating threads on Android. [DenyListedApi]
           val scheduler = Schedulers.newThread()
-                          ~~~~~~~~~~~~~~~~~~~~~~
+                                     ~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -448,7 +448,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: rxCompletable defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way. [DenyListedApi]
           val now = rxCompletable {}
-                    ~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -480,7 +480,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: rxSingle defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way. [DenyListedApi]
           val now = rxSingle { "a" }
-                    ~~~~~~~~~~~~~~~~
+                    ~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -512,7 +512,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: rxMaybe defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way. [DenyListedApi]
           val now = rxMaybe { "a" }
-                    ~~~~~~~~~~~~~~~
+                    ~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -546,7 +546,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: rxObservable defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way. [DenyListedApi]
           val now = rxObservable { send("a") }
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -599,7 +599,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:4: Error: runCatching has hidden issues when used with coroutines as it catches and doesn't rethrow CancellationException. This can interfere with coroutines cancellation handling! Prefer catching specific exceptions based on the current case. [DenyListedApi]
           val result = runCatching {}
-                       ~~~~~~~~~~~~~~
+                       ~~~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -629,7 +629,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:6: Error: Blocking calls in coroutines can cause deadlocks and application jank. Prefer making the enclosing function a suspend function or refactoring this in a way to use non-blocking calls. If running in a test, use runTest {} or Turbine to test synchronous values. [DenyListedApi]
           val result = runBlocking {}
-                       ~~~~~~~~~~~~~~
+                       ~~~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -681,19 +681,19 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         """
         src/foo/SomeClass.kt:10: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Single, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
           val singleCase = Single.never<Int>().blockingGet()
-                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                               ~~~~~~~~~~~
         src/foo/SomeClass.kt:12: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Maybe, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
           val maybeCase = Maybe.never<Int>().blockingGet()
-                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                             ~~~~~~~~~~~
         src/foo/SomeClass.kt:14: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Observable, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
           val observableCase = Observable.never<Int>().blockingFirst()
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                       ~~~~~~~~~~~~~
         src/foo/SomeClass.kt:16: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Flowable, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
           val flowableCase = Flowable.never<Int>().blockingFirst()
-                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                   ~~~~~~~~~~~~~
         src/foo/SomeClass.kt:20: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Completable, a Disposable to grant control to the caller, or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
             Completable.never().blockingAwait()
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                ~~~~~~~~~~~~~
         5 errors, 0 warnings
         """
           .trimIndent()
