@@ -5,38 +5,30 @@ package slack.lint
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Detector
-import com.android.tools.lint.detector.api.Implementation
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
-import com.android.tools.lint.detector.api.Scope
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
-import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.lang.jvm.JvmClassKind
-import java.util.EnumSet
 import org.jetbrains.uast.UAnnotated
-import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.kotlin.KotlinReceiverUParameter
+import slack.lint.util.sourceImplementation
 
 /** This is a simple lint check to catch common Dagger+Kotlin usage issues. */
 class DaggerIssuesDetector : Detector(), SourceCodeScanner {
 
   companion object {
-    // We use the overloaded constructor that takes a varargs of `Scope` as the last param.
-    // This is to enable on-the-fly IDE checks. We are telling lint to run on both
-    // JAVA and TEST_SOURCES in the `scope` parameter but by providing the `analysisScopes`
-    // params, we're indicating that this check can run on either JAVA or TEST_SOURCES and
-    // doesn't require both of them together.
-    // From discussion on lint-dev https://groups.google.com/d/msg/lint-dev/ULQMzW1ZlP0/1dG4Vj3-AQAJ
-    // This was supposed to be fixed in AS 3.4 but still required as recently as 3.6-alpha10.
-    private val SCOPES =
-      Implementation(
-        DaggerIssuesDetector::class.java,
-        EnumSet.of(Scope.JAVA_FILE, Scope.TEST_SOURCES),
-        EnumSet.of(Scope.JAVA_FILE),
-        EnumSet.of(Scope.TEST_SOURCES)
+    private val ISSUE_BINDS_MUST_BE_IN_MODULE: Issue =
+      Issue.create(
+        "BindsMustBeInModule",
+        "@Binds function must be in `@Module`-annotated classes.",
+        "@Binds function must be in `@Module`-annotated classes.",
+        Category.CORRECTNESS,
+        6,
+        Severity.ERROR,
+        sourceImplementation<DaggerIssuesDetector>()
       )
 
     private val ISSUE_BINDS_TYPE_MISMATCH: Issue =
@@ -47,7 +39,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        SCOPES
+        sourceImplementation<DaggerIssuesDetector>()
       )
 
     private val ISSUE_BINDS_RETURN_TYPE: Issue =
@@ -58,7 +50,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        SCOPES
+        sourceImplementation<DaggerIssuesDetector>()
       )
 
     private val ISSUE_BINDS_RECEIVER_PARAMETER: Issue =
@@ -69,7 +61,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        SCOPES
+        sourceImplementation<DaggerIssuesDetector>()
       )
 
     private val ISSUE_BINDS_WRONG_PARAMETER_COUNT: Issue =
@@ -80,7 +72,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        SCOPES
+        sourceImplementation<DaggerIssuesDetector>()
       )
 
     private val ISSUE_BINDS_MUST_BE_ABSTRACT: Issue =
@@ -91,7 +83,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        SCOPES
+        sourceImplementation<DaggerIssuesDetector>()
       )
 
     private val ISSUE_BINDS_REDUNDANT: Issue =
@@ -102,7 +94,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        SCOPES
+        sourceImplementation<DaggerIssuesDetector>()
       )
 
     private const val BINDS_ANNOTATION = "dagger.Binds"
@@ -115,30 +107,33 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         ISSUE_BINDS_WRONG_PARAMETER_COUNT,
         ISSUE_BINDS_MUST_BE_ABSTRACT,
         ISSUE_BINDS_REDUNDANT,
+        ISSUE_BINDS_MUST_BE_IN_MODULE,
       )
   }
 
-  override fun getApplicableUastTypes(): List<Class<out UElement>> {
-    return listOf(UMethod::class.java)
-  }
+  override fun getApplicableUastTypes() = listOf(UMethod::class.java)
 
-  override fun createUastHandler(context: JavaContext): UElementHandler? {
-    if (!isKotlin(context.psiFile)) {
-      // This is only relevant for Kotlin files.
-      return null
-    }
+  override fun createUastHandler(context: JavaContext): UElementHandler {
     return object : UElementHandler() {
       override fun visitMethod(node: UMethod) {
         if (!node.isConstructor && node.hasAnnotation(BINDS_ANNOTATION)) {
           val containingClass = node.containingClass
           if (containingClass != null) {
             when {
+              !containingClass.hasAnnotation("dagger.Module") -> {
+                context.report(
+                  ISSUE_BINDS_MUST_BE_IN_MODULE,
+                  context.getLocation(node),
+                  ISSUE_BINDS_MUST_BE_IN_MODULE.getBriefDescription(TextFormat.TEXT),
+                )
+                return
+              }
               containingClass.isInterface -> {
                 // Cannot have a default impl in interfaces
                 if (node.uastBody != null) {
                   context.report(
                     ISSUE_BINDS_MUST_BE_ABSTRACT,
-                    context.getLocation(node),
+                    context.getLocation(node.uastBody),
                     ISSUE_BINDS_MUST_BE_ABSTRACT.getBriefDescription(TextFormat.TEXT),
                   )
                   return
@@ -159,9 +154,15 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
           }
 
           if (node.uastParameters.size != 1) {
+            val locationToHighlight =
+              if (node.uastParameters.isEmpty()) {
+                node
+              } else {
+                node.parameterList
+              }
             context.report(
               ISSUE_BINDS_WRONG_PARAMETER_COUNT,
-              context.getLocation(node),
+              context.getLocation(locationToHighlight),
               ISSUE_BINDS_WRONG_PARAMETER_COUNT.getBriefDescription(TextFormat.TEXT)
             )
             return
@@ -176,7 +177,6 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
             )
             return
           }
-          val instanceType = firstParam.type
 
           val returnType =
             node.returnType?.takeUnless {
@@ -192,6 +192,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
                 return
               }
 
+          val instanceType = firstParam.type
           if (instanceType == returnType) {
             // Check that they have different annotations, otherwise it's redundant
             if (firstParam.qualifiers() != node.qualifiers()) {
