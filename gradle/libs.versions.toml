@@ -1,17 +1,18 @@
 [versions]
-kotlin = "1.8.22"
+kotlin = "1.9.10"
 ktfmt = "0.44"
-jdk = "19"
+jdk = "20"
 # lint checks must target JDK 17, but the runtime should remain 11
 lintJvmTarget = "17"
 runtimeJvmTarget = "11"
-lint = "31.2.0-beta01"
+lint = "31.3.0-alpha01"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.1" }
 dokka = { id = "org.jetbrains.dokka", version = "1.9.0" }
 lint = { id = "com.android.lint", version = "8.1.1" }
-ksp = { id = "com.google.devtools.ksp", version = "1.9.0-1.0.11" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version = "1.9.10-1.0.13" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.25.3" }
 mavenShadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
 spotless = { id = "com.diffplug.spotless", version = "6.21.0" }
