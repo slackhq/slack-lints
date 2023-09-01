@@ -4,17 +4,23 @@ import com.diffplug.gradle.spotless.KotlinExtension
 import com.diffplug.gradle.spotless.SpotlessExtension
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import io.gitlab.arturbosch.detekt.Detekt
-import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+  alias(libs.plugins.kotlin.jvm) apply false
   alias(libs.plugins.spotless) apply false
   alias(libs.plugins.mavenPublish) apply false
-  alias(libs.plugins.dokka) apply false
+  alias(libs.plugins.dokka)
   alias(libs.plugins.detekt)
   alias(libs.plugins.lint) apply false
   alias(libs.plugins.ksp) apply false
+}
+
+tasks.dokkaHtmlMultiModule {
+  outputDirectory.set(rootDir.resolve("docs/api/0.x"))
+  includes.from(project.layout.projectDirectory.file("README.md"))
 }
 
 val ktfmtVersion = libs.versions.ktfmt.get()
@@ -90,8 +96,8 @@ subprojects {
   pluginManager.withPlugin("com.vanniktech.maven.publish") {
     apply(plugin = "org.jetbrains.dokka")
 
-    tasks.withType<DokkaTask>().configureEach {
-      outputDirectory.set(rootDir.resolve("../docs/0.x"))
+    tasks.withType<DokkaTaskPartial>().configureEach {
+      outputDirectory.set(layout.buildDirectory.dir("docs/partial"))
       dokkaSourceSets.configureEach { skipDeprecated.set(true) }
     }
 
