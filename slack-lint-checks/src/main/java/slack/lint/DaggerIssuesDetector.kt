@@ -11,9 +11,12 @@ import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
 import com.intellij.lang.jvm.JvmClassKind
+import com.intellij.psi.util.childrenOfType
+import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.uast.UAnnotated
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.kotlin.KotlinReceiverUParameter
+import org.jetbrains.uast.kotlin.KotlinUMethod
 import slack.lint.util.sourceImplementation
 
 /** This is a simple lint check to catch common Dagger+Kotlin usage issues. */
@@ -170,9 +173,11 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
 
           val firstParam = node.uastParameters[0]
           if (firstParam is KotlinReceiverUParameter) {
+            val nodeToReport =
+              (node as KotlinUMethod).sourcePsi?.childrenOfType<KtTypeReference>()?.first() ?: node
             context.report(
               ISSUE_BINDS_RECEIVER_PARAMETER,
-              context.getLocation(firstParam.node),
+              context.getLocation(nodeToReport),
               ISSUE_BINDS_RECEIVER_PARAMETER.getBriefDescription(TextFormat.TEXT),
             )
             return

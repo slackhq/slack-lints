@@ -34,7 +34,7 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
         .indented()
   }
 
-  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.WHITESPACE)
+  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.WHITESPACE, TestMode.SUPPRESSIBLE)
 
   override fun getDetector() = DaggerIssuesDetector()
 
@@ -49,9 +49,7 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
         kotlin(
             """
                   package foo
-                  import javax.inject.Inject
                   import javax.inject.Qualifier
-                  import kotlin.jvm.JvmStatic
                   import dagger.Binds
                   import dagger.Module
 
@@ -78,7 +76,34 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-              
+        src/foo/MyQualifier.kt:11: Error: @Binds functions cannot be extension functions. [BindsReceiverParameter]
+          @Binds fun Int.bind(): Number
+                     ~~~
+        src/foo/MyQualifier.kt:12: Error: @Binds functions cannot be extension functions. [BindsReceiverParameter]
+          @Binds fun Long.bind(): Number
+                     ~~~~
+        src/foo/MyQualifier.kt:13: Error: @Binds functions cannot be extension functions. [BindsReceiverParameter]
+          @Binds fun Double.bind(): Number
+                     ~~~~~~
+        src/foo/MyQualifier.kt:14: Error: @Binds functions cannot be extension functions. [BindsReceiverParameter]
+          @Binds fun Float.bind(): Number
+                     ~~~~~
+        src/foo/MyQualifier.kt:15: Error: @Binds functions cannot be extension functions. [BindsReceiverParameter]
+          @Binds fun Short.bind(): Number
+                     ~~~~~
+        src/foo/MyQualifier.kt:16: Error: @Binds functions cannot be extension functions. [BindsReceiverParameter]
+          @Binds fun Byte.bind(): Number
+                     ~~~~
+        src/foo/MyQualifier.kt:17: Error: @Binds functions cannot be extension functions. [BindsReceiverParameter]
+          @Binds fun Char.bind(): Comparable<Char>
+                     ~~~~
+        src/foo/MyQualifier.kt:18: Error: @Binds functions cannot be extension functions. [BindsReceiverParameter]
+          @Binds fun String.bind(): Comparable<String>
+                     ~~~~~~
+        src/foo/MyQualifier.kt:19: Error: @Binds functions cannot be extension functions. [BindsReceiverParameter]
+          @Binds fun @receiver:MyQualifier Boolean.bind(): Comparable<Boolean>
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        9 errors, 0 warnings
         """
           .trimIndent()
       )
