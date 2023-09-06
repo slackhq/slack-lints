@@ -189,9 +189,10 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
             }
               ?: run {
                 // Report missing return type
+                val nodeLocation = node.returnTypeElement ?: node
                 context.report(
                   ISSUE_BINDS_RETURN_TYPE,
-                  context.getLocation(node),
+                  context.getLocation(nodeLocation),
                   ISSUE_BINDS_RETURN_TYPE.getBriefDescription(TextFormat.TEXT),
                 )
                 return
@@ -200,7 +201,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
           val instanceType = firstParam.type
           if (instanceType == returnType) {
             // Check that they have different annotations, otherwise it's redundant
-            if (firstParam.qualifiers() != node.qualifiers()) {
+            if (firstParam.qualifiers() == node.qualifiers()) {
               context.report(
                 ISSUE_BINDS_REDUNDANT,
                 context.getLocation(node),
