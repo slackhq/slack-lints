@@ -11,6 +11,7 @@ import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
 import com.intellij.lang.jvm.JvmClassKind
+import com.intellij.psi.PsiTypes
 import com.intellij.psi.util.childrenOfType
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.uast.UAnnotated
@@ -185,7 +186,8 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
 
           val returnType =
             node.returnType?.takeUnless {
-              context.evaluator.getTypeClass(it)?.qualifiedName == "kotlin.Unit"
+              it == PsiTypes.voidType() ||
+                context.evaluator.getTypeClass(it)?.qualifiedName == "kotlin.Unit"
             }
               ?: run {
                 // Report missing return type
