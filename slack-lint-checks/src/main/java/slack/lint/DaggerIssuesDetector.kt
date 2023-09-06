@@ -46,22 +46,22 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         sourceImplementation<DaggerIssuesDetector>()
       )
 
-    private val ISSUE_BINDS_RETURN_TYPE: Issue =
+    private val ISSUE_RETURN_TYPE: Issue =
       Issue.create(
-        "BindsReturnType",
-        "@Binds functions must have a return type. Cannot be void or Unit.",
-        "@Binds functions must have a return type. Cannot be void or Unit.",
+        "BindingReturnType",
+        "@Binds/@Provides functions must have a return type. Cannot be void or Unit.",
+        "@Binds/@Provides functions must have a return type. Cannot be void or Unit.",
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
         sourceImplementation<DaggerIssuesDetector>()
       )
 
-    private val ISSUE_BINDS_RECEIVER_PARAMETER: Issue =
+    private val ISSUE_RECEIVER_PARAMETER: Issue =
       Issue.create(
-        "BindsReceiverParameter",
-        "@Binds functions cannot be extension functions.",
-        "@Binds functions cannot be extension functions. Move the receiver type to a parameter via IDE inspection (option+enter and convert to property).",
+        "BindingReceiverParameter",
+        "@Binds/@Provides functions cannot be extension functions.",
+        "@Binds/@Provides functions cannot be extension functions. Move the receiver type to a parameter via IDE inspection (option+enter and convert to parameter).",
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
@@ -90,6 +90,17 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         sourceImplementation<DaggerIssuesDetector>()
       )
 
+    private val ISSUE_PROVIDES_CANNOT_BE_ABSTRACT: Issue =
+      Issue.create(
+        "ProvidesMustNotBeAbstract",
+        "@Provides functions cannot be abstract.",
+        "@Provides functions cannot be abstract.",
+        Category.CORRECTNESS,
+        6,
+        Severity.ERROR,
+        sourceImplementation<DaggerIssuesDetector>()
+      )
+
     private val ISSUE_BINDS_REDUNDANT: Issue =
       Issue.create(
         "RedundantBinds",
@@ -102,16 +113,18 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
       )
 
     private const val BINDS_ANNOTATION = "dagger.Binds"
+    private const val PROVIDES_ANNOTATION = "dagger.Provides"
 
     val ISSUES: Array<Issue> =
       arrayOf(
         ISSUE_BINDS_TYPE_MISMATCH,
-        ISSUE_BINDS_RETURN_TYPE,
-        ISSUE_BINDS_RECEIVER_PARAMETER,
+        ISSUE_RETURN_TYPE,
+        ISSUE_RECEIVER_PARAMETER,
         ISSUE_BINDS_WRONG_PARAMETER_COUNT,
         ISSUE_BINDS_MUST_BE_ABSTRACT,
         ISSUE_BINDS_REDUNDANT,
         ISSUE_BINDS_MUST_BE_IN_MODULE,
+        ISSUE_PROVIDES_CANNOT_BE_ABSTRACT,
       )
   }
 
@@ -120,7 +133,12 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
   override fun createUastHandler(context: JavaContext): UElementHandler {
     return object : UElementHandler() {
       override fun visitMethod(node: UMethod) {
-        if (!node.isConstructor && node.hasAnnotation(BINDS_ANNOTATION)) {
+        if (!node.isConstructor) {
+          val isBinds = node.hasAnnotation(BINDS_ANNOTATION)
+          val isProvides = node.hasAnnotation(PROVIDES_ANNOTATION)
+
+          if (!isBinds && !isProvides) return
+
           val containingClass = node.containingClass
           if (containingClass != null) {
             when {
@@ -132,7 +150,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
                 )
                 return
               }
-              containingClass.isInterface -> {
+              isBinds && containingClass.isInterface -> {
                 // Cannot have a default impl in interfaces
                 if (node.uastBody != null) {
                   context.report(
@@ -144,44 +162,50 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
                 }
               }
               containingClass.classKind == JvmClassKind.CLASS -> {
-                // Check abstract
-                if (!context.evaluator.isAbstract(node)) {
+                val isAbstract = context.evaluator.isAbstract(node)
+                // Binds must be abstract
+                if (isBinds && !isAbstract) {
                   context.report(
                     ISSUE_BINDS_MUST_BE_ABSTRACT,
                     context.getLocation(node),
                     ISSUE_BINDS_MUST_BE_ABSTRACT.getBriefDescription(TextFormat.TEXT),
                   )
                   return
+                } else if (isProvides && isAbstract) {
+                  context.report(
+                    ISSUE_PROVIDES_CANNOT_BE_ABSTRACT,
+                    context.getLocation(node),
+                    ISSUE_PROVIDES_CANNOT_BE_ABSTRACT.getBriefDescription(TextFormat.TEXT),
+                  )
+                  return
                 }
+              }
+              containingClass.classKind == JvmClassKind.INTERFACE && isProvides -> {
+                context.report(
+                  ISSUE_PROVIDES_CANNOT_BE_ABSTRACT,
+                  context.getLocation(node),
+                  ISSUE_PROVIDES_CANNOT_BE_ABSTRACT.getBriefDescription(TextFormat.TEXT),
+                )
+                return
               }
             }
           }
 
-          if (node.uastParameters.size != 1) {
-            val locationToHighlight =
-              if (node.uastParameters.isEmpty()) {
-                node
-              } else {
-                node.parameterList
-              }
-            context.report(
-              ISSUE_BINDS_WRONG_PARAMETER_COUNT,
-              context.getLocation(locationToHighlight),
-              ISSUE_BINDS_WRONG_PARAMETER_COUNT.getBriefDescription(TextFormat.TEXT)
-            )
-            return
-          }
-
-          val firstParam = node.uastParameters[0]
-          if (firstParam is KotlinReceiverUParameter) {
-            val nodeToReport =
-              (node as KotlinUMethod).sourcePsi?.childrenOfType<KtTypeReference>()?.first() ?: node
-            context.report(
-              ISSUE_BINDS_RECEIVER_PARAMETER,
-              context.getLocation(nodeToReport),
-              ISSUE_BINDS_RECEIVER_PARAMETER.getBriefDescription(TextFormat.TEXT),
-            )
-            return
+          if (isBinds) {
+            if (node.uastParameters.size != 1) {
+              val locationToHighlight =
+                if (node.uastParameters.isEmpty()) {
+                  node
+                } else {
+                  node.parameterList
+                }
+              context.report(
+                ISSUE_BINDS_WRONG_PARAMETER_COUNT,
+                context.getLocation(locationToHighlight),
+                ISSUE_BINDS_WRONG_PARAMETER_COUNT.getBriefDescription(TextFormat.TEXT)
+              )
+              return
+            }
           }
 
           val returnType =
@@ -193,32 +217,49 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
                 // Report missing return type
                 val nodeLocation = node.returnTypeElement ?: node
                 context.report(
-                  ISSUE_BINDS_RETURN_TYPE,
+                  ISSUE_RETURN_TYPE,
                   context.getLocation(nodeLocation),
-                  ISSUE_BINDS_RETURN_TYPE.getBriefDescription(TextFormat.TEXT),
+                  ISSUE_RETURN_TYPE.getBriefDescription(TextFormat.TEXT),
                 )
                 return
               }
 
-          val instanceType = firstParam.type
-          if (instanceType == returnType) {
-            // Check that they have different annotations, otherwise it's redundant
-            if (firstParam.qualifiers() == node.qualifiers()) {
+          if (node.uastParameters.isNotEmpty()) {
+            val firstParam = node.uastParameters[0]
+            if (firstParam is KotlinReceiverUParameter) {
+              val nodeToReport =
+                (node as KotlinUMethod).sourcePsi?.childrenOfType<KtTypeReference>()?.first()
+                  ?: node
               context.report(
-                ISSUE_BINDS_REDUNDANT,
-                context.getLocation(node),
-                ISSUE_BINDS_REDUNDANT.getBriefDescription(TextFormat.TEXT),
+                ISSUE_RECEIVER_PARAMETER,
+                context.getLocation(nodeToReport),
+                ISSUE_RECEIVER_PARAMETER.getBriefDescription(TextFormat.TEXT),
               )
               return
             }
-          }
 
-          if (!returnType.isAssignableFrom(instanceType)) {
-            context.report(
-              ISSUE_BINDS_TYPE_MISMATCH,
-              context.getLocation(node),
-              ISSUE_BINDS_TYPE_MISMATCH.getBriefDescription(TextFormat.TEXT),
-            )
+            if (isBinds) {
+              val instanceType = firstParam.type
+              if (instanceType == returnType) {
+                // Check that they have different annotations, otherwise it's redundant
+                if (firstParam.qualifiers() == node.qualifiers()) {
+                  context.report(
+                    ISSUE_BINDS_REDUNDANT,
+                    context.getLocation(node),
+                    ISSUE_BINDS_REDUNDANT.getBriefDescription(TextFormat.TEXT),
+                  )
+                  return
+                }
+              }
+
+              if (!returnType.isAssignableFrom(instanceType)) {
+                context.report(
+                  ISSUE_BINDS_TYPE_MISMATCH,
+                  context.getLocation(node),
+                  ISSUE_BINDS_TYPE_MISMATCH.getBriefDescription(TextFormat.TEXT),
+                )
+              }
+            }
           }
         }
       }
