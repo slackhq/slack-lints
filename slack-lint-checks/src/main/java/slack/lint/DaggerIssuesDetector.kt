@@ -213,16 +213,17 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
               it == PsiTypes.voidType() ||
                 context.evaluator.getTypeClass(it)?.qualifiedName == "kotlin.Unit"
             }
-              ?: run {
-                // Report missing return type
-                val nodeLocation = node.returnTypeElement ?: node
-                context.report(
-                  ISSUE_RETURN_TYPE,
-                  context.getLocation(nodeLocation),
-                  ISSUE_RETURN_TYPE.getBriefDescription(TextFormat.TEXT),
-                )
-                return
-              }
+
+          if (returnType == null) {
+            // Report missing return type
+            val nodeLocation = node.returnTypeElement ?: node
+            context.report(
+              ISSUE_RETURN_TYPE,
+              context.getLocation(nodeLocation),
+              ISSUE_RETURN_TYPE.getBriefDescription(TextFormat.TEXT),
+            )
+            return
+          }
 
           if (node.uastParameters.isNotEmpty()) {
             val firstParam = node.uastParameters[0]
