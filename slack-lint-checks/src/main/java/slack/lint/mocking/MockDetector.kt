@@ -33,7 +33,8 @@ import slack.lint.util.StringSetLintOption
  *
  * New [TypeChecker] implementations should be added to [TYPE_CHECKERS] to run in this.
  */
-class MockDetector constructor(
+class MockDetector
+constructor(
   private val mockAnnotations: StringSetLintOption = StringSetLintOption(MOCK_ANNOTATIONS),
   private val mockClasses: StringSetLintOption = StringSetLintOption(MOCK_CLASSES),
   private val mockMethods: StringSetLintOption = StringSetLintOption(MOCK_METHODS),

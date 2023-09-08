@@ -10,7 +10,10 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
 
   override fun lint(): TestLintTask {
     return super.lint()
-      .configureOption(MockDetector.MOCK_ANNOTATIONS, "io.mockk.impl.annotations.MockK,io.mockk.impl.annotations.SpyK")
+      .configureOption(
+        MockDetector.MOCK_ANNOTATIONS,
+        "io.mockk.impl.annotations.MockK,io.mockk.impl.annotations.SpyK"
+      )
       .configureOption(MockDetector.MOCK_CLASSES, "io.mockk.MockK")
       .configureOption(MockDetector.MOCK_METHODS, "mockk,spyk,mockkClass,mockkObject")
   }
@@ -23,8 +26,8 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
   fun tests() {
     val source =
       kotlin(
-        "test/slack/test/MyTests.kt",
-        """
+          "test/slack/test/MyTests.kt",
+          """
           package slack.test
 
           import io.mockk.impl.annotations.MockK
@@ -94,7 +97,7 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
             }
           }
         """
-      )
+        )
         .indented()
 
     lint()
@@ -187,31 +190,37 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
             val localClassMock = mockkClass<SealedClass>(SealedClass::class)
                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         24 errors, 4 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
-  private val mockK = kotlin(
-    "test/io/mockk/impl/annotations/MockK.kt",
-    """
+  private val mockK =
+    kotlin(
+        "test/io/mockk/impl/annotations/MockK.kt",
+        """
     package io.mockk.impl.annotations
 
     annotation class MockK
     """
-  ).indented()
+      )
+      .indented()
 
-  private val spyK = kotlin(
-    "test/io/mockk/impl/annotations/SpyK.kt",
-    """
+  private val spyK =
+    kotlin(
+        "test/io/mockk/impl/annotations/SpyK.kt",
+        """
     package io.mockk.impl.annotations
 
     annotation class SpyK
     """
-  ).indented()
+      )
+      .indented()
 
-  private val mockKExtensions = kotlin(
-    "test/io/mockk/MockK.kt",
-    """
+  private val mockKExtensions =
+    kotlin(
+        "test/io/mockk/MockK.kt",
+        """
     package io.mockk
 
     inline fun <reified T : Any> mockk(
@@ -221,7 +230,7 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
         relaxUnitFun: Boolean = false,
         block: T.() -> Unit = {}
     ): T = TODO()
-    
+
     inline fun <reified T : Any> spyk(
         name: String? = null,
         vararg moreInterfaces: KClass<*>,
@@ -248,32 +257,32 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
 
     inline fun mockkObject(vararg objects: Any, recordPrivateCalls: Boolean = false): Unit = TODO()
     """
-  ).indented()
+      )
+      .indented()
 
-  private val dataClass = kotlin(
-    """
+  private val dataClass =
+    kotlin(
+        """
     package slack.test
 
     data class DataClass(val foo: String, val list: List<DataClass> = emptyList())
     """
-  ).indented()
+      )
+      .indented()
 
-  private val sealedClass = kotlin(
-    """
+  private val sealedClass =
+    kotlin("""
     package slack.test
 
     sealed class SealedClass
-    """
-  ).indented()
+    """).indented()
 
-  private val objectClass = kotlin(
-    """
+  private val objectClass =
+    kotlin("""
     package slack.test
 
     object ObjectClass
-    """
-  ).indented()
+    """).indented()
 
   private fun stubs() = arrayOf(mockK, spyK, mockKExtensions, dataClass, sealedClass, objectClass)
-
 }
