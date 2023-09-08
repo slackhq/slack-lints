@@ -39,7 +39,7 @@ class SlackIssueRegistry : IssueRegistry() {
     listOf(
       *ViewContextDetector.issues,
       *ArgInFormattedQuantityStringResDetector.issues,
-      *DaggerKotlinIssuesDetector.issues,
+      *DaggerIssuesDetector.ISSUES,
       *NonKotlinPairDetector.issues,
       DoNotCallProvidersDetector.ISSUE,
       *InclusiveNamingChecker.ISSUES,
