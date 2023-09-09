@@ -13,6 +13,7 @@ import com.android.tools.lint.detector.api.TextFormat
 import com.intellij.lang.jvm.JvmClassKind
 import com.intellij.psi.PsiTypes
 import com.intellij.psi.util.childrenOfType
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.uast.UAnnotated
 import org.jetbrains.uast.UMethod
@@ -26,9 +27,9 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
   companion object {
     private val ISSUE_BINDS_MUST_BE_IN_MODULE: Issue =
       Issue.create(
-        "BindsMustBeInModule",
-        "@Binds function must be in `@Module`-annotated classes.",
-        "@Binds function must be in `@Module`-annotated classes.",
+        "MustBeInModule",
+        "@Binds/@Provides function must be in `@Module`-annotated classes.",
+        "@Binds/@Provides function must be in `@Module`-annotated classes.",
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
@@ -141,8 +142,17 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
 
           val containingClass = node.containingClass
           if (containingClass != null) {
+            // Fine to not use MetadataJavaEvaluator since we only care about current module
+            val moduleClass =
+              if (context.evaluator.hasModifier(containingClass, KtTokens.COMPANION_KEYWORD)) {
+                checkNotNull(containingClass.containingClass) {
+                  "Companion object must be nested in a class"
+                }
+              } else {
+                containingClass
+              }
             when {
-              !containingClass.hasAnnotation("dagger.Module") -> {
+              !moduleClass.hasAnnotation("dagger.Module") -> {
                 context.report(
                   ISSUE_BINDS_MUST_BE_IN_MODULE,
                   context.getLocation(node),

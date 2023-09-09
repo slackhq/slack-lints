@@ -426,7 +426,7 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
-  fun `binds must be in a module`() {
+  fun `must be in a module`() {
     lint()
       .files(
         javaxInjectStubs,
@@ -435,13 +435,41 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
             """
                   package foo
                   import dagger.Binds
+                  import dagger.Provides
+                  import dagger.Module
 
                   interface MyModule {
-                    @Binds fun validBind(real: Int): Number
+                    @Binds fun invalidBind(real: Int): Number
+
+                    companion object {
+                      @Provides fun invalidBind(): Int = 3
+                    }
                   }
 
                   abstract class MyModule2 {
+                    @Binds abstract fun invalidBind(real: Int): Number
+
+                    companion object {
+                      @Provides fun invalidBind(): Int = 3
+                    }
+                  }
+
+                  @Module
+                  interface MyModule3 {
+                    @Binds fun validBind(real: Int): Number
+
+                    companion object {
+                      @Provides fun validBind(): Int = 3
+                    }
+                  }
+
+                  @Module
+                  abstract class MyModule4 {
                     @Binds abstract fun validBind(real: Int): Number
+
+                    companion object {
+                      @Provides fun validBind(): Int = 3
+                    }
                   }
                 """
           )
@@ -451,13 +479,19 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/MyModule.kt:5: Error: @Binds function must be in @Module-annotated classes. [BindsMustBeInModule]
-          @Binds fun validBind(real: Int): Number
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyModule.kt:9: Error: @Binds function must be in @Module-annotated classes. [BindsMustBeInModule]
-          @Binds abstract fun validBind(real: Int): Number
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        2 errors, 0 warnings
+        src/foo/MyModule.kt:7: Error: @Binds/@Provides function must be in @Module-annotated classes. [MustBeInModule]
+          @Binds fun invalidBind(real: Int): Number
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/foo/MyModule.kt:10: Error: @Binds/@Provides function must be in @Module-annotated classes. [MustBeInModule]
+            @Provides fun invalidBind(): Int = 3
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/foo/MyModule.kt:15: Error: @Binds/@Provides function must be in @Module-annotated classes. [MustBeInModule]
+          @Binds abstract fun invalidBind(real: Int): Number
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/foo/MyModule.kt:18: Error: @Binds/@Provides function must be in @Module-annotated classes. [MustBeInModule]
+            @Provides fun invalidBind(): Int = 3
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        4 errors, 0 warnings
         """
           .trimIndent()
       )
