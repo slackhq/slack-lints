@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.5.1
+-----
+
+_2023-09-09_
+
+- **Fix**: Allow `@Provides` in companion objects of `@Module` classes.
+
 0.5.0
 -----
 
