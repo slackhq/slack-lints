@@ -33,17 +33,23 @@ allprojects {
       trimTrailingWhitespace()
       endWithNewline()
     }
+
+    val externalSourceGlobs = arrayOf(
+      "**/denylistedapis/*.kt",
+      "**/ExceptionMessageDetector*.kt",
+    )
+
     kotlin {
       target("**/*.kt")
       ktfmt(ktfmtVersion).googleStyle()
       trimTrailingWhitespace()
       endWithNewline()
       licenseHeaderFile(rootProject.file("spotless/spotless.kt"))
-      targetExclude("**/spotless.kt", "**/denylistedapis/*.kt")
+      targetExclude("**/spotless.kt", *externalSourceGlobs)
     }
     // Externally adapted sources that should preserve their license header
     format("kotlinExternal", KotlinExtension::class.java) {
-      target("**/denylistedapis/*.kt")
+      target(*externalSourceGlobs)
       ktfmt(ktfmtVersion).googleStyle()
       trimTrailingWhitespace()
       endWithNewline()
