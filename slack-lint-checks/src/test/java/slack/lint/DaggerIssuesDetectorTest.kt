@@ -155,11 +155,20 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
         javaxInjectStubs,
         daggerStubs,
         kotlin(
+            "src/foo/TestModule.kt",
             """
                   package foo
                   import javax.inject.Qualifier
                   import dagger.Binds
                   import dagger.Module
+
+                  sealed interface ItemDetail {
+                    object DetailTypeA : ItemDetail
+                  }
+
+                  interface ItemMapper<T : ItemDetail>
+
+                  class DetailTypeAItemMapper : ItemMapper<ItemDetail.DetailTypeA>
 
                   @Module
                   interface MyModule {
@@ -167,6 +176,10 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
                     @Binds fun validBind(real: Boolean): Comparable<Boolean>
                     @Binds fun invalidBind(real: Long): String
                     @Binds fun invalidBind(real: Long): Comparable<Boolean>
+
+                    @Binds fun validComplexBinding(real: DetailTypeAItemMapper): ItemMapper<out ItemDetail>
+                    @Binds fun validComplexBinding2(real: DetailTypeAItemMapper): ItemMapper<*>
+                    @Binds fun invalidComplexBinding(real: DetailTypeAItemMapper): ItemMapper<ItemDetail>
                   }
                 """
           )
@@ -176,13 +189,16 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/MyModule.kt:10: Error: @Binds function parameters must be type-assignable to their return types. [BindsTypeMismatch]
+        src/foo/TestModule.kt:18: Error: @Binds function parameters must be type-assignable to their return types. [BindsTypeMismatch]
           @Binds fun invalidBind(real: Long): String
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyModule.kt:11: Error: @Binds function parameters must be type-assignable to their return types. [BindsTypeMismatch]
+        src/foo/TestModule.kt:19: Error: @Binds function parameters must be type-assignable to their return types. [BindsTypeMismatch]
           @Binds fun invalidBind(real: Long): Comparable<Boolean>
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        2 errors, 0 warnings
+        src/foo/TestModule.kt:23: Error: @Binds function parameters must be type-assignable to their return types. [BindsTypeMismatch]
+          @Binds fun invalidComplexBinding(real: DetailTypeAItemMapper): ItemMapper<ItemDetail>
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        3 errors, 0 warnings
         """
           .trimIndent()
       )
