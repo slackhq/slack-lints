@@ -345,17 +345,13 @@ internal fun slackLintErrorLog(message: String) {
   }
 }
 
-/**
- * Returns whether [this] has [packageName] as its package name.
- */
+/** Returns whether [this] has [packageName] as its package name. */
 internal fun PsiMethod.isInPackageName(packageName: PackageName): Boolean {
   val actual = (containingFile as? PsiJavaFile)?.packageName
   return packageName.javaPackageName == actual
 }
 
-/**
- * Whether this [PsiMethod] returns Unit
- */
+/** Whether this [PsiMethod] returns Unit */
 internal val PsiMethod.returnsUnit
   get() = returnType.isVoidOrUnit
 
@@ -367,4 +363,3 @@ internal val PsiMethod.returnsUnit
  */
 internal val PsiType?.isVoidOrUnit
   get() = this == PsiType.VOID || this?.canonicalText == "kotlin.Unit"
-

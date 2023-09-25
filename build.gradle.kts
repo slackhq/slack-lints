@@ -34,10 +34,8 @@ allprojects {
       endWithNewline()
     }
 
-    val externalSourceGlobs = arrayOf(
-      "**/denylistedapis/*.kt",
-      "**/ExceptionMessageDetector*.kt",
-    )
+    val externalSourceGlobs =
+      arrayOf("**/denylistedapis/*.kt", "**/ExceptionMessageDetector*.kt", "**/util/Names.kt")
 
     kotlin {
       target("**/*.kt")
