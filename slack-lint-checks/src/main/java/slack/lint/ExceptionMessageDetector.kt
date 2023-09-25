@@ -30,6 +30,7 @@ import org.jetbrains.uast.getParameterForArgument
 import slack.lint.util.Name
 import slack.lint.util.Package
 import slack.lint.util.isInPackageName
+import slack.lint.util.sourceImplementation
 
 class ExceptionMessageDetector : Detector(), SourceCodeScanner {
 
@@ -75,10 +76,7 @@ class ExceptionMessageDetector : Detector(), SourceCodeScanner {
       category = Category.CORRECTNESS,
       priority = 3,
       severity = Severity.ERROR,
-      implementation = Implementation(
-        ExceptionMessageDetector::class.java,
-        EnumSet.of(Scope.JAVA_FILE)
-      )
+      implementation = sourceImplementation<ExceptionMessageDetector>()
     )
   }
 }
