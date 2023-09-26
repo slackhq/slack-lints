@@ -89,7 +89,6 @@ class ArgInFormattedQuantityStringResDetector : Detector(), SourceCodeScanner {
       val variable = exp.sourcePsiElement?.reference?.resolve() as? PsiLocalVariable
       val assignment = variable?.initializer as? PsiMethodCallExpression
       return assignment?.resolveMethod()?.name == "getFormattedCount"
-    }
-      ?: false
+    } ?: false
   }
 }

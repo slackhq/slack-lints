@@ -40,7 +40,8 @@ object DoNotMockMockDetector : MockDetector.TypeChecker {
     val uMockedType = mockedType.toUElementOfType<UClass>() ?: return null
     val doNotMockAnnotation =
       uMockedType.findAnnotation(FQCN_SLACK_DNM)
-        ?: uMockedType.findAnnotation(FQCN_EP_DNM) ?: return null
+        ?: uMockedType.findAnnotation(FQCN_EP_DNM)
+        ?: return null
 
     val messagePrefix = "Do not mock ${mockedType.name}"
     val suffix = doNotMockAnnotation.findAttributeValue("value")?.evaluate() as String?

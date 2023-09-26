@@ -99,7 +99,8 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
         }
         val reportData =
           checkMissingSubclass(node, KOTLIN_ONLY, "KotlinOnly")
-            ?: checkMissingSubclass(node, JAVA_ONLY, "JavaOnly") ?: return
+            ?: checkMissingSubclass(node, JAVA_ONLY, "JavaOnly")
+            ?: return
         context.report(
           ISSUE,
           context.getLocation(node.sourcePsi!!),
@@ -171,7 +172,8 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
         }
         val reportData =
           checkMissingOverride(node, KOTLIN_ONLY, "KotlinOnly")
-            ?: checkMissingOverride(node, JAVA_ONLY, "JavaOnly") ?: return
+            ?: checkMissingOverride(node, JAVA_ONLY, "JavaOnly")
+            ?: return
         context.report(ISSUE, context.getLocation(node), reportData.first, reportData.second)
       }
 
