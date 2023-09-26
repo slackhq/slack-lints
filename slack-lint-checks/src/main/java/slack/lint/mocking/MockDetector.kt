@@ -12,6 +12,7 @@ import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
 import com.intellij.util.containers.map2Array
+import kotlinx.metadata.ClassName
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.uast.UAnnotated
 import org.jetbrains.uast.UCallExpression
@@ -23,8 +24,14 @@ import org.jetbrains.uast.UastCallKind
 import slack.lint.mocking.MockDetector.Companion.TYPE_CHECKERS
 import slack.lint.mocking.MockDetector.TypeChecker
 import slack.lint.util.MetadataJavaEvaluator
+import slack.lint.util.Name
 import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.StringSetLintOption
+
+private data class MockFactory(
+  val declarationContainer: String,
+  val factoryName: String,
+)
 
 /**
  * A detector for detecting different kinds of mocking behavior. Implementations of [TypeChecker]
@@ -33,12 +40,10 @@ import slack.lint.util.StringSetLintOption
  *
  * New [TypeChecker] implementations should be added to [TYPE_CHECKERS] to run in this.
  */
-class MockDetector
-constructor(
-  private val mockAnnotations: StringSetLintOption = StringSetLintOption(MOCK_ANNOTATIONS),
-  private val mockClasses: StringSetLintOption = StringSetLintOption(MOCK_CLASSES),
-  private val mockMethods: StringSetLintOption = StringSetLintOption(MOCK_METHODS),
-) : OptionLoadingDetector(mockAnnotations, mockClasses, mockMethods), SourceCodeScanner {
+class MockDetector @JvmOverloads constructor(
+  private val mockAnnotationsOption: StringSetLintOption = StringSetLintOption(MOCK_ANNOTATIONS),
+  private val mockFactoriesOption: StringSetLintOption = StringSetLintOption(MOCK_FACTORIES),
+) : OptionLoadingDetector(mockAnnotationsOption, mockFactoriesOption), SourceCodeScanner {
   companion object {
 
     internal val MOCK_ANNOTATIONS =
@@ -49,20 +54,12 @@ constructor(
         "This property should define comma-separated list of mock annotation class names (FQCN)."
       )
 
-    internal val MOCK_CLASSES =
+    internal val MOCK_FACTORIES =
       StringOption(
-        "mock-classes",
-        "A comma-separated list of mock classes.",
-        "org.mockito.Mockito,slack.test.mockito.MockitoHelpers,slack.test.mockito.MockitoHelpersKt",
-        "This property should define comma-separated list of mock class names (FQCN)."
-      )
-
-    internal val MOCK_METHODS =
-      StringOption(
-        "mock-methods",
-        "A comma-separated list of mock methods.",
-        "mock,spy",
-        "This property should define comma-separated list of mock method names."
+        "mock-factories",
+        "A comma-separated list of mock factories (org.mockito.Mockito#methodName). Comma-separated. Use * for the method name to match all methods in the declaration container.",
+        "org.mockito.Mockito#mock,org.mockito.Mockito#spy,slack.test.mockito.MockitoHelpers#mock,slack.test.mockito.MockitoHelpersKt#mock",
+        "A comma-separated list of mock factories (org.mockito.Mockito#methodName). Comma-separated. Use * for the method name to match all methods in the declaration container."
       )
 
     private val TYPE_CHECKERS =
@@ -76,7 +73,7 @@ constructor(
         ObjectClassMockDetector,
         RecordClassMockDetector,
       )
-    private val OPTIONS = listOf(MOCK_ANNOTATIONS, MOCK_CLASSES, MOCK_METHODS)
+    private val OPTIONS = listOf(MOCK_ANNOTATIONS, MOCK_FACTORIES)
     val ISSUES = TYPE_CHECKERS.map2Array { it.issue.setOptions(OPTIONS) }
   }
 
@@ -91,6 +88,15 @@ constructor(
           return null
         }
     val slackEvaluator = MetadataJavaEvaluator(context.file.name, context.evaluator)
+
+    val mockFactories: Map<String, Set<String>> = mockFactoriesOption.value
+      .map { factory ->
+        val (declarationContainer, factoryName) = factory.split("#")
+        MockFactory(declarationContainer, factoryName)
+      }
+      .groupBy { it.factoryName }
+      .mapValues { it.value.mapTo(mutableSetOf()) { it.declarationContainer } }
+
     return object : UElementHandler() {
 
       // Checks for mock()/spy() calls
@@ -99,22 +105,33 @@ constructor(
         if (node.kind != UastCallKind.METHOD_CALL) return
 
         // Check our known mock methods
-        if (node.methodName in mockMethods.value) {
-          val resolvedClass = node.resolve()?.containingClass?.qualifiedName
-          // Now resolve the mocked type
-          var argumentType: PsiClass? = null
-          val expressionType = node.getExpressionType()
-          if (expressionType != null) {
+        val mockFactoryContainers = mockFactories[node.methodName]?.takeIf { it.isNotEmpty() } ?: return
+
+        // Matches a known method, now check if this one's in that method's known declaration container
+        val resolvedContainer = node.resolve()?.let {
+          it.containingClass?.qualifiedName ?: context.evaluator.getPackage(it)?.qualifiedName
+        } ?: return
+
+        if (resolvedContainer !in mockFactoryContainers) return
+
+        // Now resolve the mocked type
+        var argumentType: PsiClass? = null
+        val expressionType = node.getExpressionType()
+        when {
+          expressionType != null -> {
             argumentType = slackEvaluator.getTypeClass(expressionType)
-          } else if (node.typeArgumentCount == 1) {
+          }
+          node.typeArgumentCount == 1 -> {
             // We can read the type here for the fun <reified T> mock() helpers
             argumentType = slackEvaluator.getTypeClass(node.typeArguments[0])
-          } else if (resolvedClass in mockClasses.value && node.valueArgumentCount != 0) {
+          }
+          node.valueArgumentCount != 0 -> {
             when (val firstArg = node.valueArguments[0]) {
               is UClassLiteralExpression -> {
                 // It's Foo.class, we can just use it directly
                 argumentType = slackEvaluator.getTypeClass(firstArg.type)
               }
+
               is UReferenceExpression -> {
                 val type = firstArg.getExpressionType()
                 if (node.methodName == "spy") {
@@ -128,9 +145,9 @@ constructor(
               }
             }
           }
-
-          argumentType?.let { checkMock(node, argumentType) }
         }
+
+        argumentType?.let { checkMock(node, argumentType) }
       }
 
       // Checks properties and fields, usually annotated with @Mock/@Spy
@@ -150,7 +167,7 @@ constructor(
       }
 
       private fun isMockAnnotated(node: UAnnotated): Boolean {
-        return mockAnnotations.value.any { node.findAnnotation(it) != null }
+        return mockAnnotationsOption.value.any { node.findAnnotation(it) != null }
       }
 
       private fun checkMock(node: UElement, type: PsiClass) {

@@ -14,8 +14,10 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
         MockDetector.MOCK_ANNOTATIONS,
         "io.mockk.impl.annotations.MockK,io.mockk.impl.annotations.SpyK"
       )
-      .configureOption(MockDetector.MOCK_CLASSES, "io.mockk.MockK")
-      .configureOption(MockDetector.MOCK_METHODS, "mockk,spyk,mockkClass,mockkObject")
+      .configureOption(
+        MockDetector.MOCK_FACTORIES,
+        "io.mockk.MockKKt#mockk,io.mockk.MockKKt#mockkClass,io.mockk.MockKKt#mockkObject,io.mockk.MockKKt#spyk"
+      )
   }
 
   override fun getDetector() = MockDetector()
