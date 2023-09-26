@@ -57,9 +57,9 @@ constructor(
     internal val MOCK_FACTORIES =
       StringOption(
         "mock-factories",
-        "A comma-separated list of mock factories (org.mockito.Mockito#methodName). Comma-separated. Use * for the method name to match all methods in the declaration container.",
+        "A comma-separated list of mock factories (org.mockito.Mockito#methodName). Comma-separated.",
         "org.mockito.Mockito#mock,org.mockito.Mockito#spy,slack.test.mockito.MockitoHelpers#mock,slack.test.mockito.MockitoHelpersKt#mock",
-        "A comma-separated list of mock factories (org.mockito.Mockito#methodName). Comma-separated. Use * for the method name to match all methods in the declaration container."
+        "A comma-separated list of mock factories (org.mockito.Mockito#methodName). Comma-separated."
       )
 
     private val TYPE_CHECKERS =
