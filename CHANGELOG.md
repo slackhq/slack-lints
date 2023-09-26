@@ -1,6 +1,19 @@
 Changelog
 =========
 
+0.6.0
+-----
+
+_2023-09-28_
+
+- **New**: Add `ExceptionMessage` check that ensures that calls to `check`, `checkNotNull`, `require`, and `requireNotNull` functions always include a message.
+- **Enhancement**: Add support for custom mock factories and mock annotations to `MockDetector`.
+  - `mock-annotations` is a comma-separated list of mock annotations' fully-qualified names. Default is `org.mockito.Mock,org.mockito.Spy`.
+  - `mock-factories` is a comma-separated list of mock factories (i.e. `org.mockito.Mockito#methodName`). Default is `org.mockito.Mockito#mock,org.mockito.Mockito#spy,slack.test.mockito.MockitoHelpers#mock,slack.test.mockito.MockitoHelpersKt#mock`.
+- Update lint to `31.3.0-alpha05`.
+
+Special thanks to [@SimonMarquis](https://github.com/SimonMarquis) for contributing to this release!
+
 0.5.1
 -----
 
