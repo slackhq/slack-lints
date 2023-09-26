@@ -79,8 +79,7 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
           val isLocalResourceImport =
             parentImportedFqName?.let {
               if (packageName != null) it == packageName else filePackageName?.startsWith(it)
-            }
-              ?: true
+            } ?: true
           if (!isLocalResourceImport) {
             val importedFqNameString = requireNotNull(importedFqName).asString()
             val alias = importAliases[importedFqNameString]
