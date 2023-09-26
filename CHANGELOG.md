@@ -1,6 +1,23 @@
 Changelog
 =========
 
+0.5.1
+-----
+
+_2023-09-09_
+
+- **Fix**: Allow `@Provides` in companion objects of `@Module` classes.
+
+0.5.0
+-----
+
+_2023-09-08_
+
+- **New**: Add a bunch more checks around correct usage of Dagger `@Binds` and `@Provides` methods.
+- **Fix**: Remove `BindsCanBeExtensionFunction` lint as this is prohibited now in Dagger 2.48+.
+- Update to lint `31.3.0-alpha03`.
+- Update to Kotlin `1.9.10`.
+
 0.4.0
 -----
 

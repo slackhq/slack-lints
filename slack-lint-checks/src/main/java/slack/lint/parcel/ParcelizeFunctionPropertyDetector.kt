@@ -38,8 +38,7 @@ class ParcelizeFunctionPropertyDetector : Detector(), SourceCodeScanner {
           node.constructors
             .asSequence()
             .mapNotNull { it.getUMethod() }
-            .firstOrNull { it.sourcePsi is KtPrimaryConstructor }
-            ?: return
+            .firstOrNull { it.sourcePsi is KtPrimaryConstructor } ?: return
 
         // Now check properties
         for (parameter in primaryConstructor.uastParameters) {

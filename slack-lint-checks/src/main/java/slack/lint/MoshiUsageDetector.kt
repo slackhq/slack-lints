@@ -868,8 +868,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         (serializedName.findAttributeValue("alternate")?.sourcePsi
             as? KtCollectionLiteralExpression)
           ?.getInnerExpressions()
-          ?.size
-          ?: -1
+          ?.size ?: -1
       val hasAlternates = alternateCount > 0
 
       var fix: LintFix? = null

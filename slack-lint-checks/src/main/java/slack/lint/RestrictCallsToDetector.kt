@@ -54,8 +54,7 @@ class RestrictCallsToDetector : Detector(), SourceCodeScanner {
             .mapNotNull { superMethod ->
               superMethod.findAnnotation(RESTRICT_CALLS_TO_ANNOTATION)?.let { it to superMethod }
             }
-            .firstOrNull()
-            ?: return
+            .firstOrNull() ?: return
 
         val containingFile = annotatedMethod.getContainingUFile() ?: return
         val callingFile = node.getContainingUFile() ?: return

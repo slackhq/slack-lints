@@ -104,8 +104,7 @@ class RxSubscribeOnMainDetector : Detector(), SourceCodeScanner {
   private fun checkCall(fn: () -> UCallExpression?): Boolean {
     return fn()?.let { call ->
       "mainThread" == call.methodName || "immediateMainThread" == call.methodName
-    }
-      ?: false
+    } ?: false
   }
 
   /**
@@ -119,8 +118,7 @@ class RxSubscribeOnMainDetector : Detector(), SourceCodeScanner {
         is JavaLanguage -> checkJavaVariable(exp)
         else -> return false
       }
-    }
-      ?: false
+    } ?: false
   }
 
   private fun checkKotlinVariable(exp: UExpression): Boolean {
