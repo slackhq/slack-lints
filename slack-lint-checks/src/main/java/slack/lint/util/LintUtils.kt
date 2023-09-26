@@ -25,6 +25,8 @@ import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiJavaFile
+import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiModifierListOwner
 import com.intellij.psi.PsiType
 import com.intellij.psi.PsiWildcardType
@@ -342,3 +344,22 @@ internal fun slackLintErrorLog(message: String) {
     System.err.println("SlackLint: $message")
   }
 }
+
+/** Returns whether [this] has [packageName] as its package name. */
+internal fun PsiMethod.isInPackageName(packageName: PackageName): Boolean {
+  val actual = (containingFile as? PsiJavaFile)?.packageName
+  return packageName.javaPackageName == actual
+}
+
+/** Whether this [PsiMethod] returns Unit */
+internal val PsiMethod.returnsUnit
+  get() = returnType.isVoidOrUnit
+
+/**
+ * Whether this [PsiType] is `void` or [Unit]
+ *
+ * In Kotlin 1.6 some expressions now explicitly return [Unit] instead of just being [PsiType.VOID],
+ * so this returns whether this type is either.
+ */
+internal val PsiType?.isVoidOrUnit
+  get() = this == PsiType.VOID || this?.canonicalText == "kotlin.Unit"
