@@ -12,7 +12,6 @@ import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
 import com.intellij.util.containers.map2Array
-import kotlinx.metadata.ClassName
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.uast.UAnnotated
 import org.jetbrains.uast.UCallExpression
@@ -24,7 +23,6 @@ import org.jetbrains.uast.UastCallKind
 import slack.lint.mocking.MockDetector.Companion.TYPE_CHECKERS
 import slack.lint.mocking.MockDetector.TypeChecker
 import slack.lint.util.MetadataJavaEvaluator
-import slack.lint.util.Name
 import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.StringSetLintOption
 
@@ -40,7 +38,9 @@ private data class MockFactory(
  *
  * New [TypeChecker] implementations should be added to [TYPE_CHECKERS] to run in this.
  */
-class MockDetector @JvmOverloads constructor(
+class MockDetector
+@JvmOverloads
+constructor(
   private val mockAnnotationsOption: StringSetLintOption = StringSetLintOption(MOCK_ANNOTATIONS),
   private val mockFactoriesOption: StringSetLintOption = StringSetLintOption(MOCK_FACTORIES),
 ) : OptionLoadingDetector(mockAnnotationsOption, mockFactoriesOption), SourceCodeScanner {
@@ -89,13 +89,14 @@ class MockDetector @JvmOverloads constructor(
         }
     val slackEvaluator = MetadataJavaEvaluator(context.file.name, context.evaluator)
 
-    val mockFactories: Map<String, Set<String>> = mockFactoriesOption.value
-      .map { factory ->
-        val (declarationContainer, factoryName) = factory.split("#")
-        MockFactory(declarationContainer, factoryName)
-      }
-      .groupBy { it.factoryName }
-      .mapValues { it.value.mapTo(mutableSetOf()) { it.declarationContainer } }
+    val mockFactories: Map<String, Set<String>> =
+      mockFactoriesOption.value
+        .map { factory ->
+          val (declarationContainer, factoryName) = factory.split("#")
+          MockFactory(declarationContainer, factoryName)
+        }
+        .groupBy { it.factoryName }
+        .mapValues { it.value.mapTo(mutableSetOf()) { it.declarationContainer } }
 
     return object : UElementHandler() {
 
@@ -105,12 +106,15 @@ class MockDetector @JvmOverloads constructor(
         if (node.kind != UastCallKind.METHOD_CALL) return
 
         // Check our known mock methods
-        val mockFactoryContainers = mockFactories[node.methodName]?.takeIf { it.isNotEmpty() } ?: return
+        val mockFactoryContainers =
+          mockFactories[node.methodName]?.takeIf { it.isNotEmpty() } ?: return
 
-        // Matches a known method, now check if this one's in that method's known declaration container
-        val resolvedContainer = node.resolve()?.let {
-          it.containingClass?.qualifiedName ?: context.evaluator.getPackage(it)?.qualifiedName
-        } ?: return
+        // Matches a known method, now check if this one's in that method's known declaration
+        // container
+        val resolvedContainer =
+          node.resolve()?.let {
+            it.containingClass?.qualifiedName ?: context.evaluator.getPackage(it)?.qualifiedName
+          } ?: return
 
         if (resolvedContainer !in mockFactoryContainers) return
 
@@ -131,7 +135,6 @@ class MockDetector @JvmOverloads constructor(
                 // It's Foo.class, we can just use it directly
                 argumentType = slackEvaluator.getTypeClass(firstArg.type)
               }
-
               is UReferenceExpression -> {
                 val type = firstArg.getExpressionType()
                 if (node.methodName == "spy") {
