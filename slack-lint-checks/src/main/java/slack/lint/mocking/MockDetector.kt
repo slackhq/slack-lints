@@ -3,8 +3,11 @@
 package slack.lint.mocking
 
 import com.android.tools.lint.client.api.UElementHandler
+import com.android.tools.lint.detector.api.BooleanOption
+import com.android.tools.lint.detector.api.Context
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
+import com.android.tools.lint.detector.api.PartialResult
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.StringOption
 import com.android.tools.lint.detector.api.isJava
@@ -25,6 +28,12 @@ import slack.lint.mocking.MockDetector.TypeChecker
 import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.StringSetLintOption
+import java.nio.file.Files
+import kotlin.io.path.bufferedWriter
+import kotlin.io.path.createDirectories
+import kotlin.io.path.createFile
+import kotlin.io.path.deleteExisting
+import kotlin.io.path.exists
 
 private data class MockFactory(
   val declarationContainer: String,
@@ -43,8 +52,11 @@ class MockDetector
 constructor(
   private val mockAnnotationsOption: StringSetLintOption = StringSetLintOption(MOCK_ANNOTATIONS),
   private val mockFactoriesOption: StringSetLintOption = StringSetLintOption(MOCK_FACTORIES),
+  private val mockReport: BooleanOption = MOCK_REPORT,
 ) : OptionLoadingDetector(mockAnnotationsOption, mockFactoriesOption), SourceCodeScanner {
   companion object {
+
+    internal const val MOCK_REPORT_PATH = "build/reports/mockdetector/mocks.txt"
 
     internal val MOCK_ANNOTATIONS =
       StringOption(
@@ -62,6 +74,14 @@ constructor(
         "A comma-separated list of mock factories (org.mockito.Mockito#methodName)."
       )
 
+    internal val MOCK_REPORT =
+      BooleanOption(
+        "mock-report",
+        "If enabled, writes a mock report to <project-dir>/$MOCK_REPORT_PATH.",
+        false,
+        "If enabled, writes a mock report to <project-dir>/$MOCK_REPORT_PATH. The format of the file is a newline-delimited list of qualified names of incorrectly mocked classes."
+      )
+
     private val TYPE_CHECKERS =
       listOf(
         // Loosely defined in the order of most likely to be hit
@@ -73,9 +93,12 @@ constructor(
         ObjectClassMockDetector,
         RecordClassMockDetector,
       )
-    private val OPTIONS = listOf(MOCK_ANNOTATIONS, MOCK_FACTORIES)
+    private val OPTIONS = listOf(MOCK_ANNOTATIONS, MOCK_FACTORIES, MOCK_REPORT)
     val ISSUES = TYPE_CHECKERS.map2Array { it.issue.setOptions(OPTIONS) }
   }
+
+  // A mapping of mocked types
+  private val reports = mutableListOf<String>()
 
   override fun getApplicableUastTypes() = listOf(UCallExpression::class.java, UField::class.java)
 
@@ -88,6 +111,8 @@ constructor(
           return null
         }
     val slackEvaluator = MetadataJavaEvaluator(context.file.name, context.evaluator)
+
+    val reportingEnabled = mockReport.getValue(context)
 
     val mockFactories: Map<String, Set<String>> =
       mockFactoriesOption.value
@@ -173,14 +198,22 @@ constructor(
         return mockAnnotationsOption.value.any { node.findAnnotation(it) != null }
       }
 
+      private fun addReport(type: PsiClass) {
+        if (reportingEnabled) {
+          type.qualifiedName?.let { reports += it }
+        }
+      }
+
       private fun checkMock(node: UElement, type: PsiClass) {
         for (checker in checkers) {
           val reason = checker.checkType(context, slackEvaluator, type)
           if (reason != null) {
+            addReport(type)
             context.report(checker.issue, context.getLocation(node), reason.reason)
             continue
           }
           val disallowedAnnotation = checker.annotations.find { type.hasAnnotation(it) } ?: continue
+          addReport(type)
           context.report(
             checker.issue,
             context.getLocation(node),
@@ -190,6 +223,22 @@ constructor(
         }
       }
     }
+  }
+
+  override fun afterCheckEachProject(context: Context) {
+    if (mockReport.getValue(context) && reports.isNotEmpty()) {
+      val outputFile = context.project.dir.toPath().resolve(MOCK_REPORT_PATH)
+      if (outputFile.exists()) {
+        outputFile.deleteExisting()
+      }
+      // TODO use createParentDirectories() when we upgrade to Kotlin 1.9
+      outputFile.parent.createDirectories()
+      outputFile.createFile()
+      outputFile.bufferedWriter().use {
+        it.write(reports.sorted().joinToString("\n"))
+      }
+    }
+    reports.clear()
   }
 
   interface TypeChecker {
