@@ -1,6 +1,14 @@
 Changelog
 =========
 
+0.6.1
+-----
+
+_2023-10-09_
+
+- **Enhancement**: Add `mock-report` option to `MockDetector`s to generate a report of all mocked types in a project.
+- Update to lint `31.3.0-alpha07`.
+
 0.6.0
 -----
 
