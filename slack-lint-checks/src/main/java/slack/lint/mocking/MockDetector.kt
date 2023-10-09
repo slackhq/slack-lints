@@ -7,7 +7,6 @@ import com.android.tools.lint.detector.api.BooleanOption
 import com.android.tools.lint.detector.api.Context
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
-import com.android.tools.lint.detector.api.PartialResult
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.StringOption
 import com.android.tools.lint.detector.api.isJava
@@ -15,6 +14,11 @@ import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
 import com.intellij.util.containers.map2Array
+import kotlin.io.path.bufferedWriter
+import kotlin.io.path.createDirectories
+import kotlin.io.path.createFile
+import kotlin.io.path.deleteExisting
+import kotlin.io.path.exists
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.uast.UAnnotated
 import org.jetbrains.uast.UCallExpression
@@ -28,12 +32,6 @@ import slack.lint.mocking.MockDetector.TypeChecker
 import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.StringSetLintOption
-import java.nio.file.Files
-import kotlin.io.path.bufferedWriter
-import kotlin.io.path.createDirectories
-import kotlin.io.path.createFile
-import kotlin.io.path.deleteExisting
-import kotlin.io.path.exists
 
 private data class MockFactory(
   val declarationContainer: String,
@@ -234,9 +232,7 @@ constructor(
       // TODO use createParentDirectories() when we upgrade to Kotlin 1.9
       outputFile.parent.createDirectories()
       outputFile.createFile()
-      outputFile.bufferedWriter().use {
-        it.write(reports.sorted().joinToString("\n"))
-      }
+      outputFile.bufferedWriter().use { it.write(reports.sorted().joinToString("\n")) }
     }
     reports.clear()
   }
