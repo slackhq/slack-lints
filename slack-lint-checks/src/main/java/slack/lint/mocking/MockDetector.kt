@@ -112,9 +112,9 @@ constructor(
 
     val reportingMode = reportMode(context)
 
-    val reportErrorsEnabled =
+    val reportErrors =
       reportingMode == MockReportMode.ALL || reportingMode == MockReportMode.ERRORS
-    val reportAllEnabled = reportingMode == MockReportMode.ALL
+    val reportAll = reportingMode == MockReportMode.ALL
 
     val mockFactories: Map<String, Set<String>> =
       mockFactoriesOption.value
@@ -201,7 +201,7 @@ constructor(
       }
 
       private fun addReport(type: PsiClass, isError: Boolean) {
-        if (reportAllEnabled || (isError && reportErrorsEnabled)) {
+        if (reportAll || (isError && reportErrors)) {
           type.qualifiedName?.let { reports += (it to isError) }
         }
       }
@@ -212,7 +212,7 @@ constructor(
           if (reason != null) {
             addReport(type, isError = true)
             context.report(checker.issue, context.getLocation(node), reason.reason)
-            continue
+            return
           }
           val disallowedAnnotation = checker.annotations.find { type.hasAnnotation(it) } ?: continue
           addReport(type, isError = true)

@@ -159,4 +159,103 @@ class MockReportTest : BaseSlackLintTest() {
           .trimIndent()
       )
   }
+
+  @Test
+  fun allMode() {
+    val source =
+      kotlin(
+          "test/test/slack/test/TestClass.kt",
+          """
+          package slack.test
+
+          import org.mockito.Mock
+          import org.mockito.Spy
+          import slack.test.mockito.mock
+          import java.lang.Runnable
+
+          interface ExampleInterface
+
+          class MyTests {
+            @Mock lateinit var fieldMock: TestClass
+            @Spy lateinit var fieldSpy: TestClass
+            @Mock lateinit var nonErrorMock: ExampleInterface
+            @Spy lateinit var nonErrorSpy: java.lang.ExampleInterface
+
+            fun example() {
+              val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
+              val localSpy1 = org.mockito.Mockito.spy(localMock1)
+              val localMock2 = mock<TestClass>()
+              val classRef = TestClass::class.java
+              val localMock3 = org.mockito.Mockito.mock(classRef)
+              val nonErrorMock1 = org.mockito.Mockito.mock(ExampleInterface::class.java)
+              val nonErrorSpy1 = org.mockito.Mockito.spy(nonErrorMock1)
+              val nonErrorMock2 = mock<ExampleInterface>()
+              val classRef = ExampleInterface::class.java
+              val nonErrorMock3 = org.mockito.Mockito.mock(classRef)
+
+              val dynamicMock = mock<TestClass> {
+
+              }
+              val dynamicNonErrorMock = mock<ExampleInterface> {
+
+              }
+              val assigned: TestClass = mock()
+              val assignedNonError: ExampleInterface = mock()
+              val fake = TestClass("this is fine")
+
+              // Extra tests for location reporting
+              val unnecessaryMockedValues = TestClass(
+                "This is fine",
+                mock()
+              )
+              val unnecessaryNestedMockedValues = TestClass(
+                "This is fine",
+                listOf(mock())
+              )
+              val withNamedArgs = TestClass(
+                foo = "This is fine",
+                list = listOf(mock())
+              )
+            }
+          }
+        """
+        )
+        .indented()
+
+    val task =
+      lint()
+        .rootDirectory(tmpFolder.root)
+        .files(*mockFileStubs(), testClass, source)
+        .configureOption(MOCK_REPORT, MockDetector.MockReportMode.ALL.name)
+
+    task.run()
+
+    val reports = tmpFolder.root.toPath().resolve("default/app/${MockDetector.MOCK_REPORT_PATH}")
+    assertThat(reports.exists()).isTrue()
+    assertThat(reports.readText())
+      .isEqualTo(
+        """
+        type,isError
+        java.util.List,true
+        slack.test.ExampleInterface,false
+        slack.test.ExampleInterface,false
+        slack.test.ExampleInterface,false
+        slack.test.ExampleInterface,false
+        slack.test.ExampleInterface,false
+        slack.test.ExampleInterface,false
+        slack.test.ExampleInterface,false
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+      """
+          .trimIndent()
+      )
+  }
 }
