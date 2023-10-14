@@ -11,7 +11,8 @@ import org.junit.rules.TemporaryFolder
 import slack.lint.BaseSlackLintTest
 import slack.lint.mocking.MockDetector.Companion.MOCK_REPORT
 
-class MockReportTest : BaseSlackLintTest() {
+class
+MockReportTest : BaseSlackLintTest() {
 
   @Rule @JvmField val tmpFolder = TemporaryFolder()
 
@@ -81,7 +82,7 @@ class MockReportTest : BaseSlackLintTest() {
       lint()
         .rootDirectory(tmpFolder.root)
         .files(*mockFileStubs(), testClass, source)
-        .configureOption(MOCK_REPORT, true)
+        .configureOption(MOCK_REPORT, MockDetector.MockReportMode.ERRORS.name)
 
     task.run()
 
@@ -90,17 +91,18 @@ class MockReportTest : BaseSlackLintTest() {
     assertThat(reports.readText())
       .isEqualTo(
         """
-        java.util.List
-        slack.test.TestClass
-        slack.test.TestClass
-        slack.test.TestClass
-        slack.test.TestClass
-        slack.test.TestClass
-        slack.test.TestClass
-        slack.test.TestClass
-        slack.test.TestClass
-        slack.test.TestClass
-        slack.test.TestClass
+        type,isError
+        java.util.List,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
       """
           .trimIndent()
       )
@@ -139,7 +141,7 @@ class MockReportTest : BaseSlackLintTest() {
       lint()
         .rootDirectory(tmpFolder.root)
         .files(*mockFileStubs(), testClass, source)
-        .configureOption(MOCK_REPORT, true)
+        .configureOption(MOCK_REPORT, MockDetector.MockReportMode.ERRORS.name)
 
     task.run()
 
@@ -148,11 +150,12 @@ class MockReportTest : BaseSlackLintTest() {
     assertThat(reports.readText())
       .isEqualTo(
         """
-        slack.test.TestClass
-        slack.test.TestClass
-        slack.test.TestClass
-        slack.test.TestClass
-        slack.test.TestClass
+        type,isError
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
       """
           .trimIndent()
       )
