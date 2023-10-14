@@ -11,8 +11,7 @@ import org.junit.rules.TemporaryFolder
 import slack.lint.BaseSlackLintTest
 import slack.lint.mocking.MockDetector.Companion.MOCK_REPORT
 
-class
-MockReportTest : BaseSlackLintTest() {
+class MockReportTest : BaseSlackLintTest() {
 
   @Rule @JvmField val tmpFolder = TemporaryFolder()
 

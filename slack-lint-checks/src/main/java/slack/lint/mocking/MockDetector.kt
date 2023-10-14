@@ -3,7 +3,6 @@
 package slack.lint.mocking
 
 import com.android.tools.lint.client.api.UElementHandler
-import com.android.tools.lint.detector.api.BooleanOption
 import com.android.tools.lint.detector.api.Context
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
@@ -14,6 +13,7 @@ import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
 import com.intellij.util.containers.map2Array
+import java.util.Locale
 import kotlin.io.path.bufferedWriter
 import kotlin.io.path.createDirectories
 import kotlin.io.path.createFile
@@ -32,7 +32,6 @@ import slack.lint.mocking.MockDetector.TypeChecker
 import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.StringSetLintOption
-import java.util.Locale
 
 private data class MockFactory(
   val declarationContainer: String,
@@ -113,7 +112,8 @@ constructor(
 
     val reportingMode = reportMode(context)
 
-    val reportErrorsEnabled = reportingMode == MockReportMode.ALL || reportingMode == MockReportMode.ERRORS
+    val reportErrorsEnabled =
+      reportingMode == MockReportMode.ALL || reportingMode == MockReportMode.ERRORS
     val reportAllEnabled = reportingMode == MockReportMode.ALL
 
     val mockFactories: Map<String, Set<String>> =
@@ -229,8 +229,7 @@ constructor(
   }
 
   private fun reportMode(context: Context): MockReportMode {
-    return mockReport.getValue(context)
-      ?.let { MockReportMode.valueOf(it.uppercase(Locale.US)) }
+    return mockReport.getValue(context)?.let { MockReportMode.valueOf(it.uppercase(Locale.US)) }
       ?: MockReportMode.NONE
   }
 
