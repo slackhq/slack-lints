@@ -112,8 +112,7 @@ constructor(
 
     val reportingMode = reportMode(context)
 
-    val reportErrors =
-      reportingMode == MockReportMode.ALL || reportingMode == MockReportMode.ERRORS
+    val reportErrors = reportingMode == MockReportMode.ALL || reportingMode == MockReportMode.ERRORS
     val reportAll = reportingMode == MockReportMode.ALL
 
     val mockFactories: Map<String, Set<String>> =
