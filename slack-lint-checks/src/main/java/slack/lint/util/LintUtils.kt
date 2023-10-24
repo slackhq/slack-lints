@@ -68,9 +68,11 @@ internal fun PsiClass.implements(
   }
 }
 
-/** @return whether or not [owner] is a Kotlin `value` class. */
+/** @return whether [owner] is a Kotlin `value` class. */
 internal fun JavaEvaluator.isValueClass(owner: PsiModifierListOwner?): Boolean {
-  return hasModifier(owner, KtTokens.VALUE_KEYWORD)
+  // Check the annotation for JvmInline as a shorter check
+  return owner?.hasAnnotation("kotlin.jvm.JvmInline") == true ||
+    hasModifier(owner, KtTokens.VALUE_KEYWORD)
 }
 
 internal fun UClass.isInnerClass(evaluator: JavaEvaluator): Boolean {
