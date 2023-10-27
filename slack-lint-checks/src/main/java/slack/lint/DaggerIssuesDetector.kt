@@ -116,8 +116,8 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
     private const val BINDS_ANNOTATION = "dagger.Binds"
     private const val PROVIDES_ANNOTATION = "dagger.Provides"
 
-    val ISSUES: Array<Issue> =
-      arrayOf(
+    val ISSUES: List<Issue> =
+      listOf(
         ISSUE_BINDS_TYPE_MISMATCH,
         ISSUE_RETURN_TYPE,
         ISSUE_RECEIVER_PARAMETER,

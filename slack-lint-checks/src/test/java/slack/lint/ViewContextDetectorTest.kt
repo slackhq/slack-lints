@@ -66,7 +66,7 @@ class ViewContextDetectorTest : BaseSlackLintTest() {
   }
 
   override fun getIssues(): List<Issue> {
-    return listOf(*ViewContextDetector.issues)
+    return ViewContextDetector.issues
   }
 
   /*@Test

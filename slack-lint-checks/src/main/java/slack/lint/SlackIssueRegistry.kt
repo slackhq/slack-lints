@@ -34,39 +34,37 @@ class SlackIssueRegistry : IssueRegistry() {
   override val api: Int = CURRENT_API
   override val minApi: Int = CURRENT_API
 
-  @Suppress("SpreadOperator")
-  override val issues: List<Issue> =
-    listOf(
-      *ViewContextDetector.issues,
-      *ArgInFormattedQuantityStringResDetector.issues,
-      *DaggerIssuesDetector.ISSUES,
-      *NonKotlinPairDetector.issues,
-      DoNotCallProvidersDetector.ISSUE,
-      *InclusiveNamingChecker.ISSUES,
-      DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL,
-      DeprecatedSqlUsageDetector.ISSUE,
-      JavaOnlyDetector.ISSUE,
-      SerializableDetector.ISSUE,
-      RawDispatchersUsageDetector.ISSUE,
-      MainScopeUsageDetector.ISSUE,
-      RxSubscribeOnMainDetector.ISSUE,
-      *GuavaPreconditionsDetector.issues,
-      *MockDetector.ISSUES,
-      ErrorProneDoNotMockDetector.ISSUE,
-      *MoshiUsageDetector.issues(),
-      *FragmentDaggerFieldInjectionDetector.issues,
-      *InjectWithUsageDetector.ISSUES,
-      *RedactedUsageDetector.ISSUES,
-      InjectInJavaDetector.ISSUE,
-      RetrofitUsageDetector.ISSUE,
-      RestrictCallsToDetector.ISSUE,
-      SpanMarkPointMissingMaskDetector.ISSUE,
-      DoNotExposeEitherNetInRepositoriesDetector.ISSUE,
-      FullyQualifiedResourceDetector.ISSUE,
-      MissingResourceImportAliasDetector.ISSUE,
-      WrongResourceImportAliasDetector.ISSUE,
-      DenyListedApiDetector.ISSUE,
-      ParcelizeFunctionPropertyDetector.ISSUE,
-      ExceptionMessageDetector.ISSUE,
-    )
+  override val issues: List<Issue> = buildList {
+    addAll(ViewContextDetector.issues)
+    addAll(ArgInFormattedQuantityStringResDetector.issues)
+    addAll(DaggerIssuesDetector.ISSUES)
+    addAll(NonKotlinPairDetector.issues)
+    add(DoNotCallProvidersDetector.ISSUE)
+    addAll(InclusiveNamingChecker.ISSUES)
+    add(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
+    add(DeprecatedSqlUsageDetector.ISSUE)
+    add(JavaOnlyDetector.ISSUE)
+    add(SerializableDetector.ISSUE)
+    add(RawDispatchersUsageDetector.ISSUE)
+    add(MainScopeUsageDetector.ISSUE)
+    add(RxSubscribeOnMainDetector.ISSUE)
+    addAll(GuavaPreconditionsDetector.issues)
+    addAll(MockDetector.ISSUES)
+    add(ErrorProneDoNotMockDetector.ISSUE)
+    addAll(MoshiUsageDetector.issues())
+    addAll(FragmentDaggerFieldInjectionDetector.issues)
+    addAll(InjectWithUsageDetector.ISSUES)
+    addAll(RedactedUsageDetector.ISSUES)
+    add(InjectInJavaDetector.ISSUE)
+    add(RetrofitUsageDetector.ISSUE)
+    add(RestrictCallsToDetector.ISSUE)
+    add(SpanMarkPointMissingMaskDetector.ISSUE)
+    add(DoNotExposeEitherNetInRepositoriesDetector.ISSUE)
+    add(FullyQualifiedResourceDetector.ISSUE)
+    add(MissingResourceImportAliasDetector.ISSUE)
+    add(WrongResourceImportAliasDetector.ISSUE)
+    add(DenyListedApiDetector.ISSUE)
+    add(ParcelizeFunctionPropertyDetector.ISSUE)
+    add(ExceptionMessageDetector.ISSUE)
+  }
 }

@@ -99,6 +99,6 @@ class FragmentDaggerFieldInjectionDetector : Detector(), SourceCodeScanner {
       )
 
     val issues =
-      arrayOf(ISSUE_FRAGMENT_CONSTRUCTOR_INJECTION_AVAILABLE, ISSUE_FRAGMENT_FIELD_INJECTION_USED)
+      listOf(ISSUE_FRAGMENT_CONSTRUCTOR_INJECTION_AVAILABLE, ISSUE_FRAGMENT_FIELD_INJECTION_USED)
   }
 }

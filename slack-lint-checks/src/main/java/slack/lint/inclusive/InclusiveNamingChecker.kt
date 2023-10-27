@@ -37,7 +37,7 @@ sealed class InclusiveNamingChecker<C : Context, N> {
     private val RESOURCES_ISSUE =
       resourcesImplementation<InclusiveNamingResourceScanner>().toIssue()
 
-    val ISSUES: Array<Issue> = arrayOf(SOURCE_ISSUE, RESOURCES_ISSUE)
+    val ISSUES: List<Issue> = listOf(SOURCE_ISSUE, RESOURCES_ISSUE)
 
     private fun Implementation.toIssue(): Issue {
       return Issue.create(

@@ -1680,8 +1680,8 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
       )
 
     // Please keep in alphabetical order for readability
-    fun issues(): Array<Issue> =
-      arrayOf(
+    fun issues(): List<Issue> =
+      listOf(
         ISSUE_ADAPTED_BY_REQUIRES_ADAPTER,
         ISSUE_ADAPTED_BY_REQUIRES_KEEP,
         ISSUE_ARRAY,

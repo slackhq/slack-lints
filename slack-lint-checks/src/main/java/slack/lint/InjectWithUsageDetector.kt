@@ -93,7 +93,7 @@ class InjectWithUsageDetector : Detector(), SourceCodeScanner {
         sourceImplementation<InjectWithUsageDetector>()
       )
 
-    val ISSUES = arrayOf(LOGGED_IN_USER_PROVIDER_ISSUE, ANVIL_INJECTABLE_ISSUE)
+    val ISSUES = listOf(LOGGED_IN_USER_PROVIDER_ISSUE, ANVIL_INJECTABLE_ISSUE)
 
     private val LOGGED_IN_SCOPES = setOf(FQCN_ORG_SCOPE, FQCN_USER_SCOPE)
 
