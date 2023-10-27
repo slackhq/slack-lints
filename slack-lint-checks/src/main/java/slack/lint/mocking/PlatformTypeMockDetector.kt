@@ -29,7 +29,7 @@ object PlatformTypeMockDetector : MockDetector.TypeChecker {
     """,
       Category.CORRECTNESS,
       6,
-      Severity.WARNING,
+      Severity.ERROR,
       sourceImplementation<MockDetector>()
     )
 

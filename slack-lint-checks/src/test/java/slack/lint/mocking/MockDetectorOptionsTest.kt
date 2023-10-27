@@ -155,16 +155,16 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
         test/slack/test/MyTests.kt:53: Error: 'slack.test.ObjectClass' is an object, so mocking it should not be necessary [DoNotMockObjectClass]
             val localClassMock = mockkClass<ObjectClass>(ObjectClass::class)
                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        test/slack/test/MyTests.kt:62: Warning: platform type 'java.lang.Comparable' should not be mocked [DoNotMockPlatformTypes]
+        test/slack/test/MyTests.kt:62: Error: platform type 'java.lang.Comparable' should not be mocked [DoNotMockPlatformTypes]
             mockk<Comparable<String>>()
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        test/slack/test/MyTests.kt:63: Warning: platform type 'java.lang.Runnable' should not be mocked [DoNotMockPlatformTypes]
+        test/slack/test/MyTests.kt:63: Error: platform type 'java.lang.Runnable' should not be mocked [DoNotMockPlatformTypes]
             mockk<Runnable>()
             ~~~~~~~~~~~~~~~~~
-        test/slack/test/MyTests.kt:65: Warning: platform type 'kotlin.io.FileTreeWalk' should not be mocked [DoNotMockPlatformTypes]
+        test/slack/test/MyTests.kt:65: Error: platform type 'kotlin.io.FileTreeWalk' should not be mocked [DoNotMockPlatformTypes]
             mockk<FileTreeWalk>()
             ~~~~~~~~~~~~~~~~~~~~~
-        test/slack/test/MyTests.kt:66: Warning: platform type 'kotlin.Lazy' should not be mocked [DoNotMockPlatformTypes]
+        test/slack/test/MyTests.kt:66: Error: platform type 'kotlin.Lazy' should not be mocked [DoNotMockPlatformTypes]
             mockk<Lazy<String>>()
             ~~~~~~~~~~~~~~~~~~~~~
         test/slack/test/MyTests.kt:26: Error: 'slack.test.SealedClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
@@ -191,7 +191,7 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
         test/slack/test/MyTests.kt:38: Error: 'slack.test.SealedClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
             val localClassMock = mockkClass<SealedClass>(SealedClass::class)
                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        24 errors, 4 warnings
+        28 errors, 0 warnings
         """
           .trimIndent()
       )
