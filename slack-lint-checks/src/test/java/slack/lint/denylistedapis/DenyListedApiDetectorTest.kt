@@ -12,7 +12,7 @@ import slack.lint.BaseSlackLintTest
 // Adapted from https://gist.github.com/JakeWharton/19b1e7b8d5c648b2935ba89148b791ed
 class DenyListedApiDetectorTest : BaseSlackLintTest() {
 
-  override fun getIssues() = listOf(DenyListedApiDetector.ISSUE)
+  override fun getIssues() = DenyListedApiDetector.ISSUES
 
   override fun getDetector(): Detector = DenyListedApiDetector()
 
@@ -627,7 +627,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/SomeClass.kt:6: Error: Blocking calls in coroutines can cause deadlocks and application jank. Prefer making the enclosing function a suspend function or refactoring this in a way to use non-blocking calls. If running in a test, use runTest {} or Turbine to test synchronous values. [DenyListedApi]
+        src/foo/SomeClass.kt:6: Error: Blocking calls in coroutines can cause deadlocks and application jank. Prefer making the enclosing function a suspend function or refactoring this in a way to use non-blocking calls. If running in a test, use runTest {} or Turbine to test synchronous values. [DenyListedBlockingApi]
           val result = runBlocking {}
                        ~~~~~~~~~~~
         1 errors, 0 warnings
@@ -679,19 +679,19 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/SomeClass.kt:10: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Single, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+        src/foo/SomeClass.kt:10: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Single, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedBlockingApi]
           val singleCase = Single.never<Int>().blockingGet()
                                                ~~~~~~~~~~~
-        src/foo/SomeClass.kt:12: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Maybe, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+        src/foo/SomeClass.kt:12: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Maybe, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedBlockingApi]
           val maybeCase = Maybe.never<Int>().blockingGet()
                                              ~~~~~~~~~~~
-        src/foo/SomeClass.kt:14: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Observable, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+        src/foo/SomeClass.kt:14: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Observable, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedBlockingApi]
           val observableCase = Observable.never<Int>().blockingFirst()
                                                        ~~~~~~~~~~~~~
-        src/foo/SomeClass.kt:16: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Flowable, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+        src/foo/SomeClass.kt:16: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Flowable, a Disposable to grant control to the caller, Completable (if you want to hide emission values but defer subscription), or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedBlockingApi]
           val flowableCase = Flowable.never<Int>().blockingFirst()
                                                    ~~~~~~~~~~~~~
-        src/foo/SomeClass.kt:20: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Completable, a Disposable to grant control to the caller, or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedApi]
+        src/foo/SomeClass.kt:20: Error: Blocking calls in RxJava can cause deadlocks and application jank. Prefer making the enclosing method/function return this Completable, a Disposable to grant control to the caller, or refactoring this in a way to use non-blocking calls. If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values. [DenyListedBlockingApi]
             Completable.never().blockingAwait()
                                 ~~~~~~~~~~~~~
         5 errors, 0 warnings
