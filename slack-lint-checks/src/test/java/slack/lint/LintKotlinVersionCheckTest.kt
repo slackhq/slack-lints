@@ -27,14 +27,15 @@ class LintKotlinVersionCheckTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
             package test
 
             fun main() {
               println("Hello, world!")
             }
           """
-        )
+          )
+          .indented()
       )
       .run()
       .expect(
@@ -75,7 +76,7 @@ class LintKotlinVersionCheckTest : BaseSlackLintTest() {
     }
 
     companion object {
-      private val EXPECTED_VERSION = KotlinVersion(1, 9, 20)
+      private val EXPECTED_VERSION = KotlinVersion(1, 9, 0)
       val ISSUE =
         Issue.create(
           "KotlinVersion",
