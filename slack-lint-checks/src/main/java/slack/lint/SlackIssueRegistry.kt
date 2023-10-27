@@ -63,7 +63,7 @@ class SlackIssueRegistry : IssueRegistry() {
     add(FullyQualifiedResourceDetector.ISSUE)
     add(MissingResourceImportAliasDetector.ISSUE)
     add(WrongResourceImportAliasDetector.ISSUE)
-    add(DenyListedApiDetector.ISSUE)
+    addAll(DenyListedApiDetector.ISSUES)
     add(ParcelizeFunctionPropertyDetector.ISSUE)
     add(ExceptionMessageDetector.ISSUE)
   }
