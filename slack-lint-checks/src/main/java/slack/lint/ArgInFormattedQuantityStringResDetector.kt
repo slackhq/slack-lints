@@ -38,7 +38,7 @@ class ArgInFormattedQuantityStringResDetector : Detector(), SourceCodeScanner {
         Implementation(ArgInFormattedQuantityStringResDetector::class.java, Scope.JAVA_FILE_SCOPE)
       )
 
-    val issues: Array<Issue> = arrayOf(ISSUE_ARG_IN_QUANTITY_STRING_FORMAT)
+    val issues: List<Issue> = listOf(ISSUE_ARG_IN_QUANTITY_STRING_FORMAT)
   }
 
   override fun getApplicableMethodNames(): List<String> = listOf("getQuantityString")

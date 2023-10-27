@@ -103,6 +103,6 @@ class NonKotlinPairDetector : Detector(), SourceCodeScanner {
         Implementation(NonKotlinPairDetector::class.java, JAVA_FILE_AND_TEST_SOURCES_SCOPE)
       )
 
-    val issues: Array<Issue> = arrayOf(ISSUE_KOTLIN_PAIR_NOT_CREATED)
+    val issues: List<Issue> = listOf(ISSUE_KOTLIN_PAIR_NOT_CREATED)
   }
 }

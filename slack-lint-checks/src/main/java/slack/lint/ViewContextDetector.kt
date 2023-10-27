@@ -70,7 +70,7 @@ class ViewContextDetector : Detector(), SourceCodeScanner {
         sourceImplementation<ViewContextDetector>()
       )
 
-    val issues: Array<Issue>
-      get() = arrayOf(ISSUE_VIEW_CONTEXT_CAST)
+    val issues: List<Issue>
+      get() = listOf(ISSUE_VIEW_CONTEXT_CAST)
   }
 }
