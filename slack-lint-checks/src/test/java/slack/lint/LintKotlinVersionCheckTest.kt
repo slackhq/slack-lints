@@ -40,7 +40,7 @@ class LintKotlinVersionCheckTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test/test.kt:3: Error: Kotlin version was expected [KotlinVersion]
+          src/test/test.kt:3: Error: Kotlin version matched expected one [KotlinVersion]
           fun main() {
           ^
           1 errors, 0 warnings
@@ -57,7 +57,7 @@ class LintKotlinVersionCheckTest : BaseSlackLintTest() {
         override fun visitMethod(node: UMethod) {
           if (KotlinVersion.CURRENT == EXPECTED_VERSION) {
             // Report something anyway to ensure our lint was correctly picked up at least
-            context.report(ISSUE, node, context.getLocation(node), "Kotlin version was expected")
+            context.report(ISSUE, node, context.getLocation(node), "Kotlin version matched expected one")
           } else {
             context.report(
               ISSUE,
