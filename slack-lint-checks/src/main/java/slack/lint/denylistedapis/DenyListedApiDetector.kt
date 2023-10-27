@@ -69,7 +69,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
 
     val issues = entries.asSequence().map { it.issue }
       .distinctBy { it.id }
-      .toSet()
+      .toList()
 
     private val typeConfigs =
       entries.groupBy { it.className }.mapValues { (_, entries) -> TypeConfig(entries) }
