@@ -57,7 +57,12 @@ class LintKotlinVersionCheckTest : BaseSlackLintTest() {
         override fun visitMethod(node: UMethod) {
           if (KotlinVersion.CURRENT == EXPECTED_VERSION) {
             // Report something anyway to ensure our lint was correctly picked up at least
-            context.report(ISSUE, node, context.getLocation(node), "Kotlin version matched expected one")
+            context.report(
+              ISSUE,
+              node,
+              context.getLocation(node),
+              "Kotlin version matched expected one"
+            )
           } else {
             context.report(
               ISSUE,
