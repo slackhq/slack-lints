@@ -34,7 +34,6 @@ class LintKotlinVersionCheckTest : BaseSlackLintTest() {
               println("Hello, world!")
             }
           """
-            .trimIndent()
         )
       )
       .run()
