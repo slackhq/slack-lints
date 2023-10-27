@@ -18,7 +18,8 @@ object SealedClassMockDetector : MockDetector.TypeChecker {
       "sealed classes have a restricted type hierarchy, use a subtype instead",
       """
       sealed classes have a restricted type hierarchy, so creating new unrestricted mocks \
-      will break runtime expectations. Use a subtype instead.
+      will break runtime expectations. Mockito also cannot mock sealed classes in Java 17+. \
+      Use a subtype instead.
     """,
       Category.CORRECTNESS,
       6,
