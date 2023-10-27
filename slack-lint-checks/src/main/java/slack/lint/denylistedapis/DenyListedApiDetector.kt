@@ -212,6 +212,9 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
   }
 
   companion object {
+    val DEFAULT_ISSUE = createIssue("DenyListedApi")
+    val BLOCKING_ISSUE = createIssue("DenyListedBlockingApi")
+
     private val CONFIG =
       DenyListConfig(
         DenyListedEntry(
@@ -460,30 +463,35 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           "Blocking calls in coroutines can cause deadlocks and application jank. " +
             "Prefer making the enclosing function a suspend function or refactoring this in a way to use non-blocking calls. " +
             "If running in a test, use runTest {} or Turbine to test synchronous values.",
+          issue = BLOCKING_ISSUE,
         ),
         *rxJavaBlockingCalls().toTypedArray()
       )
 
     val ISSUES = CONFIG.issues
 
-    val DEFAULT_ISSUE =
-      Issue.create(
-        id = "DenyListedApi",
-        briefDescription = "Deny-listed API",
-        explanation =
-          "This lint check flags usages of APIs in external libraries that we prefer not to use.",
+    private fun createIssue(
+      id: String,
+      briefDescription: String = "Deny-listed API",
+      explanation: String = "This lint check flags usages of APIs in external libraries that we prefer not to use.",
+    ): Issue {
+      return Issue.create(
+        id = id,
+        briefDescription = briefDescription,
+        explanation = explanation,
         category = CORRECTNESS,
         priority = 5,
         severity = ERROR,
         implementation =
-          Implementation(
-            DenyListedApiDetector::class.java,
-            EnumSet.of(Scope.JAVA_FILE, Scope.RESOURCE_FILE, Scope.TEST_SOURCES),
-            EnumSet.of(Scope.JAVA_FILE),
-            EnumSet.of(Scope.RESOURCE_FILE),
-            EnumSet.of(Scope.TEST_SOURCES),
-          )
+        Implementation(
+          DenyListedApiDetector::class.java,
+          EnumSet.of(Scope.JAVA_FILE, Scope.RESOURCE_FILE, Scope.TEST_SOURCES),
+          EnumSet.of(Scope.JAVA_FILE),
+          EnumSet.of(Scope.RESOURCE_FILE),
+          EnumSet.of(Scope.TEST_SOURCES),
+        )
       )
+    }
   }
 }
 
@@ -573,6 +581,7 @@ private fun rxJavaBlockingCalls() =
             "Blocking calls in RxJava can cause deadlocks and application jank. " +
               "Prefer making the enclosing method/function return this $shortType, a Disposable to grant control to the caller,$orMessage or refactoring this in a way to use non-blocking calls. " +
               "If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values.",
+          issue = DenyListedApiDetector.BLOCKING_ISSUE
         )
       }
     }
