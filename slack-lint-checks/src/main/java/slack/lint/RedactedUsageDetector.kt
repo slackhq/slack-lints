@@ -71,6 +71,6 @@ class RedactedUsageDetector : Detector(), SourceCodeScanner {
         sourceImplementation<RedactedUsageDetector>()
       )
 
-    val ISSUES = arrayOf(JAVA_USAGE)
+    val ISSUES = listOf(JAVA_USAGE)
   }
 }

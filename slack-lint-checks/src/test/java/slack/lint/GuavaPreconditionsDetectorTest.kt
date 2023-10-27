@@ -70,7 +70,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*GuavaPreconditionsDetector.issues)
+      .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
       .expect(
         """
@@ -144,7 +144,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*GuavaPreconditionsDetector.issues)
+      .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
       .expect(
         """
@@ -223,7 +223,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*GuavaPreconditionsDetector.issues)
+      .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
       .expect(
         """
@@ -298,7 +298,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*GuavaPreconditionsDetector.issues)
+      .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
       .expectClean()
   }
@@ -330,7 +330,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*GuavaPreconditionsDetector.issues)
+      .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .allowCompilationErrors() // Until AGP 7.1.0
       // https://groups.google.com/g/lint-dev/c/BigCO8sMhKU
       .run()
@@ -363,7 +363,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*GuavaPreconditionsDetector.issues)
+      .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
       .expect(
         """
@@ -433,7 +433,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*GuavaPreconditionsDetector.issues)
+      .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
       .expect(
         """
@@ -508,7 +508,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*GuavaPreconditionsDetector.issues)
+      .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
       .expect(
         """

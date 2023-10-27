@@ -34,7 +34,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*NonKotlinPairDetector.issues)
+      .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
       .expect(
         """
@@ -69,7 +69,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*NonKotlinPairDetector.issues)
+      .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
       .expect(
         """
@@ -104,7 +104,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*NonKotlinPairDetector.issues)
+      .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
       .expect(
         """
@@ -137,7 +137,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*NonKotlinPairDetector.issues)
+      .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
       .expect(
         """
@@ -169,7 +169,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*NonKotlinPairDetector.issues)
+      .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
       .expectClean()
   }
@@ -197,7 +197,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*NonKotlinPairDetector.issues)
+      .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
       .expect(
         """
@@ -232,7 +232,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*NonKotlinPairDetector.issues)
+      .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
       .expect(
         """
@@ -268,7 +268,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .issues(*NonKotlinPairDetector.issues)
+      .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
       .expect(
         """

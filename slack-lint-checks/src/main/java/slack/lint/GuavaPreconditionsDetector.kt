@@ -147,7 +147,7 @@ class GuavaPreconditionsDetector : Detector(), SourceCodeScanner {
         implementation = sourceImplementation<GuavaPreconditionsDetector>(true)
       )
 
-    val issues: Array<Issue> =
-      arrayOf(ISSUE_GUAVA_CHECKS_USED, ISSUE_GUAVA_PRECONDITIONS_USED_IN_KOTLIN)
+    val issues: List<Issue> =
+      listOf(ISSUE_GUAVA_CHECKS_USED, ISSUE_GUAVA_PRECONDITIONS_USED_IN_KOTLIN)
   }
 }
