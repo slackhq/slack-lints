@@ -1,6 +1,17 @@
 Changelog
 =========
 
+0.7.0
+-----
+
+_2023-10-27_
+
+- Lower lint API back to `31.3.0-alpha05` as newer versions targeted kotlin 1.9.20 betas without us realizing it.
+- Improve explanation for sealed class mock detector to mention that Mockito can't mock them at all in Java 17+.
+- Promote `PlatformTypeMockDetector` to error severity.
+- Make `DenyListedApi` entries more configurable. Initial change is that blocking APIs are now reported with the ID `DenyListedBlockingApi`.
+- Support multiple mock report modes for the `mock-report` option. Modes are `NONE`, `ERRORS`, and `ALL`. Default is `NONE`. Now the report file is `build/reports/mockdetector/mock-report.csv` and the second column is the severity. This allows reporting all mocks for extra analysis.
+
 0.6.1
 -----
 
