@@ -83,8 +83,7 @@ class MockReportTest : BaseSlackLintTest() {
         .files(*mockFileStubs(), testClass, source)
         .configureOption(MOCK_REPORT, MockDetector.MockReportMode.ERRORS.name)
 
-    @Suppress("CheckResult")
-    task.run()
+    @Suppress("CheckResult") task.run()
 
     val reports = tmpFolder.root.toPath().resolve("default/app/${MockDetector.MOCK_REPORT_PATH}")
     assertThat(reports.exists()).isTrue()
@@ -143,8 +142,7 @@ class MockReportTest : BaseSlackLintTest() {
         .files(*mockFileStubs(), testClass, source)
         .configureOption(MOCK_REPORT, MockDetector.MockReportMode.ERRORS.name)
 
-    @Suppress("CheckResult")
-    task.run()
+    @Suppress("CheckResult") task.run()
 
     val reports = tmpFolder.root.toPath().resolve("default/app/${MockDetector.MOCK_REPORT_PATH}")
     assertThat(reports.exists()).isTrue()
@@ -230,8 +228,7 @@ class MockReportTest : BaseSlackLintTest() {
         .files(*mockFileStubs(), testClass, source)
         .configureOption(MOCK_REPORT, MockDetector.MockReportMode.ALL.name)
 
-    @Suppress("CheckResult")
-    task.run()
+    @Suppress("CheckResult") task.run()
 
     val reports = tmpFolder.root.toPath().resolve("default/app/${MockDetector.MOCK_REPORT_PATH}")
     assertThat(reports.exists()).isTrue()
