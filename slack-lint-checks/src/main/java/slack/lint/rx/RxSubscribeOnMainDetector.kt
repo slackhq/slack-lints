@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UExpression
+import org.jetbrains.uast.UastFacade
 import org.jetbrains.uast.java.JavaUCallExpression
 import org.jetbrains.uast.java.JavaUCompositeQualifiedExpression
 import org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression
@@ -147,7 +148,7 @@ class RxSubscribeOnMainDetector : Detector(), SourceCodeScanner {
     val assignment =
       when (val variable = exp.sourcePsi?.reference?.resolve()) {
         is PsiField -> variable.initializer as? PsiMethodCallExpression
-        is PsiLocalVariable -> variable.initializer as? PsiMethodCallExpression
+        is PsiLocalVariable ->  UastFacade.getInitializerBody(variable) as? PsiMethodCallExpression
         else -> null
       }
     val methodName = assignment?.resolveMethod()?.name
