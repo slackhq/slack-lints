@@ -231,11 +231,15 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
       } catch (e: IllegalArgumentException) {
         try {
           KotlinClassMetadata.readLenient(toMetadataAnnotation()).also {
-            slackLintErrorLog("Could not load metadata for $classNameHint from file $file with strict parsing. Using lenient parsing.")
+            slackLintErrorLog(
+              "Could not load metadata for $classNameHint from file $file with strict parsing. Using lenient parsing."
+            )
           }
         } catch (e: IllegalArgumentException) {
           // Extremely weird case, log this specifically
-          slackLintErrorLog("Could not load metadata for $classNameHint from file $file. This usually happens if the Kotlin version the class was compiled against is too new for lint to read (${JvmMetadataVersion.LATEST_STABLE_SUPPORTED}).")
+          slackLintErrorLog(
+            "Could not load metadata for $classNameHint from file $file. This usually happens if the Kotlin version the class was compiled against is too new for lint to read (${JvmMetadataVersion.LATEST_STABLE_SUPPORTED})."
+          )
           return null
         }
       }
