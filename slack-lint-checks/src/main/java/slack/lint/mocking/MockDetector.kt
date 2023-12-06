@@ -218,7 +218,7 @@ constructor(
           context.report(
             checker.issue,
             context.getLocation(node),
-            "Mocked type is annotated with non-mockable annotation $disallowedAnnotation."
+            "Mocked type is annotated with non-mockable annotation $disallowedAnnotation"
           )
           return
         }
