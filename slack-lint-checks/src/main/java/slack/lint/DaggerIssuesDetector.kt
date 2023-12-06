@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.uast.UAnnotated
 import org.jetbrains.uast.UMethod
+import org.jetbrains.uast.getContainingUClass
 import org.jetbrains.uast.kotlin.KotlinReceiverUParameter
 import org.jetbrains.uast.kotlin.KotlinUMethod
 import slack.lint.util.sourceImplementation
@@ -140,12 +141,12 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
 
           if (!isBinds && !isProvides) return
 
-          val containingClass = node.containingClass
+          val containingClass = node.getContainingUClass()
           if (containingClass != null) {
             // Fine to not use MetadataJavaEvaluator since we only care about current module
             val moduleClass =
               if (context.evaluator.hasModifier(containingClass, KtTokens.COMPANION_KEYWORD)) {
-                checkNotNull(containingClass.containingClass) {
+                checkNotNull(containingClass.getContainingUClass()) {
                   "Companion object must be nested in a class"
                 }
               } else {
