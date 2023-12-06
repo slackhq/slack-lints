@@ -11,24 +11,29 @@ import com.android.tools.lint.detector.api.LintFix
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.intellij.lang.java.JavaLanguage
+import com.intellij.psi.PsiCall
 import com.intellij.psi.PsiField
 import com.intellij.psi.PsiLocalVariable
 import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiMethodCallExpression
+import com.intellij.psi.PsiVariable
 import kotlin.reflect.full.safeCast
 import org.jetbrains.kotlin.asJava.elements.KtLightField
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UExpression
+import org.jetbrains.uast.UQualifiedReferenceExpression
 import org.jetbrains.uast.UastFacade
 import org.jetbrains.uast.java.JavaUCallExpression
 import org.jetbrains.uast.java.JavaUCompositeQualifiedExpression
+import org.jetbrains.uast.java.JavaUQualifiedReferenceExpression
 import org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression
 import org.jetbrains.uast.kotlin.KotlinUQualifiedReferenceExpression
 import org.jetbrains.uast.kotlin.KotlinUSimpleReferenceExpression
 import org.jetbrains.uast.kotlin.psi.UastKotlinPsiVariable
 import slack.lint.util.sourceImplementation
+import slack.lint.util.unwrapSimpleNameReferenceExpression
 
 /**
  * [Detector] for usages of `Observable.subscribeOn(AndroidSchedulers.mainThread())`. Typically,
@@ -145,13 +150,15 @@ class RxSubscribeOnMainDetector : Detector(), SourceCodeScanner {
   }
 
   private fun checkJavaVariable(exp: UExpression): Boolean {
-    val assignment =
+    val assignment: UCallExpression? =
       when (val variable = exp.sourcePsi?.reference?.resolve()) {
-        is PsiField -> variable.initializer as? PsiMethodCallExpression
-        is PsiLocalVariable ->  UastFacade.getInitializerBody(variable) as? PsiMethodCallExpression
+        // PsiVariable covers both PsiField and PsiLocalVariable
+        is PsiVariable -> {
+          ((UastFacade.getInitializerBody(variable) as? UQualifiedReferenceExpression)?.selector as? UCallExpression)
+        }
         else -> null
       }
-    val methodName = assignment?.resolveMethod()?.name
+    val methodName = assignment?.resolve()?.name
     return methodName == "mainThread" || methodName == "immediateMainThread"
   }
 }

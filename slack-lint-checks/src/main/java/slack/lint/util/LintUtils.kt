@@ -250,7 +250,7 @@ internal fun UExpression.unwrapSimpleNameReferenceExpression(): USimpleNameRefer
   return when (this) {
     is USimpleNameReferenceExpression -> this
     is UQualifiedReferenceExpression -> this.selector.unwrapSimpleNameReferenceExpression()
-    else -> error("Unrecognized reference expression type $this")
+    else -> error("Unrecognized reference expression type $javaClass")
   }
 }
 
