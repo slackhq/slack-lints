@@ -10,6 +10,7 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
+import com.android.tools.lint.detector.api.isReceiver
 import com.intellij.lang.jvm.JvmClassKind
 import com.intellij.psi.PsiTypes
 import com.intellij.psi.util.childrenOfType
@@ -18,8 +19,6 @@ import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.uast.UAnnotated
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.getContainingUClass
-import org.jetbrains.uast.kotlin.KotlinReceiverUParameter
-import org.jetbrains.uast.kotlin.KotlinUMethod
 import slack.lint.util.sourceImplementation
 
 /** This is a simple lint check to catch common Dagger+Kotlin usage issues. */
@@ -29,8 +28,8 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
     private val ISSUE_BINDS_MUST_BE_IN_MODULE: Issue =
       Issue.create(
         "MustBeInModule",
-        "@Binds/@Provides function must be in `@Module`-annotated classes.",
-        "@Binds/@Provides function must be in `@Module`-annotated classes.",
+        "@Binds/@Provides functions must be in modules",
+        "@Binds/@Provides functions must be in `@Module`-annotated classes.",
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
@@ -40,7 +39,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
     private val ISSUE_BINDS_TYPE_MISMATCH: Issue =
       Issue.create(
         "BindsTypeMismatch",
-        "@Binds function parameters must be type-assignable to their return types.",
+        "@Binds parameter/return must be type-assignable",
         "@Binds function parameters must be type-assignable to their return types.",
         Category.CORRECTNESS,
         6,
@@ -51,7 +50,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
     private val ISSUE_RETURN_TYPE: Issue =
       Issue.create(
         "BindingReturnType",
-        "@Binds/@Provides functions must have a return type. Cannot be void or Unit.",
+        "@Binds/@Provides must have a return type",
         "@Binds/@Provides functions must have a return type. Cannot be void or Unit.",
         Category.CORRECTNESS,
         6,
@@ -62,7 +61,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
     private val ISSUE_RECEIVER_PARAMETER: Issue =
       Issue.create(
         "BindingReceiverParameter",
-        "@Binds/@Provides functions cannot be extension functions.",
+        "@Binds/@Provides functions cannot be extensions",
         "@Binds/@Provides functions cannot be extension functions. Move the receiver type to a parameter via IDE inspection (option+enter and convert to parameter).",
         Category.CORRECTNESS,
         6,
@@ -73,7 +72,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
     private val ISSUE_BINDS_WRONG_PARAMETER_COUNT: Issue =
       Issue.create(
         "BindsWrongParameterCount",
-        "@Binds functions require a single parameter as an input to bind.",
+        "@Binds must have one parameter",
         "@Binds functions require a single parameter as an input to bind.",
         Category.CORRECTNESS,
         6,
@@ -84,7 +83,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
     private val ISSUE_BINDS_MUST_BE_ABSTRACT: Issue =
       Issue.create(
         "BindsMustBeAbstract",
-        "@Binds functions must be abstract and cannot have function bodies.",
+        "@Binds functions must be abstract",
         "@Binds functions must be abstract and cannot have function bodies.",
         Category.CORRECTNESS,
         6,
@@ -95,7 +94,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
     private val ISSUE_PROVIDES_CANNOT_BE_ABSTRACT: Issue =
       Issue.create(
         "ProvidesMustNotBeAbstract",
-        "@Provides functions cannot be abstract.",
+        "@Provides functions cannot be abstract",
         "@Provides functions cannot be abstract.",
         Category.CORRECTNESS,
         6,
@@ -106,7 +105,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
     private val ISSUE_BINDS_REDUNDANT: Issue =
       Issue.create(
         "RedundantBinds",
-        "@Binds functions should return a different type (including annotations) than the input type.",
+        "@Binds functions should return a different type",
         "@Binds functions should return a different type (including annotations) than the input type.",
         Category.CORRECTNESS,
         6,
@@ -238,13 +237,10 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
 
           if (node.uastParameters.isNotEmpty()) {
             val firstParam = node.uastParameters[0]
-            if (firstParam is KotlinReceiverUParameter) {
-              val nodeToReport =
-                (node as KotlinUMethod).sourcePsi?.childrenOfType<KtTypeReference>()?.first()
-                  ?: node
+            if (firstParam.isReceiver()) {
               context.report(
                 ISSUE_RECEIVER_PARAMETER,
-                context.getLocation(nodeToReport),
+                context.getNameLocation(firstParam),
                 ISSUE_RECEIVER_PARAMETER.getBriefDescription(TextFormat.TEXT),
               )
               return
