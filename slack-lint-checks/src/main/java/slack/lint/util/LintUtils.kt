@@ -29,6 +29,7 @@ import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiModifierListOwner
 import com.intellij.psi.PsiType
+import com.intellij.psi.PsiTypes
 import com.intellij.psi.PsiWildcardType
 import java.util.EnumSet
 import org.jetbrains.kotlin.idea.KotlinLanguage
@@ -249,7 +250,7 @@ internal fun UExpression.unwrapSimpleNameReferenceExpression(): USimpleNameRefer
   return when (this) {
     is USimpleNameReferenceExpression -> this
     is UQualifiedReferenceExpression -> this.selector.unwrapSimpleNameReferenceExpression()
-    else -> error("Unrecognized reference expression type $this")
+    else -> error("Unrecognized reference expression type $javaClass")
   }
 }
 
@@ -364,4 +365,4 @@ internal val PsiMethod.returnsUnit
  * so this returns whether this type is either.
  */
 internal val PsiType?.isVoidOrUnit
-  get() = this == PsiType.VOID || this?.canonicalText == "kotlin.Unit"
+  get() = this == PsiTypes.voidType() || this?.canonicalText == "kotlin.Unit"

@@ -5,23 +5,23 @@ jdk = "20"
 # lint checks must target JDK 17, but the runtime should remain 11
 lintJvmTarget = "17"
 runtimeJvmTarget = "11"
-lint = "31.3.0-alpha05"
+lint = "31.3.0-alpha16"
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.4" }
 dokka = { id = "org.jetbrains.dokka", version = "1.9.10" }
-lint = { id = "com.android.lint", version = "8.1.4" }
+lint = { id = "com.android.lint", version = "8.2.0" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.21-1.0.15" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.25.3" }
 mavenShadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
-spotless = { id = "com.diffplug.spotless", version = "6.22.0" }
+spotless = { id = "com.diffplug.spotless", version = "6.23.3" }
 
 [libraries]
 autoService-annotations = "com.google.auto.service:auto-service-annotations:1.1.1"
 autoService-ksp = "dev.zacsweers.autoservice:auto-service-ksp:1.1.0"
 junit = "junit:junit:4.13.2"
-kotlin-metadata = { module = "org.jetbrains.kotlinx:kotlinx-metadata-jvm", version = "0.7.0" }
+kotlin-metadata = { module = "org.jetbrains.kotlinx:kotlinx-metadata-jvm", version = "0.8.0" }
 ktfmt = { module = "com.facebook:ktfmt", version.ref = "ktfmt" }
 eithernet = "com.slack.eithernet:eithernet:1.8.0"
 retrofit = "com.squareup.retrofit2:retrofit:2.9.0"

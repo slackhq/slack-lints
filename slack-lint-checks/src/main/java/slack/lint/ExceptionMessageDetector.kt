@@ -46,7 +46,7 @@ class ExceptionMessageDetector : Detector(), SourceCodeScanner {
         ISSUE,
         node,
         context.getNameLocation(node),
-        "Please specify a lazyMessage param for ${node.methodName}",
+        "Please specify a `lazyMessage` param for ${node.methodName}",
       )
     }
   }
@@ -60,18 +60,18 @@ class ExceptionMessageDetector : Detector(), SourceCodeScanner {
     val ISSUE =
       Issue.create(
         id = "ExceptionMessage",
-        briefDescription = "Please provide a string for the lazyMessage parameter",
+        briefDescription = "Please provide a string for the `lazyMessage` parameter",
         explanation =
           """
-                Calls to check(), checkNotNull(), require() and requireNotNull() should
-                include a message string that can be used to debug issues experienced
-                by users.
+                Calls to `check()`, `checkNotNull()`, `require()` and `requireNotNull()` \
+                should include a message string that can be used to debug issues \
+                experienced by users.
 
-                When we read user-supplied logs, the line numbers are sometimes not
-                sufficient to determine the cause of a bug. Inline functions can
-                sometimes make it hard to determine which file threw an exception.
-                Consider supplying a lazyMessage parameter to identify the check()
-                or require() call.
+                When we read user-supplied logs, the line numbers are sometimes not\
+                sufficient to determine the cause of a bug. Inline functions can\
+                sometimes make it hard to determine which file threw an exception.\
+                Consider supplying a `lazyMessage` parameter to identify the `check()`\
+                or `require()` call.
             """,
         category = Category.CORRECTNESS,
         priority = 3,

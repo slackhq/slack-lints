@@ -88,58 +88,58 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/MyQualifier.kt:12: Error: @Binds/@Provides functions cannot be extension functions. [BindingReceiverParameter]
+        src/foo/MyQualifier.kt:12: Error: @Binds/@Provides functions cannot be extensions [BindingReceiverParameter]
           @Binds fun Int.bind(): Number
                      ~~~
-        src/foo/MyQualifier.kt:13: Error: @Binds/@Provides functions cannot be extension functions. [BindingReceiverParameter]
+        src/foo/MyQualifier.kt:13: Error: @Binds/@Provides functions cannot be extensions [BindingReceiverParameter]
           @Binds fun Long.bind(): Number
                      ~~~~
-        src/foo/MyQualifier.kt:14: Error: @Binds/@Provides functions cannot be extension functions. [BindingReceiverParameter]
+        src/foo/MyQualifier.kt:14: Error: @Binds/@Provides functions cannot be extensions [BindingReceiverParameter]
           @Binds fun Double.bind(): Number
                      ~~~~~~
-        src/foo/MyQualifier.kt:15: Error: @Binds/@Provides functions cannot be extension functions. [BindingReceiverParameter]
+        src/foo/MyQualifier.kt:15: Error: @Binds/@Provides functions cannot be extensions [BindingReceiverParameter]
           @Binds fun Float.bind(): Number
                      ~~~~~
-        src/foo/MyQualifier.kt:16: Error: @Binds/@Provides functions cannot be extension functions. [BindingReceiverParameter]
+        src/foo/MyQualifier.kt:16: Error: @Binds/@Provides functions cannot be extensions [BindingReceiverParameter]
           @Binds fun Short.bind(): Number
                      ~~~~~
-        src/foo/MyQualifier.kt:17: Error: @Binds/@Provides functions cannot be extension functions. [BindingReceiverParameter]
+        src/foo/MyQualifier.kt:17: Error: @Binds/@Provides functions cannot be extensions [BindingReceiverParameter]
           @Binds fun Byte.bind(): Number
                      ~~~~
-        src/foo/MyQualifier.kt:18: Error: @Binds/@Provides functions cannot be extension functions. [BindingReceiverParameter]
+        src/foo/MyQualifier.kt:18: Error: @Binds/@Provides functions cannot be extensions [BindingReceiverParameter]
           @Binds fun Char.bind(): Comparable<Char>
                      ~~~~
-        src/foo/MyQualifier.kt:19: Error: @Binds/@Provides functions cannot be extension functions. [BindingReceiverParameter]
+        src/foo/MyQualifier.kt:19: Error: @Binds/@Provides functions cannot be extensions [BindingReceiverParameter]
           @Binds fun String.bind(): Comparable<String>
                      ~~~~~~
-        src/foo/MyQualifier.kt:20: Error: @Binds/@Provides functions cannot be extension functions. [BindingReceiverParameter]
+        src/foo/MyQualifier.kt:20: Error: @Binds/@Provides functions cannot be extensions [BindingReceiverParameter]
           @Binds fun @receiver:MyQualifier Boolean.bind(): Comparable<Boolean>
-                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyQualifier.kt:25: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+                                           ~~~~~~~
+        src/foo/MyQualifier.kt:25: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides fun Int.bind(): Number = this@bind
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyQualifier.kt:26: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+        src/foo/MyQualifier.kt:26: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides fun Long.bind(): Number = this@bind
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyQualifier.kt:27: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+        src/foo/MyQualifier.kt:27: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides fun Double.bind(): Number = this@bind
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyQualifier.kt:28: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+        src/foo/MyQualifier.kt:28: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides fun Float.bind(): Number = this@bind
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyQualifier.kt:29: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+        src/foo/MyQualifier.kt:29: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides fun Short.bind(): Number = this@bind
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyQualifier.kt:30: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+        src/foo/MyQualifier.kt:30: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides fun Byte.bind(): Number = this@bind
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyQualifier.kt:31: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+        src/foo/MyQualifier.kt:31: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides fun Char.bind(): Comparable<Char> = this@bind
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyQualifier.kt:32: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+        src/foo/MyQualifier.kt:32: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides fun String.bind(): Comparable<String> = this@bind
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyQualifier.kt:33: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+        src/foo/MyQualifier.kt:33: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides fun @receiver:MyQualifier Boolean.bind(): Comparable<Boolean> = this@bind
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         18 errors, 0 warnings
@@ -189,13 +189,13 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/TestModule.kt:18: Error: @Binds function parameters must be type-assignable to their return types. [BindsTypeMismatch]
+        src/foo/TestModule.kt:18: Error: @Binds parameter/return must be type-assignable [BindsTypeMismatch]
           @Binds fun invalidBind(real: Long): String
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/TestModule.kt:19: Error: @Binds function parameters must be type-assignable to their return types. [BindsTypeMismatch]
+        src/foo/TestModule.kt:19: Error: @Binds parameter/return must be type-assignable [BindsTypeMismatch]
           @Binds fun invalidBind(real: Long): Comparable<Boolean>
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/TestModule.kt:23: Error: @Binds function parameters must be type-assignable to their return types. [BindsTypeMismatch]
+        src/foo/TestModule.kt:23: Error: @Binds parameter/return must be type-assignable [BindsTypeMismatch]
           @Binds fun invalidComplexBinding(real: DetailTypeAItemMapper): ItemMapper<ItemDetail>
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         3 errors, 0 warnings
@@ -235,10 +235,10 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/MyQualifier.kt:13: Error: @Binds functions should return a different type (including annotations) than the input type. [RedundantBinds]
+        src/foo/MyQualifier.kt:13: Error: @Binds functions should return a different type [RedundantBinds]
           @Binds fun invalidBind(real: Long): Long
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyQualifier.kt:14: Error: @Binds functions should return a different type (including annotations) than the input type. [RedundantBinds]
+        src/foo/MyQualifier.kt:14: Error: @Binds functions should return a different type [RedundantBinds]
           @Binds fun invalidBind(real: Long): Long
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         2 errors, 0 warnings
@@ -283,16 +283,16 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/MyQualifier.kt:14: Error: @Binds/@Provides functions must have a return type. Cannot be void or Unit. [BindingReturnType]
+        src/foo/MyQualifier.kt:14: Error: @Binds/@Provides must have a return type [BindingReturnType]
           @Provides fun invalidBind3() {
           ^
-        src/foo/MyQualifier.kt:17: Error: @Binds/@Provides functions must have a return type. Cannot be void or Unit. [BindingReturnType]
+        src/foo/MyQualifier.kt:17: Error: @Binds/@Provides must have a return type [BindingReturnType]
           @Provides fun invalidBind4(): Unit {
           ^
-        src/foo/MyQualifier.kt:12: Error: @Binds functions must be abstract and cannot have function bodies. [BindsMustBeAbstract]
+        src/foo/MyQualifier.kt:12: Error: @Binds functions must be abstract [BindsMustBeAbstract]
           @Binds fun invalidBind1(@MyQualifier real: Unit)
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyQualifier.kt:13: Error: @Binds functions must be abstract and cannot have function bodies. [BindsMustBeAbstract]
+        src/foo/MyQualifier.kt:13: Error: @Binds functions must be abstract [BindsMustBeAbstract]
           @Binds fun invalidBind2(@MyQualifier real: Unit): Unit
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         4 errors, 0 warnings
@@ -327,10 +327,10 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/MyModule.kt:8: Error: @Binds functions require a single parameter as an input to bind. [BindsWrongParameterCount]
+        src/foo/MyModule.kt:8: Error: @Binds must have one parameter [BindsWrongParameterCount]
           @Binds fun invalidBind(real: Int, second: Int): Number
                                 ~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyModule.kt:9: Error: @Binds functions require a single parameter as an input to bind. [BindsWrongParameterCount]
+        src/foo/MyModule.kt:9: Error: @Binds must have one parameter [BindsWrongParameterCount]
           @Binds fun invalidBind(): Number
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         2 errors, 0 warnings
@@ -372,16 +372,16 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/MyModule.kt:8: Error: @Binds functions must be abstract and cannot have function bodies. [BindsMustBeAbstract]
+        src/foo/MyModule.kt:8: Error: @Binds functions must be abstract [BindsMustBeAbstract]
           @Binds fun invalidBind(real: Int): Number { return real }
                                                     ~~~~~~~~~~~~~~~
-        src/foo/MyModule.kt:9: Error: @Binds functions must be abstract and cannot have function bodies. [BindsMustBeAbstract]
+        src/foo/MyModule.kt:9: Error: @Binds functions must be abstract [BindsMustBeAbstract]
           @Binds fun invalidBind(real: Int): Number = real
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyModule.kt:15: Error: @Binds functions must be abstract and cannot have function bodies. [BindsMustBeAbstract]
+        src/foo/MyModule.kt:15: Error: @Binds functions must be abstract [BindsMustBeAbstract]
           @Binds fun invalidBind(real: Int): Number { return real }
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyModule.kt:16: Error: @Binds functions must be abstract and cannot have function bodies. [BindsMustBeAbstract]
+        src/foo/MyModule.kt:16: Error: @Binds functions must be abstract [BindsMustBeAbstract]
           @Binds fun invalidBind(real: Int): Number = real
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         4 errors, 0 warnings
@@ -423,16 +423,16 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/MyModule.kt:7: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+        src/foo/MyModule.kt:7: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides fun invalidBind(real: Int): Number
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyModule.kt:8: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+        src/foo/MyModule.kt:8: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides fun invalidBind(real: Int): Number { return real }
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyModule.kt:9: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+        src/foo/MyModule.kt:9: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides fun invalidBind(real: Int): Number = real
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyModule.kt:14: Error: @Provides functions cannot be abstract. [ProvidesMustNotBeAbstract]
+        src/foo/MyModule.kt:14: Error: @Provides functions cannot be abstract [ProvidesMustNotBeAbstract]
           @Provides abstract fun invalidProvides(real: Int): Number
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         4 errors, 0 warnings
@@ -495,16 +495,16 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/MyModule.kt:7: Error: @Binds/@Provides function must be in @Module-annotated classes. [MustBeInModule]
+        src/foo/MyModule.kt:7: Error: @Binds/@Provides functions must be in modules [MustBeInModule]
           @Binds fun invalidBind(real: Int): Number
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyModule.kt:10: Error: @Binds/@Provides function must be in @Module-annotated classes. [MustBeInModule]
+        src/foo/MyModule.kt:10: Error: @Binds/@Provides functions must be in modules [MustBeInModule]
             @Provides fun invalidBind(): Int = 3
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyModule.kt:15: Error: @Binds/@Provides function must be in @Module-annotated classes. [MustBeInModule]
+        src/foo/MyModule.kt:15: Error: @Binds/@Provides functions must be in modules [MustBeInModule]
           @Binds abstract fun invalidBind(real: Int): Number
           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/foo/MyModule.kt:18: Error: @Binds/@Provides function must be in @Module-annotated classes. [MustBeInModule]
+        src/foo/MyModule.kt:18: Error: @Binds/@Provides functions must be in modules [MustBeInModule]
             @Provides fun invalidBind(): Int = 3
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         4 errors, 0 warnings
