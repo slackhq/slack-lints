@@ -76,7 +76,7 @@ class LintKotlinVersionCheckTest : BaseSlackLintTest() {
     }
 
     companion object {
-      private val EXPECTED_VERSION = KotlinVersion(1, 9, 21)
+      private val EXPECTED_VERSION = TestBuildConfig.LINT_KOTLIN_VERSION
       val ISSUE =
         Issue.create(
           "KotlinVersion",

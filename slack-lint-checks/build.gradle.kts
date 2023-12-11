@@ -11,6 +11,18 @@ plugins {
   alias(libs.plugins.ksp)
   alias(libs.plugins.mavenPublish)
   alias(libs.plugins.mavenShadow)
+  alias(libs.plugins.buildConfig)
+}
+
+val lintKotlinVersion = KotlinVersion(1, 9, 21)
+buildConfig {
+  packageName("slack.lint")
+  useKotlinOutput {
+    internalVisibility = true
+  }
+  sourceSets.getByName("test") {
+    buildConfigField("kotlin.KotlinVersion", "LINT_KOTLIN_VERSION", "KotlinVersion(${lintKotlinVersion.major}, ${lintKotlinVersion.minor}, ${lintKotlinVersion.patch})")
+  }
 }
 
 lint {
@@ -42,13 +54,14 @@ dependencies {
   testImplementation(libs.eithernet)
 }
 
+val kgpKotlinVersion = KotlinVersion.fromVersion(lintKotlinVersion.toString().substringBeforeLast('.'))
 tasks.withType<KotlinCompile>().configureEach {
   compilerOptions {
     // Lint forces Kotlin (regardless of what version the project uses), so this
     // forces a matching language level for now. Similar to `targetCompatibility` for Java.
     // This should match the value in LintKotlinVersionCheckTest.kt
-    apiVersion.set(KotlinVersion.KOTLIN_1_9)
-    languageVersion.set(KotlinVersion.KOTLIN_1_9)
+    apiVersion.set(kgpKotlinVersion)
+    languageVersion.set(kgpKotlinVersion)
   }
 }
 
