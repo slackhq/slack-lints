@@ -15,13 +15,16 @@ plugins {
 }
 
 val lintKotlinVersion = KotlinVersion(1, 9, 21)
+
 buildConfig {
   packageName("slack.lint")
-  useKotlinOutput {
-    internalVisibility = true
-  }
+  useKotlinOutput { internalVisibility = true }
   sourceSets.getByName("test") {
-    buildConfigField("kotlin.KotlinVersion", "LINT_KOTLIN_VERSION", "KotlinVersion(${lintKotlinVersion.major}, ${lintKotlinVersion.minor}, ${lintKotlinVersion.patch})")
+    buildConfigField(
+      "kotlin.KotlinVersion",
+      "LINT_KOTLIN_VERSION",
+      "KotlinVersion(${lintKotlinVersion.major}, ${lintKotlinVersion.minor}, ${lintKotlinVersion.patch})"
+    )
   }
 }
 
@@ -54,7 +57,9 @@ dependencies {
   testImplementation(libs.eithernet)
 }
 
-val kgpKotlinVersion = KotlinVersion.fromVersion(lintKotlinVersion.toString().substringBeforeLast('.'))
+val kgpKotlinVersion =
+  KotlinVersion.fromVersion(lintKotlinVersion.toString().substringBeforeLast('.'))
+
 tasks.withType<KotlinCompile>().configureEach {
   compilerOptions {
     // Lint forces Kotlin (regardless of what version the project uses), so this
