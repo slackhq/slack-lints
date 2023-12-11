@@ -46,8 +46,9 @@ tasks.withType<KotlinCompile>().configureEach {
   compilerOptions {
     // Lint forces Kotlin (regardless of what version the project uses), so this
     // forces a matching language level for now. Similar to `targetCompatibility` for Java.
-    apiVersion.set(KotlinVersion.KOTLIN_1_8)
-    languageVersion.set(KotlinVersion.KOTLIN_1_8)
+    // This should match the value in LintKotlinVersionCheckTest.kt
+    apiVersion.set(KotlinVersion.KOTLIN_1_9)
+    languageVersion.set(KotlinVersion.KOTLIN_1_9)
   }
 }
 
