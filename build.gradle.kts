@@ -69,8 +69,9 @@ val lintJvmTargetString: String = libs.versions.lintJvmTarget.get()
 val runtimeJvmTargetString: String = libs.versions.runtimeJvmTarget.get()
 
 subprojects {
+  val isChecksProject = path == ":slack-lint-checks"
   val jvmTargetString =
-    if (path == ":slack-lint-checks") {
+    if (isChecksProject) {
       lintJvmTargetString
     } else {
       runtimeJvmTargetString
@@ -88,9 +89,11 @@ subprojects {
     tasks.withType<KotlinCompile>().configureEach {
       compilerOptions {
         jvmTarget.set(JvmTarget.fromTarget(jvmTargetString))
-        // TODO re-enable if lint ever targets latest kotlin versions
-        //  allWarningsAsErrors.set(true)
-        //  freeCompilerArgs.add("-progressive")
+        // TODO re-enable on checks if lint ever targets latest kotlin versions
+        if (isChecksProject) {
+          allWarningsAsErrors.set(true)
+          progressiveMode.set(true)
+        }
       }
     }
   }
