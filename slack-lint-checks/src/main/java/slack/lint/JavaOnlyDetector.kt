@@ -55,7 +55,7 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
         Category.INTEROPERABILITY_KOTLIN,
         6,
         Severity.ERROR,
-        sourceImplementation<JavaOnlyDetector>()
+        sourceImplementation<JavaOnlyDetector>(),
       )
 
     private fun anonymousTypeString(psiClass: PsiClass, type: String): String {
@@ -78,7 +78,7 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
           context.report(
             ISSUE,
             context.getLocation(node.sourcePsi!!),
-            "Cannot annotate types with both `@KotlinOnly` and `@JavaOnly`"
+            "Cannot annotate types with both `@KotlinOnly` and `@JavaOnly`",
           )
           return
         }
@@ -105,14 +105,14 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
           ISSUE,
           context.getLocation(node.sourcePsi!!),
           reportData.first,
-          reportData.second
+          reportData.second,
         )
       }
 
       private fun checkMissingSubclass(
         node: UClass,
         targetAnnotation: String,
-        targetAnnotationSimpleName: String
+        targetAnnotationSimpleName: String,
       ): Pair<String, LintFix>? {
         return listOfNotNull(node.javaPsi.superClass, *node.interfaces)
           .mapNotNull { psiClass ->
@@ -163,7 +163,7 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
           context.report(
             ISSUE,
             context.getLocation(node.sourcePsi!!),
-            "Cannot annotate functions with both `@KotlinOnly` and `@JavaOnly`"
+            "Cannot annotate functions with both `@KotlinOnly` and `@JavaOnly`",
           )
           return
         }
@@ -180,7 +180,7 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
       private fun checkMissingOverride(
         node: UMethod,
         targetAnnotation: String,
-        targetAnnotationSimpleName: String
+        targetAnnotationSimpleName: String,
       ): Pair<String, LintFix>? {
         return context.evaluator.getSuperMethod(node)?.let { method ->
           context.evaluator.getAnnotation(method, targetAnnotation)?.run {
@@ -215,7 +215,7 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
 
       private fun UExpression.report(
         javaOnlyMessage: String?,
-        callString: String = "called from Kotlin"
+        callString: String = "called from Kotlin",
       ) {
         val message = StringBuilder("This method should not be $callString")
         if (javaOnlyMessage.isNullOrBlank()) {
@@ -260,7 +260,7 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
       UCallExpression::class.java,
       UCallableReferenceExpression::class.java,
       ULambdaExpression::class.java,
-      UClass::class.java
+      UClass::class.java,
     )
   }
 }

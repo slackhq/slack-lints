@@ -30,13 +30,13 @@ object PlatformTypeMockDetector : MockDetector.TypeChecker {
       Category.CORRECTNESS,
       6,
       Severity.ERROR,
-      sourceImplementation<MockDetector>()
+      sourceImplementation<MockDetector>(),
     )
 
   override fun checkType(
     context: JavaContext,
     evaluator: MetadataJavaEvaluator,
-    mockedType: PsiClass
+    mockedType: PsiClass,
   ): MockDetector.Reason? {
     val name = mockedType.qualifiedName ?: return null
     val isPlatformType = name.substringBefore('.') in platforms

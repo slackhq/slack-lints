@@ -8,6 +8,4 @@ import slack.lint.BaseSlackLintTest
 
 /** Loads the test Retrofit 2 jar from resources. */
 fun BaseSlackLintTest.retrofit2Jar() =
-  LibraryReferenceTestFile(
-    File(javaClass.classLoader.getResource("retrofit-2.9.0.jar")!!.toURI()),
-  )
+  LibraryReferenceTestFile(File(javaClass.classLoader.getResource("retrofit-2.9.0.jar")!!.toURI()))

@@ -17,7 +17,7 @@ class WrongResourceImportAliasDetectorTest : BaseSlackLintTest() {
     return super.lint()
       .configureOption(
         ImportAliasesLoader.IMPORT_ALIASES,
-        "slack.l10n.R as L10nR, slack.uikit.resources.R as SlackKitR, slack.uikit.R as UiKitR"
+        "slack.l10n.R as L10nR, slack.uikit.resources.R as SlackKitR, slack.uikit.R as UiKitR",
       )
   }
 

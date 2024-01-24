@@ -82,7 +82,7 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -181,9 +181,9 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
                     @Binds fun validComplexBinding2(real: DetailTypeAItemMapper): ItemMapper<*>
                     @Binds fun invalidComplexBinding(real: DetailTypeAItemMapper): ItemMapper<ItemDetail>
                   }
-                """
+                """,
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -229,7 +229,7 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -277,7 +277,7 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -321,7 +321,7 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -366,7 +366,7 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -417,7 +417,7 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -489,7 +489,7 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()

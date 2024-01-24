@@ -34,7 +34,7 @@ class InclusiveNamingSourceCodeScanner : Detector(), SourceCodeScanner {
       UClass::class.java,
       UMethod::class.java,
       UVariable::class.java,
-      ULabeledExpression::class.java
+      ULabeledExpression::class.java,
     )
 
   override fun createUastHandler(context: JavaContext): UElementHandler? {

@@ -1657,7 +1657,7 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         internalTypeAnnotated,
         jsonQualifier,
         customQualifier,
-        source
+        source,
       )
       .run()
       .expect(
@@ -2086,6 +2086,6 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       typeLabel,
       defaultObject,
       adaptedBy,
-      jsonAdapter
+      jsonAdapter,
     )
 }

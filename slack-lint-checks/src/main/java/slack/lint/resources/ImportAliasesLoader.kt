@@ -13,7 +13,7 @@ object ImportAliasesLoader {
       "A comma-separated list of package name and their import aliases.",
       null,
       "This property should define a comma-separated list of package name and their import aliases" +
-        " in the format: packageName as importAlias"
+        " in the format: packageName as importAlias",
     )
 
   /** Loads the import aliases from the [IMPORT_ALIASES] option. */

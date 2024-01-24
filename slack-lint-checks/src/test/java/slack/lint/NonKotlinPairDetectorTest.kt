@@ -32,7 +32,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
@@ -67,7 +67,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
@@ -102,7 +102,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
@@ -135,7 +135,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
@@ -195,7 +195,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
@@ -230,7 +230,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()
@@ -266,7 +266,7 @@ class NonKotlinPairDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(*NonKotlinPairDetector.issues.toTypedArray())
       .run()

@@ -95,7 +95,7 @@ class RedactedUsageDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()

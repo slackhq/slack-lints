@@ -12,11 +12,11 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
     return super.lint()
       .configureOption(
         MockDetector.MOCK_ANNOTATIONS,
-        "io.mockk.impl.annotations.MockK,io.mockk.impl.annotations.SpyK"
+        "io.mockk.impl.annotations.MockK,io.mockk.impl.annotations.SpyK",
       )
       .configureOption(
         MockDetector.MOCK_FACTORIES,
-        "io.mockk.MockKKt#mockk,io.mockk.MockKKt#mockkClass,io.mockk.MockKKt#mockkObject,io.mockk.MockKKt#spyk"
+        "io.mockk.MockKKt#mockk,io.mockk.MockKKt#mockkClass,io.mockk.MockKKt#mockkObject,io.mockk.MockKKt#spyk",
       )
   }
 
@@ -98,7 +98,7 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
               mockk<Lazy<String>>()
             }
           }
-        """
+        """,
         )
         .indented()
 
@@ -204,7 +204,7 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
     package io.mockk.impl.annotations
 
     annotation class MockK
-    """
+    """,
       )
       .indented()
 
@@ -215,7 +215,7 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
     package io.mockk.impl.annotations
 
     annotation class SpyK
-    """
+    """,
       )
       .indented()
 
@@ -258,7 +258,7 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
     ): T = TODO()
 
     inline fun mockkObject(vararg objects: Any, recordPrivateCalls: Boolean = false): Unit = TODO()
-    """
+    """,
       )
       .indented()
 

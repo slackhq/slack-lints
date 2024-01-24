@@ -76,7 +76,7 @@ class ExceptionMessageDetector : Detector(), SourceCodeScanner {
         category = Category.CORRECTNESS,
         priority = 3,
         severity = Severity.ERROR,
-        implementation = sourceImplementation<ExceptionMessageDetector>()
+        implementation = sourceImplementation<ExceptionMessageDetector>(),
       )
   }
 }

@@ -48,9 +48,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                       val r = this::g
                     }
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -82,7 +82,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
             """
                   @slack.lint.annotations.JavaOnly
                   package test.pkg;
-                  import slack.lint.annotations.JavaOnly;"""
+                  import slack.lint.annotations.JavaOnly;""",
           )
           .indented(),
         java(
@@ -92,7 +92,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   public class A {
                     public static void f() {}
                   }
-                """
+                """,
           )
           .indented(),
         kotlin(
@@ -105,9 +105,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                       test.pkg.A.f()
                     }
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -136,9 +136,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   interface Test {
                     @JavaOnly @KotlinOnly fun f()
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -167,9 +167,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   @JavaOnly @KotlinOnly interface Test {
                     fun f()
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -197,7 +197,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   interface A {
                     @KotlinOnly fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -207,9 +207,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   class B : A {
                     override fun f()
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -246,7 +246,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   interface A {
                     @KotlinOnly fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -257,9 +257,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   class B : A {
                     @KotlinOnly override fun f()
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()
@@ -279,7 +279,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   interface A {
                     @JavaOnly fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -289,9 +289,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   class B : A {
                     override fun f()
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -328,7 +328,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   interface A {
                     @JavaOnly fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -339,9 +339,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   class B : A {
                     @JavaOnly override fun f()
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()
@@ -361,7 +361,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   @KotlinOnly interface A {
                     fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -371,9 +371,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   class B : A {
                     override fun f()
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -410,7 +410,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   @KotlinOnly interface A {
                     fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -421,9 +421,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   @KotlinOnly class B : A {
                     override fun f()
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()
@@ -443,7 +443,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   @JavaOnly interface A {
                     fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -453,9 +453,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   class B : A {
                     override fun f()
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -492,7 +492,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   @JavaOnly interface A {
                     fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -503,9 +503,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   @JavaOnly class B : A {
                     override fun f()
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()
@@ -532,7 +532,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   interface I {
                     @JavaOnly override fun toString(): String
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -540,7 +540,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
             """
                   package test.pkg
                   class B : I
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -554,9 +554,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                       i.toString()
                     }
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -587,7 +587,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   @JavaOnly interface A {
                     fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -597,9 +597,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   class B {
                     fun f(): A = {}
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -627,7 +627,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   interface A {
                     @JavaOnly fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -637,9 +637,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   class B {
                     fun f(): A = {}
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -666,7 +666,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   interface A {
                     fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -676,9 +676,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   class B {
                     fun f(): A = {}
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()
@@ -698,7 +698,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   interface A {
                     @JavaOnly fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -709,9 +709,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   class B {
                     @JavaOnly fun f(): A = {}
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()
@@ -731,7 +731,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   @JavaOnly interface A {
                     fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -742,9 +742,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   class B {
                     @JavaOnly fun f(): A = {}
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()
@@ -764,7 +764,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   @JavaOnly interface A {
                     fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -776,9 +776,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                       override fun f() {}
                     }
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -805,7 +805,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   interface A {
                     fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -817,9 +817,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                       override fun f() {}
                     }
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()
@@ -839,7 +839,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   interface A {
                     @JavaOnly fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -852,9 +852,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                       @JavaOnly override fun f() {}
                     }
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()
@@ -874,7 +874,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                   @JavaOnly interface A {
                     fun f()
                   }
-                  """
+                  """,
           )
           .indented(),
         kotlin(
@@ -887,9 +887,9 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
                       override fun f() {}
                     }
                   }
-                  """
+                  """,
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()

@@ -50,7 +50,7 @@ class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
             context.getNameLocation(node.receiver),
             if (alias != null) "Use $alias as an import alias instead"
             else "Use an import alias instead",
-            quickfixData = createLintFix(alias, node, qualifier)
+            quickfixData = createLintFix(alias, node, qualifier),
           )
         }
       }
@@ -58,7 +58,7 @@ class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
       private fun createLintFix(
         alias: String?,
         node: UQualifiedReferenceExpression,
-        qualifier: String
+        qualifier: String,
       ): LintFix? {
         return if (alias != null) {
           val fixes =
@@ -81,7 +81,7 @@ class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
       private fun addImportIfMissing(
         qualifier: String,
         alias: String,
-        issues: MutableList<LintFix>
+        issues: MutableList<LintFix>,
       ) {
         context.uastFile?.imports?.let { imports ->
           val importIsMissing =
@@ -107,7 +107,7 @@ class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
         lastImport: KtImportDirective?,
         qualifier: String,
         alias: String,
-        issues: MutableList<LintFix>
+        issues: MutableList<LintFix>,
       ) {
         if (lastImport != null) {
           issues.add(
@@ -123,7 +123,7 @@ class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
       private fun addImportAfterPackageName(
         qualifier: String,
         alias: String,
-        issues: MutableList<LintFix>
+        issues: MutableList<LintFix>,
       ) {
         (context.psiFile as? KtFile)?.packageDirective?.let { packageDirective ->
           issues.add(
@@ -155,7 +155,7 @@ class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
           Category.CORRECTNESS,
           6,
           Severity.ERROR,
-          sourceImplementation<FullyQualifiedResourceDetector>()
+          sourceImplementation<FullyQualifiedResourceDetector>(),
         )
         .setOptions(listOf(IMPORT_ALIASES))
   }

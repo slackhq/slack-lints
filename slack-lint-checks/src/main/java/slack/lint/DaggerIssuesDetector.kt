@@ -31,7 +31,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<DaggerIssuesDetector>()
+        sourceImplementation<DaggerIssuesDetector>(),
       )
 
     private val ISSUE_BINDS_TYPE_MISMATCH: Issue =
@@ -42,7 +42,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<DaggerIssuesDetector>()
+        sourceImplementation<DaggerIssuesDetector>(),
       )
 
     private val ISSUE_RETURN_TYPE: Issue =
@@ -53,7 +53,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<DaggerIssuesDetector>()
+        sourceImplementation<DaggerIssuesDetector>(),
       )
 
     private val ISSUE_RECEIVER_PARAMETER: Issue =
@@ -64,7 +64,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<DaggerIssuesDetector>()
+        sourceImplementation<DaggerIssuesDetector>(),
       )
 
     private val ISSUE_BINDS_WRONG_PARAMETER_COUNT: Issue =
@@ -75,7 +75,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<DaggerIssuesDetector>()
+        sourceImplementation<DaggerIssuesDetector>(),
       )
 
     private val ISSUE_BINDS_MUST_BE_ABSTRACT: Issue =
@@ -86,7 +86,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<DaggerIssuesDetector>()
+        sourceImplementation<DaggerIssuesDetector>(),
       )
 
     private val ISSUE_PROVIDES_CANNOT_BE_ABSTRACT: Issue =
@@ -97,7 +97,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<DaggerIssuesDetector>()
+        sourceImplementation<DaggerIssuesDetector>(),
       )
 
     private val ISSUE_BINDS_REDUNDANT: Issue =
@@ -108,7 +108,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<DaggerIssuesDetector>()
+        sourceImplementation<DaggerIssuesDetector>(),
       )
 
     private const val BINDS_ANNOTATION = "dagger.Binds"
@@ -210,7 +210,7 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
               context.report(
                 ISSUE_BINDS_WRONG_PARAMETER_COUNT,
                 context.getLocation(locationToHighlight),
-                ISSUE_BINDS_WRONG_PARAMETER_COUNT.getBriefDescription(TextFormat.TEXT)
+                ISSUE_BINDS_WRONG_PARAMETER_COUNT.getBriefDescription(TextFormat.TEXT),
               )
               return
             }

@@ -36,7 +36,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -77,7 +77,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()
@@ -157,7 +157,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()
@@ -183,7 +183,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .skipTestModes(FULLY_QUALIFIED, IMPORT_ALIAS) // TODO relies on non-qualified matching.
       .run()
@@ -217,7 +217,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .skipTestModes(FULLY_QUALIFIED, IMPORT_ALIAS) // TODO relies on non-qualified matching.
       .run()
@@ -335,7 +335,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -441,7 +441,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -473,7 +473,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -505,7 +505,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -539,7 +539,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -573,7 +573,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expectClean()
@@ -622,7 +622,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -674,7 +674,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
           }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(

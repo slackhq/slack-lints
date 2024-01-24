@@ -45,7 +45,7 @@ class RawDispatchersUsageDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        SCOPES
+        SCOPES,
       )
 
     private const val DISPATCHERS_CLASS = "kotlinx.coroutines.Dispatchers"
@@ -58,7 +58,7 @@ class RawDispatchersUsageDetector : Detector(), SourceCodeScanner {
         "Default",
         "IO",
         "Main",
-        "Unconfined"
+        "Unconfined",
       )
   }
 
@@ -66,7 +66,7 @@ class RawDispatchersUsageDetector : Detector(), SourceCodeScanner {
     listOf(
       UCallExpression::class.java,
       UCallableReferenceExpression::class.java,
-      UQualifiedReferenceExpression::class.java
+      UQualifiedReferenceExpression::class.java,
     )
 
   override fun createUastHandler(context: JavaContext): UElementHandler? {

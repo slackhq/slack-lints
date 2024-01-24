@@ -78,7 +78,7 @@ class InjectInJavaDetectorTest : BaseSlackLintTest() {
             object ExampleModule
           """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -131,7 +131,7 @@ class InjectInJavaDetectorTest : BaseSlackLintTest() {
 
           """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()

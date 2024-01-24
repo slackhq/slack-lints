@@ -20,7 +20,7 @@ object AutoValueMockDetector : MockDetector.TypeChecker {
       Category.CORRECTNESS,
       6,
       Severity.ERROR,
-      sourceImplementation<MockDetector>()
+      sourceImplementation<MockDetector>(),
     )
 
   override val annotations: Set<String> =
