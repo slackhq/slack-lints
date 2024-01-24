@@ -51,7 +51,7 @@ class PlatformTypeMockDetectorTest : BaseSlackLintTest() {
               mock<ArrayMap<String, String>>()
             }
           }
-        """
+        """,
         )
         .indented()
 
@@ -113,7 +113,7 @@ class PlatformTypeMockDetectorTest : BaseSlackLintTest() {
               mock(ArrayMap.class);
             }
           }
-        """
+        """,
         )
         .indented()
 

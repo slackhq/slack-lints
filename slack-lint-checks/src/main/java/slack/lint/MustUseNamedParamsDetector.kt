@@ -43,7 +43,7 @@ class MustUseNamedParamsDetector : Detector(), SourceCodeScanner {
               ISSUE,
               node,
               context.getLocation(node),
-              ISSUE.getBriefDescription(TextFormat.TEXT)
+              ISSUE.getBriefDescription(TextFormat.TEXT),
             )
           }
         }
@@ -60,7 +60,7 @@ class MustUseNamedParamsDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         9,
         Severity.ERROR,
-        sourceImplementation<MustUseNamedParamsDetector>()
+        sourceImplementation<MustUseNamedParamsDetector>(),
       )
   }
 }

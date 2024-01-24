@@ -51,7 +51,7 @@ import org.jetbrains.uast.tryResolve
  */
 internal fun PsiClass.implements(
   qualifiedName: String,
-  nameFilter: (String) -> Boolean = { true }
+  nameFilter: (String) -> Boolean = { true },
 ): Boolean {
   val fqcn = this.qualifiedName ?: return false
   if (fqcn == qualifiedName) {
@@ -108,7 +108,7 @@ internal inline fun <reified T> sourceImplementation(
       T::class.java,
       EnumSet.of(Scope.JAVA_FILE, Scope.TEST_SOURCES),
       EnumSet.of(Scope.JAVA_FILE),
-      EnumSet.of(Scope.TEST_SOURCES)
+      EnumSet.of(Scope.TEST_SOURCES),
     )
   } else {
     Implementation(T::class.java, EnumSet.of(Scope.JAVA_FILE))
@@ -126,7 +126,7 @@ internal fun LintFix.Builder.removeNode(
   node: PsiElement,
   name: String? = null,
   autoFix: Boolean = true,
-  text: String = node.text
+  text: String = node.text,
 ): LintFix {
   val fixName = name ?: "Remove '$text'"
   return replace()
@@ -216,7 +216,7 @@ private val BOXED_PRIMITIVES =
     TYPE_LONG_WRAPPER,
     TYPE_DOUBLE_WRAPPER,
     TYPE_FLOAT_WRAPPER,
-    TYPE_CHARACTER_WRAPPER
+    TYPE_CHARACTER_WRAPPER,
   )
 
 internal fun PsiClass.isBoxedPrimitive(): Boolean {
@@ -302,7 +302,7 @@ internal fun UMethod.safeReturnType(context: JavaContext): PsiType? {
 /** Loads a [StringOption] as a [delimiter]-delimited [Set] of strings. */
 internal fun StringOption.loadAsSet(
   configuration: Configuration,
-  delimiter: String = ","
+  delimiter: String = ",",
 ): Set<String> {
   return getValue(configuration)
     ?.splitToSequence(delimiter)

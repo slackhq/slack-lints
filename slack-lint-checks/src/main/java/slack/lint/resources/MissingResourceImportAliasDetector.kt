@@ -52,7 +52,7 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
             .name("Add import alias")
             // Apply the fixes in reverse so that the ranges/locations don't change.
             .composite(*fixes.reversed().toTypedArray())
-            .autoFix()
+            .autoFix(),
       )
       rootIssueData = null
       fixes.clear()
@@ -88,7 +88,7 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
               rootIssueData =
                 RootIssueData(
                   alias = alias,
-                  nameLocation = context.getNameLocation(importDirective)
+                  nameLocation = context.getNameLocation(importDirective),
                 )
 
               fixes.add(createImportLintFix(importDirective, importedFqNameString, alias))
@@ -96,7 +96,7 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
               context.report(
                 ISSUE,
                 context.getNameLocation(importDirective),
-                "Use an import alias for R classes from other modules"
+                "Use an import alias for R classes from other modules",
               )
             }
           }
@@ -106,7 +106,7 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
       private fun createImportLintFix(
         importDirective: KtImportDirective,
         importedFqNameString: String,
-        alias: String?
+        alias: String?,
       ): LintFix {
         return fix()
           .replace()
@@ -131,7 +131,7 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
 
       private fun createReferenceLintFix(
         node: USimpleNameReferenceExpression,
-        alias: String
+        alias: String,
       ): LintFix {
         return fix().replace().range(context.getLocation(node)).with(alias).build()
       }
@@ -150,7 +150,7 @@ class MissingResourceImportAliasDetector : Detector(), SourceCodeScanner {
           Category.CORRECTNESS,
           6,
           Severity.ERROR,
-          sourceImplementation<MissingResourceImportAliasDetector>()
+          sourceImplementation<MissingResourceImportAliasDetector>(),
         )
         .setOptions(listOf(IMPORT_ALIASES))
   }

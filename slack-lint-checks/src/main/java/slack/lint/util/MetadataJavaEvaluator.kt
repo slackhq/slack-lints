@@ -87,21 +87,21 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
   @Suppress("DEPRECATION")
   @Deprecated(
     "Use getAnnotation returning a UAnnotation instead",
-    replaceWith = ReplaceWith("getAnnotation(listOwner, *annotationNames)")
+    replaceWith = ReplaceWith("getAnnotation(listOwner, *annotationNames)"),
   )
   override fun findAnnotation(
     listOwner: PsiModifierListOwner?,
-    vararg annotationNames: String
+    vararg annotationNames: String,
   ): PsiAnnotation? = delegate.findAnnotation(listOwner, *annotationNames)
 
   @Suppress("DEPRECATION")
   @Deprecated(
     "Use getAnnotationInHierarchy returning a UAnnotation instead",
-    replaceWith = ReplaceWith("getAnnotationInHierarchy(listOwner, *annotationNames)")
+    replaceWith = ReplaceWith("getAnnotationInHierarchy(listOwner, *annotationNames)"),
   )
   override fun findAnnotationInHierarchy(
     listOwner: PsiModifierListOwner,
-    vararg annotationNames: String
+    vararg annotationNames: String,
   ): PsiAnnotation? = delegate.findAnnotationInHierarchy(listOwner, *annotationNames)
 
   override fun findClass(qualifiedName: String): PsiClass? = delegate.findClass(qualifiedName)
@@ -113,11 +113,11 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
   @Suppress("DEPRECATION")
   @Deprecated(
     "Use getAnnotations() instead; consider providing a parent",
-    replaceWith = ReplaceWith("getAnnotations(owner, inHierarchy)")
+    replaceWith = ReplaceWith("getAnnotations(owner, inHierarchy)"),
   )
   override fun getAllAnnotations(
     owner: PsiModifierListOwner,
-    inHierarchy: Boolean
+    inHierarchy: Boolean,
   ): Array<PsiAnnotation> = delegate.getAllAnnotations(owner, inHierarchy)
 
   override fun getAllAnnotations(owner: UAnnotated, inHierarchy: Boolean): List<UAnnotation> =
@@ -125,18 +125,18 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
 
   override fun getAnnotation(
     listOwner: PsiModifierListOwner?,
-    vararg annotationNames: String
+    vararg annotationNames: String,
   ): UAnnotation? = delegate.getAnnotation(listOwner, *annotationNames)
 
   override fun getAnnotationInHierarchy(
     listOwner: PsiModifierListOwner,
-    vararg annotationNames: String
+    vararg annotationNames: String,
   ): UAnnotation? = delegate.getAnnotationInHierarchy(listOwner, *annotationNames)
 
   override fun getAnnotations(
     owner: PsiModifierListOwner?,
     inHierarchy: Boolean,
-    parent: UElement?
+    parent: UElement?,
   ): List<UAnnotation> = delegate.getAnnotations(owner, inHierarchy, parent)
 
   override fun getClassType(psiClass: PsiClass?): PsiClassType? = delegate.getClassType(psiClass)

@@ -29,7 +29,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -55,7 +55,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -89,7 +89,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -115,7 +115,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -149,7 +149,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -183,7 +183,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()
@@ -217,7 +217,7 @@ class DeprecatedAnnotationDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .issues(DeprecatedAnnotationDetector.ISSUE_DEPRECATED_CALL)
       .run()

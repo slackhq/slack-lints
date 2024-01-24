@@ -52,7 +52,7 @@ class RxSubscribeOnMainDetector : Detector(), SourceCodeScanner {
         category = Category.CORRECTNESS,
         priority = 4,
         severity = Severity.ERROR,
-        implementation = this
+        implementation = this,
       )
 
     val ISSUE = sourceImplementation<RxSubscribeOnMainDetector>().toIssue()
@@ -66,7 +66,7 @@ class RxSubscribeOnMainDetector : Detector(), SourceCodeScanner {
       "io/reactivex/rxjava3/core/Flowable",
       "io/reactivex/rxjava3/core/Maybe",
       "io/reactivex/rxjava3/core/Observable",
-      "io/reactivex/rxjava3/core/Single"
+      "io/reactivex/rxjava3/core/Single",
     )
 
   override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
@@ -91,7 +91,7 @@ class RxSubscribeOnMainDetector : Detector(), SourceCodeScanner {
             .name("Replace with observeOn()")
             .text("subscribeOn")
             .with("observeOn")
-            .build()
+            .build(),
         )
       }
     }

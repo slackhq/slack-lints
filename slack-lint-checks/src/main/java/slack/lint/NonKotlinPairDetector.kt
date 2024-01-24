@@ -64,7 +64,7 @@ class NonKotlinPairDetector : Detector(), SourceCodeScanner {
         issueToReport,
         location,
         issueToReport.getBriefDescription(TextFormat.TEXT),
-        null
+        null,
       )
     }
   }
@@ -82,7 +82,7 @@ class NonKotlinPairDetector : Detector(), SourceCodeScanner {
         FQN_SLACK_COMMONS_PAIR,
         FQN_ANDROIDX_PAIR,
         FQN_ANDROID_DEPRECATED_PAIR,
-        FQN_ANDROID_PAIR
+        FQN_ANDROID_PAIR,
       )
 
     /** Scope-set used for detectors which are affected by a single Java source file */
@@ -100,7 +100,7 @@ class NonKotlinPairDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.WARNING,
-        Implementation(NonKotlinPairDetector::class.java, JAVA_FILE_AND_TEST_SOURCES_SCOPE)
+        Implementation(NonKotlinPairDetector::class.java, JAVA_FILE_AND_TEST_SOURCES_SCOPE),
       )
 
     val issues: List<Issue> = listOf(ISSUE_KOTLIN_PAIR_NOT_CREATED)

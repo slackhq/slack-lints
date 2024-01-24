@@ -125,7 +125,7 @@ class ExceptionMessageDetectorTest : BaseSlackLintTest() {
                         check(true)
                     }
                     """
-        ),
+        )
       )
       .run()
       .expect(
@@ -152,7 +152,7 @@ class ExceptionMessageDetectorTest : BaseSlackLintTest() {
 
                     fun check(boolean: Boolean) {}
                     """
-        ),
+        )
       )
       .run()
       .expectClean()
@@ -260,7 +260,7 @@ class ExceptionMessageDetectorTest : BaseSlackLintTest() {
                         checkNotNull(null)
                     }
                     """
-        ),
+        )
       )
       .run()
       .expect(
@@ -287,7 +287,7 @@ class ExceptionMessageDetectorTest : BaseSlackLintTest() {
 
                     fun checkNotNull(value: Any?) {}
                     """
-        ),
+        )
       )
       .run()
       .expectClean()
@@ -395,7 +395,7 @@ class ExceptionMessageDetectorTest : BaseSlackLintTest() {
                         require(true)
                     }
                     """
-        ),
+        )
       )
       .run()
       .expect(
@@ -422,7 +422,7 @@ class ExceptionMessageDetectorTest : BaseSlackLintTest() {
 
                     fun require(boolean: Boolean) {}
                     """
-        ),
+        )
       )
       .run()
       .expectClean()
@@ -530,7 +530,7 @@ class ExceptionMessageDetectorTest : BaseSlackLintTest() {
                         requireNotNull(null)
                     }
                     """
-        ),
+        )
       )
       .run()
       .expect(
@@ -557,7 +557,7 @@ class ExceptionMessageDetectorTest : BaseSlackLintTest() {
 
                     fun requireNotNull(value: Any?) {}
                     """
-        ),
+        )
       )
       .run()
       .expectClean()

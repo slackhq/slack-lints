@@ -23,7 +23,7 @@ object DataClassMockDetector : MockDetector.TypeChecker {
       Category.CORRECTNESS,
       6,
       Severity.ERROR,
-      sourceImplementation<MockDetector>()
+      sourceImplementation<MockDetector>(),
     )
 
   override val annotations: Set<String> = emptySet()
@@ -31,13 +31,13 @@ object DataClassMockDetector : MockDetector.TypeChecker {
   override fun checkType(
     context: JavaContext,
     evaluator: MetadataJavaEvaluator,
-    mockedType: PsiClass
+    mockedType: PsiClass,
   ): MockDetector.Reason? {
     // Don't warn on records because we have a separate check for that
     return if (evaluator.isData(mockedType) && !mockedType.hasAnnotation("kotlin.jvm.JvmRecord")) {
       MockDetector.Reason(
         mockedType,
-        "'${mockedType.qualifiedName}' is a data class, so mocking it should not be necessary"
+        "'${mockedType.qualifiedName}' is a data class, so mocking it should not be necessary",
       )
     } else {
       null

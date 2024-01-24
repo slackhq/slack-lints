@@ -58,7 +58,7 @@ allprojects {
       endWithNewline()
       licenseHeaderFile(
         rootProject.file("spotless/spotless.kt"),
-        "(import|plugins|buildscript|dependencies|pluginManagement)"
+        "(import|plugins|buildscript|dependencies|pluginManagement)",
       )
     }
   }

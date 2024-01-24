@@ -23,7 +23,7 @@ buildConfig {
     buildConfigField(
       "kotlin.KotlinVersion",
       "LINT_KOTLIN_VERSION",
-      "KotlinVersion(${lintKotlinVersion.major}, ${lintKotlinVersion.minor}, ${lintKotlinVersion.patch})"
+      "KotlinVersion(${lintKotlinVersion.major}, ${lintKotlinVersion.minor}, ${lintKotlinVersion.patch})",
     )
   }
 }

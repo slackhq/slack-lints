@@ -73,7 +73,7 @@ class MockReportTest : BaseSlackLintTest() {
               )
             }
           }
-        """
+        """,
         )
         .indented()
 
@@ -132,7 +132,7 @@ class MockReportTest : BaseSlackLintTest() {
               TestClass fake = new TestClass("this is fine");
             }
           }
-        """
+        """,
         )
         .indented()
 
@@ -218,7 +218,7 @@ class MockReportTest : BaseSlackLintTest() {
               )
             }
           }
-        """
+        """,
         )
         .indented()
 

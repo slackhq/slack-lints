@@ -54,7 +54,7 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
                        }
                 }
               }
-            """
+            """,
           )
           .indented()
       )
@@ -120,7 +120,7 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
                   String localFork = "";
                 }
               }
-            """
+            """,
           )
           .indented()
       )
@@ -165,7 +165,7 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
                   xmlns:android="http://schemas.android.com/apk/res/android"
                   android:masterAttribute="testing"
                   />
-            """
+            """,
           )
           .indented()
       )

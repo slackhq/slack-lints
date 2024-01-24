@@ -123,7 +123,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
               context.report(
                 issue = denyListEntry.issue,
                 location = context.getNameLocation(node),
-                message = denyListEntry.errorMessage
+                message = denyListEntry.errorMessage,
               )
             }
           }
@@ -155,7 +155,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
             context.report(
               issue = denyListEntry.issue,
               location = context.getLocation(node),
-              message = denyListEntry.errorMessage
+              message = denyListEntry.errorMessage,
             )
           }
         }
@@ -224,7 +224,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
               "needless runtime memory and performance overhead. Relays and Subjects both extend from " +
               "Observable and can be supplied to functions accepting Observable directly. When " +
               "returning a Relay or Subject, declare the return type explicitly as Observable " +
-              "(e.g., fun foo(): Observable<Foo> = fooRelay)."
+              "(e.g., fun foo(): Observable<Foo> = fooRelay).",
         ),
         DenyListedEntry(
           className = "io.reactivex.rxjava3.core.Flowable",
@@ -235,7 +235,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
               "needless runtime memory and performance overhead. FlowableProcessor extends from " +
               "Flowable and can be supplied to functions accepting Flowable directly. When " +
               "returning a FlowableProcessor, declare the return type explicitly as Flowable " +
-              "(e.g., fun foo(): Flowable<Foo> = fooProcessor)."
+              "(e.g., fun foo(): Flowable<Foo> = fooProcessor).",
         ),
         DenyListedEntry(
           className = "io.reactivex.rxjava3.core.Completable",
@@ -246,7 +246,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
               "needless runtime memory and performance overhead. CompletableSubject extends from " +
               "Completable and can be supplied to functions accepting Completable directly. When " +
               "returning a CompletableSubject, declare the return type explicitly as Completable " +
-              "(e.g., fun foo(): Completable<Foo> = fooSubject)."
+              "(e.g., fun foo(): Completable<Foo> = fooSubject).",
         ),
         DenyListedEntry(
           className = "io.reactivex.rxjava3.core.Maybe",
@@ -257,7 +257,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
               "needless runtime memory and performance overhead. MaybeSubject extends from " +
               "Maybe and can be supplied to functions accepting Maybe directly. When " +
               "returning a MaybeSubject, declare the return type explicitly as Maybe " +
-              "(e.g., fun foo(): Maybe<Foo> = fooSubject)."
+              "(e.g., fun foo(): Maybe<Foo> = fooSubject).",
         ),
         DenyListedEntry(
           className = "io.reactivex.rxjava3.core.Single",
@@ -268,19 +268,19 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
               "needless runtime memory and performance overhead. SingleSubject extends from " +
               "Single and can be supplied to functions accepting Single directly. When " +
               "returning a SingleSubject, declare the return type explicitly as Single " +
-              "(e.g., fun foo(): Single<Foo> = fooSubject)."
+              "(e.g., fun foo(): Single<Foo> = fooSubject).",
         ),
         DenyListedEntry(
           className = "androidx.core.content.ContextCompat",
           functionName = "getDrawable",
           parameters = listOf("android.content.Context", "int"),
-          errorMessage = "Use Context#getDrawableCompat() instead"
+          errorMessage = "Use Context#getDrawableCompat() instead",
         ),
         DenyListedEntry(
           className = "androidx.core.content.res.ResourcesCompat",
           functionName = "getDrawable",
           parameters = listOf("android.content.Context", "int"),
-          errorMessage = "Use Context#getDrawableCompat() instead"
+          errorMessage = "Use Context#getDrawableCompat() instead",
         ),
         DenyListedEntry(
           className = "android.support.test.espresso.matcher.ViewMatchers",
@@ -290,7 +290,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
             "Consider matching the content description instead. IDs are " +
               "implementation details of how a screen is built, not how it works. You can't" +
               " tell a user to click on the button with ID 428194727 so our tests should not" +
-              " be doing that. "
+              " be doing that. ",
         ),
         DenyListedEntry(
           className = "android.view.View",
@@ -298,7 +298,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           parameters = listOf("android.view.View.OnClickListener"),
           arguments = listOf("null"),
           errorMessage =
-            "This fails to also set View#isClickable. Use View#clearOnClickListener() instead"
+            "This fails to also set View#isClickable. Use View#clearOnClickListener() instead",
         ),
         DenyListedEntry(
           // If you are deny listing an extension method you need to ascertain the fully qualified
@@ -312,7 +312,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
               "can be refactored into standalone suspend funs and mixed in with regular control flow " +
               "in a suspend context, but calls that invoke CoroutineScope#launch and Flow#collect at " +
               "the same time hide the suspend context, encouraging the developer to continue working in " +
-              "the reactive domain."
+              "the reactive domain.",
         ),
         DenyListedEntry(
           className = "androidx.viewpager2.widget.ViewPager2",
@@ -320,7 +320,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           parameters = listOf("int"),
           arguments = listOf("ViewCompat.generateViewId()"),
           errorMessage =
-            "Use an id defined in resources or a statically created instead of generating with ViewCompat.generateViewId(). See https://issuetracker.google.com/issues/185820237"
+            "Use an id defined in resources or a statically created instead of generating with ViewCompat.generateViewId(). See https://issuetracker.google.com/issues/185820237",
         ),
         DenyListedEntry(
           className = "androidx.viewpager2.widget.ViewPager2",
@@ -328,30 +328,30 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           parameters = listOf("int"),
           arguments = listOf("View.generateViewId()"),
           errorMessage =
-            "Use an id defined in resources or a statically created instead of generating with View.generateViewId(). See https://issuetracker.google.com/issues/185820237"
+            "Use an id defined in resources or a statically created instead of generating with View.generateViewId(). See https://issuetracker.google.com/issues/185820237",
         ),
         DenyListedEntry(
           className = "java.util.LinkedList",
           functionName = "<init>",
           errorMessage =
-            "For a stack/queue/double-ended queue use ArrayDeque, for a list use ArrayList. Both are more efficient internally."
+            "For a stack/queue/double-ended queue use ArrayDeque, for a list use ArrayList. Both are more efficient internally.",
         ),
         DenyListedEntry(
           className = "java.util.Stack",
           functionName = "<init>",
-          errorMessage = "For a stack use ArrayDeque which is more efficient internally."
+          errorMessage = "For a stack use ArrayDeque which is more efficient internally.",
         ),
         DenyListedEntry(
           className = "java.util.Vector",
           functionName = "<init>",
           errorMessage =
-            "For a vector use ArrayList or ArrayDeque which are more efficient internally."
+            "For a vector use ArrayList or ArrayDeque which are more efficient internally.",
         ),
         DenyListedEntry(
           className = "io.reactivex.rxjava3.schedulers.Schedulers",
           functionName = "newThread",
           errorMessage =
-            "Use a scheduler which wraps a cached set of threads. There should be no reason to be arbitrarily creating threads on Android."
+            "Use a scheduler which wraps a cached set of threads. There should be no reason to be arbitrarily creating threads on Android.",
         ),
         // TODO this would conflict with MagicNumber in detekt, revisit
         //      DenyListedEntry(
@@ -419,31 +419,31 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           className = "java.util.Date",
           functionName = MatchAll,
           errorMessage =
-            "Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Date in Java 8+."
+            "Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Date in Java 8+.",
         ),
         DenyListedEntry(
           className = "java.text.DateFormat",
           fieldName = MatchAll,
           errorMessage =
-            "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+."
+            "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+.",
         ),
         DenyListedEntry(
           className = "java.text.SimpleDateFormat",
           fieldName = MatchAll,
           errorMessage =
-            "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+."
+            "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+.",
         ),
         DenyListedEntry(
           className = "java.text.DateFormat",
           functionName = MatchAll,
           errorMessage =
-            "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+."
+            "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+.",
         ),
         DenyListedEntry(
           className = "java.text.SimpleDateFormat",
           functionName = MatchAll,
           errorMessage =
-            "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+."
+            "Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+.",
         ),
         DenyListedEntry(
           className = "kotlin.ResultKt",
@@ -463,7 +463,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
               "If running in a test, use runTest {} or Turbine to test synchronous values.",
           issue = BLOCKING_ISSUE,
         ),
-        *rxJavaBlockingCalls().toTypedArray()
+        *rxJavaBlockingCalls().toTypedArray(),
       )
 
     val ISSUES = CONFIG.issues
@@ -488,7 +488,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
             EnumSet.of(Scope.JAVA_FILE),
             EnumSet.of(Scope.RESOURCE_FILE),
             EnumSet.of(Scope.TEST_SOURCES),
-          )
+          ),
       )
     }
   }
@@ -528,20 +528,9 @@ data class DenyListedEntry(
 
 private fun rxJavaBlockingCalls() =
   listOf(
-      "io.reactivex.rxjava3.core.Completable" to
-        listOf(
-          "blockingAwait",
-        ),
-      "io.reactivex.rxjava3.core.Single" to
-        listOf(
-          "blockingGet",
-          "blockingSubscribe",
-        ),
-      "io.reactivex.rxjava3.core.Maybe" to
-        listOf(
-          "blockingGet",
-          "blockingSubscribe",
-        ),
+      "io.reactivex.rxjava3.core.Completable" to listOf("blockingAwait"),
+      "io.reactivex.rxjava3.core.Single" to listOf("blockingGet", "blockingSubscribe"),
+      "io.reactivex.rxjava3.core.Maybe" to listOf("blockingGet", "blockingSubscribe"),
       "io.reactivex.rxjava3.core.Observable" to
         listOf(
           "blockingFirst",
@@ -582,7 +571,7 @@ private fun rxJavaBlockingCalls() =
             "Blocking calls in RxJava can cause deadlocks and application jank. " +
               "Prefer making the enclosing method/function return this $shortType, a Disposable to grant control to the caller,$orMessage or refactoring this in a way to use non-blocking calls. " +
               "If running in a test, use the .test()/TestObserver API (https://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/observers/TestObserver.html) test synchronous values.",
-          issue = DenyListedApiDetector.BLOCKING_ISSUE
+          issue = DenyListedApiDetector.BLOCKING_ISSUE,
         )
       }
     }

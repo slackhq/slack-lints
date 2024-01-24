@@ -29,13 +29,13 @@ class RecordClassMockDetectorTest : BaseSlackLintTest() {
       record TestJavaClass(String foo) {
 
       }
-    """
+    """,
       )
       .indented()
 
   private val testClasses =
     arrayOf(
-      testClass,
+      testClass
       // TODO test once lint supports java record
       //  https://issuetracker.google.com/issues/283693337
       //            testJavaClass
@@ -93,7 +93,7 @@ class RecordClassMockDetectorTest : BaseSlackLintTest() {
 //              val fake = TestJavaClass("this is fine")
 //            }
           }
-        """
+        """,
         )
         .indented()
 
@@ -169,7 +169,7 @@ class RecordClassMockDetectorTest : BaseSlackLintTest() {
 //              TestJavaClass fake = new TestJavaClass("this is fine");
 //            }
           }
-        """
+        """,
         )
         .indented()
 

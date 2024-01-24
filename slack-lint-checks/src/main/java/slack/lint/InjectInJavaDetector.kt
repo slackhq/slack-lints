@@ -40,7 +40,7 @@ class InjectInJavaDetector : Detector(), SourceCodeScanner {
             ISSUE,
             context.getNameLocation(annotation),
             ISSUE.getBriefDescription(TextFormat.TEXT),
-            quickfixData = null
+            quickfixData = null,
           )
         }
       }
@@ -71,7 +71,7 @@ class InjectInJavaDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         9,
         Severity.ERROR,
-        sourceImplementation<InjectInJavaDetector>()
+        sourceImplementation<InjectInJavaDetector>(),
       )
 
     private val ANNOTATIONS =

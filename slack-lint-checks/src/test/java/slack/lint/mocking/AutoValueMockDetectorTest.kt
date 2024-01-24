@@ -77,7 +77,7 @@ class AutoValueMockDetectorTest : BaseSlackLintTest() {
               val fake = TestClass.builder().build()
             }
           }
-        """
+        """,
         )
         .indented()
 
@@ -162,7 +162,7 @@ class AutoValueMockDetectorTest : BaseSlackLintTest() {
               TestClass fake = TestClass.builder().build();
             }
           }
-        """
+        """,
         )
         .indented()
 

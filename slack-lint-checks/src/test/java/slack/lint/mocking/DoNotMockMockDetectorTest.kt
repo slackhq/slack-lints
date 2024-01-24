@@ -75,7 +75,7 @@ class DoNotMockMockDetectorTest : BaseSlackLintTest() {
             @Mock lateinit var mock3: TestClass3
             @Mock lateinit var mock4: TestClass4
           }
-        """
+        """,
         )
         .indented()
 
@@ -124,7 +124,7 @@ class DoNotMockMockDetectorTest : BaseSlackLintTest() {
             public void example() {
             }
           }
-        """
+        """,
         )
         .indented()
 

@@ -86,7 +86,7 @@ class InjectWithUsageDetectorTest : BaseSlackLintTest() {
             class MissingAnvilInjectable
           """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()

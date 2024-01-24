@@ -26,7 +26,7 @@ object DoNotMockMockDetector : MockDetector.TypeChecker {
       Category.CORRECTNESS,
       6,
       Severity.ERROR,
-      sourceImplementation<MockDetector>()
+      sourceImplementation<MockDetector>(),
     )
 
   private const val FQCN_SLACK_DNM = "slack.lint.annotations.DoNotMock"
@@ -35,7 +35,7 @@ object DoNotMockMockDetector : MockDetector.TypeChecker {
   override fun checkType(
     context: JavaContext,
     evaluator: MetadataJavaEvaluator,
-    mockedType: PsiClass
+    mockedType: PsiClass,
   ): MockDetector.Reason? {
     val uMockedType = mockedType.toUElementOfType<UClass>() ?: return null
     val doNotMockAnnotation =

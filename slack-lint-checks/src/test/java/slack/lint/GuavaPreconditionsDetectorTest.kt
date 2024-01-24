@@ -68,7 +68,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
@@ -142,7 +142,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
@@ -221,7 +221,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
@@ -296,7 +296,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
@@ -328,7 +328,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .allowCompilationErrors() // Until AGP 7.1.0
@@ -361,7 +361,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
@@ -431,7 +431,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()
@@ -506,7 +506,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
       .run()

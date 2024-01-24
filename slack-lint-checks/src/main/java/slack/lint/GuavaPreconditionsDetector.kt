@@ -84,13 +84,13 @@ class GuavaPreconditionsDetector : Detector(), SourceCodeScanner {
     context: JavaContext,
     node: UCallExpression,
     issue: Issue,
-    quickFix: LintFix? = null
+    quickFix: LintFix? = null,
   ) {
     context.report(
       issue,
       context.getNameLocation(node),
       issue.getBriefDescription(TextFormat.TEXT),
-      quickFix
+      quickFix,
     )
 
     check(true)
@@ -131,7 +131,7 @@ class GuavaPreconditionsDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        implementation = sourceImplementation<GuavaPreconditionsDetector>(true)
+        implementation = sourceImplementation<GuavaPreconditionsDetector>(true),
       )
 
     private val ISSUE_GUAVA_PRECONDITIONS_USED_IN_KOTLIN: Issue =
@@ -144,7 +144,7 @@ class GuavaPreconditionsDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        implementation = sourceImplementation<GuavaPreconditionsDetector>(true)
+        implementation = sourceImplementation<GuavaPreconditionsDetector>(true),
       )
 
     val issues: List<Issue> =

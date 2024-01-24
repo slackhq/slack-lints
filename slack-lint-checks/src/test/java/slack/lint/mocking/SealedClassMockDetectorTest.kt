@@ -30,11 +30,7 @@ class SealedClassMockDetectorTest : BaseSlackLintTest() {
       )
       .indented()
 
-  private val testClasses =
-    arrayOf(
-      testClass,
-      javaTestClass,
-    )
+  private val testClasses = arrayOf(testClass, javaTestClass)
 
   override fun getDetector() = MockDetector()
 
@@ -90,7 +86,7 @@ class SealedClassMockDetectorTest : BaseSlackLintTest() {
               val fake = TestJavaClass("this is fine")
             }
           }
-        """
+        """,
         )
         .indented()
 
@@ -189,7 +185,7 @@ class SealedClassMockDetectorTest : BaseSlackLintTest() {
               TestJavaClass fake = new TestJavaClass("this is fine");
             }
           }
-        """
+        """,
         )
         .indented()
 

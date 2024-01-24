@@ -44,7 +44,7 @@ class FragmentDaggerFieldInjectionDetector : Detector(), SourceCodeScanner {
         context.report(
           issueToReport,
           context.getLocation(node),
-          issueToReport.getBriefDescription(TextFormat.TEXT)
+          issueToReport.getBriefDescription(TextFormat.TEXT),
         )
       }
     }
@@ -75,7 +75,7 @@ class FragmentDaggerFieldInjectionDetector : Detector(), SourceCodeScanner {
         category = Category.CORRECTNESS,
         priority = 6,
         severity = Severity.ERROR,
-        implementation = sourceImplementation<FragmentDaggerFieldInjectionDetector>()
+        implementation = sourceImplementation<FragmentDaggerFieldInjectionDetector>(),
       )
 
     private val ISSUE_FRAGMENT_FIELD_INJECTION_USED: Issue =
@@ -95,7 +95,7 @@ class FragmentDaggerFieldInjectionDetector : Detector(), SourceCodeScanner {
         category = Category.CORRECTNESS,
         priority = 6,
         severity = Severity.ERROR,
-        implementation = sourceImplementation<FragmentDaggerFieldInjectionDetector>()
+        implementation = sourceImplementation<FragmentDaggerFieldInjectionDetector>(),
       )
 
     val issues =

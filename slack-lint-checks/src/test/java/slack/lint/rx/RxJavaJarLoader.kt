@@ -8,6 +8,4 @@ import slack.lint.BaseSlackLintTest
 
 /** Loads the test RxJava 3 jar from resources. */
 fun BaseSlackLintTest.rxJavaJar3() =
-  LibraryReferenceTestFile(
-    File(javaClass.classLoader.getResource("rxjava-3.1.0.jar")!!.toURI()),
-  )
+  LibraryReferenceTestFile(File(javaClass.classLoader.getResource("rxjava-3.1.0.jar")!!.toURI()))

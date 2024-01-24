@@ -30,7 +30,7 @@ class ErrorProneDoNotMockDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<ErrorProneDoNotMockDetector>()
+        sourceImplementation<ErrorProneDoNotMockDetector>(),
       )
 
     private const val FQCN_SLACK_DNM = "slack.lint.annotations.DoNotMock"
@@ -62,7 +62,7 @@ class ErrorProneDoNotMockDetector : Detector(), SourceCodeScanner {
                 .text(replacement)
                 .with("@$FQCN_SLACK_DNM")
                 .autoFix()
-                .build()
+                .build(),
           )
         }
       }

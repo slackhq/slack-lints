@@ -74,7 +74,7 @@ class ParcelizeFunctionPropertyDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         9,
         Severity.ERROR,
-        sourceImplementation<ParcelizeFunctionPropertyDetector>()
+        sourceImplementation<ParcelizeFunctionPropertyDetector>(),
       )
   }
 }

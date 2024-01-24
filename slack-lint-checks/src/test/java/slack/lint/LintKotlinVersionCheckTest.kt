@@ -61,14 +61,14 @@ class LintKotlinVersionCheckTest : BaseSlackLintTest() {
               ISSUE,
               node,
               context.getLocation(node),
-              "Kotlin version matched expected one"
+              "Kotlin version matched expected one",
             )
           } else {
             context.report(
               ISSUE,
               node,
               context.getLocation(node),
-              "Kotlin version was ${KotlinVersion.CURRENT}, expected $EXPECTED_VERSION"
+              "Kotlin version was ${KotlinVersion.CURRENT}, expected $EXPECTED_VERSION",
             )
           }
         }

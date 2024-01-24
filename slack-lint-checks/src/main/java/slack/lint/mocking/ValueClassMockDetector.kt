@@ -25,7 +25,7 @@ object ValueClassMockDetector : MockDetector.TypeChecker {
       Category.CORRECTNESS,
       6,
       Severity.ERROR,
-      sourceImplementation<MockDetector>()
+      sourceImplementation<MockDetector>(),
     )
 
   override val annotations: Set<String> = emptySet()
@@ -33,12 +33,12 @@ object ValueClassMockDetector : MockDetector.TypeChecker {
   override fun checkType(
     context: JavaContext,
     evaluator: MetadataJavaEvaluator,
-    mockedType: PsiClass
+    mockedType: PsiClass,
   ): MockDetector.Reason? {
     return if (evaluator.isValueClass(mockedType)) {
       MockDetector.Reason(
         mockedType,
-        "'${mockedType.qualifiedName}' is a value class using inlined types, so mocking it should not be necessary"
+        "'${mockedType.qualifiedName}' is a value class using inlined types, so mocking it should not be necessary",
       )
     } else {
       null

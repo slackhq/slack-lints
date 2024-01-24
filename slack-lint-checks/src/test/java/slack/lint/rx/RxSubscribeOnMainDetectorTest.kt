@@ -52,7 +52,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -96,7 +96,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -140,7 +140,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -184,7 +184,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -230,7 +230,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -276,7 +276,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -322,7 +322,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -368,7 +368,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -412,7 +412,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -439,7 +439,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -466,7 +466,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .allowCompilationErrors() // Until AGP 7.1.0
@@ -495,7 +495,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -524,7 +524,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -552,7 +552,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -579,7 +579,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -623,7 +623,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -650,7 +650,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -694,7 +694,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -721,7 +721,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -765,7 +765,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -792,7 +792,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .run()
@@ -836,7 +836,7 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .issues(RxSubscribeOnMainDetector.ISSUE)
       .allowCompilationErrors() // Until AGP 7.1.0

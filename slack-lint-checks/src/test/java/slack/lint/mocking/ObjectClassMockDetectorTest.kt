@@ -48,7 +48,7 @@ class ObjectClassMockDetectorTest : BaseSlackLintTest() {
               val fake = TestClass("this is fine")
             }
           }
-        """
+        """,
         )
         .indented()
 
@@ -112,7 +112,7 @@ class ObjectClassMockDetectorTest : BaseSlackLintTest() {
               TestClass fake = new TestClass("this is fine");
             }
           }
-        """
+        """,
         )
         .indented()
 

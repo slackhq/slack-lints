@@ -93,13 +93,13 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               ISSUE_DOUBLE_CLASS_ANNOTATION,
               context.getNameLocation(adaptedByAnnotation),
               ISSUE_DOUBLE_CLASS_ANNOTATION.getBriefDescription(TextFormat.TEXT),
-              fix().removeNode(context, adaptedByAnnotation.sourcePsi!!)
+              fix().removeNode(context, adaptedByAnnotation.sourcePsi!!),
             )
             context.report(
               ISSUE_DOUBLE_CLASS_ANNOTATION,
               context.getNameLocation(jsonClassAnnotation),
               ISSUE_DOUBLE_CLASS_ANNOTATION.getBriefDescription(TextFormat.TEXT),
-              fix().removeNode(context, jsonClassAnnotation.sourcePsi!!)
+              fix().removeNode(context, jsonClassAnnotation.sourcePsi!!),
             )
           }
 
@@ -129,7 +129,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                 .text(visibility.value)
                 .with("internal")
                 .autoFix()
-                .build()
+                .build(),
           )
         }
 
@@ -150,7 +150,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               ISSUE_BLANK_GENERATOR,
               context.getLocation(generatorExpression),
               ISSUE_BLANK_GENERATOR.getBriefDescription(TextFormat.TEXT),
-              quickfixData = null
+              quickfixData = null,
             )
           } else {
             usesCustomGenerator = true
@@ -161,7 +161,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                   ISSUE_BLANK_TYPE_LABEL,
                   context.getLocation(generatorExpression),
                   ISSUE_BLANK_TYPE_LABEL.getBriefDescription(TextFormat.TEXT),
-                  quickfixData = null
+                  quickfixData = null,
                 )
               }
               if (!slackEvaluator.isSealed(node)) {
@@ -169,7 +169,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                   ISSUE_SEALED_MUST_BE_SEALED,
                   context.getNameLocation(node),
                   ISSUE_SEALED_MUST_BE_SEALED.getBriefDescription(TextFormat.TEXT),
-                  quickfixData = null
+                  quickfixData = null,
                 )
               }
             }
@@ -188,7 +188,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               .text(generateAdapter.asSourceString())
               .with("true")
               .autoFix()
-              .build()
+              .build(),
           )
         }
 
@@ -209,14 +209,14 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               ISSUE_OBJECT,
               context.getNameLocation(jsonClassAnnotation),
               ISSUE_OBJECT.getBriefDescription(TextFormat.TEXT),
-              fix().removeNode(context, jsonClassAnnotation.sourcePsi!!)
+              fix().removeNode(context, jsonClassAnnotation.sourcePsi!!),
             )
           } else {
             context.report(
               ISSUE_UNSUPPORTED_TYPE,
               context.getNameLocation(jsonClassAnnotation),
               ISSUE_UNSUPPORTED_TYPE.getBriefDescription(TextFormat.TEXT),
-              fix().removeNode(context, jsonClassAnnotation.sourcePsi!!)
+              fix().removeNode(context, jsonClassAnnotation.sourcePsi!!),
             )
           }
           return
@@ -225,7 +225,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           context.report(
             ISSUE_USE_DATA,
             context.getNameLocation(node),
-            ISSUE_USE_DATA.getBriefDescription(TextFormat.TEXT)
+            ISSUE_USE_DATA.getBriefDescription(TextFormat.TEXT),
           )
         }
 
@@ -241,7 +241,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             ISSUE_MISSING_PRIMARY,
             context.getNameLocation(node),
             ISSUE_MISSING_PRIMARY.getBriefDescription(TextFormat.TEXT),
-            quickfixData = null
+            quickfixData = null,
           )
           return
         }
@@ -264,7 +264,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                 .text(constructorVisibility.value)
                 .with("internal")
                 .autoFix()
-                .build()
+                .build(),
           )
         }
 
@@ -287,7 +287,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               ISSUE_TRANSIENT_NEEDS_INIT,
               context.getLocation(parameter as UElement),
               ISSUE_TRANSIENT_NEEDS_INIT.getBriefDescription(TextFormat.TEXT),
-              quickfixData = null
+              quickfixData = null,
             )
           }
           if (sourcePsi is KtParameter && sourcePsi.isPropertyParameter()) {
@@ -306,7 +306,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                     .text("var")
                     .with("val")
                     .autoFix()
-                    .build()
+                    .build(),
               )
             }
             val paramVisibility = sourcePsi.visibilityModifierTypeOrDefault()
@@ -326,7 +326,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                     .text(paramVisibility.value)
                     .with("internal")
                     .autoFix()
-                    .build()
+                    .build(),
               )
             }
 
@@ -351,7 +351,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                 parameter,
                 parameter.typeReference!!,
                 defaultValueExpression,
-                nestedGenericCheck = false
+                nestedGenericCheck = false,
               )
             }
 
@@ -382,7 +382,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                     ISSUE_JSON_SITE_TARGET,
                     context.getLocation(annotation),
                     ISSUE_JSON_SITE_TARGET.getBriefDescription(TextFormat.TEXT),
-                    quickfixData = fix().removeNode(context, annotation.sourcePsi)
+                    quickfixData = fix().removeNode(context, annotation.sourcePsi),
                   )
                 }
               } else {
@@ -395,7 +395,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                     ISSUE_JSON_SITE_TARGET.getBriefDescription(TextFormat.TEXT),
                     quickfixData =
                       fix()
-                        .removeNode(context, jsonAnnotation.sourcePsi, text = "${siteTarget.text}:")
+                        .removeNode(context, jsonAnnotation.sourcePsi, text = "${siteTarget.text}:"),
                   )
                 }
 
@@ -425,7 +425,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                       .text("$propKeyword $name")
                       .with("@$FQCN_JSON(name = \"$name\") $propKeyword $camelCase")
                       .autoFix()
-                      .build()
+                      .build(),
                 )
               }
             }
@@ -435,7 +435,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                 ISSUE_PARAM_NEEDS_INIT,
                 context.getLocation(parameter as UElement),
                 ISSUE_PARAM_NEEDS_INIT.getBriefDescription(TextFormat.TEXT),
-                quickfixData = null
+                quickfixData = null,
               )
             }
           }
@@ -452,13 +452,13 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             ISSUE_DOUBLE_TYPE_LABEL,
             context.getNameLocation(typeLabelAnnotation),
             ISSUE_DOUBLE_TYPE_LABEL.getBriefDescription(TextFormat.TEXT),
-            fix().removeNode(context, typeLabelAnnotation)
+            fix().removeNode(context, typeLabelAnnotation),
           )
           context.report(
             ISSUE_DOUBLE_TYPE_LABEL,
             context.getNameLocation(defaultObjectAnnotation),
             ISSUE_DOUBLE_TYPE_LABEL.getBriefDescription(TextFormat.TEXT),
-            fix().removeNode(context, defaultObjectAnnotation)
+            fix().removeNode(context, defaultObjectAnnotation),
           )
           return
         }
@@ -468,7 +468,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           context.report(
             ISSUE_GENERIC_SEALED_SUBTYPE,
             context.getLocation((node.sourcePsi as KtClass).typeParameterList!!),
-            ISSUE_GENERIC_SEALED_SUBTYPE.getBriefDescription(TextFormat.TEXT)
+            ISSUE_GENERIC_SEALED_SUBTYPE.getBriefDescription(TextFormat.TEXT),
           )
         }
 
@@ -497,7 +497,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                           ISSUE_MISSING_TYPE_LABEL,
                           context.getNameLocation(node),
                           ISSUE_MISSING_TYPE_LABEL.getBriefDescription(TextFormat.TEXT),
-                          quickfixData = null
+                          quickfixData = null,
                         )
                         return@firstOrNull true
                       } else {
@@ -519,7 +519,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               ISSUE_INAPPROPRIATE_TYPE_LABEL,
               context.getNameLocation(typeLabelAnnotation),
               ISSUE_INAPPROPRIATE_TYPE_LABEL.getBriefDescription(TextFormat.TEXT),
-              quickfixData = fix().removeNode(context, typeLabelAnnotation)
+              quickfixData = fix().removeNode(context, typeLabelAnnotation),
             )
           }
           if (defaultObjectAnnotation != null) {
@@ -527,7 +527,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               ISSUE_INAPPROPRIATE_TYPE_LABEL,
               context.getNameLocation(defaultObjectAnnotation),
               ISSUE_INAPPROPRIATE_TYPE_LABEL.getBriefDescription(TextFormat.TEXT),
-              quickfixData = fix().removeNode(context, defaultObjectAnnotation)
+              quickfixData = fix().removeNode(context, defaultObjectAnnotation),
             )
           }
         }
@@ -538,7 +538,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
   private fun validateAdaptedByAnnotation(
     context: JavaContext,
     evaluator: MetadataJavaEvaluator,
-    adaptedByAnnotation: UAnnotation
+    adaptedByAnnotation: UAnnotation,
   ) {
     // Check the adapter is a valid adapter type
     val adapterAttribute =
@@ -554,14 +554,14 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         ISSUE_ADAPTED_BY_REQUIRES_ADAPTER,
         context.getLocation(adapterAttribute),
         ISSUE_ADAPTED_BY_REQUIRES_ADAPTER.getBriefDescription(TextFormat.TEXT),
-        quickfixData = null
+        quickfixData = null,
       )
     } else if (!targetClass.hasAnnotation("androidx.annotation.Keep")) {
       context.report(
         ISSUE_ADAPTED_BY_REQUIRES_KEEP,
         context.getLocation(adapterAttribute),
         ISSUE_ADAPTED_BY_REQUIRES_KEEP.getBriefDescription(TextFormat.TEXT),
-        quickfixData = null
+        quickfixData = null,
       )
     }
   }
@@ -573,7 +573,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
     parameter: UParameter,
     typeNode: UElement,
     defaultValueExpression: KtExpression?,
-    nestedGenericCheck: Boolean = true
+    nestedGenericCheck: Boolean = true,
   ) {
 
     if (psiType is PsiPrimitiveType) return
@@ -603,7 +603,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             .with(replacement)
             .autoFix()
             .build()
-            .takeUnless { nestedGenericCheck }
+            .takeUnless { nestedGenericCheck },
       )
       return
     }
@@ -626,7 +626,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           ISSUE_ENUM_PROPERTY_COULD_BE_MOSHI,
           context.getLocation(typeNode),
           ISSUE_ENUM_PROPERTY_COULD_BE_MOSHI.getBriefDescription(TextFormat.TEXT),
-          quickfixData = null
+          quickfixData = null,
         )
       } else if (
         defaultValueExpression is KtReferenceExpression ||
@@ -649,7 +649,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                 .with("")
                 .autoFix()
                 .build()
-                .takeUnless { nestedGenericCheck }
+                .takeUnless { nestedGenericCheck },
           )
         }
       }
@@ -690,7 +690,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               .with("$correctedImmutableType<")
               .autoFix()
               .build()
-              .takeUnless { nestedGenericCheck }
+              .takeUnless { nestedGenericCheck },
         )
       }
 
@@ -736,7 +736,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           context.getLocation(typeNode),
           ISSUE_NON_MOSHI_CLASS_COLLECTION.getBriefDescription(TextFormat.TEXT)
             .withHint(psiClass.name),
-          quickfixData = fix
+          quickfixData = fix,
         )
       }
       isInheritor(psiClass, "java.util.Map") -> {
@@ -755,7 +755,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               .with("Map")
               .autoFix()
               .build()
-              .takeUnless { nestedGenericCheck }
+              .takeUnless { nestedGenericCheck },
         )
       }
       psiClass.isPlatformType() -> {
@@ -766,7 +766,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           context.getLocation(typeNode),
           ISSUE_NON_MOSHI_CLASS_PLATFORM.getBriefDescription(TextFormat.TEXT)
             .withHint(psiClass.name),
-          quickfixData = null
+          quickfixData = null,
         )
       }
       psiClass.hasMoshiAnnotation() -> {
@@ -789,7 +789,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             context.getLocation(typeNode),
             ISSUE_NON_MOSHI_CLASS_INTERNAL.getBriefDescription(TextFormat.TEXT)
               .withHint(psiClass.name),
-            quickfixData = null
+            quickfixData = null,
           )
         } else {
           // Other class, error not supported
@@ -798,7 +798,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             context.getLocation(typeNode),
             ISSUE_NON_MOSHI_CLASS_EXTERNAL.getBriefDescription(TextFormat.TEXT)
               .withHint(psiClass.name),
-            quickfixData = null
+            quickfixData = null,
           )
         }
       }
@@ -813,7 +813,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
     context: JavaContext,
     member: T,
     jsonAnnotation: UAnnotation?,
-    seenNames: MutableMap<String, PsiNamedElement>
+    seenNames: MutableMap<String, PsiNamedElement>,
   ) where T : UAnnotated, T : PsiNamedElement {
     var jsonNameValue: String? = null
     if (jsonAnnotation != null) {
@@ -827,7 +827,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           context.report(
             ISSUE_BLANK_JSON_NAME,
             context.getLocation(jsonNameAttr),
-            ISSUE_BLANK_JSON_NAME.getBriefDescription(TextFormat.TEXT)
+            ISSUE_BLANK_JSON_NAME.getBriefDescription(TextFormat.TEXT),
           )
         }
         jsonName == member.name -> {
@@ -835,7 +835,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             ISSUE_REDUNDANT_JSON_NAME,
             context.getLocation(jsonNameAttr),
             ISSUE_REDUNDANT_JSON_NAME.getBriefDescription(TextFormat.TEXT),
-            quickfixData = fix().removeNode(context, jsonAnnotation.sourcePsi!!)
+            quickfixData = fix().removeNode(context, jsonAnnotation.sourcePsi!!),
           )
         }
         else -> {
@@ -852,12 +852,12 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
       context.report(
         ISSUE_DUPLICATE_JSON_NAME,
         context.getNameLocation(member as PsiElement),
-        "Name '$jsonName' is duplicated by member '${existingMember.name}'."
+        "Name '$jsonName' is duplicated by member '${existingMember.name}'.",
       )
       context.report(
         ISSUE_DUPLICATE_JSON_NAME,
         context.getNameLocation(existingMember),
-        "Name '$jsonName' is duplicated by member '${member.name}'."
+        "Name '$jsonName' is duplicated by member '${member.name}'.",
       )
     }
 
@@ -896,7 +896,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         ISSUE_SERIALIZED_NAME,
         context.getLocation(serializedName),
         ISSUE_SERIALIZED_NAME.getBriefDescription(TextFormat.TEXT),
-        quickfixData = fix
+        quickfixData = fix,
       )
     }
   }
@@ -954,7 +954,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           ISSUE_QUALIFIER_RETENTION,
           context.getLocation(retentionAnnotation.sourcePsi!!),
           ISSUE_QUALIFIER_RETENTION.getBriefDescription(TextFormat.TEXT),
-          quickfixData = fix
+          quickfixData = fix,
         )
       }
     }
@@ -965,7 +965,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           context.report(
             ISSUE_QUALIFIER_RETENTION,
             context.getNameLocation(node),
-            ISSUE_QUALIFIER_RETENTION.getBriefDescription(TextFormat.TEXT)
+            ISSUE_QUALIFIER_RETENTION.getBriefDescription(TextFormat.TEXT),
           )
         }
       }
@@ -995,7 +995,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         context.report(
           ISSUE_QUALIFIER_TARGET,
           context.getLocation(targetAnnotation.sourcePsi!!),
-          ISSUE_QUALIFIER_TARGET.getBriefDescription(TextFormat.TEXT)
+          ISSUE_QUALIFIER_TARGET.getBriefDescription(TextFormat.TEXT),
         )
       }
     }
@@ -1047,7 +1047,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               .text(generateAdapter.asSourceString())
               .with("false")
               .autoFix()
-              .build()
+              .build(),
           )
         }
       }
@@ -1058,7 +1058,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         context.getNameLocation(node),
         ISSUE_ENUM_JSON_CLASS_MISSING.getBriefDescription(TextFormat.TEXT),
         // TODO can we add it for them?
-        quickfixData = null
+        quickfixData = null,
       )
     }
 
@@ -1072,7 +1072,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         ISSUE_ENUM_UNKNOWN,
         context.getNameLocation(node),
         ISSUE_ENUM_UNKNOWN.getBriefDescription(TextFormat.TEXT),
-        quickfixData = null // TODO can we add an enum for them?
+        quickfixData = null, // TODO can we add an enum for them?
       )
     } else {
       val constant = constants[unknownIndex]
@@ -1081,7 +1081,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           ISSUE_ENUM_UNKNOWN,
           context.getNameLocation(constant),
           ISSUE_ENUM_UNKNOWN.getBriefDescription(TextFormat.TEXT),
-          quickfixData = null // TODO can we reorder it for them?
+          quickfixData = null, // TODO can we reorder it for them?
         )
       } else {
         val jsonAnnotation = constant.getAnnotation(FQCN_JSON)
@@ -1099,7 +1099,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               .text(source)
               .with("")
               .autoFix()
-              .build()
+              .build(),
           )
         }
       }
@@ -1138,7 +1138,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               .text(name)
               .with(fixReplacement)
               .autoFix()
-              .build()
+              .build(),
         )
       }
     }
@@ -1170,7 +1170,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
       subId: String,
       briefDescription: String,
       explanation: String,
-      severity: Severity = Severity.ERROR
+      severity: Severity = Severity.ERROR,
     ): Issue =
       Issue.create(
         "MoshiUsage$subId",
@@ -1179,7 +1179,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         severity,
-        implementation = sourceImplementation<MoshiUsageDetector>()
+        implementation = sourceImplementation<MoshiUsageDetector>(),
       )
 
     private val ISSUE_MISSING_TYPE_LABEL =
@@ -1190,7 +1190,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         moshi-sealed requires sealed subtypes to be annotated with @TypeLabel or @DefaultObject. \
         Otherwise, moshi-sealed will fail to compile.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_BLANK_GENERATOR =
@@ -1201,28 +1201,28 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         The default for JsonClass.generator is "", it's redundant to specify an empty one and an \
         error to specify a blank one.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_BLANK_TYPE_LABEL =
       createIssue(
         "BlankTypeLabel",
         "Moshi-sealed requires a type label specified after the 'sealed:' prefix.",
-        "Moshi-sealed requires a type label specified after the 'sealed:' prefix."
+        "Moshi-sealed requires a type label specified after the 'sealed:' prefix.",
       )
 
     private val ISSUE_SEALED_MUST_BE_SEALED =
       createIssue(
         "SealedMustBeSealed",
         "Moshi-sealed can only be applied to 'sealed' types.",
-        "Moshi-sealed can only be applied to 'sealed' types."
+        "Moshi-sealed can only be applied to 'sealed' types.",
       )
 
     private val ISSUE_GENERATE_ADAPTER_SHOULD_BE_TRUE =
       createIssue(
         "GenerateAdapterShouldBeTrue",
         "JsonClass.generateAdapter must be true in order for Moshi code gen to run.",
-        "JsonClass.generateAdapter must be true in order for Moshi code gen to run."
+        "JsonClass.generateAdapter must be true in order for Moshi code gen to run.",
       )
 
     private val ISSUE_PRIVATE_CONSTRUCTOR =
@@ -1233,7 +1233,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Constructors in Moshi classes cannot be private. \
         Otherwise Moshi cannot invoke it during decoding.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_PRIVATE_PARAMETER =
@@ -1244,7 +1244,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Constructor parameter properties in Moshi classes cannot be private. \
         Otherwise these properties will not be visible in serialization.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_TRANSIENT_NEEDS_INIT =
@@ -1256,7 +1256,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         these parameters do not participate in serialization, Moshi cannot fulfill them otherwise \
         during construction.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_INAPPROPRIATE_TYPE_LABEL =
@@ -1268,7 +1268,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         subclass a sealed Moshi type. Please remove these annotations or extend the appropriate \
         sealed Moshi-serialized class.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_DOUBLE_TYPE_LABEL =
@@ -1279,7 +1279,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Only one of @TypeLabel and @DefaultObject annotations should be present. It is an error to \
         declare both!
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_GENERIC_SEALED_SUBTYPE =
@@ -1290,7 +1290,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Moshi has no way of conveying generics information to sealed subtypes when we create an \
         adapter from the base type. As a result, you should remove generics from this subtype.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_DOUBLE_CLASS_ANNOTATION =
@@ -1301,7 +1301,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Only one of @AdaptedBy and @JsonClass annotations should be present. It is an error to \
         declare both!
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_VISIBILITY =
@@ -1312,7 +1312,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         @JsonClass-annotated types must be public, package-private, or internal. Otherwise, Moshi
         will not be able to access them from generated adapters.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_PARAM_NEEDS_INIT =
@@ -1324,7 +1324,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         parameters do not participate in serialization, Moshi cannot fulfill them otherwise during \
         construction.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_BLANK_JSON_NAME =
@@ -1335,7 +1335,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Blank names in `@Json`, while technically legal, are likely a programmer error and
         likely to cause encoding issues.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_REDUNDANT_JSON_NAME =
@@ -1347,7 +1347,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         or suppress this warning with a commented suppression explaining why it's needed.
       """
           .trimIndent(),
-        severity = Severity.WARNING
+        severity = Severity.WARNING,
       )
 
     private val ISSUE_SERIALIZED_NAME =
@@ -1358,7 +1358,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         @SerializedName is specific to Gson and will not work with Moshi. Replace it with Moshi's \
         equivalent @Json annotation instead (or remove it if @Json is defined already).
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_QUALIFIER_RETENTION =
@@ -1370,7 +1370,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Kotlin, this is the default and you can just remove the Retention annotation. In Java, \
         you must specify it explicitly with @Retention(RUNTIME).
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_QUALIFIER_TARGET =
@@ -1381,7 +1381,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Moshi code gen stores these annotations on generated adapter fields, as such they must be \
         allowed on fields. Please specify it explicitly as @Target(FIELD).
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_JSON_SITE_TARGET =
@@ -1392,7 +1392,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Use of site-targets on @Json are redundant and can be removed. Only one, target-less @Json \
         annotation is necessary.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_OBJECT =
@@ -1404,7 +1404,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         participate in Moshi serialization is if they are a sealed subtype of a Moshi sealed \
         class and annotated with `@TypeLabel` or `@DefaultObject` accordingly.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_USE_DATA =
@@ -1417,7 +1417,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         anyway and override the ones you need. If you want non-property parameter values, consider \
         making them `@Transient` properties instead with default values.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_UNSUPPORTED_TYPE =
@@ -1428,7 +1428,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Abstract, interface, annotation, and inner class types cannot be annotated with @JsonClass. \
         If you intend to decode this with a custom adapter, use @AdaptedBy.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_ADAPTED_BY_REQUIRES_ADAPTER =
@@ -1438,7 +1438,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         """
         @AdaptedBy.adapter must be a subclass of JsonAdapter or implement JsonAdapter.Factory.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_ADAPTED_BY_REQUIRES_KEEP =
@@ -1449,7 +1449,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Adapters targeted by @AdaptedBy must be annotated with @Keep in order to be reflectively \
         looked up at runtime.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_MISSING_PRIMARY =
@@ -1461,7 +1461,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         either have no serializable properties or all the potentially serializable properties are \
         mutable (which is not a case we want!).
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_ENUM_PROPERTY_COULD_BE_MOSHI =
@@ -1475,7 +1475,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         guide you.
       """
           .trimIndent(),
-        Severity.WARNING
+        Severity.WARNING,
       )
 
     private val ISSUE_ENUM_PROPERTY_DEFAULT_UNKNOWN =
@@ -1488,7 +1488,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         default a property to this value. At worst, it can change nullability semantics if the \
         enum should actually allow nullable values or null on absence.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_VAR_PROPERTY =
@@ -1500,7 +1500,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         as it can lead to asymmetric encoding and thread-safety issues. Consider making this val.
       """
           .trimIndent(),
-        Severity.WARNING
+        Severity.WARNING,
       )
 
     private val ISSUE_SNAKE_CASE =
@@ -1512,7 +1512,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         to Gson's `@SerializedName`. This can help avoid snake_case properties in source directly.
       """
           .trimIndent(),
-        Severity.WARNING
+        Severity.WARNING,
       )
 
     private val ISSUE_DUPLICATE_JSON_NAME =
@@ -1522,7 +1522,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         """
         Duplicate JSON names are errors as JSON does not allow duplicate keys in objects.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_NON_MOSHI_CLASS_PLATFORM =
@@ -1536,7 +1536,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         or may not handle it. This will eventually become an error after GSON is removed.
       """
           .trimIndent(),
-        Severity.WARNING
+        Severity.WARNING,
       )
 
     private val ISSUE_ARRAY =
@@ -1551,7 +1551,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         eventually become an error after GSON is removed.
       """
           .trimIndent(),
-        Severity.WARNING
+        Severity.WARNING,
       )
 
     private val ISSUE_MUTABLE_COLLECTIONS =
@@ -1563,7 +1563,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         classes as it can lead to asymmetric encoding and thread-safety issues. Please make them \
         immutable versions instead.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     private val ISSUE_NON_MOSHI_CLASS_COLLECTION =
@@ -1577,7 +1577,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Gson, which may or may not handle it.
       """
           .trimIndent(),
-        Severity.INFORMATIONAL
+        Severity.INFORMATIONAL,
       )
 
     private val ISSUE_NON_MOSHI_CLASS_MAP =
@@ -1591,7 +1591,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         or may not handle it.
       """
           .trimIndent(),
-        Severity.INFORMATIONAL
+        Severity.INFORMATIONAL,
       )
 
     private val ISSUE_NON_MOSHI_CLASS_INTERNAL =
@@ -1604,7 +1604,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         converting this type to Moshi as well to improve runtime performance and consistency.
       """
           .trimIndent(),
-        Severity.INFORMATIONAL
+        Severity.INFORMATIONAL,
       )
 
     private val ISSUE_NON_MOSHI_CLASS_EXTERNAL =
@@ -1618,7 +1618,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Otherwise, moshi-gson-interop will hand serialization of this property to Gson, which may \
         or may not handle it (also with reflection).
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     val ISSUE_ENUM_JSON_CLASS_GENERATED =
@@ -1629,7 +1629,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         Enums annotated with @JsonClass do not need to set "generateAdapter" to true and should \
         set it to false.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     val ISSUE_ENUM_ANNOTATED_UNKNOWN =
@@ -1640,7 +1640,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         UNKNOWN members in @JsonClass-annotated enums should not be annotated with @Json. These \
         members are only used as a fallback and never expected in actual JSON bodies.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     val ISSUE_ENUM_UNKNOWN =
@@ -1652,7 +1652,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         member as "UNKNOWN". We will automatically substitute this when encountering \
         an unrecognized value for this enum during decoding.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     val ISSUE_ENUM_JSON_CLASS_MISSING =
@@ -1663,7 +1663,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         This enum appears to use Moshi for serialization. Please also add an @JsonClass \
         annotation to it to ensure safe handling with unknown values and R8 optimization.
       """
-          .trimIndent()
+          .trimIndent(),
       )
 
     val ISSUE_ENUM_CASING =
@@ -1676,7 +1676,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         directly.
       """
           .trimIndent(),
-        severity = Severity.WARNING
+        severity = Severity.WARNING,
       )
 
     // Please keep in alphabetical order for readability
@@ -1724,7 +1724,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         ISSUE_UNSUPPORTED_TYPE,
         ISSUE_USE_DATA,
         ISSUE_VAR_PROPERTY,
-        ISSUE_VISIBILITY
+        ISSUE_VISIBILITY,
       )
   }
 }
