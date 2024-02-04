@@ -21,7 +21,6 @@ import junit.framework.TestCase
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
-@Suppress("UnstableApiUsage")
 @RunWith(JUnit4::class)
 abstract class BaseSlackLintTest : LintDetectorTest() {
   private val rootPath = "resources/test/com/slack/lint/data/"
@@ -50,6 +49,8 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
   override fun lint(): TestLintTask {
     val sdkLocation = System.getProperty("android.sdk") ?: System.getenv("ANDROID_HOME")
     val lintTask = super.lint()
+    // TODO parameterize this? Run twice?
+    lintTask.configureOptions { flags -> flags.setUseK2Uast(true) }
     lintClientName?.let { lintTask.clientFactory { TestLintClient(it) } }
     sdkLocation?.let { lintTask.sdkHome(File(it)) }
     lintTask.allowCompilationErrors(false)
