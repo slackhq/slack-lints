@@ -19,7 +19,7 @@ class MainScopeUsageDetectorTest : BaseSlackLintTest() {
 
         }
       """
-          .trimIndent()
+          .trimIndent(),
       )
   }
 
@@ -46,7 +46,7 @@ class MainScopeUsageDetectorTest : BaseSlackLintTest() {
           """
               .trimIndent()
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -87,9 +87,9 @@ class MainScopeUsageDetectorTest : BaseSlackLintTest() {
               val scope = MainScope()
             }
           """
-              .trimIndent()
+              .trimIndent(),
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()

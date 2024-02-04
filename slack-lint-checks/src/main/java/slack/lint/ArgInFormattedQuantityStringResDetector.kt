@@ -35,7 +35,7 @@ class ArgInFormattedQuantityStringResDetector : Detector(), SourceCodeScanner {
         Category.I18N,
         6,
         Severity.WARNING,
-        Implementation(ArgInFormattedQuantityStringResDetector::class.java, Scope.JAVA_FILE_SCOPE)
+        Implementation(ArgInFormattedQuantityStringResDetector::class.java, Scope.JAVA_FILE_SCOPE),
       )
 
     val issues: List<Issue> = listOf(ISSUE_ARG_IN_QUANTITY_STRING_FORMAT)
@@ -62,7 +62,7 @@ class ArgInFormattedQuantityStringResDetector : Detector(), SourceCodeScanner {
               context.report(
                 ISSUE_ARG_IN_QUANTITY_STRING_FORMAT,
                 context.getLocation(arg),
-                "This may require a localized count modifier. If so, use `LocalizationUtils.getFormattedCount()`. Consult #plz-localization if you are unsure."
+                "This may require a localized count modifier. If so, use `LocalizationUtils.getFormattedCount()`. Consult #plz-localization if you are unsure.",
               )
             }
           }

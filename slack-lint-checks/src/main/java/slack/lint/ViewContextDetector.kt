@@ -47,7 +47,7 @@ class ViewContextDetector : Detector(), SourceCodeScanner {
               issue = ISSUE_VIEW_CONTEXT_CAST,
               scope = node,
               location = context.getLocation(parent),
-              message = ISSUE_VIEW_CONTEXT_CAST.getBriefDescription(TextFormat.TEXT)
+              message = ISSUE_VIEW_CONTEXT_CAST.getBriefDescription(TextFormat.TEXT),
             )
           }
         }
@@ -67,7 +67,7 @@ class ViewContextDetector : Detector(), SourceCodeScanner {
         CORRECTNESS,
         9,
         Severity.ERROR,
-        sourceImplementation<ViewContextDetector>()
+        sourceImplementation<ViewContextDetector>(),
       )
 
     val issues: List<Issue>

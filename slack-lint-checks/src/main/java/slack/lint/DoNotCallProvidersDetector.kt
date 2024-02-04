@@ -33,7 +33,7 @@ class DoNotCallProvidersDetector : Detector(), SourceCodeScanner {
         DoNotCallProvidersDetector::class.java,
         EnumSet.of(Scope.JAVA_FILE, Scope.TEST_SOURCES),
         EnumSet.of(Scope.JAVA_FILE),
-        EnumSet.of(Scope.TEST_SOURCES)
+        EnumSet.of(Scope.TEST_SOURCES),
       )
 
     val ISSUE: Issue =
@@ -47,7 +47,7 @@ class DoNotCallProvidersDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        SCOPES
+        SCOPES,
       )
 
     private val PROVIDER_ANNOTATIONS =
@@ -68,7 +68,7 @@ class DoNotCallProvidersDetector : Detector(), SourceCodeScanner {
           context.report(
             ISSUE,
             context.getLocation(node),
-            ISSUE.getBriefDescription(TextFormat.TEXT)
+            ISSUE.getBriefDescription(TextFormat.TEXT),
           )
         }
       }

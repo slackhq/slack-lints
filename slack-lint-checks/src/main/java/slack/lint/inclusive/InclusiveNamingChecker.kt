@@ -30,7 +30,7 @@ sealed class InclusiveNamingChecker<C : Context, N> {
         "block-list",
         "A comma-separated list of words that should not be used in source code.",
         null,
-        "This property should define a comma-separated list of words that should not be used in source code."
+        "This property should define a comma-separated list of words that should not be used in source code.",
       )
 
     private val SOURCE_ISSUE = sourceImplementation<InclusiveNamingSourceCodeScanner>().toIssue()
@@ -51,7 +51,7 @@ sealed class InclusiveNamingChecker<C : Context, N> {
           Category.CORRECTNESS,
           Priorities.NORMAL,
           Severity.ERROR,
-          this
+          this,
         )
         .setOptions(listOf(BLOCK_LIST))
     }
@@ -114,7 +114,7 @@ sealed class InclusiveNamingChecker<C : Context, N> {
       node: UElement,
       location: Location,
       name: String,
-      isFile: Boolean
+      isFile: Boolean,
     ): Boolean {
       return cachedReports.add(CacheKey.fromLocation(location, isFile))
     }

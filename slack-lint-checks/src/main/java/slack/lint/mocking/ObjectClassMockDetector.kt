@@ -23,7 +23,7 @@ object ObjectClassMockDetector : MockDetector.TypeChecker {
       Category.CORRECTNESS,
       6,
       Severity.ERROR,
-      sourceImplementation<MockDetector>()
+      sourceImplementation<MockDetector>(),
     )
 
   override val annotations: Set<String> = emptySet()
@@ -31,12 +31,12 @@ object ObjectClassMockDetector : MockDetector.TypeChecker {
   override fun checkType(
     context: JavaContext,
     evaluator: MetadataJavaEvaluator,
-    mockedType: PsiClass
+    mockedType: PsiClass,
   ): MockDetector.Reason? {
     return if (evaluator.isObject(mockedType)) {
       MockDetector.Reason(
         mockedType,
-        "'${mockedType.qualifiedName}' is an object, so mocking it should not be necessary"
+        "'${mockedType.qualifiedName}' is an object, so mocking it should not be necessary",
       )
     } else {
       null

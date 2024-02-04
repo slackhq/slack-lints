@@ -46,7 +46,7 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
         ) {
           node.report(
             "Retrofit endpoints should return something other than Unit/void.",
-            context.getNameLocation(node)
+            context.getNameLocation(node),
           )
         }
 
@@ -91,7 +91,7 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
                     .text(currentText)
                     .with("@$FQCN_FORM_ENCODED\n$currentText")
                     .autoFix()
-                    .build()
+                    .build(),
               )
             }
           } else if (parameter.hasAnnotation(FQCN_URL)) {
@@ -108,7 +108,7 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
             val annotation = annotationsByFqcn.getValue(FQCN_FORM_ENCODED)
             annotation.report(
               "@FormUrlEncoded but has no @Field(Map) parameters.",
-              quickFixData = LintFix.create().removeNode(context, annotation.sourcePsiElement!!)
+              quickFixData = LintFix.create().removeNode(context, annotation.sourcePsiElement!!),
             )
           }
         } else if (isBodyMethod && !hasBodyParam && !hasFieldParams) {
@@ -122,7 +122,7 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
       private fun UElement.report(
         briefDescription: String,
         location: Location = context.getLocation(this),
-        quickFixData: LintFix? = null
+        quickFixData: LintFix? = null,
       ) {
         context.report(ISSUE, location, briefDescription, quickfixData = quickFixData)
       }
@@ -141,11 +141,7 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
         "retrofit2.http.PUT",
       )
     private val HTTP_BODY_ANNOTATIONS =
-      setOf(
-        "retrofit2.http.PATCH",
-        "retrofit2.http.POST",
-        "retrofit2.http.PUT",
-      )
+      setOf("retrofit2.http.PATCH", "retrofit2.http.POST", "retrofit2.http.PUT")
     private const val FQCN_FORM_ENCODED = "retrofit2.http.FormUrlEncoded"
     private const val FQCN_FIELD = "retrofit2.http.Field"
     private const val FQCN_FIELD_MAP = "retrofit2.http.FieldMap"
@@ -160,7 +156,7 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         10,
         Severity.ERROR,
-        sourceImplementation<RetrofitUsageDetector>()
+        sourceImplementation<RetrofitUsageDetector>(),
       )
   }
 }

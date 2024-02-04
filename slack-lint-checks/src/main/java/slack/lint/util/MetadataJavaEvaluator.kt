@@ -23,6 +23,7 @@ import kotlinx.metadata.KmClass
 import kotlinx.metadata.Modality
 import kotlinx.metadata.isData
 import kotlinx.metadata.isValue
+import kotlinx.metadata.jvm.JvmMetadataVersion
 import kotlinx.metadata.jvm.KotlinClassMetadata
 import kotlinx.metadata.jvm.Metadata as MetadataWithNullableArgs
 import kotlinx.metadata.kind
@@ -49,7 +50,6 @@ import org.jetbrains.uast.toUElementOfType
  *
  * This is necessary due to https://issuetracker.google.com/issues/283654244.
  */
-@Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
 class MetadataJavaEvaluator(private val file: String, private val delegate: JavaEvaluator) :
   JavaEvaluator() {
 
@@ -84,14 +84,24 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
   override fun extendsClass(cls: PsiClass?, className: String, strict: Boolean): Boolean =
     delegate.extendsClass(cls, className, strict)
 
+  @Suppress("DEPRECATION")
+  @Deprecated(
+    "Use getAnnotation returning a UAnnotation instead",
+    replaceWith = ReplaceWith("getAnnotation(listOwner, *annotationNames)"),
+  )
   override fun findAnnotation(
     listOwner: PsiModifierListOwner?,
-    vararg annotationNames: String
+    vararg annotationNames: String,
   ): PsiAnnotation? = delegate.findAnnotation(listOwner, *annotationNames)
 
+  @Suppress("DEPRECATION")
+  @Deprecated(
+    "Use getAnnotationInHierarchy returning a UAnnotation instead",
+    replaceWith = ReplaceWith("getAnnotationInHierarchy(listOwner, *annotationNames)"),
+  )
   override fun findAnnotationInHierarchy(
     listOwner: PsiModifierListOwner,
-    vararg annotationNames: String
+    vararg annotationNames: String,
   ): PsiAnnotation? = delegate.findAnnotationInHierarchy(listOwner, *annotationNames)
 
   override fun findClass(qualifiedName: String): PsiClass? = delegate.findClass(qualifiedName)
@@ -100,9 +110,14 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
 
   override fun findJarPath(element: UElement): String? = delegate.findJarPath(element)
 
+  @Suppress("DEPRECATION")
+  @Deprecated(
+    "Use getAnnotations() instead; consider providing a parent",
+    replaceWith = ReplaceWith("getAnnotations(owner, inHierarchy)"),
+  )
   override fun getAllAnnotations(
     owner: PsiModifierListOwner,
-    inHierarchy: Boolean
+    inHierarchy: Boolean,
   ): Array<PsiAnnotation> = delegate.getAllAnnotations(owner, inHierarchy)
 
   override fun getAllAnnotations(owner: UAnnotated, inHierarchy: Boolean): List<UAnnotation> =
@@ -110,18 +125,18 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
 
   override fun getAnnotation(
     listOwner: PsiModifierListOwner?,
-    vararg annotationNames: String
+    vararg annotationNames: String,
   ): UAnnotation? = delegate.getAnnotation(listOwner, *annotationNames)
 
   override fun getAnnotationInHierarchy(
     listOwner: PsiModifierListOwner,
-    vararg annotationNames: String
+    vararg annotationNames: String,
   ): UAnnotation? = delegate.getAnnotationInHierarchy(listOwner, *annotationNames)
 
   override fun getAnnotations(
     owner: PsiModifierListOwner?,
     inHierarchy: Boolean,
-    parent: UElement?
+    parent: UElement?,
   ): List<UAnnotation> = delegate.getAnnotations(owner, inHierarchy, parent)
 
   override fun getClassType(psiClass: PsiClass?): PsiClassType? = delegate.getClassType(psiClass)
@@ -212,15 +227,25 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
   private fun UAnnotation.parseMetadata(classNameHint: String): KmClass? {
     val parsedMetadata =
       try {
-        KotlinClassMetadata.read(toMetadataAnnotation())
-      } catch (e: IllegalStateException) {
-        // Extremely weird case, log this specifically
-        slackLintLog("Could not load metadata for $classNameHint from file $file")
-        return null
+        KotlinClassMetadata.readStrict(toMetadataAnnotation())
+      } catch (e: IllegalArgumentException) {
+        try {
+          KotlinClassMetadata.readLenient(toMetadataAnnotation()).also {
+            slackLintErrorLog(
+              "Could not load metadata for $classNameHint from file $file with strict parsing. Using lenient parsing."
+            )
+          }
+        } catch (e: IllegalArgumentException) {
+          // Extremely weird case, log this specifically
+          slackLintErrorLog(
+            "Could not load metadata for $classNameHint from file $file. This usually happens if the Kotlin version the class was compiled against is too new for lint to read (${JvmMetadataVersion.LATEST_STABLE_SUPPORTED})."
+          )
+          return null
+        }
       }
     return when (parsedMetadata) {
       is KotlinClassMetadata.Class -> {
-        parsedMetadata.toKmClass().also {
+        parsedMetadata.kmClass.also {
           slackLintLog("Loaded KmClass for $classNameHint from file $file")
         }
       }

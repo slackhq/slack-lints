@@ -16,7 +16,7 @@ class ParcelizeFunctionPropertyDetectorTest : BaseSlackLintTest() {
 
         annotation class Parcelize
         annotation class IgnoredOnParcel
-      """
+      """,
         )
         .indented()
   }
@@ -55,7 +55,7 @@ class ParcelizeFunctionPropertyDetectorTest : BaseSlackLintTest() {
           ) : Parcelable
           """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()

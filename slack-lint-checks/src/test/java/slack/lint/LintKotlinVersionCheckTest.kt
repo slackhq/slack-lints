@@ -61,14 +61,14 @@ class LintKotlinVersionCheckTest : BaseSlackLintTest() {
               ISSUE,
               node,
               context.getLocation(node),
-              "Kotlin version matched expected one"
+              "Kotlin version matched expected one",
             )
           } else {
             context.report(
               ISSUE,
               node,
               context.getLocation(node),
-              "Kotlin version was ${KotlinVersion.CURRENT}, expected $EXPECTED_VERSION"
+              "Kotlin version was ${KotlinVersion.CURRENT}, expected $EXPECTED_VERSION",
             )
           }
         }
@@ -76,7 +76,7 @@ class LintKotlinVersionCheckTest : BaseSlackLintTest() {
     }
 
     companion object {
-      private val EXPECTED_VERSION = KotlinVersion(1, 9, 0)
+      private val EXPECTED_VERSION = TestBuildConfig.LINT_KOTLIN_VERSION
       val ISSUE =
         Issue.create(
           "KotlinVersion",

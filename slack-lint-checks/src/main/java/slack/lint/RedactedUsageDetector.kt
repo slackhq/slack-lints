@@ -49,7 +49,7 @@ class RedactedUsageDetector : Detector(), SourceCodeScanner {
               JAVA_USAGE,
               context.getLocation(redactedAnnotation),
               JAVA_USAGE.getBriefDescription(TextFormat.TEXT),
-              quickfixData = null
+              quickfixData = null,
             )
           }
       }
@@ -68,7 +68,7 @@ class RedactedUsageDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         9,
         Severity.ERROR,
-        sourceImplementation<RedactedUsageDetector>()
+        sourceImplementation<RedactedUsageDetector>(),
       )
 
     val ISSUES = listOf(JAVA_USAGE)

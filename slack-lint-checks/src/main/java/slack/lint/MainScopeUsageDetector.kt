@@ -43,7 +43,7 @@ class MainScopeUsageDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        SCOPES
+        SCOPES,
       )
 
     private const val COROUTINE_SCOPE_CLASS = "kotlinx.coroutines.CoroutineScopeKt"
@@ -68,7 +68,7 @@ class MainScopeUsageDetector : Detector(), SourceCodeScanner {
           .text("MainScope(")
           .with("slack.foundation.coroutines.android.MainScope(")
           .autoFix()
-          .build()
+          .build(),
       )
     }
 

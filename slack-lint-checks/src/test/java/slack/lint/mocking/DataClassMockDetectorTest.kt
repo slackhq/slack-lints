@@ -65,7 +65,7 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
               )
             }
           }
-        """
+        """,
         )
         .indented()
 
@@ -138,7 +138,7 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
               TestClass fake = new TestClass("this is fine");
             }
           }
-        """
+        """,
         )
         .indented()
 

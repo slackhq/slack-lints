@@ -39,7 +39,7 @@ abstract class AnnotatedClassOrMethodUsageDetector :
     context: JavaContext,
     element: UElement,
     annotationInfo: AnnotationInfo,
-    usageInfo: AnnotationUsageInfo
+    usageInfo: AnnotationUsageInfo,
   ) {
     if (isEnabled && applicableAnnotations().contains(annotationInfo.qualifiedName)) {
       val issueToReport = issue
@@ -50,7 +50,7 @@ abstract class AnnotatedClassOrMethodUsageDetector :
         element,
         location,
         issueToReport.getBriefDescription(TextFormat.TEXT),
-        null
+        null,
       )
     }
   }

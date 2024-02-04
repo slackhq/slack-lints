@@ -11,16 +11,16 @@ import com.android.tools.lint.detector.api.LintFix
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.intellij.lang.java.JavaLanguage
-import com.intellij.psi.PsiField
-import com.intellij.psi.PsiLocalVariable
 import com.intellij.psi.PsiMethod
-import com.intellij.psi.PsiMethodCallExpression
+import com.intellij.psi.PsiVariable
 import kotlin.reflect.full.safeCast
 import org.jetbrains.kotlin.asJava.elements.KtLightField
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UExpression
+import org.jetbrains.uast.UQualifiedReferenceExpression
+import org.jetbrains.uast.UastFacade
 import org.jetbrains.uast.java.JavaUCallExpression
 import org.jetbrains.uast.java.JavaUCompositeQualifiedExpression
 import org.jetbrains.uast.kotlin.KotlinUFunctionCallExpression
@@ -52,7 +52,7 @@ class RxSubscribeOnMainDetector : Detector(), SourceCodeScanner {
         category = Category.CORRECTNESS,
         priority = 4,
         severity = Severity.ERROR,
-        implementation = this
+        implementation = this,
       )
 
     val ISSUE = sourceImplementation<RxSubscribeOnMainDetector>().toIssue()
@@ -66,7 +66,7 @@ class RxSubscribeOnMainDetector : Detector(), SourceCodeScanner {
       "io/reactivex/rxjava3/core/Flowable",
       "io/reactivex/rxjava3/core/Maybe",
       "io/reactivex/rxjava3/core/Observable",
-      "io/reactivex/rxjava3/core/Single"
+      "io/reactivex/rxjava3/core/Single",
     )
 
   override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
@@ -91,7 +91,7 @@ class RxSubscribeOnMainDetector : Detector(), SourceCodeScanner {
             .name("Replace with observeOn()")
             .text("subscribeOn")
             .with("observeOn")
-            .build()
+            .build(),
         )
       }
     }
@@ -144,13 +144,16 @@ class RxSubscribeOnMainDetector : Detector(), SourceCodeScanner {
   }
 
   private fun checkJavaVariable(exp: UExpression): Boolean {
-    val assignment =
+    val assignment: UCallExpression? =
       when (val variable = exp.sourcePsi?.reference?.resolve()) {
-        is PsiField -> variable.initializer as? PsiMethodCallExpression
-        is PsiLocalVariable -> variable.initializer as? PsiMethodCallExpression
+        // PsiVariable covers both PsiField and PsiLocalVariable
+        is PsiVariable -> {
+          ((UastFacade.getInitializerBody(variable) as? UQualifiedReferenceExpression)?.selector
+            as? UCallExpression)
+        }
         else -> null
       }
-    val methodName = assignment?.resolveMethod()?.name
+    val methodName = assignment?.resolve()?.name
     return methodName == "mainThread" || methodName == "immediateMainThread"
   }
 }

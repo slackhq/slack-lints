@@ -39,7 +39,7 @@ class SpanMarkPointMissingMaskDetector : Detector(), SourceCodeScanner {
         category = Category.CORRECTNESS,
         priority = 4,
         severity = Severity.ERROR,
-        implementation = sourceImplementation<SpanMarkPointMissingMaskDetector>()
+        implementation = sourceImplementation<SpanMarkPointMissingMaskDetector>(),
       )
   }
 
@@ -75,7 +75,7 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
   private fun checkExpressions(
     node: UBinaryExpression,
     markPointCheck: UExpression,
-    maskCheck: UExpression
+    maskCheck: UExpression,
   ) {
     if (markPointCheck.isMarkPointFieldName() && !maskCheck.isMaskClass()) {
       context.report(
@@ -91,7 +91,7 @@ private class ReportingHandler(private val context: JavaContext) : UElementHandl
           .name("Use bitwise mask")
           .text(maskCheck.sourcePsi?.text)
           .with("((${maskCheck.sourcePsi?.text}) and $MASK_CLASS)")
-          .build()
+          .build(),
       )
     }
   }

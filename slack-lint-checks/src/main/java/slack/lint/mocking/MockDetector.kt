@@ -33,10 +33,7 @@ import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.StringSetLintOption
 
-private data class MockFactory(
-  val declarationContainer: String,
-  val factoryName: String,
-)
+private data class MockFactory(val declarationContainer: String, val factoryName: String)
 
 /**
  * A detector for detecting different kinds of mocking behavior. Implementations of [TypeChecker]
@@ -61,7 +58,7 @@ constructor(
         "mock-annotations",
         "A comma-separated list of mock annotations.",
         "org.mockito.Mock,org.mockito.Spy",
-        "This property should define comma-separated list of mock annotation class names (FQCN)."
+        "This property should define comma-separated list of mock annotation class names (FQCN).",
       )
 
     internal val MOCK_FACTORIES =
@@ -69,7 +66,7 @@ constructor(
         "mock-factories",
         "A comma-separated list of mock factories (org.mockito.Mockito#methodName).",
         "org.mockito.Mockito#mock,org.mockito.Mockito#spy,slack.test.mockito.MockitoHelpers#mock,slack.test.mockito.MockitoHelpersKt#mock",
-        "A comma-separated list of mock factories (org.mockito.Mockito#methodName)."
+        "A comma-separated list of mock factories (org.mockito.Mockito#methodName).",
       )
 
     internal val MOCK_REPORT =
@@ -77,7 +74,7 @@ constructor(
         "mock-report",
         "If enabled, writes a mock report to <project-dir>/$MOCK_REPORT_PATH.",
         "none",
-        "If enabled, writes a mock report to <project-dir>/$MOCK_REPORT_PATH. The format of the file is a csv of (type,isError) of mocked classes."
+        "If enabled, writes a mock report to <project-dir>/$MOCK_REPORT_PATH. The format of the file is a csv of (type,isError) of mocked classes.",
       )
 
     private val TYPE_CHECKERS =
@@ -218,7 +215,7 @@ constructor(
           context.report(
             checker.issue,
             context.getLocation(node),
-            "Mocked type is annotated with non-mockable annotation $disallowedAnnotation."
+            "Mocked type is annotated with non-mockable annotation $disallowedAnnotation",
           )
           return
         }
@@ -264,7 +261,7 @@ constructor(
     fun checkType(
       context: JavaContext,
       evaluator: MetadataJavaEvaluator,
-      mockedType: PsiClass
+      mockedType: PsiClass,
     ): Reason? {
       return null
     }

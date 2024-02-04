@@ -46,7 +46,7 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -108,7 +108,7 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(
@@ -151,7 +151,7 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
             }
           """
           )
-          .indented()
+          .indented(),
       )
       .run()
       .expect(

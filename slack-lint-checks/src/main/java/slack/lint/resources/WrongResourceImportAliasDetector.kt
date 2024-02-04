@@ -47,7 +47,7 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
             .name("Replace import alias")
             // Apply the fixes in reverse so that the ranges/locations don't change.
             .composite(*fixes.reversed().toTypedArray())
-            .autoFix()
+            .autoFix(),
       )
 
       reset()
@@ -82,7 +82,7 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
               this@WrongResourceImportAliasDetector.rootIssueData =
                 RootIssueData(
                   alias = alias,
-                  nameLocation = context.getNameLocation(importDirective)
+                  nameLocation = context.getNameLocation(importDirective),
                 )
 
               fixes.add(createImportLintFix(node, importedFqNameString, aliasName, alias))
@@ -95,7 +95,7 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
         node: UImportStatement,
         importedFqNameString: String,
         aliasName: String?,
-        alias: String
+        alias: String,
       ): LintFix {
         return fix()
           .replace()
@@ -131,7 +131,7 @@ class WrongResourceImportAliasDetector : Detector(), SourceCodeScanner {
           Category.CORRECTNESS,
           6,
           Severity.ERROR,
-          sourceImplementation<WrongResourceImportAliasDetector>()
+          sourceImplementation<WrongResourceImportAliasDetector>(),
         )
         .setOptions(listOf(IMPORT_ALIASES))
   }

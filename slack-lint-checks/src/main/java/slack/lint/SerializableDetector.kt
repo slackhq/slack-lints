@@ -33,7 +33,7 @@ class SerializableDetector : Detector(), SourceCodeScanner {
           context.report(
             ISSUE,
             context.getNameLocation(node),
-            ISSUE.getBriefDescription(TextFormat.TEXT)
+            ISSUE.getBriefDescription(TextFormat.TEXT),
           )
         }
       }
@@ -53,7 +53,7 @@ class SerializableDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<SerializableDetector>()
+        sourceImplementation<SerializableDetector>(),
       )
   }
 }

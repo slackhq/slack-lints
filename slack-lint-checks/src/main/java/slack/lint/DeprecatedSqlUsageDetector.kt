@@ -32,7 +32,7 @@ class DeprecatedSqlUsageDetector : Detector(), SourceCodeScanner {
           context.report(
             issue = ISSUE,
             location = context.getLocation(node),
-            message = "All SQL querying should be performed using `SqlDelight`"
+            message = "All SQL querying should be performed using `SqlDelight`",
           )
         }
       }
@@ -47,7 +47,7 @@ class DeprecatedSqlUsageDetector : Detector(), SourceCodeScanner {
         category = Category.CORRECTNESS,
         priority = 0,
         severity = Severity.WARNING,
-        implementation = this
+        implementation = this,
       )
     }
 

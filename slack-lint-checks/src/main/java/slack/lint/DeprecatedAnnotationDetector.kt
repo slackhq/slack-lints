@@ -38,7 +38,7 @@ class DeprecatedAnnotationDetector : AnnotatedClassOrMethodUsageDetector() {
     context: JavaContext,
     element: UElement,
     annotationInfo: AnnotationInfo,
-    usageInfo: AnnotationUsageInfo
+    usageInfo: AnnotationUsageInfo,
   ) {
     if (isEnabled && applicableAnnotations().contains(annotationInfo.qualifiedName)) {
       val issueToReport = issue
@@ -52,7 +52,7 @@ class DeprecatedAnnotationDetector : AnnotatedClassOrMethodUsageDetector() {
         element,
         location,
         messagePrefix + BRIEF_DESCRIPTION_SUFFIX,
-        null
+        null,
       )
     }
   }
@@ -66,7 +66,7 @@ class DeprecatedAnnotationDetector : AnnotatedClassOrMethodUsageDetector() {
         Category.CORRECTNESS,
         Priorities.NORMAL,
         Severity.WARNING,
-        this
+        this,
       )
     }
 

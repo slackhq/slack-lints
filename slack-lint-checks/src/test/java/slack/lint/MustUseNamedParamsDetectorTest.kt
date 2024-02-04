@@ -59,7 +59,7 @@ class MustUseNamedParamsDetectorTest : BaseSlackLintTest() {
           }
         """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()

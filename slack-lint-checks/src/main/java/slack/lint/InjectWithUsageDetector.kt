@@ -37,7 +37,7 @@ class InjectWithUsageDetector : Detector(), SourceCodeScanner {
               ANVIL_INJECTABLE_ISSUE,
               context.getNameLocation(node),
               ANVIL_INJECTABLE_ISSUE.getBriefDescription(TextFormat.TEXT),
-              quickfixData = null
+              quickfixData = null,
             )
           }
 
@@ -55,7 +55,7 @@ class InjectWithUsageDetector : Detector(), SourceCodeScanner {
                 LOGGED_IN_USER_PROVIDER_ISSUE,
                 context.getNameLocation(node),
                 LOGGED_IN_USER_PROVIDER_ISSUE.getBriefDescription(TextFormat.TEXT),
-                quickfixData = null
+                quickfixData = null,
               )
             }
           }
@@ -79,7 +79,7 @@ class InjectWithUsageDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         9,
         Severity.ERROR,
-        sourceImplementation<InjectWithUsageDetector>()
+        sourceImplementation<InjectWithUsageDetector>(),
       )
 
     private val ANVIL_INJECTABLE_ISSUE: Issue =
@@ -90,7 +90,7 @@ class InjectWithUsageDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         9,
         Severity.ERROR,
-        sourceImplementation<InjectWithUsageDetector>()
+        sourceImplementation<InjectWithUsageDetector>(),
       )
 
     val ISSUES = listOf(LOGGED_IN_USER_PROVIDER_ISSUE, ANVIL_INJECTABLE_ISSUE)

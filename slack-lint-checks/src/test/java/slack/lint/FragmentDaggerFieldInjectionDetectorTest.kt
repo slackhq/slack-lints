@@ -84,7 +84,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
           """
               .trimIndent()
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -134,7 +134,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
           """
               .trimIndent()
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -204,7 +204,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
           """
               .trimIndent()
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -265,7 +265,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
           """
               .trimIndent()
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -321,7 +321,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
           """
               .trimIndent()
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -371,7 +371,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
           """
               .trimIndent()
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -416,7 +416,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
             }
                 """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -456,7 +456,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
           """
               .trimIndent()
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -506,7 +506,7 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
           """
               .trimIndent()
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()

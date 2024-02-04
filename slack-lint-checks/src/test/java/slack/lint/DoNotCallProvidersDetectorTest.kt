@@ -100,7 +100,7 @@ class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -175,7 +175,7 @@ class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
                   }
                 """
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()

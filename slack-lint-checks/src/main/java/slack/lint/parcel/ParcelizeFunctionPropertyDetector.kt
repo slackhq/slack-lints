@@ -67,14 +67,14 @@ class ParcelizeFunctionPropertyDetector : Detector(), SourceCodeScanner {
     internal val ISSUE: Issue =
       Issue.create(
         "ParcelizeFunctionProperty",
-        "Function type properties should not be used in Parcelize classes",
+        "Function type properties are not parcelable",
         "While technically (and surprisingly) supported by Parcelize, function types " +
           "should not be used in Parcelize classes. There are only limited conditions where it " +
           "will work and it's usually a sign that you're modeling your data wrong.",
         Category.CORRECTNESS,
         9,
         Severity.ERROR,
-        sourceImplementation<ParcelizeFunctionPropertyDetector>()
+        sourceImplementation<ParcelizeFunctionPropertyDetector>(),
       )
   }
 }

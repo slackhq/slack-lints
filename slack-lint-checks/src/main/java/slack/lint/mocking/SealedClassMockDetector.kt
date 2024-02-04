@@ -24,7 +24,7 @@ object SealedClassMockDetector : MockDetector.TypeChecker {
       Category.CORRECTNESS,
       6,
       Severity.ERROR,
-      sourceImplementation<MockDetector>()
+      sourceImplementation<MockDetector>(),
     )
 
   override val annotations: Set<String> = emptySet()
@@ -32,13 +32,13 @@ object SealedClassMockDetector : MockDetector.TypeChecker {
   override fun checkType(
     context: JavaContext,
     evaluator: MetadataJavaEvaluator,
-    mockedType: PsiClass
+    mockedType: PsiClass,
   ): MockDetector.Reason? {
     // Check permitsList to cover Java 17 sealed types too
     return if (evaluator.isSealed(mockedType) || mockedType.permitsList != null) {
       MockDetector.Reason(
         mockedType,
-        "'${mockedType.qualifiedName}' is a sealed type and has a restricted type hierarchy, use a subtype instead."
+        "'${mockedType.qualifiedName}' is a sealed type and has a restricted type hierarchy, use a subtype instead.",
       )
     } else {
       null

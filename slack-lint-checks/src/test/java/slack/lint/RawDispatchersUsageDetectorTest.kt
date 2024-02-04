@@ -67,7 +67,7 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
           """
               .trimIndent()
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()
@@ -128,9 +128,9 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
               Dispatchers::Main
             }
           """
-              .trimIndent()
+              .trimIndent(),
           )
-          .indented()
+          .indented(),
       )
       .allowCompilationErrors(false)
       .run()

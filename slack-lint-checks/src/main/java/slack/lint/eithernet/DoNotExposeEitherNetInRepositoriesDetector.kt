@@ -44,7 +44,7 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
           node.isPublic,
           { node.isRepositoryMember },
           { node.safeReturnType(context).isEitherNetType },
-          { context.getLocation(node.returnTypeReference ?: node) }
+          { context.getLocation(node.returnTypeReference ?: node) },
         )
       }
 
@@ -53,7 +53,7 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
           node.isPublic,
           { node.isRepositoryMember },
           { node.type.isEitherNetType },
-          { context.getLocation(node.typeReference ?: node) }
+          { context.getLocation(node.typeReference ?: node) },
         )
       }
 
@@ -74,7 +74,7 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
         isPublic: Boolean,
         isRepositoryMember: () -> Boolean,
         isEitherNetType: () -> Boolean,
-        location: () -> Location
+        location: () -> Location,
       ) {
         if (!isPublic) return
         if (!isRepositoryMember()) return
@@ -82,7 +82,7 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
           context.report(
             issue = ISSUE,
             location = location(),
-            message = "Repository APIs should not expose EitherNet types directly."
+            message = "Repository APIs should not expose EitherNet types directly.",
           )
         }
       }
@@ -110,7 +110,7 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
         category = Category.CORRECTNESS,
         priority = 0,
         severity = Severity.ERROR,
-        implementation = this
+        implementation = this,
       )
     }
 

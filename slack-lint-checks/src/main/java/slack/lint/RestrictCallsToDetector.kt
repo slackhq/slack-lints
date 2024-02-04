@@ -33,7 +33,7 @@ class RestrictCallsToDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        sourceImplementation<RestrictCallsToDetector>()
+        sourceImplementation<RestrictCallsToDetector>(),
       )
 
     private const val RESTRICT_CALLS_TO_ANNOTATION = "slack.lint.annotations.RestrictCallsTo"
@@ -63,7 +63,7 @@ class RestrictCallsToDetector : Detector(), SourceCodeScanner {
             ISSUE,
             node,
             context.getLocation(node),
-            ISSUE.getBriefDescription(TextFormat.TEXT)
+            ISSUE.getBriefDescription(TextFormat.TEXT),
           )
         }
       }
