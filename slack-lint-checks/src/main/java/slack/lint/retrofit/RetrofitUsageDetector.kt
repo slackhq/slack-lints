@@ -62,7 +62,8 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
         }
 
         val hasPath =
-          (httpAnnotation.findDeclaredAttributeValue("value")?.evaluate() as? String)?.isNotBlank() ?: false
+          (httpAnnotation.findDeclaredAttributeValue("value")?.evaluate() as? String)?.isNotBlank()
+            ?: false
 
         var hasBodyParam = false
         var hasFieldParams = false
