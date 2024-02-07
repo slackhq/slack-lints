@@ -5,13 +5,13 @@ jdk = "21"
 # lint checks must target JDK 17, but the runtime should remain 11
 lintJvmTarget = "17"
 runtimeJvmTarget = "11"
-lint = "31.3.0-rc01"
+lint = "31.4.0-alpha07"
 
 [plugins]
 buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.3.5" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.5" }
 dokka = { id = "org.jetbrains.dokka", version = "1.9.10" }
-lint = { id = "com.android.lint", version = "8.2.2" }
+lint = { id = "com.android.lint", version = "8.4.0-alpha07" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "1.9.22-1.0.17" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.27.0" }

@@ -41,6 +41,8 @@ val shade: Configuration = configurations.maybeCreate("compileShaded")
 
 configurations.getByName("compileOnly").extendsFrom(shade)
 
+tasks.test { maxParallelForks = Runtime.getRuntime().availableProcessors() * 2 }
+
 dependencies {
   compileOnly(libs.bundles.lintApi)
   ksp(libs.autoService.ksp)

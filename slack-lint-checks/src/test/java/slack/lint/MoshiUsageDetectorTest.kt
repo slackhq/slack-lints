@@ -303,18 +303,15 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Subtype.kt line 7: Remove '@TypeLabel(label = "one")':
+        Autofix for src/slack/model/Subtype.kt line 7: Remove '@TypeLabel(label = "one")':
         @@ -7 +7
         - @TypeLabel(label = "one")
-        +
-        Fix for src/slack/model/Subtype.kt line 11: Remove '@TypeLabel(label = "two")':
+        Autofix for src/slack/model/Subtype.kt line 11: Remove '@TypeLabel(label = "two")':
         @@ -11 +11
         - @TypeLabel(label = "two")
-        +
-        Fix for src/slack/model/Subtype.kt line 14: Remove '@DefaultObject':
+        Autofix for src/slack/model/Subtype.kt line 14: Remove '@DefaultObject':
         @@ -14 +14
         - @DefaultObject
-        +
         """
           .trimIndent()
       )
@@ -358,14 +355,12 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/BaseType.kt line 10: Remove '@TypeLabel(label = "one")':
+        Autofix for src/slack/model/BaseType.kt line 10: Remove '@TypeLabel(label = "one")':
         @@ -10 +10
         - @TypeLabel(label = "one")
-        +
-        Fix for src/slack/model/BaseType.kt line 11: Remove '@DefaultObject':
+        Autofix for src/slack/model/BaseType.kt line 11: Remove '@DefaultObject':
         @@ -11 +11
         - @DefaultObject
-        +
         """
           .trimIndent()
       )
@@ -559,11 +554,11 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 6: Make constructor 'internal':
+        Autofix for src/slack/model/Example.kt line 6: Make constructor 'internal':
         @@ -6 +6
         - data class Example private constructor(val value: String)
         + data class Example internal constructor(val value: String)
-        Fix for src/slack/model/Example.kt line 9: Make constructor 'internal':
+        Autofix for src/slack/model/Example.kt line 9: Make constructor 'internal':
         @@ -9 +9
         - data class Example2 protected constructor(val value: String)
         @@ -10 +9
@@ -641,12 +636,12 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 6: Make value 'internal':
+        Autofix for src/slack/model/Example.kt line 6: Make value 'internal':
         @@ -6 +6
         - data class Example(private val value: String, protected val value2: String)
         @@ -7 +6
         + data class Example(internal val value: String, protected val value2: String)
-        Fix for src/slack/model/Example.kt line 6: Make value2 'internal':
+        Autofix for src/slack/model/Example.kt line 6: Make value2 'internal':
         @@ -6 +6
         - data class Example(private val value: String, protected val value2: String)
         @@ -7 +6
@@ -685,7 +680,7 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 6: Make value 'val':
+        Autofix for src/slack/model/Example.kt line 6: Make value 'val':
         @@ -6 +6
         - data class Example(var value: String)
         @@ -7 +6
@@ -816,7 +811,7 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 8: Remove 'field:':
+        Autofix for src/slack/model/Example.kt line 8: Remove 'field:':
         @@ -8 +8
         -   @field:Json(name = "foo") val value: String
         +   @Json(name = "foo") val value: String
@@ -863,15 +858,15 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 8: Remove '@field:Json(name = "foo")':
+        Autofix for src/slack/model/Example.kt line 8: Remove '@field:Json(name = "foo")':
         @@ -8 +8
         -   @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
         +   @Json(name = "foo")  @property:Json(name = "foo") @get:Json(name = "foo") val value: String
-        Fix for src/slack/model/Example.kt line 8: Remove '@property:Json(name = "foo")':
+        Autofix for src/slack/model/Example.kt line 8: Remove '@property:Json(name = "foo")':
         @@ -8 +8
         -   @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
         +   @Json(name = "foo") @field:Json(name = "foo")  @get:Json(name = "foo") val value: String
-        Fix for src/slack/model/Example.kt line 8: Remove '@get:Json(name = "foo")':
+        Autofix for src/slack/model/Example.kt line 8: Remove '@get:Json(name = "foo")':
         @@ -8 +8
         -   @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
         +   @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo")  val value: String
@@ -916,11 +911,11 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 8: Remove '@property:Json(name = "foo")':
+        Autofix for src/slack/model/Example.kt line 8: Remove '@property:Json(name = "foo")':
         @@ -8 +8
         -   @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
         +   @field:Json(name = "foo")  @get:Json(name = "foo") val value: String
-        Fix for src/slack/model/Example.kt line 8: Remove '@get:Json(name = "foo")':
+        Autofix for src/slack/model/Example.kt line 8: Remove '@get:Json(name = "foo")':
         @@ -8 +8
         -   @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
         +   @field:Json(name = "foo") @property:Json(name = "foo")  val value: String
@@ -962,7 +957,7 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 8: Add @Json(name = "snake_case") and rename to 'snakeCase':
+        Autofix for src/slack/model/Example.kt line 8: Add @Json(name = "snake_case") and rename to 'snakeCase':
         @@ -8 +8
         -   val snake_case: String,
         +   @Json(name = "snake_case") val snakeCase: String,
@@ -1073,19 +1068,15 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         Autofix for src/slack/model/Example.kt line 6: Remove '@JsonClass(generateAdapter = true)':
         @@ -6 +6
         -   @JsonClass(generateAdapter = true)
-        +
         Autofix for src/slack/model/Example.kt line 9: Remove '@JsonClass(generateAdapter = true)':
         @@ -9 +9
         -   @JsonClass(generateAdapter = true)
-        +
         Autofix for src/slack/model/Example.kt line 12: Remove '@JsonClass(generateAdapter = true)':
         @@ -12 +12
         -   @JsonClass(generateAdapter = true)
-        +
         Autofix for src/slack/model/Example.kt line 15: Remove '@JsonClass(generateAdapter = true)':
         @@ -15 +15
         -   @JsonClass(generateAdapter = true)
-        +
         """
           .trimIndent()
           // Weirdness here because spotless strips the trailing whitespace after the '+'
@@ -1174,14 +1165,12 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 8: Remove '@JsonClass(generateAdapter = true)':
+        Autofix for src/slack/model/Example.kt line 8: Remove '@JsonClass(generateAdapter = true)':
         @@ -8 +8
         - @JsonClass(generateAdapter = true)
-        +
-        Fix for src/slack/model/Example.kt line 9: Remove '@AdaptedBy(CustomFactory::class)':
+        Autofix for src/slack/model/Example.kt line 9: Remove '@AdaptedBy(CustomFactory::class)':
         @@ -9 +9
         - @AdaptedBy(CustomFactory::class)
-        +
         """
           .trimIndent()
       )
@@ -1313,11 +1302,11 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/PrivateClass.kt line 6: Make 'internal':
+        Autofix for src/slack/model/PrivateClass.kt line 6: Make 'internal':
         @@ -6 +6
         - private data class PrivateClass(val value: String)
         + internal data class PrivateClass(val value: String)
-        Fix for src/slack/model/PrivateClass.kt line 10: Make 'internal':
+        Autofix for src/slack/model/PrivateClass.kt line 10: Make 'internal':
         @@ -10 +10
         -   protected data class ProtectedClass(val value: String)
         +   internal data class ProtectedClass(val value: String)
@@ -1405,15 +1394,15 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 9: Remove ' = UNKNOWN':
+        Autofix for src/slack/model/Example.kt line 9: Remove ' = UNKNOWN':
         @@ -9 +9
         -   val value3: TestEnum? = UNKNOWN,
         +   val value3: TestEnum?,
-        Fix for src/slack/model/Example.kt line 10: Remove ' = UNKNOWN':
+        Autofix for src/slack/model/Example.kt line 10: Remove ' = UNKNOWN':
         @@ -10 +10
         -   val value4: TestEnum = UNKNOWN,
         +   val value4: TestEnum,
-        Fix for src/slack/model/Example.kt line 11: Remove ' = TestEnum.UNKNOWN':
+        Autofix for src/slack/model/Example.kt line 11: Remove ' = TestEnum.UNKNOWN':
         @@ -11 +11
         -   val value5: TestEnum = TestEnum.UNKNOWN,
         +   val value5: TestEnum,
@@ -1474,10 +1463,9 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 5: Remove '@JsonClass(generateAdapter = true)':
+        Autofix for src/slack/model/Example.kt line 5: Remove '@JsonClass(generateAdapter = true)':
         @@ -5 +5
         - @JsonClass(generateAdapter = true)
-        +
         """
           .trimIndent()
       )
@@ -1719,47 +1707,47 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 43: Change to List<String>:
+        Autofix for src/slack/model/Example.kt line 43: Change to List<String>:
         @@ -43 +43
         -   val arrayType: Array<String>,
         +   val arrayType: List<String>,
-        Fix for src/slack/model/Example.kt line 44: Change to List<Int>:
+        Autofix for src/slack/model/Example.kt line 44: Change to List<Int>:
         @@ -44 +44
         -   val intArray: IntArray,
         +   val intArray: List<Int>,
-        Fix for src/slack/model/Example.kt line 45: Change to List<Boolean>:
+        Autofix for src/slack/model/Example.kt line 45: Change to List<Boolean>:
         @@ -45 +45
         -   val boolArray: BooleanArray,
         +   val boolArray: List<Boolean>,
-        Fix for src/slack/model/Example.kt line 46: Change to List<List<String>>:
+        Autofix for src/slack/model/Example.kt line 46: Change to List<List<String>>:
         @@ -46 +46
         -   val complexArray: Array<List<String>>,
         +   val complexArray: List<List<String>>,
-        Fix for src/slack/model/Example.kt line 53: Change to List:
+        Autofix for src/slack/model/Example.kt line 53: Change to List:
         @@ -53 +53
         -   val mutableList: MutableList<Int>,
         +   val mutableList: List<Int>,
-        Fix for src/slack/model/Example.kt line 54: Change to Set:
+        Autofix for src/slack/model/Example.kt line 54: Change to Set:
         @@ -54 +54
         -   val mutableSet: MutableSet<Int>,
         +   val mutableSet: Set<Int>,
-        Fix for src/slack/model/Example.kt line 55: Change to Collection:
+        Autofix for src/slack/model/Example.kt line 55: Change to Collection:
         @@ -55 +55
         -   val mutableCollection: MutableCollection<Int>,
         +   val mutableCollection: Collection<Int>,
-        Fix for src/slack/model/Example.kt line 56: Change to Map:
+        Autofix for src/slack/model/Example.kt line 56: Change to Map:
         @@ -56 +56
         -   val mutableMap: MutableMap<String, String>
         +   val mutableMap: Map<String, String>
-        Fix for src/slack/model/Example.kt line 25: Change to List:
+        Autofix for src/slack/model/Example.kt line 25: Change to List:
         @@ -25 +25
         -   val concreteList: ArrayList<Int>,
         +   val concreteList: List<Int>,
-        Fix for src/slack/model/Example.kt line 26: Change to Set:
+        Autofix for src/slack/model/Example.kt line 26: Change to Set:
         @@ -26 +26
         -   val concreteSet: HashSet<Int>,
         +   val concreteSet: Set<Int>,
-        Fix for src/slack/model/Example.kt line 27: Change to Map:
+        Autofix for src/slack/model/Example.kt line 27: Change to Map:
         @@ -27 +27
         -   val concreteMap: HashMap<String, String>,
         +   val concreteMap: Map<String, String>,
@@ -1833,10 +1821,9 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/NoAnnotationsIsOk.kt line 37: Remove '@Retention(AnnotationRetention.BINARY)':
+        Autofix for src/slack/model/NoAnnotationsIsOk.kt line 37: Remove '@Retention(AnnotationRetention.BINARY)':
         @@ -37 +37
         - @Retention(AnnotationRetention.BINARY)
-        +
         """
           .trimIndent()
       )
@@ -1908,7 +1895,7 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/NoTargetIsOk.java line 31: Replace with RUNTIME:
+        Autofix for src/slack/model/NoTargetIsOk.java line 31: Replace with RUNTIME:
         @@ -31 +31
         - @Retention(RetentionPolicy.CLASS)
         + @Retention(RetentionPolicy.RUNTIME)
@@ -1947,7 +1934,7 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 7: Remove '@Json(name = "value")':
+        Autofix for src/slack/model/Example.kt line 7: Remove '@Json(name = "value")':
         @@ -7 +7
         - data class Example(@Json(name = "value") val value: String)
         @@ -8 +7
@@ -2020,11 +2007,11 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/slack/model/Example.kt line 11: Replace with @Json(name = "full_gson"):
+        Autofix for src/slack/model/Example.kt line 11: Replace with @Json(name = "full_gson"):
         @@ -11 +11
         -   @SerializedName("full_gson") val fullGson: String,
         +   @Json(name = "full_gson") val fullGson: String,
-        Fix for src/slack/model/Example.kt line 13: Remove '@SerializedName("mixed")':
+        Autofix for src/slack/model/Example.kt line 13: Remove '@SerializedName("mixed")':
         @@ -13 +13
         -   @Json(name = "mixed") @SerializedName("mixed") val mixedSame: String,
         +   @Json(name = "mixed")  val mixedSame: String,
