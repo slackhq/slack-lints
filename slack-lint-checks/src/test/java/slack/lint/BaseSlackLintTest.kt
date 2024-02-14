@@ -17,7 +17,6 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.net.MalformedURLException
-import junit.framework.TestCase
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
@@ -25,9 +24,6 @@ import org.junit.runners.JUnit4
 abstract class BaseSlackLintTest : LintDetectorTest() {
   private val rootPath = "resources/test/com/slack/lint/data/"
   private val stubsPath = "testStubs"
-
-  /** Optional override to customize the lint client name when running lint test tasks. */
-  open val lintClientName: String? = null
 
   /**
    * Lint periodically adds new "TestModes" to LintDetectorTest. These modes act as a sort of chaos
@@ -50,7 +46,8 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
     val sdkLocation = System.getProperty("android.sdk") ?: System.getenv("ANDROID_HOME")
     val lintTask = super.lint()
     lintTask.configureOptions { flags -> flags.setUseK2Uast(TestBuildConfig.USE_K2_UAST) }
-    lintClientName?.let { lintTask.clientFactory { TestLintClient(it) } }
+    // This is... necessary? https://issuetracker.google.com/issues/323703301
+    lintTask.clientFactory { TestLintClient("test").apply { setLintTask(lintTask) } }
     sdkLocation?.let { lintTask.sdkHome(File(it)) }
     lintTask.allowCompilationErrors(false)
 
@@ -69,9 +66,9 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
     if (file.exists()) {
       try {
         return BufferedInputStream(FileInputStream(file))
-      } catch (e: FileNotFoundException) {
+      } catch (_: FileNotFoundException) {
         if (expectExists) {
-          TestCase.fail("Could not find file $relativePath")
+          fail("Could not find file $relativePath")
         }
       }
     }
