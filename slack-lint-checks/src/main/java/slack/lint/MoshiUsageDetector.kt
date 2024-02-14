@@ -142,7 +142,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         // and we choose to ignore it in that case.
         // This can sometimes come back as the default empty String and sometimes as null if not
         // defined
-        val generatorExpression = jsonClassAnnotation.findAttributeValue("generator")
+        val generatorExpression = jsonClassAnnotation.findDeclaredAttributeValue("generator")
         val generator = generatorExpression?.evaluate() as? String
         if (generator != null) {
           if (generator.isBlank()) {

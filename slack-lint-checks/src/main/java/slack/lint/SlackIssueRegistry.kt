@@ -53,7 +53,6 @@ class SlackIssueRegistry : IssueRegistry() {
     add(ErrorProneDoNotMockDetector.ISSUE)
     addAll(MoshiUsageDetector.issues())
     addAll(FragmentDaggerFieldInjectionDetector.issues)
-    addAll(InjectWithUsageDetector.ISSUES)
     addAll(RedactedUsageDetector.ISSUES)
     add(InjectInJavaDetector.ISSUE)
     add(RetrofitUsageDetector.ISSUE)

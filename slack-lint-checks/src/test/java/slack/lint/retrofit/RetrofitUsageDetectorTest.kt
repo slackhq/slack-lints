@@ -66,11 +66,10 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-        Fix for src/test/Example.kt line 14: Remove '@FormUrlEncoded':
+        Autofix for src/test/Example.kt line 14: Remove '@FormUrlEncoded':
         @@ -14 +14
         -   @FormUrlEncoded
-        +
-        Fix for src/test/Example.kt line 18: Replace with @retrofit2.http.FormUrlEncoded...:
+        Autofix for src/test/Example.kt line 18: Replace with @retrofit2.http.FormUrlEncoded...:
         @@ -17 +17
         -   @POST("/")
         +   @retrofit2.http.FormUrlEncoded
