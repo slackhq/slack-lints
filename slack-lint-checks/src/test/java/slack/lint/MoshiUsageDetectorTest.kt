@@ -1198,13 +1198,13 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
           class Example3
 
           @JsonClass(generateAdapter = true)
-          data class Example3(
+          data class Example4(
             @AdaptedBy(CustomAdapter::class) val value1: String,
             @AdaptedBy(NotAnAdapter::class) val value2: String
           )
 
           @AdaptedBy(CustomAdapterMissingKeep::class)
-          class Example4
+          class Example5
 
           @Keep
           abstract class CustomFactory : JsonAdapter.Factory
