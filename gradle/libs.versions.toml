@@ -5,7 +5,7 @@ jdk = "21"
 # lint checks must target JDK 17, but the runtime should remain 11
 lintJvmTarget = "17"
 runtimeJvmTarget = "11"
-lint = "31.4.0-alpha09"
+lint = "31.4.0-alpha10"
 
 [plugins]
 buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.3.5" }
