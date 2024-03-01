@@ -46,8 +46,6 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
     val sdkLocation = System.getProperty("android.sdk") ?: System.getenv("ANDROID_HOME")
     val lintTask = super.lint()
     lintTask.configureOptions { flags -> flags.setUseK2Uast(TestBuildConfig.USE_K2_UAST) }
-    // This is... necessary? https://issuetracker.google.com/issues/323703301
-    lintTask.clientFactory { TestLintClient("test").apply { setLintTask(lintTask) } }
     sdkLocation?.let { lintTask.sdkHome(File(it)) }
     lintTask.allowCompilationErrors(false)
 
