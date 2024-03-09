@@ -1,5 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.4.0-alpha07" type="baseline" client="gradle" dependencies="false" name="AGP (8.4.0-alpha07)" variant="all" version="8.4.0-alpha07">
+<issues format="6" by="lint 8.4.0-alpha13" type="baseline" client="gradle" dependencies="false" name="AGP (8.4.0-alpha13)" variant="all" version="8.4.0-alpha13">
+
+    <issue
+        id="LintDocExample"
+        message="Expected to also find a documentation example test (`testDocumentationExample`) which shows a simple, typical scenario which triggers the test, and which will be extracted into lint&apos;s per-issue documentation pages"
+        errorLine1="  @Test"
+        errorLine2="  ^">
+        <location
+            file="src/test/java/slack/lint/DeprecatedSqlUsageDetectorTest.kt"
+            line="16"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="LintDocExample"
+        message="Expected to also find a documentation example test (`testDocumentationExample`) which shows a simple, typical scenario which triggers the test, and which will be extracted into lint&apos;s per-issue documentation pages"
+        errorLine1="  @Test"
+        errorLine2="  ^">
+        <location
+            file="src/test/java/slack/lint/resources/FullyQualifiedResourceDetectorTest.kt"
+            line="25"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="LintDocExample"
+        message="Expected to also find a documentation example test (`testDocumentationExample`) which shows a simple, typical scenario which triggers the test, and which will be extracted into lint&apos;s per-issue documentation pages"
+        errorLine1="  @Test"
+        errorLine2="  ^">
+        <location
+            file="src/test/java/slack/lint/resources/MissingResourceImportAliasDetectorTest.kt"
+            line="24"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="LintDocExample"
+        message="Expected to also find a documentation example test (`testDocumentationExample`) which shows a simple, typical scenario which triggers the test, and which will be extracted into lint&apos;s per-issue documentation pages"
+        errorLine1="  @Test"
+        errorLine2="  ^">
+        <location
+            file="src/test/java/slack/lint/mocking/MockDetectorOptionsTest.kt"
+            line="27"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="LintDocExample"
+        message="Expected to also find a documentation example test (`testDocumentationExample`) which shows a simple, typical scenario which triggers the test, and which will be extracted into lint&apos;s per-issue documentation pages"
+        errorLine1="  private fun testFiles() ="
+        errorLine2="  ^">
+        <location
+            file="src/test/java/slack/lint/MoshiUsageDetectorTest.kt"
+            line="2067"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="LintDocExample"
+        message="Expected to also find a documentation example test (`testDocumentationExample`) which shows a simple, typical scenario which triggers the test, and which will be extracted into lint&apos;s per-issue documentation pages"
+        errorLine1="  private fun testViolatingExpressionLeft(markPoint: String) {"
+        errorLine2="  ^">
+        <location
+            file="src/test/java/slack/lint/text/SpanMarkPointMissingMaskDetectorTest.kt"
+            line="58"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="LintDocExample"
+        message="Expected to also find a documentation example test (`testDocumentationExample`) which shows a simple, typical scenario which triggers the test, and which will be extracted into lint&apos;s per-issue documentation pages"
+        errorLine1="  @Test"
+        errorLine2="  ^">
+        <location
+            file="src/test/java/slack/lint/ViewContextDetectorTest.kt"
+            line="11"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="LintDocExample"
+        message="Expected to also find a documentation example test (`testDocumentationExample`) which shows a simple, typical scenario which triggers the test, and which will be extracted into lint&apos;s per-issue documentation pages"
+        errorLine1="  @Test"
+        errorLine2="  ^">
+        <location
+            file="src/test/java/slack/lint/resources/WrongResourceImportAliasDetectorTest.kt"
+            line="24"
+            column="3"/>
+    </issue>
 
     <issue
         id="LintImplTextFormat"
