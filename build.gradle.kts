@@ -92,7 +92,7 @@ subprojects {
         // TODO re-enable on checks if lint ever targets latest kotlin versions
         if (isChecksProject) {
           allWarningsAsErrors.set(true)
-          progressiveMode.set(true)
+          //          progressiveMode.set(true)
         }
       }
     }
