@@ -10,12 +10,12 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
-import com.android.tools.lint.detector.api.isKotlin
 import org.jetbrains.uast.UAnnotated
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UField
 import org.jetbrains.uast.UMethod
+import org.jetbrains.uast.kotlin.isKotlin
 import slack.lint.util.sourceImplementation
 
 /**
@@ -32,7 +32,7 @@ class RedactedUsageDetector : Detector(), SourceCodeScanner {
 
   override fun createUastHandler(context: JavaContext): UElementHandler? {
     // Redacted can only be used in Kotlin files, so this check only checks in Java files
-    if (isKotlin(context.psiFile)) return null
+    if (isKotlin(context.uastFile?.lang)) return null
 
     return object : UElementHandler() {
       override fun visitClass(node: UClass) = node.checkRedacted()

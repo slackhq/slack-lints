@@ -11,12 +11,13 @@ import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
 import com.android.tools.lint.detector.api.getUMethod
-import com.android.tools.lint.detector.api.isJava
 import com.intellij.psi.PsiClassType
 import com.intellij.psi.PsiType
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
+import org.jetbrains.uast.kotlin.isKotlin
+import slack.lint.parcel.ParcelizeFunctionPropertyDetector.Companion.ISSUE
 import slack.lint.util.sourceImplementation
 
 /** @see ISSUE */
@@ -28,7 +29,8 @@ class ParcelizeFunctionPropertyDetector : Detector(), SourceCodeScanner {
 
   override fun createUastHandler(context: JavaContext): UElementHandler? {
     // Parcelize can only be used in Kotlin files, so this check only checks in Kotlin files
-    if (isJava(context.psiFile)) return null
+    if (!isKotlin(context.uastFile?.lang)) return null
+
     return object : UElementHandler() {
       override fun visitClass(node: UClass) {
         if (!node.hasAnnotation(PARCELIZE)) return

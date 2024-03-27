@@ -28,7 +28,7 @@ class GuavaPreconditionsDetector : Detector(), SourceCodeScanner {
     return object : UElementHandler() {
       override fun visitCallExpression(node: UCallExpression) {
         if (isUsingGuavaPreconditions(node)) {
-          if (isKotlin(context.psiFile)) {
+          if (isKotlin(node.lang)) {
             reportKotlin(context, node)
           } else {
             reportJavaGuavaUsage(context, node)

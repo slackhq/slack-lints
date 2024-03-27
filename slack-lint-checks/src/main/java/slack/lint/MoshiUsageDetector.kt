@@ -82,7 +82,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           checkJsonQualifierAnnotation(context, node)
         }
 
-        if (!isKotlin(context.uastFile?.lang)) return
+        context.uastFile?.lang?.let { language -> if (!isKotlin(language)) return }
 
         val adaptedByAnnotation = node.findAnnotation(FQCN_ADAPTED_BY)
         val jsonClassAnnotation = node.findAnnotation(FQCN_JSON_CLASS)
@@ -909,7 +909,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
     // Try both the Kotlin and Java annotations. In Kotlin we try both
     val retentionAnnotationPair: Pair<String, String>
     val targetAnnotationPair: Pair<String, String>
-    val isKotlin = isKotlin(node)
+    val isKotlin = isKotlin(node.language)
     if (isKotlin) {
       retentionAnnotationPair = "kotlin.annotation.Retention" to "value"
       targetAnnotationPair = "kotlin.annotation.Target" to "allowedTargets"

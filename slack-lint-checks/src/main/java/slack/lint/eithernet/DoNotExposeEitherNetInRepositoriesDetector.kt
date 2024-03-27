@@ -23,6 +23,7 @@ import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UField
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.getContainingUClass
+import org.jetbrains.uast.java.isJava
 import slack.lint.util.safeReturnType
 import slack.lint.util.sourceImplementation
 
@@ -36,7 +37,7 @@ class DoNotExposeEitherNetInRepositoriesDetector : Detector(), SourceCodeScanner
 
   override fun createUastHandler(context: JavaContext) =
     object : UElementHandler() {
-      val isJava = isJava(context.psiFile)
+      val isJava = isJava(context.uastFile?.lang)
 
       override fun visitMethod(node: UMethod) {
         if (node.sourcePsi is KtProperty) return // Handled by visitField

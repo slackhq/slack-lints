@@ -10,13 +10,13 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
-import com.android.tools.lint.detector.api.isKotlin
 import org.jetbrains.uast.UAnnotated
 import org.jetbrains.uast.UAnnotation
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UField
 import org.jetbrains.uast.UMethod
+import org.jetbrains.uast.java.isJava
 import slack.lint.util.sourceImplementation
 
 /**
@@ -31,7 +31,7 @@ class InjectInJavaDetector : Detector(), SourceCodeScanner {
 
   override fun createUastHandler(context: JavaContext): UElementHandler? {
     // Only applicable to Java files
-    if (isKotlin(context.psiFile)) return null
+    if (!isJava(context.uastFile?.lang)) return null
 
     return object : UElementHandler() {
       private fun checkNode(node: UAnnotated) {

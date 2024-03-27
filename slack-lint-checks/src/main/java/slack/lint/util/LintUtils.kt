@@ -84,7 +84,7 @@ internal fun UClass.isInnerClass(evaluator: JavaEvaluator): Boolean {
   if (isStatic) return false
 
   // If it's Kotlin and "inner", then it's definitely an inner class
-  if (isKotlin(this) && evaluator.hasModifier(this, KtTokens.INNER_KEYWORD)) return true
+  if (isKotlin(language) && evaluator.hasModifier(this, KtTokens.INNER_KEYWORD)) return true
 
   // We could check the containing class's innerClasses to look for a match here, but we've
   // logically ruled
