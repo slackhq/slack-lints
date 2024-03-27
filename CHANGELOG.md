@@ -1,6 +1,15 @@
 Changelog
 =========
 
+0.7.1
+-----
+
+_2024-03-27_
+
+- Add `MustUseNamedParamsDetector` to lint registry.
+- Update lint to `31.5.0-alpha02`.
+- Target Kotlin API/language version `1.9`.
+
 0.7.0
 -----
 
