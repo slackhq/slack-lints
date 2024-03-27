@@ -65,5 +65,6 @@ class SlackIssueRegistry : IssueRegistry() {
     addAll(DenyListedApiDetector.ISSUES)
     add(ParcelizeFunctionPropertyDetector.ISSUE)
     add(ExceptionMessageDetector.ISSUE)
+    add(MustUseNamedParamsDetector.ISSUE)
   }
 }
