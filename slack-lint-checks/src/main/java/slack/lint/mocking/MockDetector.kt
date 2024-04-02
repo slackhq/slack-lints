@@ -58,7 +58,7 @@ constructor(
         "mock-annotations",
         "A comma-separated list of mock annotations.",
         "org.mockito.Mock,org.mockito.Spy",
-        "This property should define comma-separated list of mock annotation class names (FQCN).",
+        "This property should define comma-separated list of mock annotation class names (FQCN). Set this for all issues using this option.",
       )
 
     internal val MOCK_FACTORIES =
@@ -66,7 +66,7 @@ constructor(
         "mock-factories",
         "A comma-separated list of mock factories (org.mockito.Mockito#methodName).",
         "org.mockito.Mockito#mock,org.mockito.Mockito#spy,slack.test.mockito.MockitoHelpers#mock,slack.test.mockito.MockitoHelpersKt#mock",
-        "A comma-separated list of mock factories (org.mockito.Mockito#methodName).",
+        "A comma-separated list of mock factories (org.mockito.Mockito#methodName). Set this for all issues using this option.",
       )
 
     internal val MOCK_REPORT =
@@ -74,7 +74,7 @@ constructor(
         "mock-report",
         "If enabled, writes a mock report to <project-dir>/$MOCK_REPORT_PATH.",
         "none",
-        "If enabled, writes a mock report to <project-dir>/$MOCK_REPORT_PATH. The format of the file is a csv of (type,isError) of mocked classes.",
+        "If enabled, writes a mock report to <project-dir>/$MOCK_REPORT_PATH. The format of the file is a csv of (type,isError) of mocked classes. Set this for all issues using this option.",
       )
 
     private val TYPE_CHECKERS =
