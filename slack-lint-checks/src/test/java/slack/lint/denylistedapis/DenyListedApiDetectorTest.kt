@@ -700,6 +700,38 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       )
   }
 
+  @Test
+  fun externalDenylistEntries() {
+    lint()
+      .files(
+        EXTERNAL_ENTRY_TESTCLASS_STUB,
+        kotlin(
+          """
+          package foo
+
+          import slack.lint.TestClass
+
+          class SomeClass {
+            fun test() {
+              TestClass.run()
+            }
+          }
+          """
+        )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:7: Error: TestClass.run() is disallowed in tests via external denylist entry. [DenyListedApi]
+            TestClass.run()
+                      ~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
   companion object {
     private val FLOWABLE_STUB =
       java(
@@ -1026,5 +1058,16 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       """
         )
         .indented()
+
+    private val EXTERNAL_ENTRY_TESTCLASS_STUB =
+      kotlin(
+        """
+          package slack.lint
+
+          object TestClass {
+            fun run() {}
+          }
+        """.trimIndent()
+      )
   }
 }
