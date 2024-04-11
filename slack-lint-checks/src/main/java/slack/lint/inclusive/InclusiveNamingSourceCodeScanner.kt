@@ -54,7 +54,7 @@ class InclusiveNamingSourceCodeScanner : Detector(), SourceCodeScanner {
 
       override fun visitMethod(node: UMethod) {
         if (node.isConstructor) return
-        val type = if (isKotlin(node)) "function" else "method"
+        val type = if (isKotlin(node.language)) "function" else "method"
         checker.check(node, node.name, type)
       }
 
@@ -63,7 +63,7 @@ class InclusiveNamingSourceCodeScanner : Detector(), SourceCodeScanner {
         val type =
           when (node) {
             is UField -> {
-              if (isKotlin(node)) {
+              if (isKotlin(node.language)) {
                 "property"
               } else {
                 "field"

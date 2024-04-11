@@ -13,13 +13,13 @@ import com.android.tools.lint.detector.api.Scope
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
-import com.android.tools.lint.detector.api.isJava
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
 import java.util.EnumSet
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UCallableReferenceExpression
 import org.jetbrains.uast.UElement
+import org.jetbrains.uast.kotlin.isKotlin
 
 /**
  * This is a [Detector] for detecting direct usages of Kotlin coroutines'
@@ -55,7 +55,7 @@ class MainScopeUsageDetector : Detector(), SourceCodeScanner {
 
   override fun createUastHandler(context: JavaContext): UElementHandler? {
     // Only applicable on Kotlin files
-    if (isJava(context.psiFile)) return null
+    if (!isKotlin(context.uastFile?.lang)) return null
 
     fun report(node: UElement) {
       context.report(

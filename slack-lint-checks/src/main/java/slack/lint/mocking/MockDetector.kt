@@ -178,14 +178,14 @@ constructor(
 
       // Checks properties and fields, usually annotated with @Mock/@Spy
       override fun visitField(node: UField) {
-        if (isKotlin(node)) {
+        if (isKotlin(node.language)) {
           val sourcePsi = node.sourcePsi ?: return
           if (sourcePsi is KtProperty && isMockAnnotated(node)) {
             val type = slackEvaluator.getTypeClass(node.type) ?: return
             checkMock(node, type)
             return
           }
-        } else if (isJava(node) && isMockAnnotated(node)) {
+        } else if (isJava(node.language) && isMockAnnotated(node)) {
           val type = slackEvaluator.getTypeClass(node.type) ?: return
           checkMock(node, type)
           return

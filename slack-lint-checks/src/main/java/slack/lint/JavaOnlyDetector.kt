@@ -11,7 +11,6 @@ import com.android.tools.lint.detector.api.LintFix
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.UastLintUtils
-import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
 import org.jetbrains.uast.UAnnotation
@@ -26,6 +25,7 @@ import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UReturnExpression
 import org.jetbrains.uast.getContainingUClass
 import org.jetbrains.uast.getContainingUMethod
+import org.jetbrains.uast.kotlin.isKotlin
 import org.jetbrains.uast.toUElementOfType
 import slack.lint.util.sourceImplementation
 
@@ -64,12 +64,11 @@ class JavaOnlyDetector : Detector(), SourceCodeScanner {
     }
   }
 
-  override fun createUastHandler(context: JavaContext): UElementHandler {
-    if (!isKotlin(context.psiFile)) {
-      // We only run this on Kotlin files, the ErrorProne analogue handles Java files. Can revisit
-      // if we get lint in the IDE or otherwise unify
-      return UElementHandler.NONE
-    }
+  override fun createUastHandler(context: JavaContext): UElementHandler? {
+    // We only run this on Kotlin files, the ErrorProne analogue handles Java files. Can revisit
+    // if we get lint in the IDE or otherwise unify
+    if (!isKotlin(context.uastFile?.lang)) return null
+
     return object : UElementHandler() {
       override fun visitClass(node: UClass) {
         val hasJavaOnly = context.evaluator.getAnnotation(node, JAVA_ONLY) != null
