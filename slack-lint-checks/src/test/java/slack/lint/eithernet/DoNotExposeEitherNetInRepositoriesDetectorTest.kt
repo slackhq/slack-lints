@@ -8,11 +8,13 @@ import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
 private val API_RESULT =
-  kotlin("""
+  kotlin(
+      """
   package com.slack.eithernet
 
   interface ApiResult<out T : Any, out E : Any>
-""")
+"""
+    )
     .indented()
 
 class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {

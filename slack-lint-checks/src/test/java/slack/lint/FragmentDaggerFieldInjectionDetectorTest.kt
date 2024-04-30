@@ -9,18 +9,23 @@ import org.junit.Test
 class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
 
   private val javaxInjectStubs =
-    kotlin("""
+    kotlin(
+        """
         package javax.inject
 
         annotation class Inject
-      """).indented()
+      """
+      )
+      .indented()
 
   private val assistedInjectStubs =
-    kotlin("""
+    kotlin(
+        """
       package dagger.assisted
 
       annotation class AssistedInject
-      """)
+      """
+      )
       .indented()
 
   private val topLevelFragment =

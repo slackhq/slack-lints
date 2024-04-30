@@ -10,11 +10,14 @@ import slack.lint.BaseSlackLintTest
 class SealedClassMockDetectorTest : BaseSlackLintTest() {
 
   private val testClass =
-    kotlin("""
+    kotlin(
+        """
       package slack.test
 
       sealed class TestClass
-    """).indented()
+    """
+      )
+      .indented()
 
   private val javaTestClass =
     java(

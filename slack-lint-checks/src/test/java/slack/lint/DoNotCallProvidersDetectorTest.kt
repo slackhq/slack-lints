@@ -32,11 +32,13 @@ class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
         .indented()
 
     private val daggerProducerStubs =
-      kotlin("""
+      kotlin(
+          """
         package dagger.producers
 
         annotation class Produces
-      """)
+      """
+        )
         .indented()
   }
 

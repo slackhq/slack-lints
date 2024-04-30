@@ -1503,11 +1503,14 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
   @Test
   fun propertyTypes() {
     val externalType =
-      kotlin("""
+      kotlin(
+          """
       package external
 
       class ExternalType
-    """).indented()
+    """
+        )
+        .indented()
     val externalTypeAnnotated =
       kotlin(
           """
@@ -1520,11 +1523,15 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
     """
         )
         .indented()
-    val internalType = kotlin("""
+    val internalType =
+      kotlin(
+          """
       package slack
 
       class InternalType
-    """).indented()
+    """
+        )
+        .indented()
     val internalTypeAnnotated =
       kotlin(
           """
@@ -1547,11 +1554,13 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         )
         .indented()
     val jsonQualifier =
-      kotlin("""
+      kotlin(
+          """
       package com.squareup.moshi
 
       annotation class JsonQualifier
-    """)
+    """
+        )
         .indented()
     val customQualifier =
       kotlin(
