@@ -23,22 +23,28 @@ private val mockito =
     .indented()
 
 private val mock =
-  java("""
+  java(
+      """
       package org.mockito;
 
       public @interface Mock {
 
       }
-    """).indented()
+    """
+    )
+    .indented()
 
 private val spy =
-  java("""
+  java(
+      """
       package org.mockito;
 
       public @interface Spy {
 
       }
-    """).indented()
+    """
+    )
+    .indented()
 
 private val mockitoHelpers =
   kotlin(

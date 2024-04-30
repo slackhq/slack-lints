@@ -273,18 +273,24 @@ class MockDetectorOptionsTest : BaseSlackLintTest() {
       .indented()
 
   private val sealedClass =
-    kotlin("""
+    kotlin(
+        """
     package slack.test
 
     sealed class SealedClass
-    """).indented()
+    """
+      )
+      .indented()
 
   private val objectClass =
-    kotlin("""
+    kotlin(
+        """
     package slack.test
 
     object ObjectClass
-    """).indented()
+    """
+      )
+      .indented()
 
   private fun stubs() = arrayOf(mockK, spyK, mockKExtensions, dataClass, sealedClass, objectClass)
 }

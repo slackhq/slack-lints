@@ -149,6 +149,7 @@ class MetadataJavaEvaluator(private val file: String, private val delegate: Java
 
   override fun implementsInterface(cls: PsiClass, interfaceName: String, strict: Boolean): Boolean =
     delegate.implementsInterface(cls, interfaceName, strict)
+
   // endregion
 
   /** Deep isObject check that checks if the given [cls] is an `object` class. */
