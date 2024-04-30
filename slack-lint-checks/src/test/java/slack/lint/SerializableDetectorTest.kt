@@ -16,11 +16,13 @@ class SerializableDetectorTest : BaseSlackLintTest() {
       .detector(RawDispatchersUsageDetector())
       .issues(RawDispatchersUsageDetector.ISSUE)
       .files(
-        kotlin("""
+        kotlin(
+            """
             package slack
 
             class ImplementsNothing
-          """)
+          """
+          )
           .indented()
       )
       .allowCompilationErrors(false)

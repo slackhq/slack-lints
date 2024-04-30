@@ -838,11 +838,13 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
         .indented()
 
     private val COROUTINE_SCOPE_STUB =
-      kotlin("""
+      kotlin(
+          """
         package kotlinx.coroutines
 
         interface CoroutineScope
-      """)
+      """
+        )
         .indented()
 
     private val COMPLETABLE_STUB =

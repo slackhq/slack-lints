@@ -8,11 +8,14 @@ import slack.lint.BaseSlackLintTest
 class ObjectClassMockDetectorTest : BaseSlackLintTest() {
 
   private val testClass =
-    kotlin("""
+    kotlin(
+        """
       package slack.test
 
       object TestClass
-    """).indented()
+    """
+      )
+      .indented()
 
   override fun getDetector() = MockDetector()
 
