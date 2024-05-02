@@ -80,6 +80,7 @@ constructor(
     private val TYPE_CHECKERS =
       listOf(
         // Loosely defined in the order of most likely to be hit
+        AnyMockDetector,
         PlatformTypeMockDetector,
         DataClassMockDetector,
         DoNotMockMockDetector,
