@@ -1,6 +1,18 @@
 Changelog
 =========
 
+0.7.2
+-----
+
+_2024-05-02_
+
+- Add new `DoNotMockAnything` check. This is disabled by default. This marks _any_ mock as a lint error. This is useful for enforcing a no-mocks policy in your codebase.
+- Update lint to `31.5.0-alpha07`.
+- Update to kotlin `1.9.23`.
+- [docs] Expand Mock option explanation for use with multiple issues.
+
+Special thanks to [@utwyko](https://github.com/utwyko) for contributing to this release!
+
 0.7.1
 -----
 
