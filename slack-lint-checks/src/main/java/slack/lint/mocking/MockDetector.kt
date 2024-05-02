@@ -87,6 +87,7 @@ constructor(
         AutoValueMockDetector,
         ObjectClassMockDetector,
         RecordClassMockDetector,
+        CoroutinesMockDetector,
       )
     private val OPTIONS = listOf(MOCK_ANNOTATIONS, MOCK_FACTORIES, MOCK_REPORT)
     val ISSUES = TYPE_CHECKERS.map2Array { it.issue.setOptions(OPTIONS) }
