@@ -12,7 +12,6 @@ import com.android.tools.lint.detector.api.isJava
 import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
-import com.intellij.util.containers.map2Array
 import java.util.Locale
 import kotlin.io.path.bufferedWriter
 import kotlin.io.path.createDirectories
@@ -80,6 +79,7 @@ constructor(
     private val TYPE_CHECKERS =
       listOf(
         // Loosely defined in the order of most likely to be hit
+        AnyMockDetector,
         PlatformTypeMockDetector,
         DataClassMockDetector,
         DoNotMockMockDetector,
@@ -89,7 +89,8 @@ constructor(
         RecordClassMockDetector,
       )
     private val OPTIONS = listOf(MOCK_ANNOTATIONS, MOCK_FACTORIES, MOCK_REPORT)
-    val ISSUES = TYPE_CHECKERS.map2Array { it.issue.setOptions(OPTIONS) }
+    val ALL_ISSUES = TYPE_CHECKERS.map { it.issue.setOptions(OPTIONS) }
+    val ISSUES = ALL_ISSUES.filterNot { it == AnyMockDetector.issue }.toTypedArray()
   }
 
   // A mapping of mocked types
