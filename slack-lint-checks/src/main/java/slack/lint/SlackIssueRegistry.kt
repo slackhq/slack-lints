@@ -49,7 +49,7 @@ class SlackIssueRegistry : IssueRegistry() {
     add(MainScopeUsageDetector.ISSUE)
     add(RxSubscribeOnMainDetector.ISSUE)
     addAll(GuavaPreconditionsDetector.issues)
-    addAll(MockDetector.ISSUES)
+    addAll(MockDetector.ALL_ISSUES)
     add(ErrorProneDoNotMockDetector.ISSUE)
     addAll(MoshiUsageDetector.issues())
     addAll(FragmentDaggerFieldInjectionDetector.issues)
