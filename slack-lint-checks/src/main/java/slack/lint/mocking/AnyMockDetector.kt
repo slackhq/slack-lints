@@ -14,19 +14,20 @@ import slack.lint.util.sourceImplementation
 object AnyMockDetector : MockDetector.TypeChecker {
   override val issue: Issue =
     Issue.create(
-      "DoNotMockAnything",
-      "Do not add new mocks.",
-      """
+        "DoNotMockAnything",
+        "Do not add new mocks.",
+        """
         Mocking is almost always unnecessary and will make your tests more brittle. Use real instances \
         (if appropriate) or test fakes instead. This lint is a catch-all for mocking, and has been \
         enabled in this project to help prevent new mocking from being added.
       """,
-      Category.CORRECTNESS,
-      6,
-      // Off by default though
-      Severity.ERROR,
-      sourceImplementation<MockDetector>(),
-    ).setEnabledByDefault(false)
+        Category.CORRECTNESS,
+        6,
+        // Off by default though
+        Severity.ERROR,
+        sourceImplementation<MockDetector>(),
+      )
+      .setEnabledByDefault(false)
 
   override fun checkType(
     context: JavaContext,
