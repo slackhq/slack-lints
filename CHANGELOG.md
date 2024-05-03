@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.7.3
+-----
+
+_2024-05-03_
+
+- Fix `DoNotMockAnything` to use `setEnabledByDefault(false)`.
+
 0.7.2
 -----
 

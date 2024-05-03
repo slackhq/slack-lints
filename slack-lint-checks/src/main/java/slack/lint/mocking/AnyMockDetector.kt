@@ -23,10 +23,10 @@ object AnyMockDetector : MockDetector.TypeChecker {
       """,
       Category.CORRECTNESS,
       6,
-      // Off by default
-      Severity.IGNORE,
+      // Off by default though
+      Severity.ERROR,
       sourceImplementation<MockDetector>(),
-    )
+    ).setEnabledByDefault(false)
 
   override fun checkType(
     context: JavaContext,
