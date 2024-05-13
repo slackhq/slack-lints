@@ -12,7 +12,6 @@ import com.android.tools.lint.detector.api.isJava
 import com.android.tools.lint.detector.api.isKotlin
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
-import com.intellij.util.containers.map2Array
 import java.util.Locale
 import kotlin.io.path.bufferedWriter
 import kotlin.io.path.createDirectories
@@ -58,7 +57,7 @@ constructor(
         "mock-annotations",
         "A comma-separated list of mock annotations.",
         "org.mockito.Mock,org.mockito.Spy",
-        "This property should define comma-separated list of mock annotation class names (FQCN).",
+        "This property should define comma-separated list of mock annotation class names (FQCN). Set this for all issues using this option.",
       )
 
     internal val MOCK_FACTORIES =
@@ -66,7 +65,7 @@ constructor(
         "mock-factories",
         "A comma-separated list of mock factories (org.mockito.Mockito#methodName).",
         "org.mockito.Mockito#mock,org.mockito.Mockito#spy,slack.test.mockito.MockitoHelpers#mock,slack.test.mockito.MockitoHelpersKt#mock",
-        "A comma-separated list of mock factories (org.mockito.Mockito#methodName).",
+        "A comma-separated list of mock factories (org.mockito.Mockito#methodName). Set this for all issues using this option.",
       )
 
     internal val MOCK_REPORT =
@@ -74,12 +73,13 @@ constructor(
         "mock-report",
         "If enabled, writes a mock report to <project-dir>/$MOCK_REPORT_PATH.",
         "none",
-        "If enabled, writes a mock report to <project-dir>/$MOCK_REPORT_PATH. The format of the file is a csv of (type,isError) of mocked classes.",
+        "If enabled, writes a mock report to <project-dir>/$MOCK_REPORT_PATH. The format of the file is a csv of (type,isError) of mocked classes. Set this for all issues using this option.",
       )
 
     private val TYPE_CHECKERS =
       listOf(
         // Loosely defined in the order of most likely to be hit
+        AnyMockDetector,
         PlatformTypeMockDetector,
         DataClassMockDetector,
         DoNotMockMockDetector,
@@ -89,7 +89,8 @@ constructor(
         RecordClassMockDetector,
       )
     private val OPTIONS = listOf(MOCK_ANNOTATIONS, MOCK_FACTORIES, MOCK_REPORT)
-    val ISSUES = TYPE_CHECKERS.map2Array { it.issue.setOptions(OPTIONS) }
+    val ALL_ISSUES = TYPE_CHECKERS.map { it.issue.setOptions(OPTIONS) }
+    val ISSUES = ALL_ISSUES.filterNot { it == AnyMockDetector.issue }.toTypedArray()
   }
 
   // A mapping of mocked types
