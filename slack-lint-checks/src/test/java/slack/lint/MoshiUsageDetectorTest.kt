@@ -454,7 +454,7 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         """
         src/slack/model/BaseType.kt:5: Error: Moshi-sealed requires a type label specified after the 'sealed:' prefix. [MoshiUsageBlankTypeLabel]
         @JsonClass(generateAdapter = true, generator = "sealed:")
-                                                        ~~~~~~~
+                                                       ~~~~~~~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -512,7 +512,7 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         """
         src/slack/model/Example.kt:5: Error: Don't use blank JsonClass.generator values. [MoshiUsageBlankGenerator]
         @JsonClass(generateAdapter = true, generator = " ")
-                                                        ~
+                                                       ~~~
         1 errors, 0 warnings
         """
           .trimIndent()
@@ -772,7 +772,7 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         """
           src/slack/model/Example.kt:7: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
           data class Example(@Json(name = " ") val value: String)
-                                           ~
+                                          ~~~
           1 errors, 0 warnings
         """
           .trimIndent()
@@ -1936,7 +1936,7 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         """
           src/slack/model/Example.kt:7: Warning: Json.name with the same value as the property/enum member name is redundant. [MoshiUsageRedundantJsonName]
           data class Example(@Json(name = "value") val value: String)
-                                           ~~~~~
+                                          ~~~~~~~
           0 errors, 1 warnings
         """
           .trimIndent()
