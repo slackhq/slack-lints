@@ -69,7 +69,8 @@ class ArgInFormattedQuantityStringResDetectorTest : BaseSlackLintTest() {
               val s = res.getQuantityString(0, 3, 3, "asdf")
                                                      ~~~~~~
           0 errors, 2 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -202,7 +203,8 @@ class ArgInFormattedQuantityStringResDetectorTest : BaseSlackLintTest() {
               val s = res.getQuantityString(0, 3, getFormattedCount(), "asdf")
                                                                        ~~~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -238,7 +240,8 @@ class ArgInFormattedQuantityStringResDetectorTest : BaseSlackLintTest() {
               val s = res.getQuantityString(0, 3, LocalizationUtils.getFormattedCount(), "asdf")
                                                                                          ~~~~~~
           0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
