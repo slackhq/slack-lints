@@ -877,7 +877,7 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         """
           src/slack/model/TestEnum.kt:9: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
             @Json(name = " ") TEST
-                          ~
+                         ~~~
           1 errors, 0 warnings
         """
           .trimIndent()
@@ -943,7 +943,7 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
         """
           src/slack/model/Example.kt:9: Warning: Json.name with the same value as the property/enum member name is redundant. [MoshiUsageRedundantJsonName]
             @Json(name = "VALUE") VALUE
-                          ~~~~~
+                         ~~~~~~~
           0 errors, 1 warnings
         """
           .trimIndent()
