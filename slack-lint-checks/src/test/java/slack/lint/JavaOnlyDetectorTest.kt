@@ -584,7 +584,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
             """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
-                  @JavaOnly interface A {
+                  @JavaOnly fun interface A {
                     fun f()
                   }
                   """,
@@ -624,7 +624,7 @@ class JavaOnlyDetectorTest : BaseSlackLintTest() {
             """
                   package test.pkg
                   import slack.lint.annotations.JavaOnly
-                  interface A {
+                  fun interface A {
                     @JavaOnly fun f()
                   }
                   """,

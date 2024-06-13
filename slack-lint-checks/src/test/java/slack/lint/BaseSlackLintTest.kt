@@ -4,7 +4,6 @@ package slack.lint
 
 import com.android.tools.lint.checks.infrastructure.LintDetectorTest
 import com.android.tools.lint.checks.infrastructure.TestFile
-import com.android.tools.lint.checks.infrastructure.TestLintClient
 import com.android.tools.lint.checks.infrastructure.TestLintTask
 import com.android.tools.lint.checks.infrastructure.TestMode
 import com.android.tools.lint.detector.api.Detector
@@ -17,18 +16,13 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.InputStream
 import java.net.MalformedURLException
-import junit.framework.TestCase
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
-@Suppress("UnstableApiUsage")
 @RunWith(JUnit4::class)
 abstract class BaseSlackLintTest : LintDetectorTest() {
   private val rootPath = "resources/test/com/slack/lint/data/"
   private val stubsPath = "testStubs"
-
-  /** Optional override to customize the lint client name when running lint test tasks. */
-  open val lintClientName: String? = null
 
   /**
    * Lint periodically adds new "TestModes" to LintDetectorTest. These modes act as a sort of chaos
@@ -50,7 +44,7 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
   override fun lint(): TestLintTask {
     val sdkLocation = System.getProperty("android.sdk") ?: System.getenv("ANDROID_HOME")
     val lintTask = super.lint()
-    lintClientName?.let { lintTask.clientFactory { TestLintClient(it) } }
+    lintTask.configureOptions { flags -> flags.setUseK2Uast(TestBuildConfig.USE_K2_UAST) }
     sdkLocation?.let { lintTask.sdkHome(File(it)) }
     lintTask.allowCompilationErrors(false)
 
@@ -69,9 +63,9 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
     if (file.exists()) {
       try {
         return BufferedInputStream(FileInputStream(file))
-      } catch (e: FileNotFoundException) {
+      } catch (_: FileNotFoundException) {
         if (expectExists) {
-          TestCase.fail("Could not find file $relativePath")
+          fail("Could not find file $relativePath")
         }
       }
     }
