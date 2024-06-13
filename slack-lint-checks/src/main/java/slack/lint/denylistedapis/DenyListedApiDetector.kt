@@ -28,6 +28,7 @@ import com.android.tools.lint.detector.api.XmlScanner
 import com.intellij.psi.PsiField
 import com.intellij.psi.PsiMethod
 import java.util.EnumSet
+import java.util.ServiceLoader
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
@@ -54,7 +55,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
   override fun visitElement(context: XmlContext, element: Element) =
     CONFIG.visitor(context, element)
 
-  private class DenyListConfig(vararg entries: DenyListedEntry) {
+  private class DenyListConfig(entries: Set<DenyListedEntry>) {
     private class TypeConfig(entries: List<DenyListedEntry>) {
       @Suppress("UNCHECKED_CAST") // Safe because of filter call.
       val functionEntries =
@@ -213,8 +214,8 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
     val DEFAULT_ISSUE = createIssue("DenyListedApi")
     val BLOCKING_ISSUE = createIssue("DenyListedBlockingApi")
 
-    private val CONFIG =
-      DenyListConfig(
+    private val ENTRIES =
+      setOf(
         DenyListedEntry(
           className = "io.reactivex.rxjava3.core.Observable",
           functionName = "hide",
@@ -466,6 +467,10 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
         *rxJavaBlockingCalls().toTypedArray(),
       )
 
+    private val EXTERNAL_ENTRIES = loadExternalEntries()
+
+    private val CONFIG = DenyListConfig(ENTRIES + EXTERNAL_ENTRIES)
+
     val ISSUES = CONFIG.issues
 
     private fun createIssue(
@@ -490,6 +495,14 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
             EnumSet.of(Scope.TEST_SOURCES),
           ),
       )
+    }
+
+    private fun loadExternalEntries(): Set<DenyListedEntry> {
+      val loader = ServiceLoader.load(DenyListedEntryLoader::class.java)
+
+      return mutableSetOf<DenyListedEntry>().apply {
+        loader.iterator().forEachRemaining { addAll(it.entries) }
+      }
     }
   }
 }
