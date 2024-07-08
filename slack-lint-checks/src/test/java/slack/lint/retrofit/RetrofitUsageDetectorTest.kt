@@ -16,7 +16,10 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
         package slack.lint.annotations
 
         /**
-         * Suspend retrofit call functions annotated with this can return Unit.
+         * Annotation to allow suspend Retrofit functions to return Unit.
+         *
+         * When applied to a suspend Retrofit function, this annotation permits the function
+         * to have a return type of Unit, which otherwise will be flagged as an issue.
          */
         @Target(AnnotationTarget.FUNCTION)
         @Retention(AnnotationRetention.RUNTIME)
