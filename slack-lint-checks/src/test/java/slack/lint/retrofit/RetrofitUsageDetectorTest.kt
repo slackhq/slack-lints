@@ -4,9 +4,27 @@ package slack.lint.retrofit
 
 import com.android.tools.lint.detector.api.Detector
 import org.junit.Test
+import retrofit2.http.GET
 import slack.lint.BaseSlackLintTest
 
 class RetrofitUsageDetectorTest : BaseSlackLintTest() {
+
+  private companion object {
+    private val allowUnitResponse =
+      kotlin(
+        """
+        package slack.lint.annotations
+
+        /**
+         * Suspend retrofit call functions annotated with this can return Unit.
+         */
+        @Target(AnnotationTarget.FUNCTION)
+        @Retention(AnnotationRetention.RUNTIME)
+        annotation class AllowUnitResponse
+      """
+        )
+        .indented()
+  }
 
   private val retrofit2Jar = retrofit2Jar()
 
@@ -132,21 +150,34 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         retrofit2Jar,
+        allowUnitResponse,
         kotlin(
             """
             package test
 
             import retrofit2.http.GET
+            import slack.lint.annotations.AllowUnitResponse
 
             interface Example {
               @GET("/")
               fun unitMethod()
 
-              @GET("/")
-              suspend fun suspendUnitMethod()
+              @AllowUnitResponse
+              @PUT("/")
+              suspend fun suspendUnitMethodAllowUnitResponse()
 
               @GET("/")
               fun unitMethodExplicit(): Unit
+
+              @GET("/")
+              suspend fun suspendUnitMethod()
+
+              @AllowUnitResponse
+              @DELETE("/")
+              suspend fun suspendUnitMethodExplicitAllowUnitResponse(): Unit
+
+              @GET("/")
+              suspend fun suspendUnitMethodExplicit(): Unit
             }
           """
           )
@@ -155,13 +186,19 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/test/Example.kt:7: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
+        src/test/Example.kt:8: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
           fun unitMethod()
               ~~~~~~~~~~
-        src/test/Example.kt:13: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
+        src/test/Example.kt:15: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
           fun unitMethodExplicit(): Unit
               ~~~~~~~~~~~~~~~~~~
-        2 errors, 0 warnings
+        src/test/Example.kt:18: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
+          suspend fun suspendUnitMethod()
+                      ~~~~~~~~~~~~~~~~~
+        src/test/Example.kt:25: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
+          suspend fun suspendUnitMethodExplicit(): Unit
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~
+        4 errors, 0 warnings
         """
           .trimIndent()
       )

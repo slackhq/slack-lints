@@ -40,9 +40,12 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
 
         val returnType = node.safeReturnType(context)
         val isSuspend = context.evaluator.isSuspend(node)
-
+        val hasAllowUnitResponseAnnotation = node.findAnnotation("slack.lint.annotations.AllowUnitResponse") != null
+        val isVoidOrUnitReturnType = returnType == PsiTypes.voidType() ||
+                                     returnType?.canonicalText == "kotlin.Unit"
+        val shouldDisallowUnitReturnType = !isSuspend || !hasAllowUnitResponseAnnotation
         val hasInvalidUnitReturnTypeUsage = returnType == null ||
-                                   (!isSuspend && (returnType == PsiTypes.voidType() || returnType.canonicalText == "kotlin.Unit"))
+                                            (isVoidOrUnitReturnType && shouldDisallowUnitReturnType)
 
         if (hasInvalidUnitReturnTypeUsage) {
           node.report(
