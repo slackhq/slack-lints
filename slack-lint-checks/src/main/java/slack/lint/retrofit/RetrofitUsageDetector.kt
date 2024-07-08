@@ -39,11 +39,12 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
           HTTP_ANNOTATIONS.firstNotNullOfOrNull { node.findAnnotation(it) } ?: return
 
         val returnType = node.safeReturnType(context)
-        if (
-          returnType == null ||
-            returnType == PsiTypes.voidType() ||
-            returnType.canonicalText == "kotlin.Unit"
-        ) {
+        val isSuspend = context.evaluator.isSuspend(node)
+
+        val hasInvalidUnitReturnTypeUsage = returnType == null ||
+                                   (!isSuspend && (returnType == PsiTypes.voidType() || returnType.canonicalText == "kotlin.Unit"))
+
+        if (hasInvalidUnitReturnTypeUsage) {
           node.report(
             "Retrofit endpoints should return something other than Unit/void.",
             context.getNameLocation(node),

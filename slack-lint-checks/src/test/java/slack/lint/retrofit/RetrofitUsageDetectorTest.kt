@@ -158,13 +158,10 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
         src/test/Example.kt:7: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
           fun unitMethod()
               ~~~~~~~~~~
-        src/test/Example.kt:10: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
-          suspend fun suspendUnitMethod()
-                      ~~~~~~~~~~~~~~~~~
         src/test/Example.kt:13: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
           fun unitMethodExplicit(): Unit
               ~~~~~~~~~~~~~~~~~~
-        3 errors, 0 warnings
+        2 errors, 0 warnings
         """
           .trimIndent()
       )
