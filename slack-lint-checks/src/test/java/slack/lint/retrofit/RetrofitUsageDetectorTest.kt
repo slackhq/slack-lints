@@ -22,7 +22,7 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
          * to have a return type of Unit, which otherwise will be flagged as an issue.
          */
         @Target(AnnotationTarget.FUNCTION)
-        @Retention(AnnotationRetention.RUNTIME)
+        @Retention(AnnotationRetention.BINARY)
         annotation class AllowUnitResponse
       """
         )
