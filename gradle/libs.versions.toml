@@ -8,7 +8,7 @@ runtimeJvmTarget = "11"
 lint = "31.6.0-alpha07"
 
 [plugins]
-buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.3.5" }
+buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.4.0" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.6" }
 dokka = { id = "org.jetbrains.dokka", version = "1.9.20" }
 lint = { id = "com.android.lint", version = "8.6.0-alpha07" }
