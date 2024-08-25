@@ -15,7 +15,7 @@
  */
 package slack.lint.util
 
-import kotlinx.metadata.ClassName
+import kotlin.metadata.ClassName
 
 /**
  * Represents a qualified package
