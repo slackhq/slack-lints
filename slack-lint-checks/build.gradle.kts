@@ -14,7 +14,7 @@ plugins {
   alias(libs.plugins.buildConfig)
 }
 
-val lintKotlinVersion = KotlinVersion(1, 9, 22)
+val lintKotlinVersion = KotlinVersion(1, 9, 21)
 
 buildConfig {
   packageName("slack.lint")
@@ -63,7 +63,7 @@ dependencies {
 
   // For IDE linking of APIs
   testImplementation(libs.retrofit)
-  testImplementation(libs.eithernet)
+  testImplementation(libs.eithernet) { exclude(group = "org.jetbrains.kotlin") }
 }
 
 val kgpKotlinVersion =
