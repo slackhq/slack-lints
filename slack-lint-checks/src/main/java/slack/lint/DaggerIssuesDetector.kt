@@ -10,6 +10,7 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
+import com.android.tools.lint.detector.api.isDuplicatedOverload
 import com.android.tools.lint.detector.api.isReceiver
 import com.intellij.lang.jvm.JvmClassKind
 import com.intellij.psi.PsiTypes
@@ -132,6 +133,9 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
   override fun createUastHandler(context: JavaContext): UElementHandler {
     return object : UElementHandler() {
       override fun visitMethod(node: UMethod) {
+        if (node.isDuplicatedOverload()) {
+          return
+        }
         if (!node.isConstructor) {
           val isBinds = node.hasAnnotation(BINDS_ANNOTATION)
           val isProvides = node.hasAnnotation(PROVIDES_ANNOTATION)
