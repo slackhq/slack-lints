@@ -10,7 +10,7 @@ plugins {
   alias(libs.plugins.lint)
   alias(libs.plugins.ksp)
   alias(libs.plugins.mavenPublish)
-  alias(libs.plugins.mavenShadow)
+  alias(libs.plugins.shadow)
   alias(libs.plugins.buildConfig)
 }
 
