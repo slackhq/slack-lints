@@ -57,7 +57,9 @@ dependencies {
   shade(libs.kotlin.metadata) { exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib") }
 
   // Dupe the dep because the shaded version is compileOnly in the eyes of the gradle configurations
-  testImplementation(libs.kotlin.metadata) { exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib") }
+  testImplementation(libs.kotlin.metadata) {
+    exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
+  }
   testImplementation(libs.bundles.lintTest)
   testImplementation(libs.junit)
 
