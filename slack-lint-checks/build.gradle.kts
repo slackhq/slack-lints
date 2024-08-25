@@ -14,7 +14,7 @@ plugins {
   alias(libs.plugins.buildConfig)
 }
 
-val lintKotlinVersion = KotlinVersion(1, 9, 21)
+val lintKotlinVersion = KotlinVersion(1, 9, 20)
 
 buildConfig {
   packageName("slack.lint")
@@ -57,7 +57,7 @@ dependencies {
   shade(libs.kotlin.metadata) { exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib") }
 
   // Dupe the dep because the shaded version is compileOnly in the eyes of the gradle configurations
-  testImplementation(libs.kotlin.metadata)
+  testImplementation(libs.kotlin.metadata) { exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib") }
   testImplementation(libs.bundles.lintTest)
   testImplementation(libs.junit)
 
