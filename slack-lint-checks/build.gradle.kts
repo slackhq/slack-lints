@@ -43,7 +43,11 @@ val shade: Configuration = configurations.maybeCreate("compileShaded")
 
 configurations.getByName("compileOnly").extendsFrom(shade)
 
-tasks.test { maxParallelForks = Runtime.getRuntime().availableProcessors() * 2 }
+tasks.test {
+  // Disable noisy java applications launching during tests
+  jvmArgs("-Djava.awt.headless=true")
+  maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
+}
 
 dependencies {
   compileOnly(libs.bundles.lintApi)
@@ -87,9 +91,4 @@ val shadowJar =
 artifacts {
   runtimeOnly(shadowJar)
   archives(shadowJar)
-}
-
-tasks.test {
-  // Disable noisy java applications launching during tests
-  jvmArgs("-Djava.awt.headless=true")
 }
