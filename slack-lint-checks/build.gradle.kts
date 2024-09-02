@@ -25,11 +25,6 @@ buildConfig {
       "LINT_KOTLIN_VERSION",
       "KotlinVersion(${lintKotlinVersion.major}, ${lintKotlinVersion.minor}, ${lintKotlinVersion.patch})",
     )
-    buildConfigField(
-      "Boolean",
-      "USE_K2_UAST",
-      providers.systemProperty("useK2Uast").orElse("false"),
-    )
   }
 }
 
