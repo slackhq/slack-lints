@@ -32,7 +32,13 @@ class DaggerIssuesDetectorTest : BaseSlackLintTest() {
         .indented()
   }
 
-  override val skipTestModes: Array<TestMode> = arrayOf(TestMode.WHITESPACE, TestMode.SUPPRESSIBLE)
+  override val skipTestModes: Array<TestMode> =
+    arrayOf(
+      TestMode.WHITESPACE,
+      TestMode.SUPPRESSIBLE,
+      // This mode adds new parameters to binds() functions, resulting in different error messages
+      TestMode.JVM_OVERLOADS,
+    )
 
   override fun getDetector() = DaggerIssuesDetector()
 

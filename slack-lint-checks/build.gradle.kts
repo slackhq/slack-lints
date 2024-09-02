@@ -25,11 +25,6 @@ buildConfig {
       "LINT_KOTLIN_VERSION",
       "KotlinVersion(${lintKotlinVersion.major}, ${lintKotlinVersion.minor}, ${lintKotlinVersion.patch})",
     )
-    buildConfigField(
-      "Boolean",
-      "USE_K2_UAST",
-      providers.systemProperty("useK2Uast").orElse("false"),
-    )
   }
 }
 
@@ -48,7 +43,11 @@ val shade: Configuration = configurations.maybeCreate("compileShaded")
 
 configurations.getByName("compileOnly").extendsFrom(shade)
 
-tasks.test { maxParallelForks = Runtime.getRuntime().availableProcessors() * 2 }
+tasks.test {
+  // Disable noisy java applications launching during tests
+  jvmArgs("-Djava.awt.headless=true")
+  maxParallelForks = Runtime.getRuntime().availableProcessors() * 2
+}
 
 dependencies {
   compileOnly(libs.bundles.lintApi)

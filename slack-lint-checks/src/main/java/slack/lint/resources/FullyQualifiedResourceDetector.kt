@@ -20,6 +20,7 @@ import slack.lint.resources.ImportAliasesLoader.IMPORT_ALIASES
 import slack.lint.util.sourceImplementation
 
 private const val FQN_ANDROID_R = "android.R"
+private val WHITESPACE_REGEX = "\\s+".toRegex()
 
 /** Reports an error when an R class is referenced using its fully qualified name. */
 class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
@@ -42,8 +43,9 @@ class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
         if (!isKotlin(node.lang)) return
 
         val qualifier = node.receiver.asSourceString()
-        if (qualifier.endsWith(".R") && qualifier != FQN_ANDROID_R) {
-          val alias = importAliases[qualifier]
+        val normalized = qualifier.trim().replace(WHITESPACE_REGEX, "")
+        if (normalized.endsWith(".R") && normalized != FQN_ANDROID_R) {
+          val alias = importAliases[normalized]
 
           context.report(
             ISSUE,
@@ -88,7 +90,7 @@ class FullyQualifiedResourceDetector : Detector(), SourceCodeScanner {
             !imports.any {
               val importDirective = it.sourcePsi as? KtImportDirective
 
-              val importedFqNameString = importDirective?.importedFqName?.asString()
+              val importedFqNameString = importDirective?.importedFqName?.asString()?.trim()
               qualifier == importedFqNameString && alias == importDirective.aliasName
             }
 

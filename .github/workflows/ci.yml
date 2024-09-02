@@ -39,13 +39,13 @@ jobs:
 
       - name: Build and run tests
         id: gradle
-        run: ./gradlew check --quiet -DuseK2Uast=${{ matrix.useK2Uast }}
+        run: ./gradlew check --quiet -Dlint.use.fir.uast=${{ matrix.useK2Uast }}
 
       - name: (Fail-only) Upload build reports
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: reports
+          name: reports-useK2Uast=${{ matrix.useK2Uast }}
           path: |
             **/build/reports/**
 

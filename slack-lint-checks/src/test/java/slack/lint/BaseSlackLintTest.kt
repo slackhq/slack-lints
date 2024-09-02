@@ -44,7 +44,6 @@ abstract class BaseSlackLintTest : LintDetectorTest() {
   override fun lint(): TestLintTask {
     val sdkLocation = System.getProperty("android.sdk") ?: System.getenv("ANDROID_HOME")
     val lintTask = super.lint()
-    lintTask.configureOptions { flags -> flags.setUseK2Uast(TestBuildConfig.USE_K2_UAST) }
     sdkLocation?.let { lintTask.sdkHome(File(it)) }
     lintTask.allowCompilationErrors(false)
 
