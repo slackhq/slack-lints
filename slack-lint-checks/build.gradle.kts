@@ -88,3 +88,8 @@ artifacts {
   runtimeOnly(shadowJar)
   archives(shadowJar)
 }
+
+tasks.test {
+  // Disable noisy java applications launching during tests
+  jvmArgs("-Djava.awt.headless=true")
+}
