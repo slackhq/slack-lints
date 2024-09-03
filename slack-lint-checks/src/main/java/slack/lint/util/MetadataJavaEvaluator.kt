@@ -18,16 +18,16 @@ import com.intellij.psi.PsiType
 import java.util.Optional
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.jvm.optionals.getOrNull
-import kotlinx.metadata.ClassKind
-import kotlinx.metadata.KmClass
-import kotlinx.metadata.Modality
-import kotlinx.metadata.isData
-import kotlinx.metadata.isValue
-import kotlinx.metadata.jvm.JvmMetadataVersion
-import kotlinx.metadata.jvm.KotlinClassMetadata
-import kotlinx.metadata.jvm.Metadata as MetadataWithNullableArgs
-import kotlinx.metadata.kind
-import kotlinx.metadata.modality
+import kotlin.metadata.ClassKind
+import kotlin.metadata.KmClass
+import kotlin.metadata.Modality
+import kotlin.metadata.isData
+import kotlin.metadata.isValue
+import kotlin.metadata.jvm.JvmMetadataVersion
+import kotlin.metadata.jvm.KotlinClassMetadata
+import kotlin.metadata.jvm.Metadata as MetadataWithNullableArgs
+import kotlin.metadata.kind
+import kotlin.metadata.modality
 import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtObjectDeclaration

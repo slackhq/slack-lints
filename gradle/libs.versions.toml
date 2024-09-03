@@ -15,14 +15,14 @@ lint = { id = "com.android.lint", version = "8.7.0-alpha09" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "2.0.20-1.0.24" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.29.0" }
-mavenShadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
+shadow = { id = "com.gradleup.shadow", version = "8.3.0" }
 spotless = { id = "com.diffplug.spotless", version = "7.0.0.BETA2" }
 
 [libraries]
 autoService-annotations = "com.google.auto.service:auto-service-annotations:1.1.1"
 autoService-ksp = "dev.zacsweers.autoservice:auto-service-ksp:1.2.0"
 junit = "junit:junit:4.13.2"
-kotlin-metadata = { module = "org.jetbrains.kotlinx:kotlinx-metadata-jvm", version = "0.9.0" }
+kotlin-metadata = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
 ktfmt = { module = "com.facebook:ktfmt", version.ref = "ktfmt" }
 eithernet = "com.slack.eithernet:eithernet:1.9.0"
 retrofit = "com.squareup.retrofit2:retrofit:2.11.0"
