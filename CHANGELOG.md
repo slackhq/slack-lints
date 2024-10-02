@@ -1,6 +1,19 @@
 Changelog
 =========
 
+0.8.0
+-----
+
+_2024-10-02_
+
+- **Enhancement**: Tweak explanation for default dispatcher use in rx<->flow interop.
+- **Enhancement**: Switch to stable kotlin-metadata artifact
+- **Fix**: Allow Dagger providers to be called from test sources.
+- Build against lint `8.8.0-alpha04`.
+- Update `api`/`minApi` to `16` (Lint 8.7.0+).
+- Build against Kotlin `2.0.20`.
+- Target Kotlin language version `1.9` in lint-checks (imposed by lint), `2.0` in lint-annotations.
+
 0.7.3
 -----
 

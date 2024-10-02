@@ -6,6 +6,7 @@ import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.dokka.gradle.DokkaTaskPartial
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -91,8 +92,10 @@ subprojects {
         jvmTarget.set(JvmTarget.fromTarget(jvmTargetString))
         // TODO re-enable on checks if lint ever targets latest kotlin versions
         if (isChecksProject) {
+          // Lint forces Kotlin 1.9 still
+          languageVersion.set(KotlinVersion.KOTLIN_1_9)
+        } else {
           allWarningsAsErrors.set(true)
-          //          progressiveMode.set(true)
         }
       }
     }
