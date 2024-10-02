@@ -371,7 +371,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           className = "kotlinx.coroutines.rx3.RxCompletableKt",
           functionName = "rxCompletable",
           errorMessage =
-            "rxCompletable defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way.",
+            "rxCompletable defaults to Dispatchers.Default. Provide an explicit dispatcher which can be replaced with a test dispatcher to make your tests more deterministic.",
           parameters =
             listOf(
               "kotlin.coroutines.CoroutineContext",
@@ -383,7 +383,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           className = "kotlinx.coroutines.rx3.RxMaybeKt",
           functionName = "rxMaybe",
           errorMessage =
-            "rxMaybe defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way.",
+            "rxMaybe defaults to Dispatchers.Default. Provide an explicit dispatcher which can be replaced with a test dispatcher to make your tests more deterministic.",
           parameters =
             listOf(
               "kotlin.coroutines.CoroutineContext",
@@ -395,7 +395,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           className = "kotlinx.coroutines.rx3.RxSingleKt",
           functionName = "rxSingle",
           errorMessage =
-            "rxSingle defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way.",
+            "rxSingle defaults to Dispatchers.Default. Provide an explicit dispatcher which can be replaced with a test dispatcher to make your tests more deterministic.",
           parameters =
             listOf(
               "kotlin.coroutines.CoroutineContext",
@@ -407,7 +407,7 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
           className = "kotlinx.coroutines.rx3.RxObservableKt",
           functionName = "rxObservable",
           errorMessage =
-            "rxObservable defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way.",
+            "rxObservable defaults to Dispatchers.Default. Provide an explicit dispatcher which can be replaced with a test dispatcher to make your tests more deterministic.",
           parameters =
             listOf(
               "kotlin.coroutines.CoroutineContext",

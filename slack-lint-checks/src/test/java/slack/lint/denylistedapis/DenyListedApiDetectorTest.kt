@@ -446,7 +446,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/SomeClass.kt:6: Error: rxCompletable defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way. [DenyListedApi]
+        src/foo/SomeClass.kt:6: Error: rxCompletable defaults to Dispatchers.Default. Provide an explicit dispatcher which can be replaced with a test dispatcher to make your tests more deterministic. [DenyListedApi]
           val now = rxCompletable {}
                     ~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -478,7 +478,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/SomeClass.kt:6: Error: rxSingle defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way. [DenyListedApi]
+        src/foo/SomeClass.kt:6: Error: rxSingle defaults to Dispatchers.Default. Provide an explicit dispatcher which can be replaced with a test dispatcher to make your tests more deterministic. [DenyListedApi]
           val now = rxSingle { "a" }
                     ~~~~~~~~
         1 errors, 0 warnings
@@ -510,7 +510,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/SomeClass.kt:6: Error: rxMaybe defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way. [DenyListedApi]
+        src/foo/SomeClass.kt:6: Error: rxMaybe defaults to Dispatchers.Default. Provide an explicit dispatcher which can be replaced with a test dispatcher to make your tests more deterministic. [DenyListedApi]
           val now = rxMaybe { "a" }
                     ~~~~~~~
         1 errors, 0 warnings
@@ -544,7 +544,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/SomeClass.kt:6: Error: rxObservable defaults to Dispatchers.Default, which will silently introduce multithreading. Provide an explicit dispatcher. Dispatchers.Unconfined is usually the best choice, as it behaves in an rx-y way. [DenyListedApi]
+        src/foo/SomeClass.kt:6: Error: rxObservable defaults to Dispatchers.Default. Provide an explicit dispatcher which can be replaced with a test dispatcher to make your tests more deterministic. [DenyListedApi]
           val now = rxObservable { send("a") }
                     ~~~~~~~~~~~~
         1 errors, 0 warnings
