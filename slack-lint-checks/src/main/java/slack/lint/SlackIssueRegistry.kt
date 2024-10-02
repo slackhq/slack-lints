@@ -19,6 +19,8 @@ import slack.lint.resources.WrongResourceImportAliasDetector
 import slack.lint.retrofit.RetrofitUsageDetector
 import slack.lint.rx.RxSubscribeOnMainDetector
 import slack.lint.text.SpanMarkPointMissingMaskDetector
+import slack.lint.ui.DoNotCallViewToString
+import slack.lint.ui.ItemDecorationViewBindingDetector
 
 @AutoService(IssueRegistry::class)
 class SlackIssueRegistry : IssueRegistry() {
@@ -66,5 +68,8 @@ class SlackIssueRegistry : IssueRegistry() {
     add(ParcelizeFunctionPropertyDetector.ISSUE)
     add(ExceptionMessageDetector.ISSUE)
     add(MustUseNamedParamsDetector.ISSUE)
+    add(NotNullOperatorDetector.ISSUE)
+    add(DoNotCallViewToString.ISSUE)
+    add(ItemDecorationViewBindingDetector.ISSUE)
   }
 }
