@@ -4,6 +4,11 @@ Changelog
 **Unreleased**
 --------------
 
+0.8.1
+-----
+
+_2024-10-03_
+
 - Open-source `AvoidUsingNotNullOperator`, `InflationInItemDecoration`, and `DoNotCallViewToString` checks.
 
 0.8.0
