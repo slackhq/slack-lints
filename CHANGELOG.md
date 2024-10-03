@@ -1,6 +1,11 @@
 Changelog
 =========
 
+**Unreleased**
+--------------
+
+- Open-source `AvoidUsingNotNullOperator`, `InflationInItemDecoration`, and `DoNotCallViewToString` checks.
+
 0.8.0
 -----
 
