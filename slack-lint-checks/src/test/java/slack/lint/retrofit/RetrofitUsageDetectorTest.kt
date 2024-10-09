@@ -110,15 +110,15 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
               @Multipart
               @POST("/")
               fun multipartCorrect(@Part input: String): String
-              
+
               @Multipart
               @GET("/")
               fun multipartBadMethod(@Part input: String): String
-              
+
               @Multipart
               @POST("/")
               fun multipartBadParameterType(@Body input: String): String
-              
+
               @Multipart
               @POST("/")
               fun multipartMissingPartParameter(): String
