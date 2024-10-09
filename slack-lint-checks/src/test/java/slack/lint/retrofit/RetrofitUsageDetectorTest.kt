@@ -90,6 +90,8 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
 
             import retrofit2.http.Body
             import retrofit2.http.GET
+            import retrofit2.http.Multipart
+            import retrofit2.http.Part
             import retrofit2.http.POST
 
             interface Example {
@@ -104,6 +106,22 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
 
               @POST("/")
               fun correct(@Body input: String): String
+
+              @Multipart
+              @POST("/")
+              fun multipartCorrect(@Part input: String): String
+              
+              @Multipart
+              @GET("/")
+              fun multipartBadMethod(@Part input: String): String
+              
+              @Multipart
+              @POST("/")
+              fun multipartBadParameterType(@Body input: String): String
+              
+              @Multipart
+              @POST("/")
+              fun multipartMissingPartParameter(): String
             }
           """
           )
@@ -112,17 +130,26 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/test/Example.kt:8: Error: @Body param requires @PUT, @POST, or @PATCH. [RetrofitUsage]
-          @GET("/")
-          ~~~~~~~~~
-        src/test/Example.kt:11: Error: This annotation requires an @Body parameter. [RetrofitUsage]
-          @POST("/")
-          ~~~~~~~~~~
-        src/test/Example.kt:15: Error: Duplicate @Body param!. [RetrofitUsage]
-          fun doubleBody(@Body input: String, @Body input2: String): String
-                                              ~~~~~~~~~~~~~~~~~~~~
-        3 errors, 0 warnings
-        """
+          src/test/Example.kt:10: Error: @Body param requires @PUT, @POST, or @PATCH. [RetrofitUsage]
+            @GET("/")
+            ~~~~~~~~~
+          src/test/Example.kt:13: Error: This annotation requires an @Body parameter. [RetrofitUsage]
+            @POST("/")
+            ~~~~~~~~~~
+          src/test/Example.kt:17: Error: Duplicate @Body param!. [RetrofitUsage]
+            fun doubleBody(@Body input: String, @Body input2: String): String
+                                                ~~~~~~~~~~~~~~~~~~~~
+          src/test/Example.kt:28: Error: @Multipart requires @PUT, @POST, or @PATCH. [RetrofitUsage]
+            fun multipartBadMethod(@Part input: String): String
+                ~~~~~~~~~~~~~~~~~~
+          src/test/Example.kt:31: Error: @Multipart methods should only contain @Part parameters. [RetrofitUsage]
+            @POST("/")
+            ~~~~~~~~~~
+          src/test/Example.kt:35: Error: @Multipart methods should contain at least one @Part parameter. [RetrofitUsage]
+            @POST("/")
+            ~~~~~~~~~~
+          6 errors, 0 warnings
+          """
           .trimIndent()
       )
   }
