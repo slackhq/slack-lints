@@ -4,6 +4,13 @@ Changelog
 **Unreleased**
 --------------
 
+0.8.2
+-----
+
+_2024-10-14_
+
+- **Enhancement**: Handle `@Multipart` and `@Part` annotations in Retrofit lints.
+
 0.8.1
 -----
 
