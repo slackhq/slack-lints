@@ -55,13 +55,13 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
         val annotationsByFqcn = node.uAnnotations.associateBy { it.qualifiedName }
 
         val isFormUrlEncoded = FQCN_FORM_ENCODED in annotationsByFqcn
-        val isMultipart = FQCN_MULTIPART in annotationsByFqcn
 
         if (isFormUrlEncoded && !isBodyMethod) {
           node.report("@FormUrlEncoded requires @PUT, @POST, or @PATCH.")
           return
         }
 
+        val isMultipart = FQCN_MULTIPART in annotationsByFqcn
         if (isMultipart && !isBodyMethod) {
           node.report("@Multipart requires @PUT, @POST, or @PATCH.")
           return
