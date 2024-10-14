@@ -61,12 +61,19 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
           return
         }
 
+        val isMultipart = FQCN_MULTIPART in annotationsByFqcn
+        if (isMultipart && !isBodyMethod) {
+          node.report("@Multipart requires @PUT, @POST, or @PATCH.")
+          return
+        }
+
         val hasPath =
           (httpAnnotation.findDeclaredAttributeValue("value")?.evaluate() as? String)?.isNotBlank()
             ?: false
 
         var hasBodyParam = false
         var hasFieldParams = false
+        var hasPartParams = false
         var hasUrlParam = false
 
         for (parameter in node.uastParameters) {
@@ -101,6 +108,12 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
             } else {
               hasUrlParam = true
             }
+          } else if (parameter.hasAnnotation(FQCN_PART)) {
+            if (!isBodyMethod) {
+              httpAnnotation.report("@Part param requires @PUT, @POST, or @PATCH.")
+            } else {
+              hasPartParams = true
+            }
           }
         }
 
@@ -112,7 +125,13 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
               quickFixData = LintFix.create().removeNode(context, annotation.sourcePsiElement!!),
             )
           }
-        } else if (isBodyMethod && !hasBodyParam && !hasFieldParams) {
+        } else if (isMultipart) {
+          if (hasBodyParam || hasFieldParams) {
+            httpAnnotation.report("@Multipart methods should only contain @Part parameters.")
+          } else if (!hasPartParams) {
+            httpAnnotation.report("@Multipart methods should contain at least one @Part parameter.")
+          }
+        } else if (isBodyMethod && !hasBodyParam && !hasFieldParams && !hasPartParams) {
           httpAnnotation.report("This annotation requires an `@Body` parameter.")
         }
         if (!hasPath && !hasUrlParam) {
@@ -144,7 +163,9 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
     private val HTTP_BODY_ANNOTATIONS =
       setOf("retrofit2.http.PATCH", "retrofit2.http.POST", "retrofit2.http.PUT")
     private const val FQCN_FORM_ENCODED = "retrofit2.http.FormUrlEncoded"
+    private const val FQCN_MULTIPART = "retrofit2.http.Multipart"
     private const val FQCN_FIELD = "retrofit2.http.Field"
+    private const val FQCN_PART = "retrofit2.http.Part"
     private const val FQCN_FIELD_MAP = "retrofit2.http.FieldMap"
     private const val FQCN_BODY = "retrofit2.http.Body"
     private const val FQCN_URL = "retrofit2.http.Url"
