@@ -24,7 +24,7 @@ autoService-ksp = "dev.zacsweers.autoservice:auto-service-ksp:1.2.0"
 junit = "junit:junit:4.13.2"
 kotlin-metadata = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
 ktfmt = { module = "com.facebook:ktfmt", version.ref = "ktfmt" }
-eithernet = "com.slack.eithernet:eithernet:1.9.0"
+eithernet = "com.slack.eithernet:eithernet:2.0.0"
 retrofit = "com.squareup.retrofit2:retrofit:2.11.0"
 lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "lint" }
 lint-checks = { module = "com.android.tools.lint:lint-checks", version.ref = "lint" }
