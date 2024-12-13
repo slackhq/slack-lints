@@ -13,7 +13,7 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.7" }
 dokka = { id = "org.jetbrains.dokka", version = "1.9.20" }
 lint = { id = "com.android.lint", version = "8.9.0-alpha05" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.0.21-1.0.27" }
+ksp = { id = "com.google.devtools.ksp", version = "2.1.0-1.0.29" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.30.0" }
 shadow = { id = "com.gradleup.shadow", version = "8.3.5" }
 spotless = { id = "com.diffplug.spotless", version = "7.0.0.BETA4" }
@@ -24,7 +24,7 @@ autoService-ksp = "dev.zacsweers.autoservice:auto-service-ksp:1.2.0"
 junit = "junit:junit:4.13.2"
 kotlin-metadata = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
 ktfmt = { module = "com.facebook:ktfmt", version.ref = "ktfmt" }
-eithernet = "com.slack.eithernet:eithernet:1.9.0"
+eithernet = "com.slack.eithernet:eithernet:2.0.0"
 retrofit = "com.squareup.retrofit2:retrofit:2.11.0"
 lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "lint" }
 lint-checks = { module = "com.android.tools.lint:lint-checks", version.ref = "lint" }
