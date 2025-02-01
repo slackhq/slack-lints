@@ -422,6 +422,18 @@ internal class DenyListedApiDetector : Detector(), SourceCodeScanner, XmlScanner
             "Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Date in Java 8+.",
         ),
         DenyListedEntry(
+          className = "java.util.Calendar",
+          fieldName = MatchAll,
+          errorMessage =
+            "Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Date in Java 8+.",
+        ),
+        DenyListedEntry(
+          className = "java.util.Calendar",
+          functionName = MatchAll,
+          errorMessage =
+            "Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Date in Java 8+.",
+        ),
+        DenyListedEntry(
           className = "java.text.DateFormat",
           fieldName = MatchAll,
           errorMessage =

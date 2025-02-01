@@ -569,6 +569,64 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
+  fun javaUtilCalendarField() {
+    lint()
+      .files(
+        kotlin(
+            """
+          package foo
+
+          import java.util.Calendar
+
+          class SomeClass {
+            val hourOfDay = Calendar.HOUR_OF_DAY
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:6: Error: Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Date in Java 8+. [DenyListedApi]
+          val hourOfDay = Calendar.HOUR_OF_DAY
+                          ~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun javaUtilCalendarFunction() {
+    lint()
+      .files(
+        kotlin(
+            """
+          package foo
+
+          import java.util.Calendar
+
+          class SomeClass {
+            val calendar = Calendar.getInstance()
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:6: Error: Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Date in Java 8+. [DenyListedApi]
+          val calendar = Calendar.getInstance()
+                                  ~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
   fun rxCompletableParameterless() {
     lint()
       .files(
