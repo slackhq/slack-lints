@@ -588,7 +588,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/SomeClass.kt:6: Error: Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Date in Java 8+. [DenyListedApi]
+        src/foo/SomeClass.kt:6: Error: Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Calendar in Java 8+. [DenyListedApi]
           val hourOfDay = Calendar.HOUR_OF_DAY
                           ~~~~~~~~~~~~~~~~~~~~
         1 errors, 0 warnings
@@ -617,7 +617,7 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/SomeClass.kt:6: Error: Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Date in Java 8+. [DenyListedApi]
+        src/foo/SomeClass.kt:6: Error: Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Calendar in Java 8+. [DenyListedApi]
           val calendar = Calendar.getInstance()
                                   ~~~~~~~~~~~
         1 errors, 0 warnings
