@@ -424,6 +424,209 @@ class DenyListedApiDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
+  fun javaUtilDate() {
+    lint()
+      .files(
+        kotlin(
+            """
+          package foo
+
+          import java.util.Date
+
+          class SomeClass {
+            val now = Date()
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:6: Error: Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Date in Java 8+. [DenyListedApi]
+          val now = Date()
+                    ~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun javaTextDateFormatField() {
+    lint()
+      .files(
+        kotlin(
+            """
+          package foo
+
+          import java.text.DateFormat
+
+          class SomeClass {
+            val yearField = DateFormat.YEAR_FIELD
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:6: Error: Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+. [DenyListedApi]
+          val yearField = DateFormat.YEAR_FIELD
+                          ~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun javaTextDateFormatFunction() {
+    lint()
+      .files(
+        kotlin(
+            """
+          package foo
+
+          import java.text.DateFormat
+
+          class SomeClass {
+            val dateFormat = DateFormat.getDateInstance()
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:6: Error: Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+. [DenyListedApi]
+          val dateFormat = DateFormat.getDateInstance()
+                                      ~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun javaTextSimpleDateFormatField() {
+    lint()
+      .files(
+        kotlin(
+            """
+          package foo
+
+          import java.text.SimpleDateFormat
+
+          class SomeClass {
+            val yearField = SimpleDateFormat.YEAR_FIELD
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:6: Error: Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+. [DenyListedApi]
+          val yearField = SimpleDateFormat.YEAR_FIELD
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun javaTextSimpleDateFormatFunction() {
+    lint()
+      .files(
+        kotlin(
+            """
+          package foo
+
+          import java.text.SimpleDateFormat
+
+          class SomeClass {
+            val dateFormat = SimpleDateFormat.getDateInstance()
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:6: Error: Use java.time.DateTimeFormatter instead. There is no reason to use java.text.DateFormat in Java 8+. [DenyListedApi]
+          val dateFormat = SimpleDateFormat.getDateInstance()
+                                            ~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun javaUtilCalendarField() {
+    lint()
+      .files(
+        kotlin(
+            """
+          package foo
+
+          import java.util.Calendar
+
+          class SomeClass {
+            val hourOfDay = Calendar.HOUR_OF_DAY
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:6: Error: Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Calendar in Java 8+. [DenyListedApi]
+          val hourOfDay = Calendar.HOUR_OF_DAY
+                          ~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun javaUtilCalendarFunction() {
+    lint()
+      .files(
+        kotlin(
+            """
+          package foo
+
+          import java.util.Calendar
+
+          class SomeClass {
+            val calendar = Calendar.getInstance()
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/foo/SomeClass.kt:6: Error: Use java.time.Instant or java.time.ZonedDateTime instead. There is no reason to use java.util.Calendar in Java 8+. [DenyListedApi]
+          val calendar = Calendar.getInstance()
+                                  ~~~~~~~~~~~
+        1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
   fun rxCompletableParameterless() {
     lint()
       .files(
