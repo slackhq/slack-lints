@@ -17,60 +17,58 @@ import org.jetbrains.uast.kotlin.isKotlin
 import slack.lint.util.sourceImplementation
 
 class NotNullReadOnlyVariableDetector : Detector(), SourceCodeScanner {
-    override fun getApplicableUastTypes() =
-        listOf(ULocalVariable::class.java, UVariable::class.java)
+  override fun getApplicableUastTypes() = listOf(ULocalVariable::class.java, UVariable::class.java)
 
-    override fun createUastHandler(context: JavaContext): UElementHandler? {
-        if (!isKotlin(context.uastFile?.lang)) return null
+  override fun createUastHandler(context: JavaContext): UElementHandler? {
+    if (!isKotlin(context.uastFile?.lang)) return null
 
-        return object : UElementHandler() {
+    return object : UElementHandler() {
 
-            fun isNullInitializedForReadOnlyVariable(node: UVariable): Boolean {
-                val uastInitializer = node.uastInitializer
+      fun isNullInitializedForReadOnlyVariable(node: UVariable): Boolean {
+        val uastInitializer = node.uastInitializer
 
-                val isNullInitialized =
-                    uastInitializer is ULiteralExpression && uastInitializer.isNull
-                val isReadOnlyVariable = !node.isWritable
+        val isNullInitialized = uastInitializer is ULiteralExpression && uastInitializer.isNull
+        val isReadOnlyVariable = !node.isWritable
 
-                return isNullInitialized && isReadOnlyVariable
-            }
+        return isNullInitialized && isReadOnlyVariable
+      }
 
-            fun report(node: UExpression?) {
-                context.report(
-                    ISSUE,
-                    context.getLocation(node),
-                    "Avoid initializing read-only variable with null",
-                )
-            }
+      fun report(node: UExpression?) {
+        context.report(
+          ISSUE,
+          context.getLocation(node),
+          "Avoid initializing read-only variable with null",
+        )
+      }
 
-            override fun visitLocalVariable(node: ULocalVariable) {
-                if (isNullInitializedForReadOnlyVariable(node)) {
-                    report(node.uastInitializer)
-                }
-            }
-
-            override fun visitVariable(node: UVariable) {
-                if (isNullInitializedForReadOnlyVariable(node)) {
-                    report(node.uastInitializer)
-                }
-            }
+      override fun visitLocalVariable(node: ULocalVariable) {
+        if (isNullInitializedForReadOnlyVariable(node)) {
+          report(node.uastInitializer)
         }
-    }
+      }
 
-    companion object {
-        val ISSUE: Issue =
-            Issue.create(
-                "AvoidNullInitializationForReadOnlyVariables",
-                "Avoid initializing read-only variable with null in Kotlin",
-                """
+      override fun visitVariable(node: UVariable) {
+        if (isNullInitializedForReadOnlyVariable(node)) {
+          report(node.uastInitializer)
+        }
+      }
+    }
+  }
+
+  companion object {
+    val ISSUE: Issue =
+      Issue.create(
+        "AvoidNullInitializationForReadOnlyVariables",
+        "Avoid initializing read-only variable with null in Kotlin",
+        """
                     Avoid unnecessary `null` initialization for read-only variables, as they can never be reassigned. \
                     Assigning null explicitly does not provide any real benefit and may mislead readers into thinking the value could change later. \
                     If the variable needs to be modified later, it's better to use `var` instead of `val`, or consider using `lateinit var` if it is guaranteed to be initialized before use.
                     """,
-                Category.CORRECTNESS,
-                6,
-                Severity.WARNING,
-                sourceImplementation<NotNullReadOnlyVariableDetector>(),
-            )
-    }
+        Category.CORRECTNESS,
+        6,
+        Severity.WARNING,
+        sourceImplementation<NotNullReadOnlyVariableDetector>(),
+      )
+  }
 }
