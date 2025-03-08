@@ -9,7 +9,7 @@ lint = "31.8.0-alpha07"
 
 [plugins]
 buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.5.1" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.7" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.8" }
 dokka = { id = "org.jetbrains.dokka", version = "1.9.20" }
 lint = { id = "com.android.lint", version = "8.8.0-alpha09" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
