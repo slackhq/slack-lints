@@ -61,8 +61,12 @@ class NotNullReadOnlyVariableDetector : Detector(), SourceCodeScanner {
         val ISSUE: Issue =
             Issue.create(
                 "AvoidNullInitializationForReadOnlyVariables",
-                "Avoid initializing read-only variable with null",
-                "Avoid unnecessary null initialization for read-only variables.",
+                "Avoid initializing read-only variable with null in Kotlin",
+                """
+                    Avoid unnecessary `null` initialization for read-only variables, as they can never be reassigned. \
+                    Assigning null explicitly does not provide any real benefit and may mislead readers into thinking the value could change later. \
+                    If the variable needs to be modified later, it's better to use `var` instead of `val`, or consider using `lateinit var` if it is guaranteed to be initialized before use.
+                    """,
                 Category.CORRECTNESS,
                 6,
                 Severity.WARNING,
