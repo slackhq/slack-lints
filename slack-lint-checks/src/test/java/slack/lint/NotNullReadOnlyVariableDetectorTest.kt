@@ -1,3 +1,5 @@
+// Copyright (C) 2025 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.checks.infrastructure.TestMode
@@ -15,12 +17,12 @@ class NotNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
         kotlin(
           """
                     package foo
-    
+
                     class Test {
                         val str: String? = null
-                     
+
                         fun method() {
-                            val strInFunction: String? = null 
+                            val strInFunction: String? = null
                         }
                     }
                 """
@@ -35,11 +37,10 @@ class NotNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
                                     val str: String? = null
                                                        ~~~~
             src/foo/Test.kt:8: Warning: Avoid initializing read-only variable with null [AvoidNullInitializationForReadOnlyVariables]
-                                        val strInFunction: String? = null 
+                                        val strInFunction: String? = null
                                                                      ~~~~
             0 errors, 2 warnings
         """
-
           .trimIndent()
       )
   }
