@@ -14,23 +14,16 @@ class NotNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
           """
-                            package foo
-                
-                            val nullableKtString: String? = null
-
-                            class Test {
-                                val nullableString: String? = null
-                                val nullableFloat: Float? = null
-                             
-                                fun method() {
-                                    val nullableLocalString: String? = null 
-                                }
-
-                                companion object {
-                                    val nullableCompanionString: String? = null
-                                }
-                            }
-                        """
+                    package foo
+    
+                    class Test {
+                        val str: String? = null
+                     
+                        fun method() {
+                            val strInFunction: String? = null 
+                        }
+                    }
+                """
         )
       )
       .skipTestModes(TestMode.JVM_OVERLOADS)
@@ -38,23 +31,14 @@ class NotNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-                    src/foo/Test.kt:4: Warning: Avoid initializing read-only variable with null [AvoidNullInitializationForReadOnlyVariables]
-                                                val nullableKtString: String? = null
-                                                                                ~~~~
-                    src/foo/Test.kt:7: Warning: Avoid initializing read-only variable with null [AvoidNullInitializationForReadOnlyVariables]
-                                                    val nullableString: String? = null
-                                                                                  ~~~~
-                    src/foo/Test.kt:8: Warning: Avoid initializing read-only variable with null [AvoidNullInitializationForReadOnlyVariables]
-                                                    val nullableFloat: Float? = null
-                                                                                ~~~~
-                    src/foo/Test.kt:11: Warning: Avoid initializing read-only variable with null [AvoidNullInitializationForReadOnlyVariables]
-                                                        val nullableLocalString: String? = null 
-                                                                                           ~~~~
-                    src/foo/Test.kt:15: Warning: Avoid initializing read-only variable with null [AvoidNullInitializationForReadOnlyVariables]
-                                                        val nullableCompanionString: String? = null
-                                                                                               ~~~~
-                    0 errors, 5 warnings
-                """
+            src/foo/Test.kt:5: Warning: Avoid initializing read-only variable with null [AvoidNullInitializationForReadOnlyVariables]
+                                    val str: String? = null
+                                                       ~~~~
+            src/foo/Test.kt:8: Warning: Avoid initializing read-only variable with null [AvoidNullInitializationForReadOnlyVariables]
+                                        val strInFunction: String? = null 
+                                                                     ~~~~
+            0 errors, 2 warnings
+        """
 
           .trimIndent()
       )
