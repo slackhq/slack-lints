@@ -5,13 +5,13 @@ package slack.lint
 import com.android.tools.lint.checks.infrastructure.TestMode
 import org.junit.Test
 
-class NotNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
-  override fun getDetector() = NotNullReadOnlyVariableDetector()
+class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
+    override fun getDetector() = AlwaysNullReadOnlyVariableDetector()
 
-  override fun getIssues() = listOf(NotNullReadOnlyVariableDetector.ISSUE)
+    override fun getIssues() = listOf(AlwaysNullReadOnlyVariableDetector.ISSUE)
 
-  @Test
-  fun testDocumentationExample() {
+    @Test
+    fun `initializing a read-only variable with null shows warnings`() {
     lint()
       .files(
         kotlin(
