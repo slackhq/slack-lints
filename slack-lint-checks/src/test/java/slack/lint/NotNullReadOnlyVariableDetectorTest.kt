@@ -15,31 +15,32 @@ class NotNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
-                    package foo
-
-                    class Test {
-                        val str: String? = null
-
-                        fun method() {
-                            val strInFunction: String? = null
-                        }
-                    }
-                """
-        )
+            """
+            package foo
+    
+            class Test {
+                val str: String? = null
+    
+                fun method() {
+                    val strInFunction: String? = null
+                }
+            }
+            """
+        ).indented()
       )
+        .allowMissingSdk()
       .skipTestModes(TestMode.JVM_OVERLOADS)
       .allowDuplicates()
       .run()
       .expect(
         """
-            src/foo/Test.kt:5: Warning: Avoid initializing read-only variable with null [AvoidNullInitializationForReadOnlyVariables]
-                                    val str: String? = null
-                                                       ~~~~
-            src/foo/Test.kt:8: Warning: Avoid initializing read-only variable with null [AvoidNullInitializationForReadOnlyVariables]
-                                        val strInFunction: String? = null
-                                                                     ~~~~
-            0 errors, 2 warnings
+        src/foo/Test.kt:4: Warning: Avoid initializing read-only variable with null [AvoidNullInitializationForReadOnlyVariables]
+            val str: String? = null
+                               ~~~~
+        src/foo/Test.kt:7: Warning: Avoid initializing read-only variable with null [AvoidNullInitializationForReadOnlyVariables]
+                val strInFunction: String? = null
+                                             ~~~~
+        0 errors, 2 warnings
         """
           .trimIndent()
       )
