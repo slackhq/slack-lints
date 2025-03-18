@@ -28,7 +28,6 @@ class NotNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
             """
         ).indented()
       )
-        .allowMissingSdk()
       .skipTestModes(TestMode.JVM_OVERLOADS)
       .allowDuplicates()
       .run()
