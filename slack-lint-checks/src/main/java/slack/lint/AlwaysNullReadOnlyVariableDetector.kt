@@ -16,7 +16,7 @@ import org.jetbrains.uast.UVariable
 import org.jetbrains.uast.kotlin.isKotlin
 import slack.lint.util.sourceImplementation
 
-class NotNullReadOnlyVariableDetector : Detector(), SourceCodeScanner {
+class AlwaysNullReadOnlyVariableDetector : Detector(), SourceCodeScanner {
   override fun getApplicableUastTypes() = listOf(ULocalVariable::class.java, UVariable::class.java)
 
   override fun createUastHandler(context: JavaContext): UElementHandler? {
@@ -61,14 +61,14 @@ class NotNullReadOnlyVariableDetector : Detector(), SourceCodeScanner {
         "AvoidNullInitializationForReadOnlyVariables",
         "Avoid initializing read-only variable with null in Kotlin",
         """
-                    Avoid unnecessary `null` initialization for read-only variables, as they can never be reassigned. \
-                    Assigning null explicitly does not provide any real benefit and may mislead readers into thinking the value could change later. \
-                    If the variable needs to be modified later, it's better to use `var` instead of `val`, or consider using `lateinit var` if it is guaranteed to be initialized before use.
-                    """,
+          Avoid unnecessary `null` initialization for read-only variables, as they can never be reassigned. \
+          Assigning null explicitly does not provide any real benefit and may mislead readers into thinking the value could change later. \
+          If the variable needs to be modified later, it's better to use `var` instead of `val`, or consider using `lateinit var` if it is guaranteed to be initialized before use.
+        """,
         Category.CORRECTNESS,
         6,
         Severity.WARNING,
-        sourceImplementation<NotNullReadOnlyVariableDetector>(),
+        sourceImplementation<AlwaysNullReadOnlyVariableDetector>(),
       )
   }
 }
