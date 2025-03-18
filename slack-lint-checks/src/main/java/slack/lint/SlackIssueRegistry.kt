@@ -71,6 +71,6 @@ class SlackIssueRegistry : IssueRegistry() {
     add(NotNullOperatorDetector.ISSUE)
     add(DoNotCallViewToString.ISSUE)
     add(ItemDecorationViewBindingDetector.ISSUE)
-    add(NotNullReadOnlyVariableDetector.ISSUE)
+    add(AlwaysNullReadOnlyVariableDetector.ISSUE)
   }
 }
