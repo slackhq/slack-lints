@@ -6,27 +6,28 @@ import com.android.tools.lint.checks.infrastructure.TestMode
 import org.junit.Test
 
 class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
-    override fun getDetector() = AlwaysNullReadOnlyVariableDetector()
+  override fun getDetector() = AlwaysNullReadOnlyVariableDetector()
 
-    override fun getIssues() = listOf(AlwaysNullReadOnlyVariableDetector.ISSUE)
+  override fun getIssues() = listOf(AlwaysNullReadOnlyVariableDetector.ISSUE)
 
-    @Test
-    fun `initializing a read-only variable with null shows warnings`() {
+  @Test
+  fun `initializing a read-only variable with null shows warnings`() {
     lint()
       .files(
         kotlin(
             """
             package foo
-    
+
             class Test {
                 val str: String? = null
-    
+
                 fun method() {
                     val strInFunction: String? = null
                 }
             }
             """
-        ).indented()
+          )
+          .indented()
       )
       .skipTestModes(TestMode.JVM_OVERLOADS)
       .allowDuplicates()
