@@ -19,9 +19,11 @@ plugins {
   alias(libs.plugins.ksp) apply false
 }
 
-tasks.dokkaHtmlMultiModule {
-  outputDirectory.set(rootDir.resolve("docs/api/0.x"))
-  includes.from(project.layout.projectDirectory.file("README.md"))
+dokka {
+  dokkaPublications.html {
+    outputDirectory.set(rootDir.resolve("docs/api/0.x"))
+    includes.from(project.layout.projectDirectory.file("README.md"))
+  }
 }
 
 val ktfmtVersion = libs.versions.ktfmt.get()
