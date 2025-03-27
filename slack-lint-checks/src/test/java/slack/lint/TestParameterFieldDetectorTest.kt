@@ -1,3 +1,5 @@
+// Copyright (C) 2025 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import org.junit.Test
@@ -42,7 +44,8 @@ class TestParameterFieldDetectorTest : BaseSlackLintTest() {
                       @com.google.testing.junit.testparameterinjector.TestParameter val myParam: String
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 error
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 
@@ -65,7 +68,8 @@ class TestParameterFieldDetectorTest : BaseSlackLintTest() {
                       @field:com.google.testing.junit.testparameterinjector.TestParameter val myParam: String
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 error
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 

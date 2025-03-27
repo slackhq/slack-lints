@@ -1,3 +1,5 @@
+// Copyright (C) 2025 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -8,11 +10,8 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.LintFix
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
-import com.android.tools.lint.detector.api.getUMethod
 import org.jetbrains.kotlin.psi.KtParameter
-import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
-import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UParameter
