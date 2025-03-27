@@ -98,6 +98,7 @@ class RedactedUsageDetectorTest : BaseSlackLintTest() {
           .indented(),
       )
       .allowCompilationErrors(false)
+      .allowClassNameClashes(true)
       .run()
       .expect(
         """

@@ -2,12 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
+import com.android.tools.lint.checks.infrastructure.TestLintTask
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Issue
 import org.junit.Test
 
-@Suppress("UnstableApiUsage")
 class ViewContextDetectorTest : BaseSlackLintTest() {
+
+  override fun lint(): TestLintTask {
+    return super.lint().allowClassNameClashes(true)
+  }
+
   @Test
   fun test_customViewInternalCaller() {
     lint()
