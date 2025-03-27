@@ -64,7 +64,7 @@ constructor(
       StringOption(
         "mock-factories",
         "A comma-separated list of mock factories (org.mockito.Mockito#methodName).",
-        "org.mockito.Mockito#mock,org.mockito.Mockito#spy,slack.test.mockito.MockitoHelpers#mock,slack.test.mockito.MockitoHelpersKt#mock",
+        "org.mockito.Mockito#mock,org.mockito.Mockito#spy,slack.test.mockito.MockitoHelpers#mock,slack.test.mockito.MockitoHelpersKt#mock,org.mockito.kotlin.MockingKt#mock,org.mockito.kotlin.SpyingKt#spy",
         "A comma-separated list of mock factories (org.mockito.Mockito#methodName). Set this for all issues using this option.",
       )
 
