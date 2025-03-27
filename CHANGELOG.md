@@ -4,6 +4,7 @@ Changelog
 **Unreleased**
 --------------
 
+- **New**: Add `TestParameterSiteTarget` check to protected against https://github.com/google/TestParameterInjector/issues/49.
 - Raise lint registry API version to `16` (`8.7.0-alpha04`).
 - Build against Kotlin `2.1.20`.
 - Build against lint `31.10.0-alpha03`.
