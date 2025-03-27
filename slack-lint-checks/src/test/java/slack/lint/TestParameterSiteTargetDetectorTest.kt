@@ -40,7 +40,7 @@ class TestParameterSiteTargetDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/MyTest.kt:3: Error: TestParameter annotation has the wrong site target. [TestParameterSiteTarget]
+        src/MyTest.kt:3: Error: TestParameter annotation has the wrong site target [TestParameterSiteTarget]
                       @com.google.testing.junit.testparameterinjector.TestParameter val myParam: String
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 error
@@ -64,7 +64,7 @@ class TestParameterSiteTargetDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/MyTest.kt:3: Error: TestParameter annotation has the wrong site target. [TestParameterSiteTarget]
+        src/MyTest.kt:3: Error: TestParameter annotation has the wrong site target [TestParameterSiteTarget]
                       @field:com.google.testing.junit.testparameterinjector.TestParameter val myParam: String
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 error
@@ -121,7 +121,7 @@ class TestParameterSiteTargetDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/MyTest.kt:3: Error: TestParameter annotation has the wrong site target. [TestParameterSiteTarget]
+        src/MyTest.kt:3: Error: TestParameter annotation has the wrong site target [TestParameterSiteTarget]
                       @com.google.testing.junit.testparameterinjector.TestParameter val myParam: String
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 error

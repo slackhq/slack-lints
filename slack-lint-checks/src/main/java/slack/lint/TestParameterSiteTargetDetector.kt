@@ -13,12 +13,13 @@ import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
+import org.jetbrains.uast.UAnnotation
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UParameter
-import org.jetbrains.uast.kotlin.KotlinUAnnotation
 import org.jetbrains.uast.kotlin.isKotlin
 import org.jetbrains.uast.toUElement
+import org.jetbrains.uast.toUElementOfType
 import slack.lint.util.sourceImplementation
 
 /**
@@ -53,7 +54,7 @@ class TestParameterSiteTargetDetector : Detector(), SourceCodeScanner {
 
         // Find @TestParameter annotations
         for (annotationEntry in sourcePsi.annotationEntries) {
-          val qualifiedName = (annotationEntry.toUElement() as? KotlinUAnnotation)?.qualifiedName
+          val qualifiedName = (annotationEntry.toUElementOfType<UAnnotation>())?.qualifiedName
 
           // Check if this is a TestParameter annotation
           if (
@@ -97,7 +98,7 @@ class TestParameterSiteTargetDetector : Detector(), SourceCodeScanner {
       Issue.create(
         id = "TestParameterSiteTarget",
         briefDescription =
-          "`TestParameter` annotation has the wrong site target.",
+          "`TestParameter` annotation has the wrong site target",
         explanation =
           """
         `TestParameter` annotations on parameter properties must have `param:` site targets.\
