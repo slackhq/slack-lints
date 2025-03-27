@@ -10,6 +10,7 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.LintFix
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
+import com.android.tools.lint.detector.api.TextFormat
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 import org.jetbrains.uast.UElement
@@ -78,8 +79,7 @@ class TestParameterFieldDetector : Detector(), SourceCodeScanner {
               context.report(
                 ISSUE,
                 context.getLocation(annotationEntry),
-                "TestParameter annotations on parameter properties must have param: site targets. " +
-                  "See https://github.com/google/TestParameterInjector/issues/49",
+                ISSUE.getBriefDescription(TextFormat.TEXT),
                 LintFix.create().replace().text(annotationText).with(replacementText).build(),
               )
             }
@@ -97,10 +97,10 @@ class TestParameterFieldDetector : Detector(), SourceCodeScanner {
       Issue.create(
         id = "TestParameterSiteTarget",
         briefDescription =
-          "TestParameter annotations on parameter properties must have param: site targets",
+          "`TestParameter` annotation has the wrong site target.",
         explanation =
           """
-        TestParameter annotations on parameter properties must have param: site targets.\
+        `TestParameter` annotations on parameter properties must have `param:` site targets.\
         \
         For example:\
         ```kotlin\
