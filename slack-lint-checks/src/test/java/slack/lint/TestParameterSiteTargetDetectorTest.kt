@@ -40,7 +40,7 @@ class TestParameterSiteTargetDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/MyTest.kt:3: Error: TestParameter annotations on parameter properties must have param: site targets. See https://github.com/google/TestParameterInjector/issues/49 [TestParameterSiteTarget]
+        src/MyTest.kt:3: Error: TestParameter annotation has the wrong site target. [TestParameterSiteTarget]
                       @com.google.testing.junit.testparameterinjector.TestParameter val myParam: String
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 error
@@ -64,7 +64,7 @@ class TestParameterSiteTargetDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/MyTest.kt:3: Error: TestParameter annotations on parameter properties must have param: site targets. See https://github.com/google/TestParameterInjector/issues/49 [TestParameterSiteTarget]
+        src/MyTest.kt:3: Error: TestParameter annotation has the wrong site target. [TestParameterSiteTarget]
                       @field:com.google.testing.junit.testparameterinjector.TestParameter val myParam: String
                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         1 error
