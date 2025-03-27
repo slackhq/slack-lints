@@ -1656,6 +1656,7 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         customQualifier,
         source,
       )
+      .allowClassNameClashes(true)
       .run()
       .expect(
         """
@@ -1683,10 +1684,10 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         src/slack/model/Example.kt:56: Error: Use immutable collections rather than mutable versions. [MoshiUsageMutableCollections]
           val mutableMap: MutableMap<String, String>
                           ~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/slack/model/Example.kt:25: Information: Concrete Collection type 'ArrayList' is not natively supported by Moshi. [MoshiUsageNonMoshiClassCollection]
+        src/slack/model/Example.kt:25: Hint: Concrete Collection type 'ArrayList' is not natively supported by Moshi. [MoshiUsageNonMoshiClassCollection]
           val concreteList: ArrayList<Int>,
                             ~~~~~~~~~~~~~~
-        src/slack/model/Example.kt:26: Information: Concrete Collection type 'HashSet' is not natively supported by Moshi. [MoshiUsageNonMoshiClassCollection]
+        src/slack/model/Example.kt:26: Hint: Concrete Collection type 'HashSet' is not natively supported by Moshi. [MoshiUsageNonMoshiClassCollection]
           val concreteSet: HashSet<Int>,
                            ~~~~~~~~~~~~
         src/slack/model/Example.kt:32: Error: External type 'ExternalType' is not natively supported by Moshi. [MoshiUsageNonMoshiClassExternal]
@@ -1701,16 +1702,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
         src/slack/model/Example.kt:49: Error: External type 'ExternalType' is not natively supported by Moshi. [MoshiUsageNonMoshiClassExternal]
           val badNestedGeneric: CustomGenericType<List<ExternalType>>,
                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/slack/model/Example.kt:35: Information: Non-Moshi internal type 'InternalType' is not natively supported by Moshi. [MoshiUsageNonMoshiClassInternal]
+        src/slack/model/Example.kt:35: Hint: Non-Moshi internal type 'InternalType' is not natively supported by Moshi. [MoshiUsageNonMoshiClassInternal]
           val internalType: InternalType,
                             ~~~~~~~~~~~~
-        src/slack/model/Example.kt:27: Information: Concrete Map type 'HashMap' is not natively supported by Moshi. [MoshiUsageNonMoshiClassMap]
+        src/slack/model/Example.kt:27: Hint: Concrete Map type 'HashMap' is not natively supported by Moshi. [MoshiUsageNonMoshiClassMap]
           val concreteMap: HashMap<String, String>,
                            ~~~~~~~~~~~~~~~~~~~~~~~
         src/slack/model/Example.kt:29: Warning: Platform type 'Date' is not natively supported by Moshi. [MoshiUsageNonMoshiClassPlatform]
           val platformType: Date,
                             ~~~~
-        8 errors, 5 warnings
+        8 errors, 5 warnings, 4 hints
         """
           .trimIndent()
       )
