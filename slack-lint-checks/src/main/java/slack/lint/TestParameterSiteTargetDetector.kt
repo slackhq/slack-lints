@@ -25,7 +25,7 @@ import slack.lint.util.sourceImplementation
  * Detector that checks for `@TestParameter` annotations on parameter properties and ensures they
  * have param: site targets.
  */
-class TestParameterFieldDetector : Detector(), SourceCodeScanner {
+class TestParameterSiteTargetDetector : Detector(), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> {
     return listOf(UMethod::class.java)
@@ -114,7 +114,7 @@ class TestParameterFieldDetector : Detector(), SourceCodeScanner {
         category = Category.CORRECTNESS,
         priority = 5,
         severity = Severity.ERROR,
-        implementation = sourceImplementation<TestParameterFieldDetector>(),
+        implementation = sourceImplementation<TestParameterSiteTargetDetector>(),
       )
   }
 }

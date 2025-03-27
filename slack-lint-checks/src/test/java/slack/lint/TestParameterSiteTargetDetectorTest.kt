@@ -4,10 +4,10 @@ package slack.lint
 
 import org.junit.Test
 
-class TestParameterFieldDetectorTest : BaseSlackLintTest() {
-  override fun getDetector() = TestParameterFieldDetector()
+class TestParameterSiteTargetDetectorTest : BaseSlackLintTest() {
+  override fun getDetector() = TestParameterSiteTargetDetector()
 
-  override fun getIssues() = listOf(TestParameterFieldDetector.ISSUE)
+  override fun getIssues() = listOf(TestParameterSiteTargetDetector.ISSUE)
 
   @Test
   fun testParameterWithParamSiteTarget() {
