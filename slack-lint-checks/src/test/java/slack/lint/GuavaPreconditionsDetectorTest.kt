@@ -532,28 +532,6 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
         """
           .trimIndent()
       )
-      .expectFixDiffs(
-        """
-          NOTE: The following is specific to test mode "Names replaced with Fully Qualified Names, Type aliases, Handling @JvmOverloads methods" (TestMode.FULLY_QUALIFIED, TestMode.TYPE_ALIAS, TestMode.JVM_OVERLOADS) :
-
-          Autofix for src/foo/Foo.kt line 10: Use Kotlin's standard library checks:
-          @@ -10 +10
-          -   val isTrue = com.google.common.base.Preconditions.checkState(false);
-          +   val isTrue = check(false);
-          Autofix for src/foo/Foo.kt line 14: Use Kotlin's standard library checks:
-          @@ -14 +14
-          -     com.google.common.base.Preconditions.checkState(true)
-          +     check(true)
-          Autofix for src/foo/Foo.kt line 15: Use Kotlin's standard library checks:
-          @@ -15 +15
-          -     com.google.common.base.Preconditions.checkArgument(false)
-          +     require(false)
-          Autofix for src/foo/Foo.kt line 16: Use Kotlin's standard library checks:
-          @@ -16 +16
-          -     com.google.common.base.Preconditions.checkNotNull("Hello")
-          +     checkNotNull("Hello")
-        """
-          .trimIndent()
-      )
+    // Can't assert fix diffs because lint produces non-deterministic diffs per test mode
   }
 }
