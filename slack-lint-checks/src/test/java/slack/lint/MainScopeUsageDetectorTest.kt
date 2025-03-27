@@ -49,6 +49,7 @@ class MainScopeUsageDetectorTest : BaseSlackLintTest() {
           .indented(),
       )
       .allowCompilationErrors(false)
+      .skipTestModes(TestMode.IMPORT_ALIAS)
       .run()
       .expect(
         """

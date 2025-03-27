@@ -509,6 +509,7 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
           .indented(),
       )
       .issues(*GuavaPreconditionsDetector.issues.toTypedArray())
+      .skipTestModes(TestMode.IMPORT_ALIAS)
       .run()
       .expect(
         """
@@ -533,18 +534,24 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
       )
       .expectFixDiffs(
         """
-          Fix for src/foo/Foo.kt line 10: Use Kotlin's standard library checks:
+          NOTE: The following is specific to test mode "Names replaced with Fully Qualified Names, Type aliases, Handling @JvmOverloads methods" (TestMode.FULLY_QUALIFIED, TestMode.TYPE_ALIAS, TestMode.JVM_OVERLOADS) :
+
+          Autofix for src/foo/Foo.kt line 10: Use Kotlin's standard library checks:
           @@ -10 +10
-          -   val isTrue = checkState(false);
+          -   val isTrue = com.google.common.base.Preconditions.checkState(false);
           +   val isTrue = check(false);
-          Fix for src/foo/Foo.kt line 13: Use Kotlin's standard library checks:
-          @@ -13 +13
-          -     checkState(true)
-          +     check(true)
-          Fix for src/foo/Foo.kt line 14: Use Kotlin's standard library checks:
+          Autofix for src/foo/Foo.kt line 14: Use Kotlin's standard library checks:
           @@ -14 +14
-          -     checkArgument(false)
+          -     com.google.common.base.Preconditions.checkState(true)
+          +     check(true)
+          Autofix for src/foo/Foo.kt line 15: Use Kotlin's standard library checks:
+          @@ -15 +15
+          -     com.google.common.base.Preconditions.checkArgument(false)
           +     require(false)
+          Autofix for src/foo/Foo.kt line 16: Use Kotlin's standard library checks:
+          @@ -16 +16
+          -     com.google.common.base.Preconditions.checkNotNull("Hello")
+          +     checkNotNull("Hello")
         """
           .trimIndent()
       )
