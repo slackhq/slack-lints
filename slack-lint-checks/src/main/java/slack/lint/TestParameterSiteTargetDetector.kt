@@ -18,7 +18,6 @@ import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UParameter
 import org.jetbrains.uast.kotlin.isKotlin
-import org.jetbrains.uast.toUElement
 import org.jetbrains.uast.toUElementOfType
 import slack.lint.util.sourceImplementation
 
@@ -97,8 +96,7 @@ class TestParameterSiteTargetDetector : Detector(), SourceCodeScanner {
     val ISSUE =
       Issue.create(
         id = "TestParameterSiteTarget",
-        briefDescription =
-          "`TestParameter` annotation has the wrong site target",
+        briefDescription = "`TestParameter` annotation has the wrong site target",
         explanation =
           """
         `TestParameter` annotations on parameter properties must have `param:` site targets.\
