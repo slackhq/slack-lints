@@ -10,8 +10,7 @@ import org.junit.Test
 class ViewContextDetectorTest : BaseSlackLintTest() {
 
   override fun lint(): TestLintTask {
-    return super.lint()
-      .allowClassNameClashes(true)
+    return super.lint().allowClassNameClashes(true)
   }
 
   @Test
