@@ -105,4 +105,28 @@ class TestParameterSiteTargetDetectorTest : BaseSlackLintTest() {
       .run()
       .expectClean()
   }
+
+  @Test
+  fun testDocumentationExample() {
+    lint()
+      .files(
+        kotlin(
+          """
+          class MyTest(
+              @com.google.testing.junit.testparameterinjector.TestParameter val myParam: String
+          )
+          """
+        )
+      )
+      .run()
+      .expect(
+        """
+        src/MyTest.kt:3: Error: TestParameter annotation has the wrong site target. [TestParameterSiteTarget]
+                      @com.google.testing.junit.testparameterinjector.TestParameter val myParam: String
+                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 error
+        """
+          .trimIndent()
+      )
+  }
 }
