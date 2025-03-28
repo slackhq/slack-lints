@@ -152,7 +152,7 @@ class NullableConcurrentHashMapDetectorTest : BaseSlackLintTest() {
           """
           class TestClass {
               private val map: java.util.concurrent.ConcurrentHashMap<String, Int>
-              
+
               init {
                   map = java.util.concurrent.ConcurrentHashMap()
               }
@@ -172,7 +172,7 @@ class NullableConcurrentHashMapDetectorTest : BaseSlackLintTest() {
           """
           class TestClass {
               private val map: java.util.concurrent.ConcurrentHashMap<String?, Int?>
-              
+
               init {
                   map = java.util.concurrent.ConcurrentHashMap()
               }
