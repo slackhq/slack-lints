@@ -4,7 +4,13 @@ Changelog
 **Unreleased**
 --------------
 
-- **New**: Add `TestParameterSiteTarget` check to protected against https://github.com/google/TestParameterInjector/issues/49.
+0.9.0
+-----
+
+_2025-03-27_
+
+- **New**: Add `TestParameterSiteTarget` check to protect against https://github.com/google/TestParameterInjector/issues/49.
+- **New**: Add `NullableConcurrentHashMap` check to protect against putting null keys or values into `ConcurrentHashMap`s
 - Raise lint registry API version to `16` (`8.7.0-alpha04`).
 - Build against Kotlin `2.1.20`.
 - Build against lint `31.10.0-alpha03`.
