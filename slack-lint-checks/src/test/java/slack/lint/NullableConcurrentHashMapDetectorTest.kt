@@ -143,4 +143,55 @@ class NullableConcurrentHashMapDetectorTest : BaseSlackLintTest() {
           .trimIndent()
       )
   }
+
+  @Test
+  fun concurrentHashMapDeclaredSeparately() {
+    lint()
+      .files(
+        kotlin(
+          """
+          class TestClass {
+              private val map: java.util.concurrent.ConcurrentHashMap<String, Int>
+              
+              init {
+                  map = java.util.concurrent.ConcurrentHashMap()
+              }
+          }
+          """
+        )
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun concurrentHashMapDeclaredSeparatelyWithNullableTypes() {
+    lint()
+      .files(
+        kotlin(
+          """
+          class TestClass {
+              private val map: java.util.concurrent.ConcurrentHashMap<String?, Int?>
+              
+              init {
+                  map = java.util.concurrent.ConcurrentHashMap()
+              }
+          }
+          """
+        )
+      )
+      .run()
+      .expect(
+        """
+        src/TestClass.kt:3: Error: ConcurrentHashMap should not use nullable key types [NullableConcurrentHashMap]
+                      private val map: java.util.concurrent.ConcurrentHashMap<String?, Int?>
+                                                                              ~~~~~~~
+        src/TestClass.kt:3: Error: ConcurrentHashMap should not use nullable value types [NullableConcurrentHashMap]
+                      private val map: java.util.concurrent.ConcurrentHashMap<String?, Int?>
+                                                                                       ~~~~
+        2 errors
+        """
+          .trimIndent()
+      )
+  }
 }
