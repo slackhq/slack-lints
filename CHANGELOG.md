@@ -10,10 +10,16 @@ Changelog
 _2025-03-27_
 
 - **New**: Add `TestParameterSiteTarget` check to protect against https://github.com/google/TestParameterInjector/issues/49.
-- **New**: Add `NullableConcurrentHashMap` check to protect against putting null keys or values into `ConcurrentHashMap`s
+- **New**: Add `NullableConcurrentHashMap` check to protect against putting null keys or values into `ConcurrentHashMap`s.
+- Add mockito-kotlin mock/spy functions to default `DoNotMock` checks.
+- Add `java.util.Calendar` to `DenyListedApiDetector`.
+- Don't require `ExceptionMessage` lint in tests.
+- Update EitherNet checks to EitherNet 2.0.
 - Raise lint registry API version to `16` (`8.7.0-alpha04`).
 - Build against Kotlin `2.1.20`.
 - Build against lint `31.10.0-alpha03`.
+
+Special thanks to [@mformetal](https://github.com/mformetal) and [@jbduncan](https://github.com/jbduncan) for contributing to this release!
 
 0.8.2
 -----
