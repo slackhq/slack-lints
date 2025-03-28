@@ -4,6 +4,8 @@ Changelog
 **Unreleased**
 --------------
 
+- Update lint to `31.11.0-alpha03`.
+
 0.9.0
 -----
 
