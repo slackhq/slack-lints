@@ -32,10 +32,10 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/Test.kt:4: Warning: Avoid initializing read-only variable with null in Kotlin [AvoidNullInitializationForReadOnlyVariables]
+        src/foo/Test.kt:4: Warning: Avoid initializing read-only variable with null in Kotlin [AvoidNullInitForReadOnlyVariables]
             val str: String? = null
                                ~~~~
-        src/foo/Test.kt:7: Warning: Avoid initializing read-only variable with null in Kotlin [AvoidNullInitializationForReadOnlyVariables]
+        src/foo/Test.kt:7: Warning: Avoid initializing read-only variable with null in Kotlin [AvoidNullInitForReadOnlyVariables]
                 val strInFunction: String? = null
                                              ~~~~
         0 errors, 2 warnings
@@ -72,7 +72,7 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/foo/Test.kt:12: Warning: Avoid initializing read-only variable with null in Kotlin [AvoidNullInitializationForReadOnlyVariables]
+        src/foo/Test.kt:12: Warning: Avoid initializing read-only variable with null in Kotlin [AvoidNullInitForReadOnlyVariables]
             val str3: String? = null
                                 ~~~~
         src/foo/Test.kt:5: Warning: Avoid returning null in getter for read-only properties in Kotlin [AvoidReturningNullInGetter]
