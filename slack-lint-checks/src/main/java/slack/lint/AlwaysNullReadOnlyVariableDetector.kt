@@ -103,7 +103,7 @@ class AlwaysNullReadOnlyVariableDetector : Detector(), SourceCodeScanner {
   companion object {
     val ISSUE_ALWAYS_INITIALIZE_NULL: Issue =
       Issue.create(
-        "AvoidNullInitializationForReadOnlyVariables",
+        "AvoidNullInitForReadOnlyVariables",
         "Avoid initializing read-only variable with null in Kotlin",
         """
           Avoid unnecessary `null` initialization for read-only variables, as they can never be reassigned. \
