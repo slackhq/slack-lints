@@ -1,5 +1,379 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.9.0-alpha05" type="baseline" client="gradle" dependencies="false" name="AGP (8.9.0-alpha05)" variant="all" version="8.9.0-alpha05">
+<issues format="6" by="lint 8.11.0-alpha03" type="baseline" client="gradle" dependencies="false" name="AGP (8.11.0-alpha03)" variant="all" version="8.11.0-alpha03">
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {operator fun contains(element: E): kotlin.Boolean}, extensions {operator fun &lt;@kotlin.internal.OnlyInputTypes T> kotlin.collections.Iterable&lt;T>.contains(element: T): kotlin.Boolean}"
+        errorLine1="    if (isEnabled &amp;&amp; applicableAnnotations().contains(annotationInfo.qualifiedName)) {"
+        errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/AnnotatedClassOrMethodUsageDetector.kt"
+            line="44"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {@kotlin.SinceKotlin(version = &quot;1.1&quot;)&#xA;@kotlin.internal.PlatformDependent&#xA;fun getOrDefault(key: K, defaultValue: V): V}, extensions {@kotlin.SinceKotlin(version = &quot;1.2&quot;)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun &lt;@kotlin.internal.OnlyInputTypes K, V> kotlin.collections.Map&lt;out K, V>.getOrDefault(key: K, defaultValue: V): V}"
+        errorLine1="            typeConfig.functionEntries.getOrDefault(functionName, emptyList()) +"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/denylistedapis/DenyListedApiDetector.kt"
+            line="114"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {@kotlin.SinceKotlin(version = &quot;1.1&quot;)&#xA;@kotlin.internal.PlatformDependent&#xA;fun getOrDefault(key: K, defaultValue: V): V}, extensions {@kotlin.SinceKotlin(version = &quot;1.2&quot;)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun &lt;@kotlin.internal.OnlyInputTypes K, V> kotlin.collections.Map&lt;out K, V>.getOrDefault(key: K, defaultValue: V): V}"
+        errorLine1="              typeConfig.functionEntries.getOrDefault(MatchAll, emptyList())"
+        errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/denylistedapis/DenyListedApiDetector.kt"
+            line="115"
+            column="15"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {@kotlin.SinceKotlin(version = &quot;1.1&quot;)&#xA;@kotlin.internal.PlatformDependent&#xA;fun getOrDefault(key: K, defaultValue: V): V}, extensions {@kotlin.SinceKotlin(version = &quot;1.2&quot;)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun &lt;@kotlin.internal.OnlyInputTypes K, V> kotlin.collections.Map&lt;out K, V>.getOrDefault(key: K, defaultValue: V): V}"
+        errorLine1="            typeConfig.referenceEntries.getOrDefault(referenceName, emptyList()) +"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/denylistedapis/DenyListedApiDetector.kt"
+            line="148"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {@kotlin.SinceKotlin(version = &quot;1.1&quot;)&#xA;@kotlin.internal.PlatformDependent&#xA;fun getOrDefault(key: K, defaultValue: V): V}, extensions {@kotlin.SinceKotlin(version = &quot;1.2&quot;)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun &lt;@kotlin.internal.OnlyInputTypes K, V> kotlin.collections.Map&lt;out K, V>.getOrDefault(key: K, defaultValue: V): V}"
+        errorLine1="              typeConfig.referenceEntries.getOrDefault(MatchAll, emptyList())"
+        errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/denylistedapis/DenyListedApiDetector.kt"
+            line="149"
+            column="15"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {operator fun contains(element: E): kotlin.Boolean}, extensions {operator fun &lt;@kotlin.internal.OnlyInputTypes T> kotlin.collections.Iterable&lt;T>.contains(element: T): kotlin.Boolean}"
+        errorLine1="    if (isEnabled &amp;&amp; applicableAnnotations().contains(annotationInfo.qualifiedName)) {"
+        errorLine2="                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DeprecatedAnnotationDetector.kt"
+            line="43"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(str: kotlin.String?): java.lang.StringBuilder?, open fun append(s: kotlin.CharSequence?): java.lang.StringBuilder?}, extensions {fun &lt;T : kotlin.text.Appendable> T.append(vararg value: kotlin.CharSequence?): T, @kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.String?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(issue.getBriefDescription(TextFormat.TEXT))"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/inclusive/InclusiveNamingChecker.kt"
+            line="87"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(str: kotlin.String?): java.lang.StringBuilder?, open fun append(s: kotlin.CharSequence?): java.lang.StringBuilder?}, extensions {fun &lt;T : kotlin.text.Appendable> T.append(vararg value: kotlin.CharSequence?): T, @kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.String?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(&quot; Matched string is &apos;&quot;)"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/inclusive/InclusiveNamingChecker.kt"
+            line="88"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(str: kotlin.String?): java.lang.StringBuilder?, open fun append(s: kotlin.CharSequence?): java.lang.StringBuilder?}, extensions {fun &lt;T : kotlin.text.Appendable> T.append(vararg value: kotlin.CharSequence?): T, @kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.String?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(matched)"
+        errorLine2="          ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/inclusive/InclusiveNamingChecker.kt"
+            line="89"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(str: kotlin.String?): java.lang.StringBuilder?, open fun append(s: kotlin.CharSequence?): java.lang.StringBuilder?}, extensions {fun &lt;T : kotlin.text.Appendable> T.append(vararg value: kotlin.CharSequence?): T, @kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.String?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(&quot;&apos; in &quot;)"
+        errorLine2="          ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/inclusive/InclusiveNamingChecker.kt"
+            line="90"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(str: kotlin.String?): java.lang.StringBuilder?, open fun append(s: kotlin.CharSequence?): java.lang.StringBuilder?}, extensions {fun &lt;T : kotlin.text.Appendable> T.append(vararg value: kotlin.CharSequence?): T, @kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.String?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(type)"
+        errorLine2="          ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/inclusive/InclusiveNamingChecker.kt"
+            line="91"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(str: kotlin.String?): java.lang.StringBuilder?, open fun append(s: kotlin.CharSequence?): java.lang.StringBuilder?}, extensions {fun &lt;T : kotlin.text.Appendable> T.append(vararg value: kotlin.CharSequence?): T, @kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.String?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(&quot; name &apos;&quot;)"
+        errorLine2="          ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/inclusive/InclusiveNamingChecker.kt"
+            line="92"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(str: kotlin.String?): java.lang.StringBuilder?, open fun append(s: kotlin.CharSequence?): java.lang.StringBuilder?}, extensions {fun &lt;T : kotlin.text.Appendable> T.append(vararg value: kotlin.CharSequence?): T, @kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.String?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(name)"
+        errorLine2="          ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/inclusive/InclusiveNamingChecker.kt"
+            line="93"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(str: kotlin.String?): java.lang.StringBuilder?, open fun append(s: kotlin.CharSequence?): java.lang.StringBuilder?}, extensions {fun &lt;T : kotlin.text.Appendable> T.append(vararg value: kotlin.CharSequence?): T, @kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.String?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(&quot;&apos;&quot;)"
+        errorLine2="          ~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/inclusive/InclusiveNamingChecker.kt"
+            line="94"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(str: kotlin.String?): java.lang.StringBuilder?, open fun append(s: kotlin.CharSequence?): java.lang.StringBuilder?}, extensions {fun &lt;T : kotlin.text.Appendable> T.append(vararg value: kotlin.CharSequence?): T, @kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.String?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          message.append(&quot;, see its documentation for details.&quot;)"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/JavaOnlyDetector.kt"
+            line="221"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(str: kotlin.String?): java.lang.StringBuilder?, open fun append(s: kotlin.CharSequence?): java.lang.StringBuilder?}, extensions {fun &lt;T : kotlin.text.Appendable> T.append(vararg value: kotlin.CharSequence?): T, @kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.String?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          message.append(&quot;: $javaOnlyMessage&quot;)"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/JavaOnlyDetector.kt"
+            line="223"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {@jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun toString(): kotlin.String}, extensions {fun kotlin.Any?.toString(): kotlin.String}"
+        errorLine1="        context.report(ISSUE, context.getLocation(this), message.toString())"
+        errorLine2="                                                         ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/JavaOnlyDetector.kt"
+            line="225"
+            column="58"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(c: kotlin.Char): java.lang.StringBuilder?}, extensions {@kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(c.uppercaseChar())"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="157"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(c: kotlin.Char): java.lang.StringBuilder?}, extensions {@kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(c)"
+        errorLine2="          ~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="160"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(c: kotlin.Char): java.lang.StringBuilder?}, extensions {@kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(&apos;_&apos;)"
+        errorLine2="          ~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="188"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(c: kotlin.Char): java.lang.StringBuilder?}, extensions {@kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="            append(&apos;_&apos;)"
+        errorLine2="            ~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="194"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(c: kotlin.Char): java.lang.StringBuilder?}, extensions {@kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(c)"
+        errorLine2="          ~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="196"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {open fun append(obj: kotlin.Any?): java.lang.StringBuilder?, @jdk.internal.vm.annotation.IntrinsicCandidate&#xA;open fun append(c: kotlin.Char): java.lang.StringBuilder?}, extensions {@kotlin.Deprecated(message = &quot;Use append(value: Any?) instead&quot;, replaceWith = kotlin/ReplaceWith(expression = &quot;append(value = obj)&quot;, , imports = [], ), level = kotlin.DeprecationLevel.WARNING)&#xA;@kotlin.internal.InlineOnly&#xA;inline fun kotlin.text.StringBuilder.append(obj: kotlin.Any?): kotlin.text.StringBuilder, fun kotlin.text.StringBuilder.append(vararg value: kotlin.Any?): kotlin.text.StringBuilder}"
+        errorLine1="          append(c.uppercaseChar())"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="199"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {fun addAll(elements: kotlin.collections.Collection&lt;E>): kotlin.Boolean}, extensions {fun &lt;T> kotlin.collections.MutableCollection&lt;in T>.addAll(elements: kotlin.collections.Iterable&lt;T>): kotlin.Boolean}"
+        errorLine1="    addAll(ViewContextDetector.issues)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SlackIssueRegistry.kt"
+            line="40"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {fun addAll(elements: kotlin.collections.Collection&lt;E>): kotlin.Boolean}, extensions {fun &lt;T> kotlin.collections.MutableCollection&lt;in T>.addAll(elements: kotlin.collections.Iterable&lt;T>): kotlin.Boolean}"
+        errorLine1="    addAll(ArgInFormattedQuantityStringResDetector.issues)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SlackIssueRegistry.kt"
+            line="41"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {fun addAll(elements: kotlin.collections.Collection&lt;E>): kotlin.Boolean}, extensions {fun &lt;T> kotlin.collections.MutableCollection&lt;in T>.addAll(elements: kotlin.collections.Iterable&lt;T>): kotlin.Boolean}"
+        errorLine1="    addAll(DaggerIssuesDetector.ISSUES)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SlackIssueRegistry.kt"
+            line="42"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {fun addAll(elements: kotlin.collections.Collection&lt;E>): kotlin.Boolean}, extensions {fun &lt;T> kotlin.collections.MutableCollection&lt;in T>.addAll(elements: kotlin.collections.Iterable&lt;T>): kotlin.Boolean}"
+        errorLine1="    addAll(NonKotlinPairDetector.issues)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SlackIssueRegistry.kt"
+            line="43"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {fun addAll(elements: kotlin.collections.Collection&lt;E>): kotlin.Boolean}, extensions {fun &lt;T> kotlin.collections.MutableCollection&lt;in T>.addAll(elements: kotlin.collections.Iterable&lt;T>): kotlin.Boolean}"
+        errorLine1="    addAll(InclusiveNamingChecker.ISSUES)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SlackIssueRegistry.kt"
+            line="45"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {fun addAll(elements: kotlin.collections.Collection&lt;E>): kotlin.Boolean}, extensions {fun &lt;T> kotlin.collections.MutableCollection&lt;in T>.addAll(elements: kotlin.collections.Iterable&lt;T>): kotlin.Boolean}"
+        errorLine1="    addAll(GuavaPreconditionsDetector.issues)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SlackIssueRegistry.kt"
+            line="53"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {fun addAll(elements: kotlin.collections.Collection&lt;E>): kotlin.Boolean}, extensions {fun &lt;T> kotlin.collections.MutableCollection&lt;in T>.addAll(elements: kotlin.collections.Iterable&lt;T>): kotlin.Boolean}"
+        errorLine1="    addAll(MockDetector.ALL_ISSUES)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SlackIssueRegistry.kt"
+            line="54"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {fun addAll(elements: kotlin.collections.Collection&lt;E>): kotlin.Boolean}, extensions {fun &lt;T> kotlin.collections.MutableCollection&lt;in T>.addAll(elements: kotlin.collections.Iterable&lt;T>): kotlin.Boolean}"
+        errorLine1="    addAll(MoshiUsageDetector.issues())"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SlackIssueRegistry.kt"
+            line="56"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {fun addAll(elements: kotlin.collections.Collection&lt;E>): kotlin.Boolean}, extensions {fun &lt;T> kotlin.collections.MutableCollection&lt;in T>.addAll(elements: kotlin.collections.Iterable&lt;T>): kotlin.Boolean}"
+        errorLine1="    addAll(FragmentDaggerFieldInjectionDetector.issues)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SlackIssueRegistry.kt"
+            line="57"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {fun addAll(elements: kotlin.collections.Collection&lt;E>): kotlin.Boolean}, extensions {fun &lt;T> kotlin.collections.MutableCollection&lt;in T>.addAll(elements: kotlin.collections.Iterable&lt;T>): kotlin.Boolean}"
+        errorLine1="    addAll(RedactedUsageDetector.ISSUES)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SlackIssueRegistry.kt"
+            line="58"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="MemberExtensionConflict"
+        message="Conflict applicable candidates of member and extension: members {fun addAll(elements: kotlin.collections.Collection&lt;E>): kotlin.Boolean}, extensions {fun &lt;T> kotlin.collections.MutableCollection&lt;in T>.addAll(elements: kotlin.collections.Iterable&lt;T>): kotlin.Boolean}"
+        errorLine1="    addAll(DenyListedApiDetector.ISSUES)"
+        errorLine2="    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SlackIssueRegistry.kt"
+            line="67"
+            column="5"/>
+    </issue>
 
     <issue
         id="LintDocExample"
@@ -52,7 +426,7 @@
         errorLine2="  ^">
         <location
             file="src/test/java/slack/lint/MoshiUsageDetectorTest.kt"
-            line="2076"
+            line="2077"
             column="3"/>
     </issue>
 
@@ -74,7 +448,7 @@
         errorLine2="  ^">
         <location
             file="src/test/java/slack/lint/ViewContextDetectorTest.kt"
-            line="11"
+            line="16"
             column="3"/>
     </issue>
 
@@ -410,6 +784,39 @@
 
     <issue
         id="LintImplTextFormat"
+        message="&quot;ConcurrentHashMap&quot; looks like a code reference; surround with backtics in string to display as symbol, e.g. \`ConcurrentHashMap\`"
+        errorLine1="          context.report(ISSUE, location, &quot;ConcurrentHashMap should not use nullable $name types&quot;)"
+        errorLine2="                                           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/NullableConcurrentHashMapDetector.kt"
+            line="65"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="&quot;ConcurrentHashMap&quot; looks like a code reference; surround with backtics in string to display as symbol, e.g. \`ConcurrentHashMap\`"
+        errorLine1="          context.report(ISSUE, location, &quot;ConcurrentHashMap should not use nullable $name types&quot;)"
+        errorLine2="                                           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/NullableConcurrentHashMapDetector.kt"
+            line="111"
+            column="44"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="&quot;ConcurrentHashMap&quot; looks like a code reference; surround with backtics in string to display as symbol, e.g. \`ConcurrentHashMap\`"
+        errorLine1="        ConcurrentHashMap does not support null keys or values. \"
+        errorLine2="        ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/NullableConcurrentHashMapDetector.kt"
+            line="137"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
         message="The issue summary should *not* end with a period (think of it as a headline)"
         errorLine1="        &quot;Use SlackDispatchers.&quot;,"
         errorLine2="         ~~~~~~~~~~~~~~~~~~~~~">
@@ -560,6 +967,501 @@
             file="src/main/java/slack/lint/rx/RxSubscribeOnMainDetector.kt"
             line="134"
             column="33"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="              containingClass.classKind == JvmClassKind.CLASS -> {"
+        errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DaggerIssuesDetector.kt"
+            line="176"
+            column="15"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="              containingClass.classKind == JvmClassKind.INTERFACE &amp;&amp; isProvides -> {"
+        errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DaggerIssuesDetector.kt"
+            line="195"
+            column="15"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="                  node.parameterList"
+        errorLine2="                  ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DaggerIssuesDetector.kt"
+            line="212"
+            column="19"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="            val nodeLocation = node.returnTypeElement ?: node"
+        errorLine2="                               ~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/DaggerIssuesDetector.kt"
+            line="231"
+            column="32"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="          return containingClass.name?.endsWith(&quot;Repository&quot;) == true"
+        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/eithernet/DoNotExposeEitherNetInRepositoriesDetector.kt"
+            line="94"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="    constructors.any {"
+        errorLine2="    ~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
+            line="56"
+            column="5"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        checker.check(node, node.name, &quot;class&quot;)"
+        errorLine2="                            ~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/inclusive/InclusiveNamingSourceCodeScanner.kt"
+            line="52"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        val type = if (isKotlin(node.language)) &quot;function&quot; else &quot;method&quot;"
+        errorLine2="                                ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/inclusive/InclusiveNamingSourceCodeScanner.kt"
+            line="57"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="              if (isKotlin(node.language)) {"
+        errorLine2="                           ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/inclusive/InclusiveNamingSourceCodeScanner.kt"
+            line="66"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="          node.baseClassType.resolve()?.let { psiClass ->"
+        errorLine2="          ~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/JavaOnlyDetector.kt"
+            line="91"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        return listOfNotNull(node.javaPsi.superClass, *node.interfaces)"
+        errorLine2="                                                       ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/JavaOnlyDetector.kt"
+            line="116"
+            column="56"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="              val source = node.text"
+        errorLine2="                           ~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/JavaOnlyDetector.kt"
+            line="121"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        return context.evaluator.getSuperMethod(node)?.let { method ->"
+        errorLine2="                                                ~~~~">
+        <location
+            file="src/main/java/slack/lint/JavaOnlyDetector.kt"
+            line="184"
+            column="49"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="            val modifier = node.modifierList.children.joinToString(separator = &quot; &quot;) { it.text }"
+        errorLine2="                           ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/JavaOnlyDetector.kt"
+            line="192"
+            column="28"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="  containingClass ?: return false"
+        errorLine2="  ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="81"
+            column="3"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="  if (isKotlin(language) &amp;&amp; evaluator.hasModifier(this, KtTokens.INNER_KEYWORD)) return true"
+        errorLine2="               ~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="87"
+            column="16"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="  if (language == KotlinLanguage.INSTANCE &amp;&amp; context.evaluator.isSuspend(this)) {"
+        errorLine2="      ~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="293"
+            column="7"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="    val classReference = parameterList.parameters.lastOrNull()?.type as? PsiClassType ?: return null"
+        errorLine2="                         ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/LintUtils.kt"
+            line="294"
+            column="26"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        if (uClass.classKind in applicableClassKinds) {"
+        errorLine2="            ~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/MetadataJavaEvaluator.kt"
+            line="165"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        if (cls.classKind in applicableClassKinds) {"
+        errorLine2="            ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/util/MetadataJavaEvaluator.kt"
+            line="192"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        if (isKotlin(node.language)) {"
+        errorLine2="                     ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/mocking/MockDetector.kt"
+            line="182"
+            column="22"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        } else if (isJava(node.language) &amp;&amp; isMockAnnotated(node)) {"
+        errorLine2="                          ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/mocking/MockDetector.kt"
+            line="189"
+            column="27"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        if (node.isEnum) {"
+        errorLine2="            ~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="76"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="          slackEvaluator.isObject(node) ||"
+        errorLine2="                                  ~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="199"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="          if (slackEvaluator.isObject(node)) {"
+        errorLine2="                                      ~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="206"
+            column="39"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="          node.constructors"
+        errorLine2="          ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="234"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="                    .name(&quot;Make ${parameter.name} &apos;val&apos;&quot;)"
+        errorLine2="                                  ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="303"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="                    .name(&quot;Make ${parameter.name} &apos;internal&apos;&quot;)"
+        errorLine2="                                  ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="323"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        val typeLabelAnnotation = node.getAnnotation(FQCN_TYPE_LABEL)"
+        errorLine2="                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="446"
+            column="35"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        val defaultObjectAnnotation = node.getAnnotation(FQCN_DEFAULT_OBJECT)"
+        errorLine2="                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="447"
+            column="39"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        if (isTypeLabeled &amp;&amp; node.hasTypeParameters()) {"
+        errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="467"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="          node.superTypes"
+        errorLine2="          ~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="483"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="          &quot;Could not load class for ${psiType.className} on ${parameter.getUastParentOfType&lt;UClass>()!!.name}.${parameter.name}&quot;"
+        errorLine2="                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="616"
+            column="63"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="          &quot;Could not load class for ${psiType.className} on ${parameter.getUastParentOfType&lt;UClass>()!!.name}.${parameter.name}&quot;"
+        errorLine2="                                                                                                                ~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="616"
+            column="113"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        jsonName == member.name -> {"
+        errorLine2="                    ~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="833"
+            column="21"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        context.getNameLocation(member as PsiElement),"
+        errorLine2="                                ~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="854"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        &quot;Name &apos;$jsonName&apos; is duplicated by member &apos;${member.name}&apos;.&quot;,"
+        errorLine2="                                                     ~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="860"
+            column="54"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="    val isKotlin = isKotlin(node.language)"
+        errorLine2="                            ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="912"
+            column="29"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="    val unknownIndex = constants.indexOfFirst { it.name == &quot;UNKNOWN&quot; }"
+        errorLine2="                                                ~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="1069"
+            column="49"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        val jsonAnnotation = constant.getAnnotation(FQCN_JSON)"
+        errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="1087"
+            column="30"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="      val name = constant.name"
+        errorLine2="                 ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/MoshiUsageDetector.kt"
+            line="1115"
+            column="18"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="          node.constructors"
+        errorLine2="          ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/parcel/ParcelizeFunctionPropertyDetector.kt"
+            line="40"
+            column="11"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="            it.findSuperMethods()[0].toUElementOfType()"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/RestrictCallsToDetector.kt"
+            line="76"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="              val currentText = node.text"
+        errorLine2="                                ~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/retrofit/RetrofitUsageDetector.kt"
+            line="93"
+            column="33"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="        if (node.isEnum) return"
+        errorLine2="            ~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/SerializableDetector.kt"
+            line="23"
+            column="13"/>
     </issue>
 
     <issue
