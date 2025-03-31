@@ -6,7 +6,7 @@ import org.junit.Ignore
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
-@Ignore("https://issuetracker.google.com/issues/283715187")
+//@Ignore("https://issuetracker.google.com/issues/283715187")
 class ValueClassMockDetectorTest : BaseSlackLintTest() {
 
   private val testClass =
@@ -43,7 +43,7 @@ class ValueClassMockDetectorTest : BaseSlackLintTest() {
             @Spy lateinit var fieldSpy: TestClass
 
             fun example() {
-//              val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
+              val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
               val localSpy1 = org.mockito.Mockito.spy(1u)
 //              val localMock2 = mock<TestClass>()
 //              val classRef = TestClass::class.java
