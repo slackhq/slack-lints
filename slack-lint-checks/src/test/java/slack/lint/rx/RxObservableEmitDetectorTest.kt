@@ -165,6 +165,10 @@ private val RX_OBSERVABLE_API =
       """
             package kotlinx.coroutines.rx3
 
+            import io.reactivex.rxjava3.core.Observable
+            import kotlin.coroutines.CoroutineContext
+            import kotlin.coroutines.ProducerScope
+
             fun <T : Any> rxObservable(
               context: CoroutineContext,
               block: suspend ProducerScope<T>.() -> Unit
@@ -177,6 +181,10 @@ private val RX_FLOWABLE_API =
   kotlin(
       """
             package kotlinx.coroutines.rx3
+
+            import io.reactivex.rxjava3.core.Flowable
+            import kotlin.coroutines.CoroutineContext
+            import kotlin.coroutines.ProducerScope
 
             fun <T : Any> rxFlowable(
               context: CoroutineContext,
@@ -191,6 +199,8 @@ private val OBSERVABLE_API =
       """
             package io.reactivex.rxjava3.core
 
+            import io.reactivex.rxjava4.annotations.NonNull
+
             interface Observable<@NonNull T>
             """
     )
@@ -200,6 +210,8 @@ private val FLOWABLE_API =
   kotlin(
       """
             package io.reactivex.rxjava3.core
+
+            import io.reactivex.rxjava4.annotations.NonNull
 
             interface Flowable<@NonNull T>
             """
