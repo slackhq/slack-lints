@@ -21,10 +21,7 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
     return object : UElementHandler() {
       override fun visitCallExpression(node: UCallExpression) {
         val issue = functionToIssue[node.methodName] ?: return
-        val lambdaExpression =
-          requireNotNull(node.valueArguments.lastOrNull() as? ULambdaExpression) {
-            "Missing trailing lambda!"
-          }
+        val lambdaExpression = node.valueArguments.lastOrNull() as? ULambdaExpression ?: return
 
         var sendCalled = false
 
