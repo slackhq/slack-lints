@@ -61,6 +61,7 @@ dependencies {
   }
   testImplementation(libs.bundles.lintTest)
   testImplementation(libs.junit)
+  testImplementation(libs.testParameterInjector)
 
   // For IDE linking of APIs
   testImplementation(libs.retrofit)
