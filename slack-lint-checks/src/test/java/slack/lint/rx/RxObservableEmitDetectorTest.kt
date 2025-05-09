@@ -77,42 +77,42 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
 
   @Test
   fun `rxObservable - calls send`() {
-    testWhenResultsOfSendAreReturned(RX_OBSERVABLE, "send")
+    testWhenResultsOfSendAreReturned(RX_OBSERVABLE, SEND)
   }
 
   @Test
   fun `rxObservable - calls trySend`() {
-    testWhenResultsOfSendAreReturned(RX_OBSERVABLE, "trySend")
+    testWhenResultsOfSendAreReturned(RX_OBSERVABLE, TRY_SEND)
   }
 
   @Test
   fun `rxFlowable - calls send`() {
-    testWhenResultsOfSendAreReturned("rxFlowable", "send")
+    testWhenResultsOfSendAreReturned("rxFlowable", SEND)
   }
 
   @Test
   fun `rxFlowable - calls trySend`() {
-    testWhenResultsOfSendAreReturned("rxFlowable", "trySend")
+    testWhenResultsOfSendAreReturned("rxFlowable", TRY_SEND)
   }
 
   @Test
   fun `rxObservable - results of send are not the lambda return value`() {
-    testWhenResultsOfSendAreNotReturned(RX_OBSERVABLE, "send")
+    testWhenResultsOfSendAreNotReturned(RX_OBSERVABLE, SEND)
   }
 
   @Test
   fun `rxObservable - results of trySend are not the lambda return value`() {
-    testWhenResultsOfSendAreNotReturned(RX_OBSERVABLE, "trySend")
+    testWhenResultsOfSendAreNotReturned(RX_OBSERVABLE, TRY_SEND)
   }
 
   @Test
   fun `rxFlowable - results of send are not the lambda return value`() {
-    testWhenResultsOfSendAreNotReturned("rxFlowable", "send")
+    testWhenResultsOfSendAreNotReturned("rxFlowable", SEND)
   }
 
   @Test
   fun `rxFlowable - results of trySend are not the lambda return value`() {
-    testWhenResultsOfSendAreNotReturned("rxFlowable", "trySend")
+    testWhenResultsOfSendAreNotReturned("rxFlowable", TRY_SEND)
   }
 
   private fun testWhenResultsOfSendAreReturned(method: String, emitter: String) {
