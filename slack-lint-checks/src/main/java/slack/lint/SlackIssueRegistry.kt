@@ -17,6 +17,7 @@ import slack.lint.resources.FullyQualifiedResourceDetector
 import slack.lint.resources.MissingResourceImportAliasDetector
 import slack.lint.resources.WrongResourceImportAliasDetector
 import slack.lint.retrofit.RetrofitUsageDetector
+import slack.lint.rx.RxObservableEmitDetector
 import slack.lint.rx.RxSubscribeOnMainDetector
 import slack.lint.text.SpanMarkPointMissingMaskDetector
 import slack.lint.ui.DoNotCallViewToString
@@ -50,6 +51,7 @@ class SlackIssueRegistry : IssueRegistry() {
     add(RawDispatchersUsageDetector.ISSUE)
     add(MainScopeUsageDetector.ISSUE)
     add(RxSubscribeOnMainDetector.ISSUE)
+    addAll(RxObservableEmitDetector.issues)
     addAll(GuavaPreconditionsDetector.issues)
     addAll(MockDetector.ALL_ISSUES)
     add(ErrorProneDoNotMockDetector.ISSUE)
