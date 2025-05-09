@@ -2,15 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.rx
 
-import com.android.tools.lint.checks.infrastructure.LintDetectorTest.kotlin
-import com.google.testing.junit.testparameterinjector.TestParameter
-import com.google.testing.junit.testparameterinjector.TestParameterInjector
+import com.android.tools.lint.checks.infrastructure.TestFile
 import org.junit.Test
-import org.junit.runner.RunWith
 import slack.lint.BaseSlackLintTest
 
-@Suppress("Junit4RunWithInspection")
-@RunWith(TestParameterInjector::class)
 class RxObservableEmitDetectorTest : BaseSlackLintTest() {
   override fun getDetector() = RxObservableEmitDetector()
 
@@ -81,10 +76,46 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
-  fun `rx factory - calls send`(
-    @TestParameter("rxObservable", "rxFlowable") method: String,
-    @TestParameter("send", "trySend") emitter: String,
-  ) {
+  fun `rxObservable - calls send`() {
+    testWhenResultsOfSendAreReturned(RX_OBSERVABLE, "send")
+  }
+
+  @Test
+  fun `rxObservable - calls trySend`() {
+    testWhenResultsOfSendAreReturned(RX_OBSERVABLE, "trySend")
+  }
+
+  @Test
+  fun `rxFlowable - calls send`() {
+    testWhenResultsOfSendAreReturned("rxFlowable", "send")
+  }
+
+  @Test
+  fun `rxFlowable - calls trySend`() {
+    testWhenResultsOfSendAreReturned("rxFlowable", "trySend")
+  }
+
+  @Test
+  fun `rxObservable - results of send are not the lambda return value`() {
+    testWhenResultsOfSendAreNotReturned(RX_OBSERVABLE, "send")
+  }
+
+  @Test
+  fun `rxObservable - results of trySend are not the lambda return value`() {
+    testWhenResultsOfSendAreNotReturned(RX_OBSERVABLE, "trySend")
+  }
+
+  @Test
+  fun `rxFlowable - results of send are not the lambda return value`() {
+    testWhenResultsOfSendAreNotReturned("rxFlowable", "send")
+  }
+
+  @Test
+  fun `rxFlowable - results of trySend are not the lambda return value`() {
+    testWhenResultsOfSendAreNotReturned("rxFlowable", "trySend")
+  }
+
+  private fun testWhenResultsOfSendAreReturned(method: String, emitter: String) {
     lint()
       .files(
         *files,
@@ -107,11 +138,7 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
       .expectClean()
   }
 
-  @Test
-  fun `rx factory - results of send are not the lambda return value`(
-    @TestParameter("rxObservable", "rxFlowable") method: String,
-    @TestParameter("send", "trySend") emitter: String,
-  ) {
+  private fun testWhenResultsOfSendAreNotReturned(method: String, emitter: String) {
     lint()
       .files(
         *files,
@@ -136,33 +163,38 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
       .run()
       .expectClean()
   }
-}
 
-private val COROUTINE_CONTEXT_API =
-  kotlin(
-      """
+  private companion object {
+    const val RX_OBSERVABLE = "rxObservable"
+    const val RX_FLOWABLE = "rxFlowable"
+    const val SEND = "send"
+    const val TRY_SEND = "trySend"
+
+    val COROUTINE_CONTEXT_API: TestFile =
+      kotlin(
+          """
           package kotlin.coroutines
 
           interface CoroutineContext
           """
-    )
-    .indented()
+        )
+        .indented()
 
-private val PRODUCER_SCOPE_API =
-  kotlin(
-      """
+    val PRODUCER_SCOPE_API: TestFile =
+      kotlin(
+          """
           package kotlin.coroutines
 
           interface ProducerScope<in E> {
               suspend fun send(element: E)
           }
           """
-    )
-    .indented()
+        )
+        .indented()
 
-private val RX_OBSERVABLE_API =
-  kotlin(
-      """
+    val RX_OBSERVABLE_API: TestFile =
+      kotlin(
+          """
             package kotlinx.coroutines.rx3
 
             import io.reactivex.rxjava3.core.Observable
@@ -174,12 +206,12 @@ private val RX_OBSERVABLE_API =
               block: suspend ProducerScope<T>.() -> Unit
             ): Observable<T>
           """
-    )
-    .indented()
+        )
+        .indented()
 
-private val RX_FLOWABLE_API =
-  kotlin(
-      """
+    val RX_FLOWABLE_API: TestFile =
+      kotlin(
+          """
             package kotlinx.coroutines.rx3
 
             import io.reactivex.rxjava3.core.Flowable
@@ -191,50 +223,52 @@ private val RX_FLOWABLE_API =
               block: suspend ProducerScope<T>.() -> Unit
             ): Flowable<T>
           """
-    )
-    .indented()
+        )
+        .indented()
 
-private val OBSERVABLE_API =
-  kotlin(
-      """
+    val OBSERVABLE_API: TestFile =
+      kotlin(
+          """
             package io.reactivex.rxjava3.core
 
             import io.reactivex.rxjava4.annotations.NonNull
 
             interface Observable<@NonNull T>
             """
-    )
-    .indented()
+        )
+        .indented()
 
-private val FLOWABLE_API =
-  kotlin(
-      """
+    val FLOWABLE_API: TestFile =
+      kotlin(
+          """
             package io.reactivex.rxjava3.core
 
             import io.reactivex.rxjava4.annotations.NonNull
 
             interface Flowable<@NonNull T>
             """
-    )
-    .indented()
+        )
+        .indented()
 
-private val NON_NULL_API =
-  kotlin(
-      """
+    val NON_NULL_API: TestFile =
+      kotlin(
+          """
             package io.reactivex.rxjava4.annotations
 
             annotation class NonNull
             """
-    )
-    .indented()
+        )
+        .indented()
 
-private val files =
-  arrayOf(
-    COROUTINE_CONTEXT_API,
-    PRODUCER_SCOPE_API,
-    RX_OBSERVABLE_API,
-    RX_FLOWABLE_API,
-    OBSERVABLE_API,
-    FLOWABLE_API,
-    NON_NULL_API,
-  )
+    val files =
+      arrayOf(
+        COROUTINE_CONTEXT_API,
+        PRODUCER_SCOPE_API,
+        RX_OBSERVABLE_API,
+        RX_FLOWABLE_API,
+        OBSERVABLE_API,
+        FLOWABLE_API,
+        NON_NULL_API,
+      )
+  }
+}
