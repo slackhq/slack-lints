@@ -28,10 +28,12 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
         val visitor =
           object : DataFlowAnalyzer(emptySet()) {
             override fun visitCallExpression(node: UCallExpression): Boolean {
-              if (node.methodIdentifier?.name in REQUIRE_ONE_OF) {
-                sendCalled = true
-              }
               return super.visitCallExpression(node)
+                .also {
+                  if (node.methodIdentifier?.name in REQUIRE_ONE_OF) {
+                    sendCalled = true
+                  }
+                }
             }
           }
 
