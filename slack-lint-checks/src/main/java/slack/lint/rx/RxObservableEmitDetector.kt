@@ -23,7 +23,7 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
         val issue = functionToIssue[node.methodName] ?: return
         val lambdaExpression = node.valueArguments.lastOrNull() as? ULambdaExpression ?: return
         val producerScopeParam = lambdaExpression.parameters.firstOrNull() ?: return
-        
+
         // Verify the parameter is a ProducerScope
         if (!producerScopeParam.type.canonicalText.startsWith(PROVIDER_SCOPE_FQN)) return
 
@@ -32,12 +32,15 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
         val visitor =
           object : DataFlowAnalyzer(emptySet()) {
             override fun visitCallExpression(node: UCallExpression): Boolean {
-              // If we find a nested factory method, return immediately and stop traversing this code path.
+              // If we find a nested factory method, return immediately and stop traversing this
+              // code path.
               // Note: this factory will be validated by the UElementHandler above
               if (node.methodName in functionToIssue) return true
 
-              return super.visitCallExpression(node)
-                .also { if (node.hasProviderScopeReceiver() && node.methodName in REQUIRE_ONE_OF) sendCalled = true }
+              return super.visitCallExpression(node).also {
+                if (node.hasProviderScopeReceiver() && node.methodName in REQUIRE_ONE_OF)
+                  sendCalled = true
+              }
             }
           }
 

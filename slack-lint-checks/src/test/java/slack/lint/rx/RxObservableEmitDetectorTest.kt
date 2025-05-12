@@ -3,9 +3,9 @@
 package slack.lint.rx
 
 import com.android.tools.lint.checks.infrastructure.TestFile
+import java.util.Locale.getDefault
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
-import java.util.Locale.getDefault
 
 class RxObservableEmitDetectorTest : BaseSlackLintTest() {
   override fun getDetector() = RxObservableEmitDetector()
@@ -19,27 +19,27 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
         *files,
         kotlin(
             """
-                    package test
+            package test
 
-                    import kotlinx.coroutines.rx3.rxObservable
+            import kotlinx.coroutines.rx3.rxObservable
 
-                    class Foo {
-                      fun foo() {
-                        rxObservable { println("foo") }
-                      }
-                    }
-                    """
+            class Foo {
+              fun foo() {
+                rxObservable { println("foo") }
+              }
+            }
+            """
           )
           .indented(),
       )
       .run()
       .expect(
         """
-                src/test/Foo.kt:7: Hint: rxObservable does not call send() or trySend() [RxObservableDoesNotEmit]
-                    rxObservable { println("foo") }
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                0 errors, 0 warnings, 1 hint
-                """
+            src/test/Foo.kt:7: Hint: rxObservable does not call send() or trySend() [RxObservableDoesNotEmit]
+                rxObservable { println("foo") }
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            0 errors, 0 warnings, 1 hint
+            """
           .trimIndent()
       )
   }
@@ -51,27 +51,27 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
         *files,
         kotlin(
             """
-                    package test
+            package test
 
-                    import kotlinx.coroutines.rx3.rxFlowable
+            import kotlinx.coroutines.rx3.rxFlowable
 
-                    class Foo {
-                      fun foo() {
-                        rxFlowable { println("foo") }
-                      }
-                    }
-                    """
+            class Foo {
+              fun foo() {
+                rxFlowable { println("foo") }
+              }
+            }
+            """
           )
           .indented(),
       )
       .run()
       .expect(
         """
-                src/test/Foo.kt:7: Hint: rxFlowable does not call send() or trySend() [RxFlowableDoesNotEmit]
-                    rxFlowable { println("foo") }
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                0 errors, 0 warnings, 1 hint
-                """
+            src/test/Foo.kt:7: Hint: rxFlowable does not call send() or trySend() [RxFlowableDoesNotEmit]
+                rxFlowable { println("foo") }
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            0 errors, 0 warnings, 1 hint
+            """
           .trimIndent()
       )
   }
@@ -122,16 +122,16 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
         *files,
         kotlin(
             """
-                    package test
+            package test
 
-                    import kotlinx.coroutines.rx3.$method
+            import kotlinx.coroutines.rx3.$method
 
-                    class Foo {
-                      fun foo() {
-                        $method { $emitter("foo") }
-                      }
-                    }
-                    """
+            class Foo {
+              fun foo() {
+                $method { $emitter("foo") }
+              }
+            }
+            """
           )
           .indented(),
       )
@@ -145,19 +145,19 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
         *files,
         kotlin(
             """
-                    package test
+            package test
 
-                    import kotlinx.coroutines.rx3.$method
+            import kotlinx.coroutines.rx3.$method
 
-                    class Foo {
-                      fun foo() {
-                        $method {
-                          $emitter("foo")
-                          println("bar")
-                        }
-                      }
-                    }
-                    """
+            class Foo {
+              fun foo() {
+                $method {
+                  $emitter("foo")
+                  println("bar")
+                }
+              }
+            }
+            """
           )
           .indented(),
       )
@@ -165,164 +165,167 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
       .expectClean()
   }
 
-    @Test
-    fun `rxObservable - should fail when outer factor does not call send`() {
-        testWhenOuterFactoryDoesNotCallSend(RX_OBSERVABLE, SEND)
-    }
+  @Test
+  fun `rxObservable - should fail when outer factor does not call send`() {
+    testWhenOuterFactoryDoesNotCallSend(RX_OBSERVABLE, SEND)
+  }
 
-    @Test
-    fun `rxObservable - should fail when outer factory does not call trySend`() {
-        testWhenOuterFactoryDoesNotCallSend(RX_OBSERVABLE, TRY_SEND)
-    }
+  @Test
+  fun `rxObservable - should fail when outer factory does not call trySend`() {
+    testWhenOuterFactoryDoesNotCallSend(RX_OBSERVABLE, TRY_SEND)
+  }
 
-    @Test
-    fun `rxFlowable - should fail when outer factor does not call send`() {
-        testWhenOuterFactoryDoesNotCallSend(RX_FLOWABLE, SEND)
-    }
+  @Test
+  fun `rxFlowable - should fail when outer factor does not call send`() {
+    testWhenOuterFactoryDoesNotCallSend(RX_FLOWABLE, SEND)
+  }
 
-    @Test
-    fun `rxFlowable - should fail when outer factory does not call trySend`() {
-        testWhenOuterFactoryDoesNotCallSend(RX_FLOWABLE, TRY_SEND)
-    }
+  @Test
+  fun `rxFlowable - should fail when outer factory does not call trySend`() {
+    testWhenOuterFactoryDoesNotCallSend(RX_FLOWABLE, TRY_SEND)
+  }
 
-    private fun testWhenOuterFactoryDoesNotCallSend(method: String, emitter: String) {
-        lint()
-            .files(
-                *files,
-                kotlin(
-                        """
-                        package test
+  private fun testWhenOuterFactoryDoesNotCallSend(method: String, emitter: String) {
+    lint()
+      .files(
+        *files,
+        kotlin(
+            """
+            package test
 
-                        import kotlinx.coroutines.rx3.$method
+            import kotlinx.coroutines.rx3.$method
 
-                        class Foo {
-                          fun foo() {
-                            $method { 
-                                $method {
-                                    $emitter("foo") 
-                                }
-                            }
-                          }
-                        }
-                        """
-                    )
-                    .indented(),
-            )
-            .run()
-            .expect(
-                """
-                src/test/Foo.kt:7: Hint: $method does not call send() or trySend() [${getError(method)}]
-                    $method { 
+            class Foo {
+              fun foo() {
+                $method {
+                    $method {
+                        $emitter("foo")
+                    }
+                }
+              }
+            }
+            """
+          )
+          .indented(),
+      )
+      .run()
+      .expect(
+        """
+            src/test/Foo.kt:7: Hint: $method does not call send() or trySend() [${getError(method)}]
+                $method {
+                ^
+            0 errors, 0 warnings, 1 hint
+            """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun `rxObservable - should fail when inner factor does not call send`() {
+    testWhenInnerFactoryDoesNotCallSend(RX_OBSERVABLE, SEND)
+  }
+
+  @Test
+  fun `rxObservable - should fail when inner factory does not call trySend`() {
+    testWhenInnerFactoryDoesNotCallSend(RX_OBSERVABLE, TRY_SEND)
+  }
+
+  @Test
+  fun `rxFlowable - should fail when inner factor does not call send`() {
+    testWhenInnerFactoryDoesNotCallSend(RX_FLOWABLE, SEND)
+  }
+
+  @Test
+  fun `rxFlowable - should fail when inner factory does not call trySend`() {
+    testWhenInnerFactoryDoesNotCallSend(RX_FLOWABLE, TRY_SEND)
+  }
+
+  private fun testWhenInnerFactoryDoesNotCallSend(method: String, emitter: String) {
+    lint()
+      .files(
+        *files,
+        kotlin(
+            """
+            package test
+
+            import kotlinx.coroutines.rx3.$method
+
+            class Foo {
+              fun foo() {
+                $method {
+                    $emitter("foo")
+                    $method {
+                      println("bar!")
+                    }
+                }
+              }
+            }
+            """
+          )
+          .indented(),
+      )
+      .run()
+      .expect(
+        """
+            src/test/Foo.kt:9: Hint: $method does not call send() or trySend() [${getError(method)}]
+                    $method {
                     ^
-                0 errors, 0 warnings, 1 hint
-                """
-                    .trimIndent()
-            )
-    }
+            0 errors, 0 warnings, 1 hint
+            """
+          .trimIndent()
+      )
+  }
 
-    @Test
-    fun `rxObservable - should fail when inner factor does not call send`() {
-        testWhenInnerFactoryDoesNotCallSend(RX_OBSERVABLE, SEND)
-    }
+  @Test
+  fun `rxObservable - should succeed when inner and outer call send`() {
+    testWhenInnerAndOuterFactoriesCallSend(RX_OBSERVABLE, SEND)
+  }
 
-    @Test
-    fun `rxObservable - should fail when inner factory does not call trySend`() {
-        testWhenInnerFactoryDoesNotCallSend(RX_OBSERVABLE, TRY_SEND)
-    }
+  @Test
+  fun `rxObservable - should succeed when inner and outer call trySend`() {
+    testWhenInnerAndOuterFactoriesCallSend(RX_OBSERVABLE, TRY_SEND)
+  }
 
-    @Test
-    fun `rxFlowable - should fail when inner factor does not call send`() {
-        testWhenInnerFactoryDoesNotCallSend(RX_FLOWABLE, SEND)
-    }
+  @Test
+  fun `rxFlowable - should succeed when inner and outer call send`() {
+    testWhenInnerAndOuterFactoriesCallSend(RX_FLOWABLE, SEND)
+  }
 
-    @Test
-    fun `rxFlowable - should fail when inner factory does not call trySend`() {
-        testWhenInnerFactoryDoesNotCallSend(RX_FLOWABLE, TRY_SEND)
-    }
+  @Test
+  fun `rxFlowable - should succeed when inner and outer call trySend`() {
+    testWhenInnerAndOuterFactoriesCallSend(RX_FLOWABLE, TRY_SEND)
+  }
 
-    private fun testWhenInnerFactoryDoesNotCallSend(method: String, emitter: String) {
-        lint()
-            .files(
-                *files,
-                kotlin(
-                        """
-                            package test
+  private fun testWhenInnerAndOuterFactoriesCallSend(method: String, emitter: String) {
+    lint()
+      .files(
+        *files,
+        kotlin(
+            """
+            package test
 
-                            import kotlinx.coroutines.rx3.$method
+            import kotlinx.coroutines.rx3.$method
 
-                            class Foo {
-                              fun foo() {
-                                $method { 
-                                    $emitter("foo") 
-                                    $method { 
-                                      println("bar!") 
-                                    }
-                                }
-                              }
-                            }
-                            """
-                    )
-                    .indented(),
-            )
-            .run()
-            .expect(
-                """
-                src/test/Foo.kt:9: Hint: $method does not call send() or trySend() [${getError(method)}]
-                        $method { 
-                        ^
-                0 errors, 0 warnings, 1 hint
-                """
-                    .trimIndent()
-            )
-    }
+            class Foo {
+              fun foo() {
+                $method {
+                    $emitter("foo")
+                    $method { inner -> inner.$emitter("foo") }
+                }
+              }
+            }
+            """
+          )
+          .indented(),
+      )
+      .run()
+      .expectClean()
+  }
 
-    @Test
-    fun `rxObservable - should succeed when inner and outer call send`() {
-        testWhenInnerAndOuterFactoriesCallSend(RX_OBSERVABLE, SEND)
-    }
-
-    @Test
-    fun `rxObservable - should succeed when inner and outer call trySend`() {
-        testWhenInnerAndOuterFactoriesCallSend(RX_OBSERVABLE, TRY_SEND)
-    }
-
-    @Test
-    fun `rxFlowable - should succeed when inner and outer call send`() {
-        testWhenInnerAndOuterFactoriesCallSend(RX_FLOWABLE, SEND)
-    }
-
-    @Test
-    fun `rxFlowable - should succeed when inner and outer call trySend`() {
-        testWhenInnerAndOuterFactoriesCallSend(RX_FLOWABLE, TRY_SEND)
-    }
-    private fun testWhenInnerAndOuterFactoriesCallSend(method: String, emitter: String) {
-        lint()
-            .files(
-                *files,
-                kotlin(
-                    """
-                                package test
-
-                                import kotlinx.coroutines.rx3.$method
-
-                                class Foo {
-                                  fun foo() {
-                                    $method { 
-                                        $emitter("foo") 
-                                        $method { inner -> inner.$emitter("foo") }
-                                    }
-                                  }
-                                }
-                                """
-                    )
-                    .indented(),
-            )
-            .run()
-            .expectClean()
-    }
-
-    private fun getError(method: String) =
-        method.replaceFirstChar { if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString() } + "DoesNotEmit"
+  private fun getError(method: String) =
+    method.replaceFirstChar {
+      if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString()
+    } + "DoesNotEmit"
 
   private companion object {
     const val RX_OBSERVABLE = "rxObservable"
