@@ -185,8 +185,11 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
           """
           package kotlin.coroutines
 
+          class ChannelResult<T>
+
           interface ProducerScope<in E> {
               suspend fun send(element: E)
+              fun trySend(element: E): ChannelResult<Unit>
           }
           """
         )
