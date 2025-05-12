@@ -22,36 +22,44 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
       override fun visitCallExpression(node: UCallExpression) {
         val issue = functionToIssue[node.methodName] ?: return
         val lambdaExpression = node.valueArguments.lastOrNull() as? ULambdaExpression ?: return
+        val producerScopeParam = lambdaExpression.parameters.firstOrNull() ?: return
+        
+        // Verify the parameter is a ProducerScope
+        if (!producerScopeParam.type.canonicalText.startsWith(PROVIDER_SCOPE_FQN)) return
 
         var sendCalled = false
 
         val visitor =
           object : DataFlowAnalyzer(emptySet()) {
             override fun visitCallExpression(node: UCallExpression): Boolean {
+              // If we find a nested factory method, return immediately and stop traversing this code path.
+              // Note: this factory will be validated by the UElementHandler above
+              if (node.methodName in functionToIssue) return true
+
               return super.visitCallExpression(node)
-                .also {
-                  if (node.methodIdentifier?.name in REQUIRE_ONE_OF) {
-                    sendCalled = true
-                  }
-                }
+                .also { if (node.matchesRequiredMethod() && node.methodName in REQUIRE_ONE_OF) sendCalled = true }
             }
           }
 
         lambdaExpression.accept(visitor)
 
-        if (sendCalled) return
-
-        context.report(
-          issue,
-          context.getLocation(node),
-          "${node.methodName} does not call send() or trySend()",
-        )
+        if (!sendCalled) {
+          context.report(
+            issue,
+            context.getLocation(node),
+            "${node.methodName} does not call send() or trySend()",
+          )
+        }
       }
     }
   }
 
+  private fun UCallExpression.matchesRequiredMethod(): Boolean =
+    receiverType?.canonicalText?.startsWith(PROVIDER_SCOPE_FQN) == true
+
   internal companion object {
     private val REQUIRE_ONE_OF = setOf("send", "trySend")
+    private const val PROVIDER_SCOPE_FQN = "kotlin.coroutines.ProducerScope"
 
     private val ISSUE_RX_OBSERVABLE_DOES_NOT_EMIT =
       Issue.create(
