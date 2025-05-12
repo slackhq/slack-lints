@@ -37,7 +37,7 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
               if (node.methodName in functionToIssue) return true
 
               return super.visitCallExpression(node)
-                .also { if (node.matchesRequiredMethod() && node.methodName in REQUIRE_ONE_OF) sendCalled = true }
+                .also { if (node.hasProviderScopeReceiver() && node.methodName in REQUIRE_ONE_OF) sendCalled = true }
             }
           }
 
@@ -54,7 +54,7 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
     }
   }
 
-  private fun UCallExpression.matchesRequiredMethod(): Boolean =
+  private fun UCallExpression.hasProviderScopeReceiver(): Boolean =
     receiverType?.canonicalText?.startsWith(PROVIDER_SCOPE_FQN) == true
 
   internal companion object {
