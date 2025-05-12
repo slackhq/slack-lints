@@ -164,6 +164,55 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
       .expectClean()
   }
 
+    @Test
+    fun `rxObservable - nested factory but only one call to send fails`() {
+        testWhenOuterFactoryDoesNotCallSend(RX_OBSERVABLE, SEND)
+    }
+
+    @Test
+    fun `rxObservable - nested factory but only one call to trySend fails`() {
+        testWhenOuterFactoryDoesNotCallSend(RX_OBSERVABLE, TRY_SEND)
+    }
+
+    @Test
+    fun `rxFlowable - nested factory but only one call to send fails`() {
+        testWhenOuterFactoryDoesNotCallSend(RX_FLOWABLE, SEND)
+    }
+
+    @Test
+    fun `rxFlowable - nested factory but only one call to trySend fails`() {
+        testWhenOuterFactoryDoesNotCallSend(RX_FLOWABLE, TRY_SEND)
+    }
+
+    private fun testWhenOuterFactoryDoesNotCallSend(method: String, emitter: String) {
+        lint()
+            .files(
+                *files,
+                kotlin(
+                        """
+                        package test
+
+                        import kotlinx.coroutines.rx3.$method
+
+                        class Foo {
+                          fun foo() {
+                            $method { 
+                                $method {
+                                    $emitter("foo") 
+                                }
+                            }
+                          }
+                        }
+                        """
+                    )
+                    .indented(),
+            )
+            .run()
+            .expect("""
+                
+            """.trimIndent())
+    }
+
   private companion object {
     const val RX_OBSERVABLE = "rxObservable"
     const val RX_FLOWABLE = "rxFlowable"
