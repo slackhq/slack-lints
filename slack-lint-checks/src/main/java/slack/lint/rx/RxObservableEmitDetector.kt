@@ -10,6 +10,7 @@ import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
+import com.intellij.psi.PsiClassType
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.ULambdaExpression
 import slack.lint.util.sourceImplementation
@@ -23,9 +24,10 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
         val issue = functionToIssue[node.methodName] ?: return
         val lambdaExpression = node.valueArguments.lastOrNull() as? ULambdaExpression ?: return
         val producerScopeParam = lambdaExpression.parameters.firstOrNull() ?: return
+        val producerScopeType = (producerScopeParam.type as? PsiClassType) ?: return
 
         // Verify the parameter is a ProducerScope
-        if (!producerScopeParam.type.canonicalText.startsWith(PROVIDER_SCOPE_FQN)) return
+        if (producerScopeType.resolve()?.qualifiedName != PROVIDER_SCOPE_FQN) return
 
         var sendCalled = false
 
