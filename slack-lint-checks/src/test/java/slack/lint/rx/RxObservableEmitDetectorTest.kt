@@ -13,6 +13,11 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
   override fun getIssues() = RxObservableEmitDetector.issues
 
   @Test
+  fun testDocumentationExample() {
+    testWhenResultsOfSendAreReturned(RX_OBSERVABLE, SEND)
+  }
+
+  @Test
   fun `rxObservable - does not call send or trySend`() {
     lint()
       .files(
@@ -116,7 +121,6 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
     testWhenResultsOfSendAreNotReturned("rxFlowable", TRY_SEND)
   }
 
-    @Suppress("LintDocExample")
   private fun testWhenResultsOfSendAreReturned(method: String, emitter: String) {
     lint()
       .files(
@@ -348,18 +352,18 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
       .files(
         *files,
         kotlin(
-          """
-            package test
-
-            import kotlinx.coroutines.rx3.$method as factory
-
-            class Foo {
-              fun foo() {
-                factory { $emitter("foo") }
-              }
-            }
             """
-        )
+              package test
+
+              import kotlinx.coroutines.rx3.$method as factory
+
+              class Foo {
+                fun foo() {
+                  factory { $emitter("foo") }
+                }
+              }
+              """
+          )
           .indented(),
       )
       .run()
