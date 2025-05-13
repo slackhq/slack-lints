@@ -323,6 +323,49 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
       .expectClean()
   }
 
+  @Test
+  fun `rxObservable - should succeed when aliased factory calls send`() {
+    testWhenAliasedFactoryCallsSend(RX_OBSERVABLE, SEND)
+  }
+
+  @Test
+  fun `rxObservable - should succeed when aliased factory calls trySend`() {
+    testWhenAliasedFactoryCallsSend(RX_OBSERVABLE, TRY_SEND)
+  }
+
+  @Test
+  fun `rxFlowable - should succeed when aliased factory calls send`() {
+    testWhenAliasedFactoryCallsSend(RX_FLOWABLE, SEND)
+  }
+
+  @Test
+  fun `rxFlowable - should succeed when aliased factory calls trySend`() {
+    testWhenAliasedFactoryCallsSend(RX_FLOWABLE, TRY_SEND)
+  }
+
+  private fun testWhenAliasedFactoryCallsSend(method: String, emitter: String) {
+    lint()
+      .files(
+        *files,
+        kotlin(
+          """
+            package test
+
+            import kotlinx.coroutines.rx3.$method as factory
+
+            class Foo {
+              fun foo() {
+                factory { $emitter("foo") }
+              }
+            }
+            """
+        )
+          .indented(),
+      )
+      .run()
+      .expectClean()
+  }
+
   private fun getError(method: String) =
     method.replaceFirstChar {
       if (it.isLowerCase()) it.titlecase(getDefault()) else it.toString()
