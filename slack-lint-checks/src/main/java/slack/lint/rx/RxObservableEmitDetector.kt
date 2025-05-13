@@ -37,10 +37,11 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
               // Note: this factory will be validated by the UElementHandler above
               if (node.methodName in functionToIssue) return true
 
-              return super.visitCallExpression(node).also {
-                if (node.hasProviderScopeReceiver() && node.methodName in REQUIRE_ONE_OF)
-                  sendCalled = true
+              if (node.hasProviderScopeReceiver() && node.methodName in REQUIRE_ONE_OF) {
+                sendCalled = true
               }
+
+              return super.visitCallExpression(node)
             }
           }
 
