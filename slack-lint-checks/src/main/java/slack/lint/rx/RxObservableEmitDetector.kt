@@ -51,7 +51,7 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
           context.report(
             issue,
             context.getLocation(node),
-            "${node.methodName} does not call send() or trySend()",
+            "${node.methodName} does not call `send()` or `trySend()`",
           )
         }
       }
@@ -68,9 +68,9 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
     private val ISSUE_RX_OBSERVABLE_DOES_NOT_EMIT =
       Issue.create(
         id = "RxObservableDoesNotEmit",
-        briefDescription = "rxObservable should call send() or trySend()",
+        briefDescription = "RxObservable should call `send()` or `trySend()`",
         explanation =
-          "If the rxObservable trailing lambda does not call send() or trySend(), the returned Observable will never emit!",
+          "If the rxObservable trailing lambda does not call `send()` or `trySend()`, the returned Observable will never emit!",
         category = Category.CORRECTNESS,
         priority = 2,
         severity = Severity.INFORMATIONAL,
@@ -80,9 +80,9 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
     private val ISSUE_RX_FLOWABLE_DOES_NOT_EMIT =
       Issue.create(
         id = "RxFlowableDoesNotEmit",
-        briefDescription = "rxFlowable should call send() or trySend()",
+        briefDescription = "RxFlowable should call `send()` or `trySend()`",
         explanation =
-          "If the rxFlowable trailing lambda does not call send() or trySend(), the returned Flowable will never emit!",
+          "If the rxFlowable trailing lambda does not call `send()` or `trySend()`, the returned Flowable will never emit!",
         category = Category.CORRECTNESS,
         priority = 2,
         severity = Severity.INFORMATIONAL,

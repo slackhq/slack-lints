@@ -116,6 +116,7 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
     testWhenResultsOfSendAreNotReturned("rxFlowable", TRY_SEND)
   }
 
+    @Suppress("LintDocExample")
   private fun testWhenResultsOfSendAreReturned(method: String, emitter: String) {
     lint()
       .files(
