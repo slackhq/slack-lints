@@ -16,7 +16,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "2.1.21-2.0.2" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.32.0" }
 shadow = { id = "com.gradleup.shadow", version = "8.3.6" }
-spotless = { id = "com.diffplug.spotless", version = "7.0.3" }
+spotless = { id = "com.diffplug.spotless", version = "7.0.4" }
 
 [libraries]
 autoService-annotations = "com.google.auto.service:auto-service-annotations:1.1.1"
