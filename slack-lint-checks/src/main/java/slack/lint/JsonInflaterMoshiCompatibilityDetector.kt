@@ -1,3 +1,5 @@
+// Copyright (C) 2025 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
 import com.android.tools.lint.client.api.UElementHandler
@@ -16,8 +18,8 @@ import org.jetbrains.uast.UCallExpression
 import slack.lint.util.sourceImplementation
 
 /**
- * A detector that checks if a type passed into the JsonInflater.inflate/deflate methods follows Moshi's requirements
- * for serialization/deserialization.
+ * A detector that checks if a type passed into the JsonInflater.inflate/deflate methods follows
+ * Moshi's requirements for serialization/deserialization.
  */
 class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
 
@@ -83,12 +85,17 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     }
   }
 
-  private fun validateClassForMoshiCompatibility(context: JavaContext, node: UCallExpression, classToValidate: PsiClass) {
+  private fun validateClassForMoshiCompatibility(
+    context: JavaContext,
+    node: UCallExpression,
+    classToValidate: PsiClass,
+  ) {
     if (!isMoshiCompatible(classToValidate)) {
       context.report(
         issue = ISSUE_JSON_INFLATER_WITH_MOSHI_INCOMPATIBLE_TYPE,
         location = context.getLocation(node),
-        message = ISSUE_JSON_INFLATER_WITH_MOSHI_INCOMPATIBLE_TYPE.getBriefDescription(TextFormat.TEXT)
+        message =
+          ISSUE_JSON_INFLATER_WITH_MOSHI_INCOMPATIBLE_TYPE.getBriefDescription(TextFormat.TEXT),
       )
     }
   }
@@ -96,27 +103,29 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
   private fun isMoshiCompatible(psiClass: PsiClass): Boolean {
     if (!isInstantiable(psiClass)) return false
 
-    return hasPublicNoArgConstructor(psiClass) || hasJsonClassGenerateAdapter(psiClass) || hasAdaptedBy(psiClass)
+    return hasPublicNoArgConstructor(psiClass) ||
+      hasJsonClassGenerateAdapter(psiClass) ||
+      hasAdaptedBy(psiClass)
   }
 
   private fun isInstantiable(psiClass: PsiClass): Boolean {
-    return !psiClass.isInterface
-            && !psiClass.hasModifierProperty(PsiModifier.ABSTRACT)
-            && !psiClass.isEnum
-            && psiClass.hasModifierProperty(PsiModifier.PUBLIC)
+    return !psiClass.isInterface &&
+      !psiClass.hasModifierProperty(PsiModifier.ABSTRACT) &&
+      !psiClass.isEnum &&
+      psiClass.hasModifierProperty(PsiModifier.PUBLIC)
   }
 
   private fun hasPublicNoArgConstructor(psiClass: PsiClass): Boolean {
     return psiClass.constructors.any { constructor ->
       constructor.parameterList.parametersCount == 0 &&
-              constructor.hasModifierProperty(PsiModifier.PUBLIC)
+        constructor.hasModifierProperty(PsiModifier.PUBLIC)
     }
   }
 
   private fun hasJsonClassGenerateAdapter(psiClass: PsiClass): Boolean {
     return psiClass.annotations.any { annotation ->
       annotation.qualifiedName == FQCN_JSON_CLASS &&
-              annotation.findDeclaredAttributeValue("generateAdapter")?.text == "true"
+        annotation.findDeclaredAttributeValue("generateAdapter")?.text == "true"
     }
   }
 
@@ -129,7 +138,7 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     private const val FQCN_JSON_INFLATER = "slack.commons.json.JsonInflater"
     private const val FQCN_JSON_CLASS = "com.squareup.moshi.JsonClass"
     private const val FQCN_ADAPTED_BY = "dev.zacsweers.moshix.adapters.AdaptedBy"
-    
+
     // Issue definitions
     private val ISSUE_JSON_INFLATER_WITH_MOSHI_INCOMPATIBLE_TYPE =
       Issue.create(
@@ -143,9 +152,9 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
-        implementation = sourceImplementation<JsonInflaterMoshiCompatibilityDetector>()
+        implementation = sourceImplementation<JsonInflaterMoshiCompatibilityDetector>(),
       )
-    
+
     fun issues(): List<Issue> = listOf(ISSUE_JSON_INFLATER_WITH_MOSHI_INCOMPATIBLE_TYPE)
   }
 }
