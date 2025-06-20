@@ -71,11 +71,13 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
   }
 
   private fun isJsonPrimitive(type: PsiType): Boolean {
-    val isString = if (type is PsiClassType) {
-      type.resolve()?.qualifiedName == FQCN_JAVA_STRING || type.resolve()?.qualifiedName == FQCN_KOTLIN_STRING
-    } else {
-      false
-    }
+    val isString =
+      if (type is PsiClassType) {
+        type.resolve()?.qualifiedName == FQCN_JAVA_STRING ||
+          type.resolve()?.qualifiedName == FQCN_KOTLIN_STRING
+      } else {
+        false
+      }
     return type is PsiPrimitiveType || isString
   }
 
@@ -113,11 +115,12 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     val result = mutableListOf<PsiClass>()
 
     fun processType(t: PsiType) {
-      val unwrapped = when (t) {
-        is PsiWildcardType -> t.bound ?: return
-        is PsiCapturedWildcardType -> t.wildcard.bound ?: return
-        else -> t
-      }
+      val unwrapped =
+        when (t) {
+          is PsiWildcardType -> t.bound ?: return
+          is PsiCapturedWildcardType -> t.wildcard.bound ?: return
+          else -> t
+        }
 
       val psiClass = PsiTypesUtil.getPsiClass(unwrapped)
       if (psiClass != null) {
