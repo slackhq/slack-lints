@@ -10,10 +10,14 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
+import com.intellij.psi.PsiCapturedWildcardType
 import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiClassType
 import com.intellij.psi.PsiModifier
 import com.intellij.psi.PsiPrimitiveType
 import com.intellij.psi.PsiType
+import com.intellij.psi.PsiWildcardType
+import com.intellij.psi.util.PsiTypesUtil
 import org.jetbrains.uast.UCallExpression
 import slack.lint.util.sourceImplementation
 
@@ -57,11 +61,8 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     // Skip checking primitive types and String
     if (isPrimitiveOrString(returnType)) return
 
-    // Get the class for the return type
-    val returnClass = context.evaluator.getTypeClass(returnType) ?: return
-
     // Validate if the class is Moshi-compatible
-    validateClassForMoshiCompatibility(context, node, returnClass)
+    validateClassForMoshiCompatibility(context, node, returnType)
   }
 
   private fun isPrimitiveOrString(type: PsiType): Boolean {
@@ -70,27 +71,25 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
 
   private fun validateDeflateArguments(context: JavaContext, node: UCallExpression) {
     val method = node.resolve() ?: return
+
     val parameters = method.parameterList.parameters
-    val arguments = node.valueArguments
+    val valueParamIndex = parameters.indexOfFirst { it.name == "value" }
+    if (valueParamIndex == -1) return
 
-    for ((index, parameter) in parameters.withIndex()) {
-      if (parameter.name == "value" && index < arguments.size) {
-        val objectArgument = arguments[index]
-        // Get the type of the object being deflated
-        val objectType = objectArgument.getExpressionType() ?: return
-        val objectClass = context.evaluator.getTypeClass(objectType) ?: return
+    val valueArg = node.getArgumentForParameter(valueParamIndex) ?: return
+    val valueArgType = valueArg.getExpressionType() ?: return
 
-        validateClassForMoshiCompatibility(context, node, objectClass)
-      }
-    }
+    validateClassForMoshiCompatibility(context, node, valueArgType)
   }
 
   private fun validateClassForMoshiCompatibility(
     context: JavaContext,
     node: UCallExpression,
-    classToValidate: PsiClass,
+    typeToValidate: PsiType,
   ) {
-    if (!isMoshiCompatible(classToValidate)) {
+    val modelClasses = extractModelClasses(typeToValidate)
+
+    if (modelClasses.any { !isMoshiCompatible(it) }) {
       context.report(
         issue = ISSUE_JSON_INFLATER_WITH_MOSHI_INCOMPATIBLE_TYPE,
         location = context.getLocation(node),
@@ -100,12 +99,45 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     }
   }
 
+  private fun extractModelClasses(type: PsiType): List<PsiClass> {
+    val result = mutableListOf<PsiClass>()
+
+    fun processType(t: PsiType) {
+      val unwrapped = when (t) {
+        is PsiWildcardType -> t.bound ?: return
+        is PsiCapturedWildcardType -> t.wildcard.bound ?: return
+        else -> t
+      }
+
+      val psiClass = PsiTypesUtil.getPsiClass(unwrapped)
+      if (psiClass != null) {
+        result.add(psiClass)
+      }
+
+      if (unwrapped is PsiClassType) {
+        for (param in unwrapped.parameters) {
+          processType(param)
+        }
+      }
+    }
+
+    processType(type)
+    return result
+  }
+
   private fun isMoshiCompatible(psiClass: PsiClass): Boolean {
+    if (isCollectionType(psiClass)) return true
+
     if (!isInstantiable(psiClass)) return false
 
     return hasPublicNoArgConstructor(psiClass) ||
       hasJsonClassGenerateAdapter(psiClass) ||
       hasAdaptedBy(psiClass)
+  }
+
+  private fun isCollectionType(psiClass: PsiClass): Boolean {
+    val qualifiedName = psiClass.qualifiedName ?: return false
+    return qualifiedName in listOf(FQCN_LIST, FQCN_SET, FQCN_MAP, FQCN_COLLECTION)
   }
 
   private fun isInstantiable(psiClass: PsiClass): Boolean {
@@ -138,6 +170,10 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     private const val FQCN_JSON_INFLATER = "slack.commons.json.JsonInflater"
     private const val FQCN_JSON_CLASS = "com.squareup.moshi.JsonClass"
     private const val FQCN_ADAPTED_BY = "dev.zacsweers.moshix.adapters.AdaptedBy"
+    private const val FQCN_LIST = "java.util.List"
+    private const val FQCN_SET = "java.util.Set"
+    private const val FQCN_MAP = "java.util.Map"
+    private const val FQCN_COLLECTION = "java.util.Collection"
 
     // Issue definitions
     private val ISSUE_JSON_INFLATER_WITH_MOSHI_INCOMPATIBLE_TYPE =

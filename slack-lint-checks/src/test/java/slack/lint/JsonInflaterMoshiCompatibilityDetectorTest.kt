@@ -69,7 +69,11 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
       """
     package slack.commons.json
 
+    import java.lang.reflect.Type
+
     interface JsonInflater {
+      fun <T : Any> inflate(jsonData: String, typeOfT: Type): T
+    
       fun <T : Any> inflate(jsonData: String, clazz: Class<T>): T
 
       fun <T : Any> deflate(value: T, clazz: Class<T>): String
@@ -77,6 +81,25 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
       fun deflate(value: Any, type: Type): String
     }
   """
+    )
+
+    private val parameterizedTypeStub = kotlin(
+        """
+            package com.squareup.moshi
+
+            import java.lang.reflect.ParameterizedType
+            import java.lang.reflect.Type
+            
+            class StubParameterizedType(
+                private val rawType: Type,
+                private val typeArguments: Array<Type>,
+                private val ownerType: Type? = null
+            ) : ParameterizedType {
+                override fun getActualTypeArguments(): Array<Type> = typeArguments
+                override fun getRawType(): Type = rawType
+                override fun getOwnerType(): Type? = ownerType
+            }
+        """.trimIndent()
     )
 
   @Test
@@ -91,6 +114,7 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
         package test
 
         import com.squareup.moshi.JsonClass
+        import slack.commons.json.JsonInflater
 
         @JsonClass(generateAdapter = true)
         data class ValidModel(
@@ -99,41 +123,9 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
             val count: Int
         )
 
-        fun useJsonInflater(jsonInflater: slack.commons.json.JsonInflater) {
+        fun useJsonInflater(jsonInflater: JsonInflater) {
             val model = jsonInflater.inflate("{}", ValidModel::class.java)
-            val json = jsonInflater.deflate(model)
-        }
-      """
-        ),
-      )
-      .run()
-      .expectClean()
-  }
-
-  @Test
-  fun testDataClassAdaptedBy() {
-    lint()
-      .files(
-        jsonClassStub,
-        jsonStub,
-        jsonInflaterStub,
-        adaptedByStub,
-        kotlin(
-          """
-        package test
-
-        import dev.zacsweers.moshix.adapters.AdaptedBy
-
-        @AdaptedBy(String::class)
-        data class ValidModel(
-            val id: String,
-            val name: String,
-            val count: Int
-        )
-
-        fun useJsonInflater(jsonInflater: slack.commons.json.JsonInflater) {
-            val model = jsonInflater.inflate("{}", ValidModel::class.java)
-            val json = jsonInflater.deflate(model)
+            val json = jsonInflater.deflate(model, ValidModel::class.java)
         }
       """
         ),
@@ -154,6 +146,7 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
         package test
 
         import com.squareup.moshi.JsonClass
+        import slack.commons.json.JsonInflater
 
         @JsonClass(generateAdapter = false)
         data class ValidModel(
@@ -162,7 +155,7 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
             val count: Int
         )
 
-        fun useJsonInflater(jsonInflater: slack.commons.json.JsonInflater) {
+        fun useJsonInflater(jsonInflater: JsonInflater) {
             val model = jsonInflater.inflate("{}", ValidModel::class.java)
             val json = jsonInflater.deflate(model)
         }
@@ -172,16 +165,137 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
       .run()
       .expect(
         """
-        src/test/ValidModel.kt:14: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
-                    val model = jsonInflater.inflate("{}", ValidModel::class.java)
-                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test/ValidModel.kt:15: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
-                    val json = jsonInflater.deflate(model)
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        2 errors
+            src/test/ValidModel.kt:15: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
+                        val model = jsonInflater.inflate("{}", ValidModel::class.java)
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            src/test/ValidModel.kt:16: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
+                        val json = jsonInflater.deflate(model)
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            2 errors
       """
       )
   }
+
+    @Test
+    fun testDataClassAdaptedBy() {
+        lint()
+            .files(
+                jsonClassStub,
+                jsonStub,
+                jsonInflaterStub,
+                adaptedByStub,
+                kotlin(
+                    """
+        package test
+    
+        import dev.zacsweers.moshix.adapters.AdaptedBy
+        import slack.commons.json.JsonInflater
+    
+        @AdaptedBy(String::class)
+        data class ValidModel(
+            val id: String,
+            val name: String,
+            val count: Int
+        )
+    
+        fun useJsonInflater(jsonInflater: JsonInflater) {
+            val model = jsonInflater.inflate("{}", ValidModel::class.java)
+            val json = jsonInflater.deflate(model, ValidModel::class.java)
+        }
+      """
+                ),
+            )
+            .run()
+            .expectClean()
+    }
+
+    @Test
+    fun testValidDataClassInList() {
+        lint()
+            .files(
+                jsonClassStub,
+                jsonStub,
+                jsonInflaterStub,
+                adaptedByStub,
+                parameterizedTypeStub,
+                kotlin(
+                    """
+        package test
+    
+        import com.squareup.moshi.JsonClass
+        import com.squareup.moshi.StubParameterizedType
+        import slack.commons.json.JsonInflater
+
+        @JsonClass(generateAdapter = true)
+        data class ValidModel(
+            val id: String,
+            val name: String,
+            val count: Int
+        )
+    
+        fun useJsonInflater(jsonInflater: JsonInflater) {
+            val type = StubParameterizedType(
+                List::class.java,
+                arrayOf(ValidModel::class.java)
+            )
+            val model = jsonInflater.inflate<List<ValidModel>>("{}", type)
+            val json = jsonInflater.deflate(model, type)
+        }
+      """
+                ),
+            )
+            .run()
+            .expectClean()
+    }
+
+    @Test
+    fun testInvalidDataClassInList() {
+        lint()
+            .files(
+                jsonClassStub,
+                jsonStub,
+                jsonInflaterStub,
+                adaptedByStub,
+                parameterizedTypeStub,
+                kotlin(
+                    """
+        package test
+    
+        import com.squareup.moshi.JsonClass
+        import com.squareup.moshi.StubParameterizedType
+        import slack.commons.json.JsonInflater
+
+        @JsonClass(generateAdapter = false)
+        data class InvalidModel(
+            val id: String,
+            val name: String,
+            val count: Int
+        )
+    
+        fun useJsonInflater(jsonInflater: JsonInflater) {
+            val type = StubParameterizedType(
+                List::class.java,
+                arrayOf(InvalidModel::class.java)
+            )
+            val model = jsonInflater.inflate<List<InvalidModel>>("{}", type)
+            val json = jsonInflater.deflate(model, type)
+        }
+      """
+                ),
+            )
+            .run()
+            .expect(
+                """
+                src/test/InvalidModel.kt:20: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
+                            val model = jsonInflater.inflate<List<InvalidModel>>("{}", type)
+                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                src/test/InvalidModel.kt:21: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
+                            val json = jsonInflater.deflate(model, type)
+                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                2 errors
+              """
+            )
+    }
 
   @Test
   fun testMissingJsonClassAnnotation() {
@@ -194,15 +308,17 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
           """
         package test
 
+        import slack.commons.json.JsonInflater
+
         data class InvalidModel(
             val id: String,
             val name: String,
             val count: Int
         )
 
-        fun useJsonInflater(jsonInflater: slack.commons.json.JsonInflater) {
+        fun useJsonInflater(jsonInflater: JsonInflater) {
             val model = jsonInflater.inflate("{}", InvalidModel::class.java)
-            val json = jsonInflater.deflate(model)
+            val json = jsonInflater.deflate(model, InvalidModel::class.java)
         }
       """
         ),
@@ -210,12 +326,12 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
       .run()
       .expect(
         """
-        src/test/InvalidModel.kt:11: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
+        src/test/InvalidModel.kt:13: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
                     val model = jsonInflater.inflate("{}", InvalidModel::class.java)
                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test/InvalidModel.kt:12: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
-                    val json = jsonInflater.deflate(model)
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/test/InvalidModel.kt:14: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
+                    val json = jsonInflater.deflate(model, InvalidModel::class.java)
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         2 errors
       """
       )
@@ -233,6 +349,7 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
         package test
 
         import com.squareup.moshi.JsonClass
+        import slack.commons.json.JsonInflater
 
         @JsonClass(generateAdapter = true)
         class InvalidModel(
@@ -241,9 +358,9 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
             val count: Int
         )
 
-        fun useJsonInflater(jsonInflater: slack.commons.json.JsonInflater) {
+        fun useJsonInflater(jsonInflater: JsonInflater) {
             val model = jsonInflater.inflate("{}", InvalidModel::class.java)
-            val json = jsonInflater.deflate(model)
+            val json = jsonInflater.deflate(model, InvalidModel::class.java)
         }
       """
         ),
@@ -264,6 +381,7 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
         package test
 
         import com.squareup.moshi.JsonClass
+        import slack.commons.json.JsonInflater
 
         @JsonClass(generateAdapter = true)
         abstract class InvalidModel(
@@ -272,9 +390,9 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
             val count: Int
         )
 
-        fun useJsonInflater(jsonInflater: slack.commons.json.JsonInflater) {
+        fun useJsonInflater(jsonInflater: JsonInflater) {
             val model = jsonInflater.inflate("{}", InvalidModel::class.java)
-            val json = jsonInflater.deflate(model)
+            val json = jsonInflater.deflate(model, InvalidModel::class.java)
         }
       """
         ),
@@ -282,12 +400,12 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
       .run()
       .expect(
         """
-        src/test/InvalidModel.kt:14: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
+        src/test/InvalidModel.kt:15: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
                     val model = jsonInflater.inflate("{}", InvalidModel::class.java)
                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test/InvalidModel.kt:15: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
-                    val json = jsonInflater.deflate(model)
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/test/InvalidModel.kt:16: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiCompatibility:MoshiIncompatibleType]
+                    val json = jsonInflater.deflate(model, InvalidModel::class.java)
+                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         2 errors
       """
       )
