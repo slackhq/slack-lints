@@ -19,6 +19,7 @@ import com.intellij.psi.PsiType
 import com.intellij.psi.PsiWildcardType
 import com.intellij.psi.util.PsiTypesUtil
 import org.jetbrains.uast.UCallExpression
+import slack.lint.moshi.MoshiLintUtil.hasMoshiAnnotation
 import slack.lint.util.sourceImplementation
 
 /**
@@ -139,9 +140,7 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
 
     if (!isInstantiable(psiClass)) return false
 
-    return hasPublicNoArgConstructor(psiClass) ||
-      hasJsonClassGenerateAdapter(psiClass) ||
-      hasAdaptedBy(psiClass)
+    return hasPublicNoArgConstructor(psiClass) || psiClass.hasMoshiAnnotation()
   }
 
   private fun isCollectionType(psiClass: PsiClass): Boolean {
@@ -163,22 +162,11 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     }
   }
 
-  private fun hasJsonClassGenerateAdapter(psiClass: PsiClass): Boolean {
-    return psiClass.annotations.any { annotation ->
-      annotation.qualifiedName == FQCN_JSON_CLASS &&
-        annotation.findDeclaredAttributeValue("generateAdapter")?.text == "true"
-    }
-  }
-
-  private fun hasAdaptedBy(psiClass: PsiClass): Boolean {
-    return psiClass.annotations.any { annotation -> annotation.qualifiedName == FQCN_ADAPTED_BY }
-  }
-
   companion object {
     // Fully qualified class names for relevant annotations and types
     private const val FQCN_JSON_INFLATER = "slack.commons.json.JsonInflater"
-    private const val FQCN_JSON_CLASS = "com.squareup.moshi.JsonClass"
-    private const val FQCN_ADAPTED_BY = "dev.zacsweers.moshix.adapters.AdaptedBy"
+    private const val FQCN_JAVA_STRING = "java.lang.String"
+    private const val FQCN_KOTLIN_STRING = "kotlin.String"
     private const val FQCN_LIST = "java.util.List"
     private const val FQCN_SET = "java.util.Set"
     private const val FQCN_MAP = "java.util.Map"
