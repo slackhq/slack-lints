@@ -34,8 +34,10 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
   override fun createUastHandler(context: JavaContext): UElementHandler {
     return object : UElementHandler() {
       override fun visitCallExpression(node: UCallExpression) {
+        val method = node.resolve() ?: return
+
         if (isJsonInflaterInflateOrDeflate(node)) {
-          when (node.methodName) {
+          when (method.name) {
             "inflate" -> validateInflateReturnType(context, node)
             "deflate" -> validateDeflateArguments(context, node)
           }
