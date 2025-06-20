@@ -105,6 +105,11 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
     )
 
   @Test
+  fun testDocumentationExample() {
+    testMissingJsonClassAnnotation()
+  }
+
+  @Test
   fun testDataClassJsonClassTrue() {
     lint()
       .files(
