@@ -24,6 +24,8 @@ import slack.lint.util.sourceImplementation
 /**
  * A detector that checks if a type passed into the JsonInflater.inflate/deflate methods follows
  * Moshi's requirements for serialization/deserialization.
+ *
+ * `JsonInflater` is a JSON serialization indirection we have internally at Slack.
  */
 class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
 
