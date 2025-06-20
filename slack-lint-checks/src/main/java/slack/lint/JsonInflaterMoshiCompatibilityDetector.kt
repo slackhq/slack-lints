@@ -178,7 +178,7 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     // Issue definitions
     private val ISSUE_JSON_INFLATER_WITH_MOSHI_INCOMPATIBLE_TYPE =
       Issue.create(
-        id = "JsonInflaterMoshiCompatibility:MoshiIncompatibleType",
+        id = "JsonInflaterMoshiIncompatibleType",
         "Using JsonInflater.inflate/deflate with a Moshi-incompatible type.",
         """
           Classes used with JsonInflater.inflate/deflate must be annotated with @JsonClass or @AdaptedBy to make it \
