@@ -63,14 +63,19 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     val returnType = node.getExpressionType() ?: return
 
     // Skip checking primitive types and String
-    if (isPrimitiveOrString(returnType)) return
+    if (isJsonPrimitive(returnType)) return
 
     // Validate if the class is Moshi-compatible
     validateClassForMoshiCompatibility(context, node, returnType)
   }
 
-  private fun isPrimitiveOrString(type: PsiType): Boolean {
-    return type is PsiPrimitiveType || type.canonicalText == "java.lang.String"
+  private fun isJsonPrimitive(type: PsiType): Boolean {
+    val isString = if (type is PsiClassType) {
+      type.resolve()?.qualifiedName == FQCN_JAVA_STRING || type.resolve()?.qualifiedName == FQCN_KOTLIN_STRING
+    } else {
+      false
+    }
+    return type is PsiPrimitiveType || isString
   }
 
   private fun validateDeflateArguments(context: JavaContext, node: UCallExpression) {
