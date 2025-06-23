@@ -73,8 +73,7 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
   private fun isJsonPrimitive(type: PsiType): Boolean {
     val isString =
       if (type is PsiClassType) {
-        type.resolve()?.qualifiedName == FQCN_JAVA_STRING ||
-          type.resolve()?.qualifiedName == FQCN_KOTLIN_STRING
+        type.resolve()?.qualifiedName == FQCN_JAVA_STRING
       } else {
         false
       }
@@ -169,7 +168,6 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     // Fully qualified class names for relevant annotations and types
     private const val FQCN_JSON_INFLATER = "slack.commons.json.JsonInflater"
     private const val FQCN_JAVA_STRING = "java.lang.String"
-    private const val FQCN_KOTLIN_STRING = "kotlin.String"
     private const val FQCN_LIST = "java.util.List"
     private const val FQCN_SET = "java.util.Set"
     private const val FQCN_MAP = "java.util.Map"
