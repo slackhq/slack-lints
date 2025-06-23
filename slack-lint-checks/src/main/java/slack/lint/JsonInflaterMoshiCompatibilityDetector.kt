@@ -142,7 +142,7 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
 
     if (!isInstantiable(psiClass)) return false
 
-    return hasPublicNoArgConstructor(psiClass) || psiClass.hasMoshiAnnotation()
+    return psiClass.hasMoshiAnnotation()
   }
 
   private fun isCollectionType(psiClass: PsiClass): Boolean {
@@ -155,13 +155,6 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
       !psiClass.hasModifierProperty(PsiModifier.ABSTRACT) &&
       !psiClass.isEnum &&
       psiClass.hasModifierProperty(PsiModifier.PUBLIC)
-  }
-
-  private fun hasPublicNoArgConstructor(psiClass: PsiClass): Boolean {
-    return psiClass.constructors.any { constructor ->
-      constructor.parameterList.parametersCount == 0 &&
-        constructor.hasModifierProperty(PsiModifier.PUBLIC)
-    }
   }
 
   companion object {
