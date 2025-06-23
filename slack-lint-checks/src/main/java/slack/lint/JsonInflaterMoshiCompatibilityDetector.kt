@@ -183,8 +183,7 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
         """
           Classes used with JsonInflater.inflate/deflate must be annotated with @JsonClass or @AdaptedBy to make it \
           compatible with Moshi. Additionally, it cannot be an abstract class or an interface.
-        """
-          .trimIndent(),
+        """,
         Category.CORRECTNESS,
         6,
         Severity.ERROR,
