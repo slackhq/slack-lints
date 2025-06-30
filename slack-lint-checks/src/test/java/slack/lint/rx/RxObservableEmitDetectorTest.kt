@@ -301,6 +301,10 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
     testWhenInnerAndOuterFactoriesCallSend(RX_FLOWABLE, TRY_SEND)
   }
 
+  /**
+   * @param method a function like "rxObservable"
+   * @param emitter an emitter function like "send"
+   */
   private fun testWhenInnerAndOuterFactoriesCallSend(method: String, emitter: String) {
     lint()
       .files(
@@ -315,7 +319,7 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
               fun foo() {
                 $method {
                     $emitter("foo")
-                    $method { inner -> inner.$emitter("foo") }
+                    $method { $emitter("foo") }
                 }
               }
             }

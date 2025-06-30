@@ -1,22 +1,22 @@
 [versions]
-kotlin = "2.1.21"
-ktfmt = "0.54"
+kotlin = "2.2.0"
+ktfmt = "0.56"
 jdk = "23"
 # lint checks must target JDK 17, but the runtime should remain 11
 lintJvmTarget = "17"
 runtimeJvmTarget = "11"
-lint = "31.11.0-alpha03"
+lint = "31.12.0-alpha07"
 
 [plugins]
-buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.6.5" }
+buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.6.7" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.8" }
 dokka = { id = "org.jetbrains.dokka", version = "2.0.0" }
-lint = { id = "com.android.lint", version = "8.11.0-alpha10" }
+lint = { id = "com.android.lint", version = "8.11.0" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.1.21-2.0.1" }
-mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.32.0" }
-shadow = { id = "com.gradleup.shadow", version = "8.3.6" }
-spotless = { id = "com.diffplug.spotless", version = "7.0.3" }
+ksp = { id = "com.google.devtools.ksp", version = "2.2.0-2.0.2" }
+mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.33.0" }
+shadow = { id = "com.gradleup.shadow", version = "8.3.7" }
+spotless = { id = "com.diffplug.spotless", version = "7.0.4" }
 
 [libraries]
 autoService-annotations = "com.google.auto.service:auto-service-annotations:1.1.1"
@@ -25,7 +25,7 @@ junit = "junit:junit:4.13.2"
 kotlin-metadata = { module = "org.jetbrains.kotlin:kotlin-metadata-jvm", version.ref = "kotlin" }
 ktfmt = { module = "com.facebook:ktfmt", version.ref = "ktfmt" }
 eithernet = "com.slack.eithernet:eithernet:2.0.0"
-retrofit = "com.squareup.retrofit2:retrofit:2.11.0"
+retrofit = "com.squareup.retrofit2:retrofit:3.0.0"
 lint-api = { module = "com.android.tools.lint:lint-api", version.ref = "lint" }
 lint-checks = { module = "com.android.tools.lint:lint-checks", version.ref = "lint" }
 lint = { module = "com.android.tools.lint:lint", version.ref = "lint" }
