@@ -176,20 +176,28 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
           }
         }
 
-        val generateAdapter = jsonClassAnnotation.findAttributeValue("generateAdapter")
-        if (generateAdapter?.evaluate() != true) {
-          context.report(
-            ISSUE_GENERATE_ADAPTER_SHOULD_BE_TRUE,
-            context.getLocation(generateAdapter as UExpression),
-            ISSUE_GENERATE_ADAPTER_SHOULD_BE_TRUE.getBriefDescription(TextFormat.TEXT),
-            fix()
-              .replace()
-              .name("Set to true")
-              .text(generateAdapter.asSourceString())
-              .with("true")
-              .autoFix()
-              .build(),
-          )
+        val generateAdapterExpression = jsonClassAnnotation.findAttributeValue("generateAdapter")
+        val generateAdapter = generateAdapterExpression?.evaluate() as? Boolean? ?: false
+        val isData = slackEvaluator.isData(node)
+        if (!generateAdapter) {
+          // If it's a data class always report these because it's probably user error
+          if (isData) {
+            context.report(
+              ISSUE_GENERATE_ADAPTER_SHOULD_BE_TRUE,
+              context.getLocation(generateAdapterExpression as UExpression),
+              ISSUE_GENERATE_ADAPTER_SHOULD_BE_TRUE.getBriefDescription(TextFormat.TEXT),
+              fix()
+                .replace()
+                .name("Set to true")
+                .text(generateAdapterExpression.asSourceString())
+                .with("true")
+                .autoFix()
+                .build(),
+            )
+          }
+
+          // It's ok if we're just doing generateAdapter = false as these might be for R8 reasons
+          return
         }
 
         // If they're using a custom generator, peace of out this
@@ -220,7 +228,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             )
           }
           return
-        } else if (!slackEvaluator.isData(node)) {
+        }
+
+        if (!isData) {
           // These should be data classes unless there's a very specific reason not to
           context.report(
             ISSUE_USE_DATA,
