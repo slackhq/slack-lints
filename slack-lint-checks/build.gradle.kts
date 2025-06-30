@@ -14,7 +14,7 @@ plugins {
   alias(libs.plugins.buildConfig)
 }
 
-val lintKotlinVersion = KotlinVersion(2, 1, 0)
+val lintKotlinVersion = KotlinVersion(2, 1, 20)
 
 buildConfig {
   packageName("slack.lint")
