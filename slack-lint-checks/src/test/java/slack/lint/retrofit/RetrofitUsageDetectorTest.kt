@@ -2,13 +2,28 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.retrofit
 
+import com.android.tools.lint.checks.infrastructure.TestFile
 import com.android.tools.lint.detector.api.Detector
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
 class RetrofitUsageDetectorTest : BaseSlackLintTest() {
 
-  private val retrofit2Jar = retrofit2Jar()
+  private companion object {
+    val allowUnitResult: TestFile =
+      kotlin(
+          """
+        package slack.lint.annotations
+
+        @Target(AnnotationTarget.FUNCTION)
+        @Retention(AnnotationRetention.SOURCE)
+        annotation class AllowUnitResult
+      """
+        )
+        .indented()
+  }
+
+  private val retrofit3Jar = retrofit3Jar()
 
   override fun getDetector(): Detector = RetrofitUsageDetector()
 
@@ -18,7 +33,7 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
   fun formEncoding() {
     lint()
       .files(
-        retrofit2Jar,
+        retrofit3Jar,
         kotlin(
             """
             package test
@@ -83,7 +98,7 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
   fun bodies() {
     lint()
       .files(
-        retrofit2Jar,
+        retrofit3Jar,
         kotlin(
             """
             package test
@@ -158,12 +173,14 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
   fun unitReturn() {
     lint()
       .files(
-        retrofit2Jar,
+        retrofit3Jar,
+        allowUnitResult,
         kotlin(
             """
             package test
 
             import retrofit2.http.GET
+            import slack.lint.annotations.AllowUnitResult
 
             interface Example {
               @GET("/")
@@ -174,6 +191,16 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
 
               @GET("/")
               fun unitMethodExplicit(): Unit
+
+              suspend fun suspendUnitMethodExplicit(): Unit
+
+              @AllowUnitResult
+              @PUT("/")
+              suspend fun suspendUnitMethodAllowUnitResult()
+
+              @AllowUnitResult
+              @DELETE("/")
+              suspend fun suspendUnitMethodExplicitAllowUnitResult(): Unit
             }
           """
           )
@@ -182,16 +209,16 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-        src/test/Example.kt:7: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
+        src/test/Example.kt:8: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
           fun unitMethod()
               ~~~~~~~~~~
-        src/test/Example.kt:10: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
+        src/test/Example.kt:11: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
           suspend fun suspendUnitMethod()
                       ~~~~~~~~~~~~~~~~~
-        src/test/Example.kt:13: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
+        src/test/Example.kt:14: Error: Retrofit endpoints should return something other than Unit/void. [RetrofitUsage]
           fun unitMethodExplicit(): Unit
               ~~~~~~~~~~~~~~~~~~
-        3 errors, 0 warnings
+        3 errors
         """
           .trimIndent()
       )

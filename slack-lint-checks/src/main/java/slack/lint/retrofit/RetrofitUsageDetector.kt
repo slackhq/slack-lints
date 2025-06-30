@@ -39,15 +39,19 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
           HTTP_ANNOTATIONS.firstNotNullOfOrNull { node.findAnnotation(it) } ?: return
 
         val returnType = node.safeReturnType(context)
-        if (
+        val isVoidOrUnitReturnType =
           returnType == null ||
             returnType == PsiTypes.voidType() ||
             returnType.canonicalText == "kotlin.Unit"
-        ) {
-          node.report(
-            "Retrofit endpoints should return something other than Unit/void.",
-            context.getNameLocation(node),
-          )
+        if (isVoidOrUnitReturnType) {
+          val allowsUnitResult = node.hasAnnotation("slack.lint.annotations.AllowUnitResponse")
+          val isSuspend = context.evaluator.isSuspend(node)
+          if (!(isSuspend && allowsUnitResult)) {
+            node.report(
+              "Retrofit endpoints should return something other than Unit/void.",
+              context.getNameLocation(node),
+            )
+          }
         }
 
         val httpAnnotationFqnc = httpAnnotation.qualifiedName ?: return
