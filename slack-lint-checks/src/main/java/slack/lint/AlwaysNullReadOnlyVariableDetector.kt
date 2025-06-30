@@ -36,13 +36,13 @@ class AlwaysNullReadOnlyVariableDetector : Detector(), SourceCodeScanner {
 
     return object : UElementHandler() {
 
-      fun isNullInitializedForReadOnlyVariable(node: UVariable): Boolean {
-        val uastInitializer = node.uastInitializer
-        val sourcePsi = node.sourcePsi
-
+      private fun isNullInitializedForReadOnlyVariable(node: UVariable): Boolean {
+        val uastInitializer = node.uastInitializer ?: return false
         val isNullInitialized = uastInitializer is ULiteralExpression && uastInitializer.isNull
+        if (!isNullInitialized) return false
+        val sourcePsi = node.sourcePsi
         val isReadOnlyVariable = sourcePsi is KtProperty && !sourcePsi.isVar
-        return isNullInitialized && isReadOnlyVariable
+        return isReadOnlyVariable
       }
 
       override fun visitLocalVariable(node: ULocalVariable) {
