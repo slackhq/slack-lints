@@ -4,7 +4,11 @@ Changelog
 **Unreleased**
 --------------
 
-- Update lint to `31.11.0-alpha03`.
+- **New:** Add `JsonInflaterMoshiCompatibilityDetector` check. This lint is only usable to slack's internal repo.
+- **New:** Add `RxObservableEmitDetector` to ensure that `rxObservable`/`rxFlowable` lambda expressions call `send`/`trySend`.
+- Update lint to `31.12.0-alpha07`.
+- Only test against K2 UAST now.
+- Test against Retrofit `3.0.0`.
 
 0.9.0
 -----
