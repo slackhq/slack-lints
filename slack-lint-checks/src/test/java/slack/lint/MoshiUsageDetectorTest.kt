@@ -1037,6 +1037,9 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
 
             @JsonClass(generateAdapter = true)
             interface UnsupportedInterface
+
+            @JsonClass(generateAdapter = false)
+            interface UnsupportedInterfaceButGenerateAdapterIsFalseIsOk
           }
         """
         )
