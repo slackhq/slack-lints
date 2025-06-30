@@ -36,6 +36,11 @@ jobs:
         id: gradle
         run: ./gradlew check --quiet
 
+      - uses: mikepenz/action-junit-report@v5
+        if: success() || failure()
+        with:
+          report_paths: '**/build/test-results/test/TEST-*.xml'
+
       - name: (Fail-only) Upload build reports
         if: failure()
         uses: actions/upload-artifact@v4
