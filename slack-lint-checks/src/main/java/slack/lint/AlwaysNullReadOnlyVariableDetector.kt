@@ -10,13 +10,13 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.ULiteralExpression
-import org.jetbrains.uast.ULocalVariable
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UVariable
 import org.jetbrains.uast.kotlin.isKotlin
@@ -24,12 +24,7 @@ import slack.lint.util.sourceImplementation
 
 class AlwaysNullReadOnlyVariableDetector : Detector(), SourceCodeScanner {
   override fun getApplicableUastTypes() =
-    listOf(
-      ULocalVariable::class.java,
-      UVariable::class.java,
-      UCallExpression::class.java,
-      UMethod::class.java,
-    )
+    listOf(UVariable::class.java, UCallExpression::class.java, UMethod::class.java)
 
   override fun createUastHandler(context: JavaContext): UElementHandler? {
     if (!isKotlin(context.uastFile?.lang)) return null
@@ -41,18 +36,11 @@ class AlwaysNullReadOnlyVariableDetector : Detector(), SourceCodeScanner {
         val isNullInitialized = uastInitializer is ULiteralExpression && uastInitializer.isNull
         if (!isNullInitialized) return false
         val sourcePsi = node.sourcePsi
-        val isReadOnlyVariable = sourcePsi is KtProperty && !sourcePsi.isVar
+        val isReadOnlyVariable =
+          sourcePsi is KtProperty &&
+            !sourcePsi.isVar &&
+            !sourcePsi.hasModifier(KtTokens.OPEN_KEYWORD)
         return isReadOnlyVariable
-      }
-
-      override fun visitLocalVariable(node: ULocalVariable) {
-        if (isNullInitializedForReadOnlyVariable(node)) {
-          context.report(
-            ISSUE_ALWAYS_INITIALIZE_NULL,
-            context.getLocation(node.uastInitializer),
-            ISSUE_ALWAYS_INITIALIZE_NULL.getBriefDescription(TextFormat.TEXT),
-          )
-        }
       }
 
       override fun visitVariable(node: UVariable) {

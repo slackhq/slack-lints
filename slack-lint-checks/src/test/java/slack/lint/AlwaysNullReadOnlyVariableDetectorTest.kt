@@ -15,8 +15,6 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
             """
-            package foo
-
             class Test {
                 val str: String? = null
 
@@ -28,14 +26,13 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .allowDuplicates()
       .run()
       .expect(
         """
-        src/foo/Test.kt:4: Warning: Avoid initializing read-only variable with null in Kotlin [AvoidNullInitForReadOnlyVariables]
+        src/Test.kt:2: Warning: Avoid initializing read-only variable with null in Kotlin [AvoidNullInitForReadOnlyVariables]
             val str: String? = null
                                ~~~~
-        src/foo/Test.kt:7: Warning: Avoid initializing read-only variable with null in Kotlin [AvoidNullInitForReadOnlyVariables]
+        src/Test.kt:5: Warning: Avoid initializing read-only variable with null in Kotlin [AvoidNullInitForReadOnlyVariables]
                 val strInFunction: String? = null
                                              ~~~~
         0 errors, 2 warnings
@@ -50,8 +47,6 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
             """
-            package foo
-
             class Test {
                 val str1: String?
                     get() = null
@@ -68,17 +63,16 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .allowDuplicates()
       .run()
       .expect(
         """
-        src/foo/Test.kt:12: Warning: Avoid initializing read-only variable with null in Kotlin [AvoidNullInitForReadOnlyVariables]
+        src/Test.kt:10: Warning: Avoid initializing read-only variable with null in Kotlin [AvoidNullInitForReadOnlyVariables]
             val str3: String? = null
                                 ~~~~
-        src/foo/Test.kt:5: Warning: Avoid returning null in getter for read-only properties in Kotlin [AvoidReturningNullInGetter]
+        src/Test.kt:3: Warning: Avoid returning null in getter for read-only properties in Kotlin [AvoidReturningNullInGetter]
                 get() = null
                         ~~~~
-        src/foo/Test.kt:9: Warning: Avoid returning null in getter for read-only properties in Kotlin [AvoidReturningNullInGetter]
+        src/Test.kt:7: Warning: Avoid returning null in getter for read-only properties in Kotlin [AvoidReturningNullInGetter]
                     return null
                            ~~~~
         0 errors, 3 warnings
@@ -93,8 +87,6 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
             """
-            package foo
-
             class Test {
                 var str: String? = null
 
@@ -106,7 +98,6 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .allowDuplicates()
       .run()
       .expectClean()
   }
@@ -117,8 +108,6 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
             """
-            package foo
-
             class Test {
                 val str: String? = "str"
 
@@ -130,7 +119,6 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .allowDuplicates()
       .run()
       .expectClean()
   }
@@ -141,8 +129,6 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
             """
-            package foo
-
             class Test {
                 var str: String? = "str"
 
@@ -154,7 +140,6 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .allowDuplicates()
       .run()
       .expectClean()
   }
@@ -165,8 +150,6 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
       .files(
         kotlin(
             """
-            package foo
-
             class Test {
                 val str1: String?
                     get() = "str"
@@ -180,7 +163,38 @@ class AlwaysNullReadOnlyVariableDetectorTest : BaseSlackLintTest() {
           )
           .indented()
       )
-      .allowDuplicates()
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `parameter properties initialized to null are ok`() {
+    lint()
+      .files(
+        kotlin(
+            """
+            class Test(val str1: String? = null)
+            """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `open properties initialized to null are ok`() {
+    lint()
+      .files(
+        kotlin(
+            """
+            open class Test {
+              open val str1: String? = null
+            }
+            """
+          )
+          .indented()
+      )
       .run()
       .expectClean()
   }
