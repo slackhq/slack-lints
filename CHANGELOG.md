@@ -6,6 +6,7 @@ Changelog
 
 - **New:** Add `JsonInflaterMoshiCompatibilityDetector` check. This lint is only usable to slack's internal repo.
 - **New:** Add `RxObservableEmitDetector` to ensure that `rxObservable`/`rxFlowable` lambda expressions call `send`/`trySend`.
+- **New:** Add `AlwaysNullReadOnlyVariableDetector` to lint against read-only variables always initialized to null.
 - Allow suspend Retrofit functions to return `Unit` if annotated with `@AllowUnitResult`.
 - Update lint to `31.12.0-alpha07`.
 - Only test against K2 UAST now.
