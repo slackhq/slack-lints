@@ -177,7 +177,7 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
         """,
         Category.CORRECTNESS,
         6,
-        Severity.ERROR,
+        Severity.IGNORE,
         implementation = sourceImplementation<JsonInflaterMoshiCompatibilityDetector>(),
       )
 
