@@ -43,7 +43,7 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
                 sendCalled = true
               }
 
-              return super.visitCallExpression(node)
+              return false
             }
           }
 
