@@ -4,6 +4,13 @@ Changelog
 **Unreleased**
 --------------
 
+0.10.1
+------
+
+_2025-07-14_
+
+- Fix "You must override visitCallExpression (and don't call super.visitCallExpression!)" error.
+
 0.10.0
 ------
 

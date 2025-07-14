@@ -19,7 +19,7 @@ git commit -am "Prepare for release $NEW_VERSION."
 git tag -a "$NEW_VERSION" -m "Version $NEW_VERSION"
 
 # Publish
-./gradlew publish --no-configuration-cache
+./gradlew publish
 
 # Prepare next snapshot
 echo "Restoring snapshot version $SNAPSHOT_VERSION"
