@@ -281,10 +281,7 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
         )
         .indented()
 
-    lint()
-      .files(circuitScreenStub, testFile)
-      .run()
-      .expectClean()
+    lint().files(circuitScreenStub, testFile).run().expectClean()
   }
 
   @Test
