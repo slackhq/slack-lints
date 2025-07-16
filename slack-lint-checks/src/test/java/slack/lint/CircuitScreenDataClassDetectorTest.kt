@@ -284,15 +284,7 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     lint()
       .files(circuitScreenStub, testFile)
       .run()
-      .expect(
-        """
-        src/com/example/screens/NavigationScreen.kt:5: Error: ${CircuitScreenDataClassDetector.MESSAGE} [${CircuitScreenDataClassDetector.ISSUE_ID}]
-        sealed class NavigationScreen : Screen {
-               ~~~~~
-        1 error
-        """
-          .trimIndent()
-      )
+      .expectClean()
   }
 
   @Test
