@@ -76,8 +76,6 @@ class CircuitScreenDataClassDetector : Detector(), SourceCodeScanner {
                 .with(replacement)
                 .reformat(true)
                 .build()
-
-            // update location to the keyword
             context.report(ISSUE, keywordLocation, MESSAGE, quickFix)
           }
         }
