@@ -10,6 +10,7 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.getUMethod
+import org.jetbrains.kotlin.analysis.utils.isLocalClass
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -48,6 +49,7 @@ class CircuitScreenDataClassDetector : Detector(), SourceCodeScanner {
             !sourceNode.hasModifier(
               KtTokens.COMPANION_KEYWORD
             ) && // Cannot have companion data object
+            !node.isLocalClass() &&
             node.implements(QUALIFIED_CIRCUIT_SCREEN)
         ) {
           val hasProperties =

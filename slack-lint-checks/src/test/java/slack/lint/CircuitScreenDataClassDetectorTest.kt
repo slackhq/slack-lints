@@ -370,6 +370,27 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
       )
   }
 
+  @Test
+  fun `Test CircuitScreenDataClassDetector - local class implements Screen - succeeds`() {
+    val testFile =
+      kotlin(
+          """
+            package com.example.screens
+
+            import com.slack.circuit.runtime.screen.Screen
+
+            fun createScreen() {
+                class LocalScreen : Screen
+                return LocalScreen()
+            }
+        """
+            .trimIndent()
+        )
+        .indented()
+
+    lint().files(circuitScreenStub, testFile).run().expectClean()
+  }
+
   private val circuitScreenStub =
     kotlin(
         """
