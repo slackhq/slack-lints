@@ -17,7 +17,7 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
   }
 
   override fun getIssues(): List<Issue> {
-    return JsonInflaterMoshiCompatibilityDetector.issues()
+    return listOf(JsonInflaterMoshiCompatibilityDetector.ISSUE)
   }
 
   // Stubs for required annotations and classes
@@ -316,13 +316,13 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
       .run()
       .expect(
         """
-                src/test/InvalidModel.kt:19: Warning: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
+                src/test/InvalidModel.kt:19: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
                             val model = jsonInflater.inflate<List<InvalidModel>>("{}", type)
                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                src/test/InvalidModel.kt:20: Warning: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
+                src/test/InvalidModel.kt:20: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
                             val json = jsonInflater.deflate(model, type)
                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                0 errors, 2 warnings
+                2 errors, 0 warnings
               """
       )
   }
@@ -356,13 +356,13 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
       .run()
       .expect(
         """
-        src/test/InvalidModel.kt:13: Warning: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
+        src/test/InvalidModel.kt:13: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
                     val model = jsonInflater.inflate("{}", InvalidModel::class.java)
                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test/InvalidModel.kt:14: Warning: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
+        src/test/InvalidModel.kt:14: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
                     val json = jsonInflater.deflate(model, InvalidModel::class.java)
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        0 errors, 2 warnings
+        2 errors, 0 warnings
       """
       )
   }
@@ -430,13 +430,13 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
       .run()
       .expect(
         """
-        src/test/InvalidModel.kt:15: Warning: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
+        src/test/InvalidModel.kt:15: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
                     val model = jsonInflater.inflate("{}", InvalidModel::class.java)
                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        src/test/InvalidModel.kt:16: Warning: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
+        src/test/InvalidModel.kt:16: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
                     val json = jsonInflater.deflate(model, InvalidModel::class.java)
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        0 errors, 2 warnings
+        2 errors, 0 warnings
       """
       )
   }
