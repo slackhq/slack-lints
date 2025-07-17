@@ -27,57 +27,58 @@ class CircuitScreenDataClassDetector : Detector(), SourceCodeScanner {
     return object : UElementHandler() {
 
       override fun visitClass(node: UClass) {
-        val sourceNode = node.sourcePsi as? KtClassOrObject ?: return
+        val sourceNode = node.sourcePsi as? KtClassOrObject
 
-        val isInterface = node.isInterface
-        // Open classes cannot be "data" classes
-        val isOpen = sourceNode.hasModifier(KtTokens.OPEN_KEYWORD)
-        // Screens must be parcelable and inner classes cannot be parcelable
-        val isInner = sourceNode.hasModifier(KtTokens.INNER_KEYWORD)
-        // Cannot have abstract data class / object
-        val isAbstract = sourceNode.hasModifier(KtTokens.ABSTRACT_KEYWORD)
-        // Cannot have sealed data class / object
-        val isSealed = sourceNode.hasModifier(KtTokens.SEALED_KEYWORD)
-        // Cannot have companion data object
-        val isCompanionObject = sourceNode.hasModifier(KtTokens.COMPANION_KEYWORD)
-
-        val isApplicableClass =
-          !isOpen && !isCompanionObject && !isInterface && !isInner && !isAbstract && !isSealed
-
-        if (isApplicableClass && node.implements(QUALIFIED_CIRCUIT_SCREEN)) {
-          val isDataClass = sourceNode.isData()
-
-          if (!isDataClass) {
-            val hasProperties =
-              !node.constructors
-                .asSequence()
-                .mapNotNull { it.getUMethod() }
-                .firstOrNull { it.sourcePsi is KtPrimaryConstructor }
-                ?.uastParameters
-                .isNullOrEmpty()
-            val classKeyword =
-              when (sourceNode) {
-                is KtClass -> sourceNode.getClassKeyword()
-                is KtObjectDeclaration -> sourceNode.getObjectKeyword() ?: return
-                else -> return
-              }
-            val isObject = classKeyword?.node?.elementType == KtTokens.OBJECT_KEYWORD
-            val originalKeyword = if (isObject) KtTokens.OBJECT_KEYWORD else KtTokens.CLASS_KEYWORD
-            val replacement =
-              if (hasProperties) "${KtTokens.DATA_KEYWORD} ${KtTokens.CLASS_KEYWORD}"
-              else "${KtTokens.DATA_KEYWORD} ${KtTokens.OBJECT_KEYWORD}"
-            val keywordLocation = context.getLocation(classKeyword)
-            val quickFix =
-              fix()
-                .replace()
-                .name("Replace with $replacement")
-                .range(keywordLocation)
-                .text(originalKeyword.value)
-                .with(replacement)
-                .reformat(true)
-                .build()
-            context.report(ISSUE, keywordLocation, MESSAGE, quickFix)
-          }
+        if (
+          sourceNode != null &&
+            !sourceNode.isData() &&
+            !node.isInterface &&
+            !sourceNode.hasModifier(
+              KtTokens.OPEN_KEYWORD
+            ) && // Open classes cannot be "data" classes
+            !sourceNode.hasModifier(
+              KtTokens.INNER_KEYWORD
+            ) && // Screens must be parcelable and inner classes cannot be parcelable
+            !sourceNode.hasModifier(
+              KtTokens.ABSTRACT_KEYWORD
+            ) && // Cannot have abstract data class / object
+            !sourceNode.hasModifier(
+              KtTokens.SEALED_KEYWORD
+            ) && // Cannot have sealed data class / object
+            !sourceNode.hasModifier(
+              KtTokens.COMPANION_KEYWORD
+            ) && // Cannot have companion data object
+            node.implements(QUALIFIED_CIRCUIT_SCREEN)
+        ) {
+          val hasProperties =
+            !node.constructors
+              .asSequence()
+              .mapNotNull { it.getUMethod() }
+              .firstOrNull { it.sourcePsi is KtPrimaryConstructor }
+              ?.uastParameters
+              .isNullOrEmpty()
+          val classKeyword =
+            when (sourceNode) {
+              is KtClass -> sourceNode.getClassKeyword()
+              is KtObjectDeclaration -> sourceNode.getObjectKeyword() ?: return
+              else -> return
+            }
+          val isObject = classKeyword?.node?.elementType == KtTokens.OBJECT_KEYWORD
+          val originalKeyword = if (isObject) KtTokens.OBJECT_KEYWORD else KtTokens.CLASS_KEYWORD
+          val replacement =
+            if (hasProperties) "${KtTokens.DATA_KEYWORD} ${KtTokens.CLASS_KEYWORD}"
+            else "${KtTokens.DATA_KEYWORD} ${KtTokens.OBJECT_KEYWORD}"
+          val keywordLocation = context.getLocation(classKeyword)
+          val quickFix =
+            fix()
+              .replace()
+              .name("Replace with $replacement")
+              .range(keywordLocation)
+              .text(originalKeyword.value)
+              .with(replacement)
+              .reformat(true)
+              .build()
+          context.report(ISSUE, keywordLocation, MESSAGE, quickFix)
         }
       }
     }
