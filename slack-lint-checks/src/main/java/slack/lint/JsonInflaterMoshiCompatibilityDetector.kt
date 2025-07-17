@@ -102,10 +102,9 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
 
     if (modelClasses.any { !isMoshiCompatible(it) }) {
       context.report(
-        issue = ISSUE_JSON_INFLATER_WITH_MOSHI_INCOMPATIBLE_TYPE,
+        issue = ISSUE,
         location = context.getLocation(node),
-        message =
-          ISSUE_JSON_INFLATER_WITH_MOSHI_INCOMPATIBLE_TYPE.getBriefDescription(TextFormat.TEXT),
+        message = ISSUE.getBriefDescription(TextFormat.TEXT),
       )
     }
   }
@@ -166,8 +165,7 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     private const val FQCN_MAP = "java.util.Map"
     private const val FQCN_COLLECTION = "java.util.Collection"
 
-    // Issue definitions
-    private val ISSUE_JSON_INFLATER_WITH_MOSHI_INCOMPATIBLE_TYPE =
+    val ISSUE =
       Issue.create(
         id = "JsonInflaterMoshiIncompatibleType",
         "Using JsonInflater.inflate/deflate with a Moshi-incompatible type.",
@@ -177,10 +175,8 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
         """,
         Category.CORRECTNESS,
         6,
-        Severity.IGNORE,
+        Severity.ERROR,
         implementation = sourceImplementation<JsonInflaterMoshiCompatibilityDetector>(),
       )
-
-    fun issues(): List<Issue> = listOf(ISSUE_JSON_INFLATER_WITH_MOSHI_INCOMPATIBLE_TYPE)
   }
 }

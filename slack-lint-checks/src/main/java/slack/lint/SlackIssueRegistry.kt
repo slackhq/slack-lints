@@ -77,5 +77,6 @@ class SlackIssueRegistry : IssueRegistry() {
     add(NullableConcurrentHashMapDetector.ISSUE)
     addAll(AlwaysNullReadOnlyVariableDetector.ISSUES)
     add(CircuitScreenDataClassDetector.ISSUE)
+    add(JsonInflaterMoshiCompatibilityDetector.ISSUE)
   }
 }
