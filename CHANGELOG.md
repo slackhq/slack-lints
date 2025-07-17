@@ -4,6 +4,17 @@ Changelog
 **Unreleased**
 --------------
 
+0.11.0
+------
+
+_2025-07-17_
+
+- **New**: Add `CircuitScreenDataClassDetector` check to ensure that [Circuit](https://github.com/slackhq/circuit) `Screen` classes are data classes or data objects.
+- **Fix**: Enable the `JsonInflaterMoshiCompatibilityDetector` in slack-lint's lint registry.
+- **Fix**: _Actually_ fix "You must override visitCallExpression (and don't call super.visitCallExpression!)" error.
+- **Change**: Disable `AlwaysNullReadOnlyVariableDetector` for now as this was causing the issue above it seems and we haven't had a change to investigate further.
+- Build against lint `31.12.0-alpha09`.
+
 0.10.1
 ------
 
