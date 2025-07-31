@@ -12,6 +12,7 @@ import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
 import com.android.tools.lint.detector.api.asCall
+import com.android.tools.lint.detector.api.isUnconditionalReturn
 import com.intellij.psi.PsiArrayType
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
@@ -19,24 +20,25 @@ import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.PsiPrimitiveType
 import com.intellij.psi.PsiType
-import org.jetbrains.kotlin.asJava.elements.KtLightMember
-import org.jetbrains.kotlin.asJava.elements.KtLightMethod
 import org.jetbrains.uast.UBlockExpression
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.ULambdaExpression
 import org.jetbrains.uast.UReturnExpression
-import org.jetbrains.uast.kotlin.KotlinUImplicitReturnExpression
+import org.jetbrains.uast.UastEmptyExpression
 import org.jetbrains.uast.tryResolve
+import org.jetbrains.uast.visitor.UastVisitor
 import slack.lint.util.Package
 import slack.lint.util.implements
 import slack.lint.util.isBoxedPrimitive
 import slack.lint.util.isInPackageName
 import slack.lint.util.sourceImplementation
 
+private val ComposeRuntimePackageName = Package("androidx.compose.runtime")
 private val RememberSaveablePackageName = Package("androidx.compose.runtime.saveable")
 private const val RememberSaveableMethodName = "rememberSaveable"
+private val AUTO_SAVER = UastEmptyExpression(null)
 
 // todo Rewrite this so its checking this instead
 // Android only source set
@@ -50,6 +52,7 @@ class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
 
   override fun createUastHandler(context: JavaContext) =
     object : UElementHandler() {
+      @Suppress("ReturnCount")
       override fun visitCallExpression(node: UCallExpression) {
         if (node.methodName != RememberSaveableMethodName) return
         val evaluator = context.evaluator
@@ -64,16 +67,20 @@ class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
         }
 
         val arguments = evaluator.computeArgumentMapping(node, method)
-
-        // todo Check for custom saver or included saver, null is autoSaver
         val saver = arguments.getSaver()
-        val initReturnType = arguments.getInit()
-        // Auto saver checks
-        if (saver == null && returnType.isAcceptableType()) {
+        // With an auto saver return the check
+        if (saver == AUTO_SAVER && returnType.isAcceptableType()) {
           return
         }
-        val source = saver?.sourcePsi
-        if (saver != null && source != null) {
+        // If there is no init expression just return.
+        val init = arguments.getInit() ?: return
+        val returnExpressions = resolveReturns(init)
+        if (returnsKnownMutableState(returnExpressions)) {
+          return
+        }
+
+        val source = saver.sourcePsi
+        if (source != null) {
           val resolve = context.evaluator.resolve(source)
           saver.getExpressionType()
           getMethodName(saver)
@@ -101,11 +108,9 @@ class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
   }
 }
 
-private fun Map<UExpression, PsiParameter>.getSaver(): UExpression? {
+private fun Map<UExpression, PsiParameter>.getSaver(): UExpression {
   val saver = firstNotNullOfOrNull { (expression, parameter) ->
-    if (parameter.name == "saver") {
-      expression
-    } else null
+    if (parameter.name == "saver") expression else null
   }
   val resolved = saver?.tryResolve()
   if (
@@ -113,9 +118,9 @@ private fun Map<UExpression, PsiParameter>.getSaver(): UExpression? {
       resolved.name == "autoSaver" &&
       resolved.isInPackageName(RememberSaveablePackageName)
   ) {
-    return null
+    return AUTO_SAVER
   }
-  return saver
+  return saver ?: AUTO_SAVER
 }
 
 private fun Map<UExpression, PsiParameter>.getInit(): UExpression? {
@@ -124,35 +129,81 @@ private fun Map<UExpression, PsiParameter>.getInit(): UExpression? {
       expression
     } else null
   }
-  resolveLambdaType(init)
-  //  return valueArguments.filterIsInstance<ValueArgument>().find { arg ->
-  //    arg.getArgumentName()?.referenceExpression?.getReferencedName() == "init"
-  //  }
   return init
 }
 
-private fun resolveLambdaType(init: UExpression?) {
+private fun resolveReturns(init: UExpression?): List<UReturnExpression> {
+  val returnExpressions = mutableListOf<UReturnExpression>()
   if (init is ULambdaExpression) {
     val body = init.body
     when (body) {
+      // todo Handle function calls?
       is UBlockExpression -> {
-        val returnTypes = mutableListOf<UExpression>()
-        for (expresssion in body.expressions) {
-          if (expresssion is UReturnExpression) {
-            val returnExpression = expresssion.returnExpression
-            if (returnExpression is UCallExpression) {
-              val resolved = returnExpression.resolve()
-              if (resolved is KtLightMethod) {
-                resolved.body
-              }
-            }
-            // todo Handle objects
+        for (expression in body.expressions) {
+          // todo What are the other cases?
+          if (expression is UReturnExpression) {
+            returnExpressions += expression
           }
         }
       }
     }
   }
+  return returnExpressions
 }
+
+private fun returnsKnownMutableState(returnExpressions: List<UReturnExpression>): Boolean {
+  var areAllAcceptableMutableStates = false
+  for (returnExpression in returnExpressions) {
+    areAllAcceptableMutableStates =
+      returnExpression.isUnconditionalReturn() &&
+        MutableStateVisitor().run {
+          returnExpression.accept(this)
+          hasAcceptableMutableState
+        }
+    if (!areAllAcceptableMutableStates) break
+  }
+  return areAllAcceptableMutableStates
+}
+
+private class MutableStateVisitor : UastVisitor {
+
+  private var visitedAcceptableMutableState: Boolean = false
+  var hasAcceptableMutableState = false
+    private set
+
+  override fun afterVisitReturnExpression(node: UReturnExpression) {
+    super.afterVisitReturnExpression(node)
+    if (visitedAcceptableMutableState) {
+      hasAcceptableMutableState =
+        node.returnExpression?.getExpressionType()?.asClass()?.parameters?.all {
+          it.isAcceptableType()
+        } == true
+    }
+  }
+
+  override fun visitElement(node: UElement): Boolean {
+    val resolved = node.tryResolve()
+    val isKnownMutableState =
+      resolved is PsiMethod &&
+        resolved.isInPackageName(ComposeRuntimePackageName) &&
+        resolved.name in AcceptableMutableStateMethods
+    if (isKnownMutableState) {
+      // Check the type in mutableStateOf()
+      if (resolved.name == "mutableStateOf") {
+        val mutableClass = node.asCall()?.returnType?.asClass()
+        mutableClass
+          ?.parameters
+          ?.all { it.isAcceptableType() }
+          ?.let { visitedAcceptableMutableState = it }
+      } else {
+        visitedAcceptableMutableState = true
+      }
+    }
+    return isKnownMutableState
+  }
+}
+
+private fun PsiType?.asClass(): PsiClassType? = this as? PsiClassType
 
 private fun PsiType.isAcceptableType(): Boolean {
   return when (this) {
@@ -162,7 +213,6 @@ private fun PsiType.isAcceptableType(): Boolean {
       val resolved = resolve() ?: return true // Can't resolve class type treat as acceptable?
       resolved.isAcceptableClassType() && parameters.all { it.isAcceptableType() }
     }
-
     else -> false
   }
 }
@@ -222,7 +272,7 @@ private fun canBeSavedToBundle(value: Any): Boolean {
  * Note: it is simplified copy of the array from SavedStateHandle (lifecycle-viewmodel-savedstate).
  */
 private val AcceptableClasses =
-  arrayOf(
+  setOf(
     "java.io.Serializable",
     "android.os.Parcelable",
     "java.lang.String",
@@ -230,4 +280,13 @@ private val AcceptableClasses =
     "android.os.Binder",
     "android.util.Size",
     "android.util.SizeF",
+  )
+
+private val AcceptableMutableStateMethods =
+  setOf(
+    "mutableStateOf",
+    "mutableIntStateOf",
+    "mutableFloatStateOf",
+    "mutableDoubleStateOf",
+    "mutableLongStateOf",
   )

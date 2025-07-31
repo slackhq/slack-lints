@@ -2,27 +2,128 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.compose
 
+import com.android.tools.lint.checks.infrastructure.LintDetectorTest.java
+import com.android.tools.lint.checks.infrastructure.LintDetectorTest.kotlin
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
 class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
 
-  private val javaIo =
-    java(
-        """
+  override fun getDetector() = RememberSaveableAcceptableDetector()
+
+  override fun getIssues() = listOf(RememberSaveableAcceptableDetector.ISSUE)
+
+  @Test
+  fun acceptableTypes_autoSaver_noError() {
+    val source =
+      kotlin(
+          """
+      package test
+
+      import androidx.compose.runtime.Composable
+      import androidx.compose.runtime.mutableDoubleStateOf
+      import androidx.compose.runtime.mutableFloatStateOf
+      import androidx.compose.runtime.mutableIntStateOf
+      import androidx.compose.runtime.mutableLongStateOf
+      import androidx.compose.runtime.mutableStateOf
+      import androidx.compose.runtime.saveable.autoSaver
+      import androidx.compose.runtime.saveable.rememberSaveable
+      import java.util.ArrayList
+
+      @Composable
+      fun TestComposable() {
+        // Acceptable primitive types
+        val stringValue = rememberSaveable { "test" }
+        val intValue = rememberSaveable { 42 }
+        val booleanValue = rememberSaveable { true }
+        val floatValue = rememberSaveable { 1.0f }
+        val doubleValue = rememberSaveable { 1.0 }
+        val longValue = rememberSaveable { 1L }
+
+        // Acceptable array types
+        val stringArray = rememberSaveable { arrayOf("test") }
+        val intArray = rememberSaveable { intArrayOf(42) }
+        val booleanArray = rememberSaveable { booleanArrayOf(true) }
+        val floatArray = rememberSaveable { floatArrayOf(1.0f) }
+        val doubleArray = rememberSaveable { doubleArrayOf(1.0) }
+        val longArray = rememberSaveable { longArrayOf(1L) }
+        val parcelableArray = rememberSaveable { arrayOf<Parcelable>() }
+
+        // Acceptable class types
+        val serializableValue = rememberSaveable { TestSerializable() }
+        val parcelableValue = rememberSaveable { TestParcelable() }
+        val arrayListValue = rememberSaveable { ArrayList<String>() }
+
+        // Nullable acceptable types
+        val nullableString = rememberSaveable<String?> { null }
+        val nullableInt = rememberSaveable<Int?> { null }
+        val nullableBoolean = rememberSaveable<Boolean?> { null }
+
+        // Mutable state types
+        // Check policy and internal type?
+        val mutableState = rememberSaveable { mutableStateOf("value") }
+        val mutableIntState = rememberSaveable { mutableIntStateOf(1) }
+        val mutableFloatState = rememberSaveable { mutableFloatStateOf(1f) }
+        val mutableDoubleState = rememberSaveable { mutableDoubleStateOf(1.0) }
+        val mutableLongState = rememberSaveable { mutableLongStateOf(1L) }
+        val mutableTestParcelableState = rememberSaveable {
+          mutableStateOf(TestParcelable()).apply { value = TestParcelable() }
+        }
+        val mutableTestSerializableState = rememberSaveable {
+          mutableStateOf(TestSerializable()).apply { value = TestSerializable() }
+        }
+
+        // AutoSaver is specified
+        val mutableStateLabeled =
+          rememberSaveable(saver = autoSaver(), init = { mutableStateOf("value") })
+
+        // Acceptable collections with acceptable types
+
+        // Kotlin promises listOf is serializable on jvm
+        val listValue = rememberSaveable { listOf("test") }
+        // Fail without map saver
+        val mapValue = rememberSaveable { mapOf("key" to "value") }
+        // Check policy and internal type
+        val mutableStateValue = rememberSaveable { mutableStateOf("value") }
+}
+
+      """
+            .trimIndent()
+        )
+        .indented()
+
+    lint()
+      .files(
+        JAVA_IO,
+        JAVA_UTIL,
+        ANDROID_OS,
+        ANDROID_UTIL,
+        COMPOSE_RUNTIME,
+        COMPOSE_SAVEABLE,
+        TEST_SAVEABLES,
+        source,
+      )
+      .run()
+      .expectClean()
+  }
+}
+
+private val JAVA_IO =
+  java(
+      """
     package java.io;
 
     public interface Serializable {
     }
 
     """
-          .trimIndent()
-      )
-      .indented()
+        .trimIndent()
+    )
+    .indented()
 
-  private val javaUtil =
-    java(
-        """
+private val JAVA_UTIL =
+  java(
+      """
     package java.util;
 
     import java.io.Serializable;
@@ -30,13 +131,13 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
     public class ArrayList<E> implements Serializable {}
 
     """
-          .trimIndent()
-      )
-      .indented()
+        .trimIndent()
+    )
+    .indented()
 
-  private val androidOs =
-    java(
-      """
+private val ANDROID_OS =
+  java(
+    """
     package android.os;
 
     public interface Parcelable {}
@@ -45,12 +146,12 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
 
 
     """
-        .trimIndent()
-    )
+      .trimIndent()
+  )
 
-  private val androidUtil =
-    java(
-      """
+private val ANDROID_UTIL =
+  java(
+    """
     package android.util;
 
     public class SparseArray<E> {}
@@ -58,12 +159,12 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
     public final class SizeF implements Parcelable {}
 
     """
-        .trimIndent()
-    )
+      .trimIndent()
+  )
 
-  private val composeRuntime =
-    kotlin(
-        """
+private val COMPOSE_RUNTIME =
+  kotlin(
+      """
     package androidx.compose.runtime
 
     annotation class Composable
@@ -83,64 +184,43 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
     fun <T> mutableStateOf(
       value: T,
       policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy(),
-    ): MutableState<T> = createSnapshotMutableState(value, policy)
-
-    fun <T> createSnapshotMutableState(
-          value: T,
-          policy: SnapshotMutationPolicy<T>,
-    ): SnapshotMutableState<T> = ParcelableSnapshotMutableState(value, policy)
-
-    private class ParcelableSnapshotMutableState<T>(
-      val value: T,
-      val policy: SnapshotMutationPolicy<T>,
-        ) : Parcelable
-
-    fun mutableIntStateOf(value: Int): MutableIntState = createSnapshotMutableIntState(value)
-
-    fun createSnapshotMutableIntState(value: Int): MutableIntState =
-      ParcelableSnapshotMutableIntState(value)
-
-    private class ParcelableSnapshotMutableIntState(val value: Int) : Parcelable
-
-    interface IntState : State<Int> {
-      override val value: Int
-        get() = intValue
-
-      val intValue: Int
-    }
+    ): MutableState<T> = TODO()
 
     interface MutableIntState : IntState, MutableState<Int> {
       override var value: Int
       override var intValue: Int
     }
 
-    fun mutableFloatStateOf(value: Float): MutableFloatState = TODO()
+    fun mutableIntStateOf(value: Int): MutableIntState = TODO()
 
     interface MutableFloatState : FloatState, MutableState<Float> {
       override var value: Float
-        get() = floatValue
-        set(value) {
-          floatValue = value
-        }
-
       override var floatValue: Float
     }
 
-    interface FloatState : State<Float> {
-      override val value: Float
-        get() = floatValue
+    fun mutableFloatStateOf(value: Float): MutableFloatState = TODO()
 
-      val floatValue: Float
+    interface MutableDoubleState : MutableState<Double> {
+        override var value: Double
+        override var doubleValue: Double
     }
 
-    """
-          .trimIndent()
-      )
-      .indented()
+    fun mutableDoubleStateOf(value: Double): MutableDoubleState = TODO()
 
-  private val composeSaveable =
-    kotlin(
-        """
+    interface MutableLongState : MutableState<Long> {
+        override var value: Long
+        override var longValue: Long
+    }
+
+    fun mutableLongStateOf(value: Long): MutableLongState = TODO()
+    """
+        .trimIndent()
+    )
+    .indented()
+
+private val COMPOSE_SAVEABLE =
+  kotlin(
+      """
     package androidx.compose.runtime.saveable
 
     interface Saver<Original, Saveable : Any> {
@@ -167,13 +247,13 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
     ): MutableState<T>  = TODO()
 
     """
-          .trimIndent()
-      )
-      .indented()
+        .trimIndent()
+    )
+    .indented()
 
-  private val testSaveables =
-    kotlin(
-        """
+private val TEST_SAVEABLES =
+  kotlin(
+      """
     package test
 
     import android.os.Parcelable
@@ -182,93 +262,6 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
     class TestSerializable : Serializable
     class TestParcelable : Parcelable
     """
-          .trimIndent()
-      )
-      .indented()
-
-  override fun getDetector() = RememberSaveableAcceptableDetector()
-
-  override fun getIssues() = listOf(RememberSaveableAcceptableDetector.ISSUE)
-
-  @Test
-  fun acceptableTypes_autoSaver_noError() {
-    val source =
-      kotlin(
-          """
-      package test
-
-      import androidx.compose.runtime.Composable
-      import androidx.compose.runtime.saveable.rememberSaveable
-      import androidx.compose.runtime.saveable.autoSaver
-      import androidx.compose.runtime.mutableStateOf
-      import androidx.compose.runtime.mutableIntStateOf
-      import androidx.compose.runtime.mutableFloatStateOf
-      import java.util.ArrayList
-
-      @Composable
-      fun TestComposable() {
-      
-        val mutableStateLabeled = rememberSaveable(saver = autoSaver(), init = { mutableStateOf("value") })
-        // Acceptable primitive types
-        val stringValue = rememberSaveable { "test" }
-        val intValue = rememberSaveable { 42 }
-        val booleanValue = rememberSaveable { true }
-        val floatValue = rememberSaveable { 1.0f }
-        val doubleValue = rememberSaveable { 1.0 }
-        val longValue = rememberSaveable { 1L }
-
-        // Acceptable array types
-        val stringArray = rememberSaveable { arrayOf("test") }
-        val intArray = rememberSaveable { intArrayOf(42) }
-        val booleanArray = rememberSaveable { booleanArrayOf(true) }
-        val floatArray = rememberSaveable { floatArrayOf(1.0f) }
-        val doubleArray = rememberSaveable { doubleArrayOf(1.0) }
-        val longArray = rememberSaveable { longArrayOf(1L) }
-        val parcelableArray = rememberSaveable { arrayOf<Parcelable>() }
-
-        // Acceptable class types
-        val serializableValue = rememberSaveable { TestSerializable() }
-        val parcelableValue = rememberSaveable { TestParcelable() }
-        val arrayListValue = rememberSaveable { ArrayList<String>() }
-
-       // Nullable acceptable types
-        val nullableString = rememberSaveable<String?> { null }
-        val nullableInt = rememberSaveable<Int?> { null }
-        val nullableBoolean = rememberSaveable<Boolean?> { null }
-
-        // Mutable state types
-        // Check policy and internal type      
-        val mutableStateValue = rememberSaveable { mutableStateOf("value") }
-        val mutableIntStateValue = rememberSaveable { mutableIntStateOf(1) }
-        val mutableFloatStateValue = rememberSaveable { mutableFloatStateOf(1f) }
-
-        // Acceptable collections with acceptable types
-
-        // Kotlin promises listOf is serializable on jvm
-        val listValue = rememberSaveable { listOf("test") }
-        // Fail without map saver
-        val mapValue = rememberSaveable { mapOf("key" to "value") }
-        // Check policy and internal type
-        val mutableStateValue = rememberSaveable { mutableStateOf("value") }
-
-      }
-      """
-            .trimIndent()
-        )
-        .indented()
-
-    lint()
-      .files(
-        javaIo,
-        javaUtil,
-        androidOs,
-        androidUtil,
-        composeRuntime,
-        composeSaveable,
-        testSaveables,
-        source,
-      )
-      .run()
-      .expectClean()
-  }
-}
+        .trimIndent()
+    )
+    .indented()
