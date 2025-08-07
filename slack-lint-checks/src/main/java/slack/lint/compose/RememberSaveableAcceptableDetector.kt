@@ -2,17 +2,16 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.compose
 
+import com.android.tools.lint.checks.DataFlowAnalyzer
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Detector
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
-import com.android.tools.lint.detector.api.JavaContext.Companion.getMethodName
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
 import com.android.tools.lint.detector.api.asCall
-import com.android.tools.lint.detector.api.isUnconditionalReturn
 import com.intellij.psi.PsiArrayType
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiClassType
@@ -20,15 +19,13 @@ import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.PsiPrimitiveType
 import com.intellij.psi.PsiType
-import org.jetbrains.uast.UBlockExpression
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
-import org.jetbrains.uast.ULambdaExpression
 import org.jetbrains.uast.UReturnExpression
 import org.jetbrains.uast.UastEmptyExpression
 import org.jetbrains.uast.tryResolve
-import org.jetbrains.uast.visitor.UastVisitor
+import org.jetbrains.uast.visitor.AbstractUastVisitor
 import slack.lint.util.Package
 import slack.lint.util.implements
 import slack.lint.util.isBoxedPrimitive
@@ -68,22 +65,25 @@ class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
 
         val arguments = evaluator.computeArgumentMapping(node, method)
         val saver = arguments.getSaver()
-        // With an auto saver return the check
+        // With an auto saver check the return type.
         if (saver == AUTO_SAVER && returnType.isAcceptableType()) {
           return
         }
         // If there is no init expression just return.
         val init = arguments.getInit() ?: return
-        val returnExpressions = resolveReturns(init)
-        if (returnsKnownMutableState(returnExpressions)) {
+        // Check whats created in the init expression.
+        if (returnsKnownMutableState(returnType, init)) {
+          // Found a known parcelable mutable state.
           return
         }
-
-        val source = saver.sourcePsi
-        if (source != null) {
-          val resolve = context.evaluator.resolve(source)
-          saver.getExpressionType()
-          getMethodName(saver)
+        if (returnsLambdaExpression(returnType, init)) {
+          // todo Report specific error language about kotlin Lambdas
+          context.report(
+            ISSUE,
+            context.getLocation(node),
+            ISSUE.getBriefDescription(TextFormat.TEXT) + " (LAMBDA)",
+          )
+          return
         }
         context.report(ISSUE, context.getLocation(node), ISSUE.getBriefDescription(TextFormat.TEXT))
       }
@@ -92,8 +92,8 @@ class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
   companion object {
     const val MESSAGE = "remember"
     const val ISSUE_ID = "RememberSaveableTypeMustBeAcceptable"
-    const val BRIEF_DESCRIPTION = "todo"
-    const val EXPLANATION = """todo"""
+    const val BRIEF_DESCRIPTION = "Brief description"
+    const val EXPLANATION = """Full explanation"""
 
     val ISSUE: Issue =
       Issue.create(
@@ -132,76 +132,87 @@ private fun Map<UExpression, PsiParameter>.getInit(): UExpression? {
   return init
 }
 
-private fun resolveReturns(init: UExpression?): List<UReturnExpression> {
-  val returnExpressions = mutableListOf<UReturnExpression>()
-  if (init is ULambdaExpression) {
-    val body = init.body
-    when (body) {
-      // todo Handle function calls?
-      is UBlockExpression -> {
-        for (expression in body.expressions) {
-          // todo What are the other cases?
-          if (expression is UReturnExpression) {
-            returnExpressions += expression
-          }
+/**
+ * The default Android `mutableStateOf` is `ParcelableSnapshotMutableState`, so check if all the
+ * return statements are default `mutableStateOf` calls.
+ */
+private fun returnsKnownMutableState(returnType: PsiType, expression: UExpression): Boolean {
+  return if (returnType.isAcceptableMutableStateClass()) {
+    val visitor = MutableStateOfVisitor()
+    expression.accept(visitor)
+    val allReturned =
+      visitor.mutableStateOfs.isNotEmpty() &&
+        visitor.mutableStateOfs.all { tracked ->
+          val returnsTracker = ReturnsTracker(tracked)
+          expression.accept(returnsTracker)
+          returnsTracker.returned
         }
-      }
-    }
-  }
-  return returnExpressions
+    allReturned
+  } else false
 }
 
-private fun returnsKnownMutableState(returnExpressions: List<UReturnExpression>): Boolean {
-  var areAllAcceptableMutableStates = false
-  for (returnExpression in returnExpressions) {
-    areAllAcceptableMutableStates =
-      returnExpression.isUnconditionalReturn() &&
-        MutableStateVisitor().run {
-          returnExpression.accept(this)
-          hasAcceptableMutableState
-        }
-    if (!areAllAcceptableMutableStates) break
-  }
-  return areAllAcceptableMutableStates
+private fun PsiType?.isAcceptableMutableStateClass(): Boolean {
+  val psiClassType = asClass()
+  val isMutableState =
+    psiClassType
+      ?.resolve()
+      ?.implements("${ComposeRuntimePackageName.javaPackageName}.MutableState") == true
+  return isMutableState && psiClassType.parameters.all { it.isAcceptableType() }
 }
 
-private class MutableStateVisitor : UastVisitor {
-
-  private var visitedAcceptableMutableState: Boolean = false
-  var hasAcceptableMutableState = false
-    private set
-
-  override fun afterVisitReturnExpression(node: UReturnExpression) {
-    super.afterVisitReturnExpression(node)
-    if (visitedAcceptableMutableState) {
-      hasAcceptableMutableState =
-        node.returnExpression?.getExpressionType()?.asClass()?.parameters?.all {
-          it.isAcceptableType()
-        } == true
+private fun isKnownMutableStateFunction(node: UElement): Boolean {
+  val resolved = node.tryResolve()
+  val isKnownMutableState =
+    resolved is PsiMethod &&
+      resolved.isInPackageName(ComposeRuntimePackageName) &&
+      resolved.name in AcceptableMutableStateMethods
+  if (isKnownMutableState) {
+    // Check the type of mutableStateOf()
+    if (resolved.name == "mutableStateOf") {
+      val mutableClass = node.asCall()?.returnType?.asClass()
+      mutableClass?.parameters?.all { it.isAcceptableType() } == true
+    } else {
+      // Known mutable[Primitive]StateOf()
+      true
     }
   }
+  return isKnownMutableState
+}
 
-  override fun visitElement(node: UElement): Boolean {
-    val resolved = node.tryResolve()
-    val isKnownMutableState =
-      resolved is PsiMethod &&
-        resolved.isInPackageName(ComposeRuntimePackageName) &&
-        resolved.name in AcceptableMutableStateMethods
-    if (isKnownMutableState) {
-      // Check the type in mutableStateOf()
-      if (resolved.name == "mutableStateOf") {
-        val mutableClass = node.asCall()?.returnType?.asClass()
-        mutableClass
-          ?.parameters
-          ?.all { it.isAcceptableType() }
-          ?.let { visitedAcceptableMutableState = it }
-      } else {
-        visitedAcceptableMutableState = true
-      }
-    }
-    return isKnownMutableState
+private class MutableStateOfVisitor : AbstractUastVisitor() {
+
+  val mutableStateOfs = mutableListOf<UCallExpression>()
+
+  override fun visitCallExpression(node: UCallExpression): Boolean =
+    if (isKnownMutableStateFunction(node)) {
+      mutableStateOfs.add(node)
+      true
+    } else false
+}
+
+private class ReturnsTracker(tracked: UElement, var returned: Boolean = false) :
+  DataFlowAnalyzer(listOf(tracked)) {
+  override fun returns(expression: UReturnExpression) {
+    returned = true
   }
 }
+
+/**
+ * > Lambdas in Kotlin implement Serializable, but will crash if you really try to save them. We
+ * > check for both Function and Serializable (see kotlin.jvm.internal.Lambda) to support custom
+ * > user defined classes implementing Function interface.
+ * - From:
+ *   https://github.com/androidx/androidx/blob/989d1e676252c69e1b9b2e0639c3dba039e7ac99/compose/ui/ui/src/androidMain/kotlin/androidx/compose/ui/platform/DisposableSaveableStateRegistry.android.kt#L122-L124
+ */
+private fun returnsLambdaExpression(returnType: PsiType, expression: UExpression): Boolean {
+  val isFunction = returnType.asClass()?.resolve()?.implements("kotlin.Function") == true
+  // todo Find all the function returns and see if any are lambda expressions
+  val visitor = ReturnsLambdaVisitor()
+  expression.accept(visitor)
+  return isFunction // && visitor.returned
+}
+
+private class ReturnsLambdaVisitor(var returned: Boolean = false) : AbstractUastVisitor() {}
 
 private fun PsiType?.asClass(): PsiClassType? = this as? PsiClassType
 
@@ -217,7 +228,7 @@ private fun PsiType.isAcceptableType(): Boolean {
   }
 }
 
-fun PsiClass.isAcceptableClassType(): Boolean {
+private fun PsiClass.isAcceptableClassType(): Boolean {
   return isBoxedPrimitive() || AcceptableClasses.any { implements(it) }
 }
 
