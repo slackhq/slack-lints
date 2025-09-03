@@ -40,6 +40,13 @@ private val ComposeRuntimePackageName = Package("androidx.compose.runtime")
 private val RememberSaveablePackageName = Package("androidx.compose.runtime.saveable")
 private val AUTO_SAVER = UastEmptyExpression(null)
 
+// todo
+//  - Collections (listOf, mapOf, etc) checks
+//  - ArrayList check?
+//  Think the savers likely go in a different detector
+//  - MapSaver check
+//  - ListSaver check
+//  - Custom saver check
 class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> =

@@ -268,26 +268,48 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
-  fun acceptableTypes_collections_noError() {
+  fun acceptableTypes_collections_wrong_saver_error() {
     val source =
       kotlin(
           """
           package test
 
           import androidx.compose.runtime.Composable
-          import androidx.compose.runtime.mutableStateOf
+                    import androidx.compose.runtime.saveable.rememberSaveable
+
+          @Composable
+          fun TestComposable() {
+            val listValue = rememberSaveable { listOf("test") }
+            val mapValue = rememberSaveable { mapOf("key" to "value") }
+          }
+
+                """
+            .trimIndent()
+        )
+        .indented()
+
+    test(source).expectClean()
+  }
+
+  @Test
+  fun acceptableTypes_collections_wrong_saver_error() {
+    val source =
+      kotlin(
+        """
+          package test
+
+          import androidx.compose.runtime.Composable
           import androidx.compose.runtime.saveable.rememberSaveable
 
           @Composable
           fun TestComposable() {
             val listValue = rememberSaveable { listOf("test") }
             val mapValue = rememberSaveable { mapOf("key" to "value") }
-            val mutableStateValue = rememberSaveable { mutableStateOf("value") }
           }
 
                 """
-            .trimIndent()
-        )
+          .trimIndent()
+      )
         .indented()
 
     test(source).expectClean()
@@ -336,7 +358,16 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
         )
         .indented()
 
-    test(source).expect("")
+    test(source)
+      .expect(
+        """
+          src/test/test.kt:8: Error: Brief description (LAMBDA) [RememberSaveableTypeMustBeAcceptable]
+            val lambdaValue = rememberSaveable { { "value" } }
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          1 error
+        """
+          .trimIndent()
+      )
   }
 
   @Test
