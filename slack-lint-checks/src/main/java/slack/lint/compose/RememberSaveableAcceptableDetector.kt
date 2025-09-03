@@ -19,7 +19,6 @@ import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.PsiPrimitiveType
 import com.intellij.psi.PsiType
-import kotlin.contracts.ExperimentalContracts
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
@@ -28,7 +27,9 @@ import org.jetbrains.uast.UastEmptyExpression
 import org.jetbrains.uast.skipParenthesizedExprDown
 import org.jetbrains.uast.tryResolve
 import org.jetbrains.uast.tryResolveNamed
+import org.jetbrains.uast.unwrapReferenceNameElement
 import org.jetbrains.uast.visitor.AbstractUastVisitor
+import slack.lint.util.Name
 import slack.lint.util.Package
 import slack.lint.util.asClass
 import slack.lint.util.implements
@@ -39,7 +40,8 @@ import slack.lint.util.sourceImplementation
 private const val REMEMBER_SAVEABLE_METHOD_NAME = "rememberSaveable"
 
 private val ComposeRuntimePackageName = Package("androidx.compose.runtime")
-private val RememberSaveablePackageName = Package("androidx.compose.runtime.saveable")
+private val ComposeSaveablePackageName = Package("androidx.compose.runtime.saveable")
+private val SaverFQN = Name(ComposeSaveablePackageName, "Saver").javaFqn
 private val AUTO_SAVER = UastEmptyExpression(null)
 
 // todo
@@ -48,7 +50,6 @@ private val AUTO_SAVER = UastEmptyExpression(null)
 //  Think the savers likely go in a different detector
 //  - MapSaver check
 //  - ListSaver check
-//  - Custom saver check
 class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> =
@@ -82,7 +83,7 @@ private class RememberSaveableElementHandler(val context: JavaContext) : UElemen
     val method = node.resolve()
     val returnType = node.returnType
     if (
-      method != null && returnType != null && method.isInPackageName(RememberSaveablePackageName)
+      method != null && returnType != null && method.isInPackageName(ComposeSaveablePackageName)
     ) {
       val arguments = evaluator.computeArgumentMapping(node, method)
       val saver = arguments.getSaver()
@@ -145,23 +146,49 @@ private class RememberSaveableElementHandler(val context: JavaContext) : UElemen
 
   private fun visitCustomSaver(node: UCallExpression, saver: UExpression) {
     // todo Custom saver, check the return type of the save call and report an error.
-    context.report(
-      RememberSaveableAcceptableDetector.Companion.ISSUE,
-      context.getLocation(node),
-      RememberSaveableAcceptableDetector.Companion.ISSUE.getBriefDescription(TextFormat.TEXT),
-    )
+    val unwrapedElement = unwrapReferenceNameElement(saver)
+    val visitor = CustomSaverVisitor()
+    unwrapedElement?.accept(visitor)
+    if (visitor.saveableType?.isAcceptableType() == false) {
+      context.report(
+        RememberSaveableAcceptableDetector.Companion.ISSUE,
+        context.getLocation(node),
+        RememberSaveableAcceptableDetector.Companion.ISSUE.getBriefDescription(TextFormat.TEXT),
+      )
+    }
+  }
+}
+
+private class CustomSaverVisitor : AbstractUastVisitor() {
+
+  var saveableType: PsiType? = null
+
+  override fun visitExpression(node: UExpression): Boolean {
+    this.saveableType = node.getExpressionType()?.asClass()?.let { unwrapSaveableType(it) }
+    return saveableType != null || super.visitExpression(node)
+  }
+
+  private fun unwrapSaveableType(element: PsiClassType): PsiType? {
+    val resolved = element.resolve()
+    return when {
+      resolved == null -> null
+      resolved.qualifiedName == SaverFQN -> element.parameters[1]
+      else -> resolved.superTypes.firstNotNullOfOrNull { type -> unwrapSaveableType(type) }
+    }
   }
 }
 
 private fun Map<UExpression, PsiParameter>.getSaver(): UExpression {
-  val saver = firstNotNullOfOrNull { (expression, parameter) ->
-    if (parameter.name == "saver") expression else null
-  }
+  val saver =
+    firstNotNullOfOrNull { (expression, parameter) ->
+        if (parameter.name == "saver") expression else null
+      }
+      ?.skipParenthesizedExprDown()
   val resolved = saver?.tryResolve()
   if (
     resolved is PsiMethod &&
       resolved.name == "autoSaver" &&
-      resolved.isInPackageName(RememberSaveablePackageName)
+      resolved.isInPackageName(ComposeSaveablePackageName)
   ) {
     return AUTO_SAVER
   }
@@ -292,7 +319,6 @@ private class MutableStateOfVisitor(private val context: JavaContext) : Abstract
  * Checks if the mutableStateOf call uses an acceptable SnapshotMutationPolicy. Acceptable policies
  * are: neverEqualPolicy, structuralEqualityPolicy, referentialEqualityPolicy
  */
-@OptIn(ExperimentalContracts::class)
 private fun hasAcceptablePolicy(call: UCallExpression?, context: JavaContext): Boolean {
   val method = call?.resolve() ?: return true // Default policy is acceptable
   val arguments = context.evaluator.computeArgumentMapping(call, method)
