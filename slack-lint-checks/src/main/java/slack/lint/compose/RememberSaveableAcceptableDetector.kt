@@ -40,7 +40,6 @@ private val ComposeRuntimePackageName = Package("androidx.compose.runtime")
 private val RememberSaveablePackageName = Package("androidx.compose.runtime.saveable")
 private val AUTO_SAVER = UastEmptyExpression(null)
 
-
 class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> =
@@ -190,27 +189,19 @@ private fun isKnownMutableStateFunction(node: UElement, context: JavaContext): B
  */
 private fun hasAcceptablePolicy(call: UCallExpression?, context: JavaContext): Boolean {
   val method = call?.resolve() ?: return true // Default policy is acceptable
-  val evaluator = context.evaluator
-  val arguments = evaluator.computeArgumentMapping(call, method)
+  val arguments = context.evaluator.computeArgumentMapping(call, method)
 
   // Find the policy argument by parameter name
   val policyArgument =
-    arguments.firstNotNullOfOrNull { (expression, parameter) ->
-      if (parameter.name == "policy") expression.skipParenthesizedExprDown() else null
-    }
+    arguments
+      .firstNotNullOfOrNull { (expression, parameter) ->
+        if (parameter.name == "policy") expression.skipParenthesizedExprDown() else null
+      }
+      ?.tryResolveNamed() ?: return true // If no policy is specified, assume its the default
 
-  // If no policy is specified, the default (structuralEqualityPolicy) is acceptable
-  if (policyArgument == null) return true
-
-  val resolved = policyArgument.tryResolveNamed()
-  if (
-    resolved is PsiMethod &&
-      resolved.isInPackageName(ComposeRuntimePackageName) &&
-      resolved.name in AcceptablePolicyMethods
-  ) {
-    return true
-  }
-  return false
+  return policyArgument is PsiMethod &&
+    policyArgument.isInPackageName(ComposeRuntimePackageName) &&
+    policyArgument.name in AcceptablePolicyMethods
 }
 
 private class MutableStateOfVisitor(private val context: JavaContext) : AbstractUastVisitor() {
@@ -240,13 +231,31 @@ private class ReturnsTracker(tracked: UElement, var returned: Boolean = false) :
  */
 private fun returnsLambdaExpression(returnType: PsiType, expression: UExpression): Boolean {
   val isFunction = returnType.asClass()?.resolve()?.implements("kotlin.Function") == true
-  // todo Find all the function returns and see if any are lambda expressions
+
+  // Find all the function returns and see if any are lambda expressions
   val visitor = ReturnsLambdaVisitor()
   expression.accept(visitor)
-  return isFunction // && visitor.returned
+
+  // Return true if the return type is a function AND we found lambda returns
+  return isFunction && visitor.returnedLambda
 }
 
-private class ReturnsLambdaVisitor(var returned: Boolean = false) : AbstractUastVisitor() {}
+private class ReturnsLambdaVisitor(var returnedLambda: Boolean = false) : AbstractUastVisitor() {
+
+  override fun visitReturnExpression(node: UReturnExpression): Boolean {
+    val returnValue = node.returnExpression
+    if (returnValue != null && isLambdaExpression(returnValue)) {
+      returnedLambda = true
+    }
+    return super.visitReturnExpression(node)
+  }
+
+  private fun isLambdaExpression(expression: UExpression): Boolean {
+    // Check if this is a lambda expression by looking at the expression type
+    val expressionType = expression.getExpressionType()
+    return expressionType?.asClass()?.resolve()?.implements("kotlin.Function") == true
+  }
+}
 
 private fun PsiType?.asClass(): PsiClassType? = this as? PsiClassType
 

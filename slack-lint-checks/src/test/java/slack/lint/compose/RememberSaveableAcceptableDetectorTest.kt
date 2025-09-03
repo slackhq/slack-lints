@@ -343,7 +343,7 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
   fun acceptableTypes_multiReturnLambdas_errors() {
     val source =
       kotlin(
-        """
+          """
           package test
 
           import androidx.compose.runtime.Composable
@@ -365,11 +365,20 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
           }
 
                 """
-          .trimIndent()
-      )
+            .trimIndent()
+        )
         .indented()
 
-    test(source).expect("")
+    test(source)
+      .expect(
+        """
+          src/test/test.kt:9: Error: Brief description (LAMBDA) [RememberSaveableTypeMustBeAcceptable]
+            val lambdaBlockValue = rememberSaveable {
+                                   ^
+          1 error
+        """
+          .trimIndent()
+      )
   }
 }
 
