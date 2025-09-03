@@ -24,7 +24,9 @@ import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.UReturnExpression
 import org.jetbrains.uast.UastEmptyExpression
+import org.jetbrains.uast.skipParenthesizedExprDown
 import org.jetbrains.uast.tryResolve
+import org.jetbrains.uast.tryResolveNamed
 import org.jetbrains.uast.visitor.AbstractUastVisitor
 import slack.lint.util.Package
 import slack.lint.util.implements
@@ -32,9 +34,10 @@ import slack.lint.util.isBoxedPrimitive
 import slack.lint.util.isInPackageName
 import slack.lint.util.sourceImplementation
 
+private const val REMEMBER_SAVEABLE_METHOD_NAME = "rememberSaveable"
+
 private val ComposeRuntimePackageName = Package("androidx.compose.runtime")
 private val RememberSaveablePackageName = Package("androidx.compose.runtime.saveable")
-private const val RememberSaveableMethodName = "rememberSaveable"
 private val AUTO_SAVER = UastEmptyExpression(null)
 
 // todo Rewrite this so its checking this instead
@@ -51,7 +54,7 @@ class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
     object : UElementHandler() {
       @Suppress("ReturnCount")
       override fun visitCallExpression(node: UCallExpression) {
-        if (node.methodName != RememberSaveableMethodName) return
+        if (node.methodName != REMEMBER_SAVEABLE_METHOD_NAME) return
         val evaluator = context.evaluator
         val method = node.resolve()
         val returnType = node.returnType
@@ -72,7 +75,7 @@ class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
         // If there is no init expression just return.
         val init = arguments.getInit() ?: return
         // Check whats created in the init expression.
-        if (returnsKnownMutableState(returnType, init)) {
+        if (returnsKnownMutableState(returnType, init, context)) {
           // Found a known parcelable mutable state.
           return
         }
@@ -136,9 +139,13 @@ private fun Map<UExpression, PsiParameter>.getInit(): UExpression? {
  * The default Android `mutableStateOf` is `ParcelableSnapshotMutableState`, so check if all the
  * return statements are default `mutableStateOf` calls.
  */
-private fun returnsKnownMutableState(returnType: PsiType, expression: UExpression): Boolean {
+private fun returnsKnownMutableState(
+  returnType: PsiType,
+  expression: UExpression,
+  context: JavaContext,
+): Boolean {
   return if (returnType.isAcceptableMutableStateClass()) {
-    val visitor = MutableStateOfVisitor()
+    val visitor = MutableStateOfVisitor(context)
     expression.accept(visitor)
     val allReturned =
       visitor.mutableStateOfs.isNotEmpty() &&
@@ -160,31 +167,62 @@ private fun PsiType?.isAcceptableMutableStateClass(): Boolean {
   return isMutableState && psiClassType.parameters.all { it.isAcceptableType() }
 }
 
-private fun isKnownMutableStateFunction(node: UElement): Boolean {
+private fun isKnownMutableStateFunction(node: UElement, context: JavaContext): Boolean {
   val resolved = node.tryResolve()
   val isKnownMutableState =
     resolved is PsiMethod &&
       resolved.isInPackageName(ComposeRuntimePackageName) &&
       resolved.name in AcceptableMutableStateMethods
-  if (isKnownMutableState) {
+  return if (isKnownMutableState) {
     // Check the type of mutableStateOf()
     if (resolved.name == "mutableStateOf") {
-      val mutableClass = node.asCall()?.returnType?.asClass()
-      mutableClass?.parameters?.all { it.isAcceptableType() } == true
+      val call = node.asCall()
+      val mutableClass = call?.returnType?.asClass()
+      val typeIsAcceptable = mutableClass?.parameters?.all { it.isAcceptableType() } == true
+      val policyIsAcceptable = hasAcceptablePolicy(call, context)
+      typeIsAcceptable && policyIsAcceptable
     } else {
       // Known mutable[Primitive]StateOf()
       true
     }
-  }
-  return isKnownMutableState
+  } else false
 }
 
-private class MutableStateOfVisitor : AbstractUastVisitor() {
+/**
+ * Checks if the mutableStateOf call uses an acceptable SnapshotMutationPolicy. Acceptable policies
+ * are: neverEqualPolicy, structuralEqualityPolicy, referentialEqualityPolicy
+ */
+private fun hasAcceptablePolicy(call: UCallExpression?, context: JavaContext): Boolean {
+  val method = call?.resolve() ?: return true // Default policy is acceptable
+  val evaluator = context.evaluator
+  val arguments = evaluator.computeArgumentMapping(call, method)
+
+  // Find the policy argument by parameter name
+  val policyArgument =
+    arguments.firstNotNullOfOrNull { (expression, parameter) ->
+      if (parameter.name == "policy") expression.skipParenthesizedExprDown() else null
+    }
+
+  // If no policy is specified, the default (structuralEqualityPolicy) is acceptable
+  if (policyArgument == null) return true
+
+  val resolved = policyArgument.tryResolveNamed()
+  if (
+    resolved is PsiMethod &&
+      resolved.isInPackageName(ComposeRuntimePackageName) &&
+      resolved.name in AcceptablePolicyMethods
+  ) {
+    return true
+  }
+  return false
+}
+
+private class MutableStateOfVisitor(private val context: JavaContext) : AbstractUastVisitor() {
 
   val mutableStateOfs = mutableListOf<UCallExpression>()
 
   override fun visitCallExpression(node: UCallExpression): Boolean =
-    if (isKnownMutableStateFunction(node)) {
+    if (isKnownMutableStateFunction(node, context)) {
       mutableStateOfs.add(node)
       true
     } else false
@@ -265,9 +303,9 @@ private fun canBeSavedToBundle(value: Any): Boolean {
 }
  */
 
-// From
-// https://github.com/androidx/androidx/blob/989d1e676252c69e1b9b2e0639c3dba039e7ac99/compose/ui/ui/src/androidMain/kotlin/androidx/compose/ui/platform/DisposableSaveableStateRegistry.android.kt#L151
-/**
+/*
+ * From: https://github.com/androidx/androidx/blob/989d1e676252c69e1b9b2e0639c3dba039e7ac99/compose/ui/ui/src/androidMain/kotlin/androidx/compose/ui/platform/DisposableSaveableStateRegistry.android.kt#L151
+ *
  * Contains Classes which can be stored inside [Bundle].
  *
  * Some of the classes are not added separately because:
@@ -301,3 +339,6 @@ private val AcceptableMutableStateMethods =
     "mutableDoubleStateOf",
     "mutableLongStateOf",
   )
+
+private val AcceptablePolicyMethods =
+  setOf("neverEqualPolicy", "structuralEqualityPolicy", "referentialEqualityPolicy")

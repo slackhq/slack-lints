@@ -182,11 +182,13 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.structuralEqualityPolicy
 import androidx.compose.runtime.saveable.rememberSaveable
 
 @Composable
 fun TestComposable() {
     val mutableState = rememberSaveable { mutableStateOf("value") }
+    val mutableStateWithPolicy = rememberSaveable { mutableStateOf("value", structuralEqualityPolicy()) }
     val mutableIntState = rememberSaveable { mutableIntStateOf(1) }
     val mutableFloatState = rememberSaveable { mutableFloatStateOf(1f) }
     val mutableDoubleState = rememberSaveable { mutableDoubleStateOf(1.0) }
@@ -255,6 +257,94 @@ fun TestComposable() {
       )
       .run()
       .expectClean()
+  }
+
+  @Test
+  fun acceptableTypes_mutableStateWithAcceptablePolicy_noError() {
+    val source =
+      kotlin(
+          """
+package test
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.neverEqualPolicy
+import androidx.compose.runtime.referentialEqualityPolicy
+import androidx.compose.runtime.structuralEqualityPolicy
+import androidx.compose.runtime.saveable.rememberSaveable
+
+@Composable
+fun TestComposable() {
+    val structuralPolicy = rememberSaveable { mutableStateOf("value", structuralEqualityPolicy()) }
+    val referentialPolicy = rememberSaveable { mutableStateOf("value", referentialEqualityPolicy()) }
+    val neverEqualPolicy = rememberSaveable { mutableStateOf("value", neverEqualPolicy()) }
+    val defaultPolicy = rememberSaveable { mutableStateOf("value") }
+}
+
+      """
+            .trimIndent()
+        )
+        .indented()
+
+    lint()
+      .files(
+        JAVA_IO,
+        JAVA_UTIL,
+        ANDROID_OS,
+        ANDROID_UTIL,
+        COMPOSE_RUNTIME,
+        COMPOSE_SAVEABLE,
+        TEST_SAVEABLES,
+        source,
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun unacceptableTypes_mutableStateWithCustomPolicy_hasError() {
+    val source =
+      kotlin(
+          """
+package test
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+
+@Composable
+fun TestComposable() {
+    fun <T> customPolicy(): SnapshotMutationPolicy<T> = TODO()
+    
+    val customPolicyState = rememberSaveable { mutableStateOf("value", customPolicy()) }
+}
+
+      """
+            .trimIndent()
+        )
+        .indented()
+
+    lint()
+      .files(
+        JAVA_IO,
+        JAVA_UTIL,
+        ANDROID_OS,
+        ANDROID_UTIL,
+        COMPOSE_RUNTIME,
+        COMPOSE_SAVEABLE,
+        TEST_SAVEABLES,
+        source,
+      )
+      .run()
+      .expect(
+        """
+src/test/test.kt:11: Error: Brief description [RememberSaveableTypeMustBeAcceptable]
+    val customPolicyState = rememberSaveable { mutableStateOf("value", customPolicy()) }
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 errors, 0 warnings
+        """
+          .trimIndent()
+      )
   }
 
   @Test
@@ -414,6 +504,11 @@ private val COMPOSE_RUNTIME =
     }
 
     fun mutableLongStateOf(value: Long): MutableLongState = TODO()
+
+    fun <T> structuralEqualityPolicy(): SnapshotMutationPolicy<T> = TODO()
+    fun <T> referentialEqualityPolicy(): SnapshotMutationPolicy<T> = TODO()
+    fun <T> neverEqualPolicy(): SnapshotMutationPolicy<T> = TODO()
+
     """
         .trimIndent()
     )
