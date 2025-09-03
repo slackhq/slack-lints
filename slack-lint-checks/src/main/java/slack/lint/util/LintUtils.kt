@@ -366,3 +366,6 @@ internal val PsiMethod.returnsUnit
  */
 internal val PsiType?.isVoidOrUnit
   get() = this == PsiTypes.voidType() || this?.canonicalText == "kotlin.Unit"
+
+/** Cast as a [PsiClassType] if possible. */
+internal fun PsiType?.asClass(): PsiClassType? = this as? PsiClassType

@@ -19,6 +19,7 @@ import com.intellij.psi.PsiMethod
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.PsiPrimitiveType
 import com.intellij.psi.PsiType
+import kotlin.contracts.ExperimentalContracts
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
@@ -29,6 +30,7 @@ import org.jetbrains.uast.tryResolve
 import org.jetbrains.uast.tryResolveNamed
 import org.jetbrains.uast.visitor.AbstractUastVisitor
 import slack.lint.util.Package
+import slack.lint.util.asClass
 import slack.lint.util.implements
 import slack.lint.util.isBoxedPrimitive
 import slack.lint.util.isInPackageName
@@ -52,54 +54,14 @@ class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
   override fun getApplicableUastTypes(): List<Class<out UElement>> =
     listOf(UCallExpression::class.java)
 
-  override fun createUastHandler(context: JavaContext) =
-    object : UElementHandler() {
-      @Suppress("ReturnCount")
-      override fun visitCallExpression(node: UCallExpression) {
-        if (node.methodName != REMEMBER_SAVEABLE_METHOD_NAME) return
-        val evaluator = context.evaluator
-        val method = node.resolve()
-        val returnType = node.returnType
-        if (
-          method == null ||
-            returnType == null ||
-            !method.isInPackageName(RememberSaveablePackageName)
-        ) {
-          return
-        }
-
-        val arguments = evaluator.computeArgumentMapping(node, method)
-        val saver = arguments.getSaver()
-        // With an auto saver check the return type.
-        if (saver == AUTO_SAVER && returnType.isAcceptableType()) {
-          return
-        }
-        // If there is no init expression just return.
-        val init = arguments.getInit() ?: return
-        // Check whats created in the init expression.
-        if (returnsKnownMutableState(returnType, init, context)) {
-          // Found a known parcelable mutable state.
-          return
-        }
-        if (returnsLambdaExpression(returnType, init)) {
-          // todo Report specific error language about kotlin Lambdas
-          context.report(
-            ISSUE,
-            context.getLocation(node),
-            ISSUE.getBriefDescription(TextFormat.TEXT) + " (LAMBDA)",
-          )
-          return
-        }
-        context.report(ISSUE, context.getLocation(node), ISSUE.getBriefDescription(TextFormat.TEXT))
-      }
-    }
+  override fun createUastHandler(context: JavaContext): UElementHandler =
+    RememberSaveableElementHandler(context)
 
   companion object {
     const val MESSAGE = "remember"
     const val ISSUE_ID = "RememberSaveableTypeMustBeAcceptable"
     const val BRIEF_DESCRIPTION = "Brief description"
     const val EXPLANATION = """Full explanation"""
-
     val ISSUE: Issue =
       Issue.create(
         ISSUE_ID,
@@ -110,6 +72,84 @@ class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
         Severity.ERROR,
         sourceImplementation<RememberSaveableAcceptableDetector>(),
       )
+  }
+}
+
+private class RememberSaveableElementHandler(val context: JavaContext) : UElementHandler() {
+  override fun visitCallExpression(node: UCallExpression) {
+    if (node.methodName != REMEMBER_SAVEABLE_METHOD_NAME) return
+    val evaluator = context.evaluator
+    val method = node.resolve()
+    val returnType = node.returnType
+    if (
+      method != null && returnType != null && method.isInPackageName(RememberSaveablePackageName)
+    ) {
+      val arguments = evaluator.computeArgumentMapping(node, method)
+      val saver = arguments.getSaver()
+      if (saver == AUTO_SAVER) {
+        visitAutoSaver(node, returnType, arguments)
+      } else {
+        visitCustomSaver(node, saver)
+      }
+    }
+  }
+
+  private fun visitAutoSaver(
+    node: UCallExpression,
+    returnType: PsiType,
+    arguments: Map<UExpression, PsiParameter>,
+  ) {
+    val init = arguments.getInit()
+    // If there is no init expression or if the return is an acceptable type, just return.
+    if (init == null || returnType.isAcceptableType()) {
+      return
+    }
+    // Check what is created in the init expression.
+    val (allAcceptableMutableStates, customPolices) =
+      returnsKnownMutableState(returnType, init, context)
+    if (allAcceptableMutableStates) {
+      // Found a known parcelable mutable state!
+      // Report the custom policy error when using the auto saver.
+      // todo Report error message "If you use a custom SnapshotMutationPolicy for your
+      //  MutableState you have to write a custom Saver"
+      customPolices.forEach {
+        context.report(
+          RememberSaveableAcceptableDetector.Companion.ISSUE,
+          context.getLocation(it),
+          RememberSaveableAcceptableDetector.Companion.ISSUE.getBriefDescription(TextFormat.TEXT) +
+            " (Custom policy)",
+        )
+      }
+      return
+    }
+
+    if (returnsLambdaExpression(returnType, init)) {
+      // todo Report specific error language about kotlin Lambdas
+      context.report(
+        RememberSaveableAcceptableDetector.Companion.ISSUE,
+        context.getLocation(node),
+        RememberSaveableAcceptableDetector.Companion.ISSUE.getBriefDescription(TextFormat.TEXT) +
+          " (LAMBDA)",
+      )
+    } else {
+      // "The default implementation only supports types which can be stored inside the Bundle.
+      // Please consider implementing a custom Saver for this class and pass it to
+      // rememberSaveable()."
+      context.report(
+        RememberSaveableAcceptableDetector.Companion.ISSUE,
+        context.getLocation(node),
+        RememberSaveableAcceptableDetector.Companion.ISSUE.getBriefDescription(TextFormat.TEXT),
+      )
+    }
+  }
+
+  private fun visitCustomSaver(node: UCallExpression, saver: UExpression) {
+    // todo Custom saver, check the return type of the save call and report an error.
+    context.report(
+      RememberSaveableAcceptableDetector.Companion.ISSUE,
+      context.getLocation(node),
+      RememberSaveableAcceptableDetector.Companion.ISSUE.getBriefDescription(TextFormat.TEXT),
+    )
   }
 }
 
@@ -145,20 +185,21 @@ private fun returnsKnownMutableState(
   returnType: PsiType,
   expression: UExpression,
   context: JavaContext,
-): Boolean {
+): ReturnsKnownMutableStateResult {
   return if (returnType.isAcceptableMutableStateClass()) {
     val visitor = MutableStateOfVisitor(context)
     expression.accept(visitor)
-    val allReturned =
-      visitor.mutableStateOfs.isNotEmpty() &&
-        visitor.mutableStateOfs.all { tracked ->
-          val returnsTracker = ReturnsTracker(tracked)
-          expression.accept(returnsTracker)
-          returnsTracker.returned
-        }
-    allReturned
-  } else false
+    val allAcceptableMutableStates = visitor.checkAllReturned(expression)
+    ReturnsKnownMutableStateResult(allAcceptableMutableStates, visitor.customPolices)
+  } else {
+    ReturnsKnownMutableStateResult(false, emptyList())
+  }
 }
+
+private data class ReturnsKnownMutableStateResult(
+  val allAcceptableMutableStates: Boolean,
+  val customPolices: List<UCallExpression>,
+)
 
 private fun PsiType?.isAcceptableMutableStateClass(): Boolean {
   val psiClassType = asClass()
@@ -169,31 +210,89 @@ private fun PsiType?.isAcceptableMutableStateClass(): Boolean {
   return isMutableState && psiClassType.parameters.all { it.isAcceptableType() }
 }
 
-private fun isKnownMutableStateFunction(node: UElement, context: JavaContext): Boolean {
-  val resolved = node.tryResolve()
-  val isKnownMutableState =
-    resolved is PsiMethod &&
-      resolved.isInPackageName(ComposeRuntimePackageName) &&
-      resolved.name in AcceptableMutableStateMethods
-  return if (isKnownMutableState) {
-    // Check the type of mutableStateOf()
-    if (resolved.name == "mutableStateOf") {
-      val call = node.asCall()
-      val mutableClass = call?.returnType?.asClass()
-      val typeIsAcceptable = mutableClass?.parameters?.all { it.isAcceptableType() } == true
-      val policyIsAcceptable = hasAcceptablePolicy(call, context)
-      typeIsAcceptable && policyIsAcceptable
-    } else {
-      // Known mutable[Primitive]StateOf()
+/**
+ * Visitor that tracks `mutableStateOf` function calls within an expression to determine if all such
+ * calls are returned from their containing expressions.
+ *
+ * This visitor is used to verify that when `rememberSaveable` contains `mutableStateOf` calls,
+ * those calls are actually being returned (and thus can be properly saved/restored by the
+ * auto-saver mechanism).
+ *
+ * @param context The JavaContext for the current lint analysis
+ */
+private class MutableStateOfVisitor(private val context: JavaContext) : AbstractUastVisitor() {
+
+  /** List of all `mutableStateOf` function calls found during traversal */
+  val mutableStateOfs = mutableListOf<UCallExpression>()
+  val customPolices = mutableListOf<UCallExpression>()
+
+  /**
+   * Visits call expressions and tracks those that are known mutable state functions.
+   *
+   * @param node The call expression to examine
+   * @return true if the node is a known mutable state function, false otherwise
+   */
+  override fun visitCallExpression(node: UCallExpression): Boolean =
+    if (isKnownMutableStateFunction(node, context)) {
+      mutableStateOfs.add(node)
       true
+    } else false
+
+  /**
+   * Checks if all tracked `mutableStateOf` calls are returned from their containing expressions.
+   *
+   * @return true if all tracked calls are returned, false otherwise
+   */
+  fun checkAllReturned(expression: UExpression): Boolean {
+    return mutableStateOfs.isNotEmpty() &&
+      mutableStateOfs.all { tracked ->
+        val visitor = ReturnsTracker(tracked)
+        expression.accept(visitor)
+        visitor.returned
+      }
+  }
+
+  /**
+   * Check if the call is one of the acceptable mutable state functions, like `mutableStateOf` or
+   * `mutableFloatStateOf`.
+   */
+  private fun isKnownMutableStateFunction(node: UElement, context: JavaContext): Boolean {
+    val resolved = node.tryResolve()
+    val isKnownMutableState =
+      resolved is PsiMethod &&
+        resolved.isInPackageName(ComposeRuntimePackageName) &&
+        resolved.name in AcceptableMutableStateMethods
+    return if (isKnownMutableState) {
+      // Check the type of mutableStateOf()
+      if (resolved.name == "mutableStateOf") {
+        val call = node.asCall()
+        val mutableClass = call?.returnType?.asClass()
+        val typeIsAcceptable = mutableClass?.parameters?.all { it.isAcceptableType() } == true
+        // Side effect to track custom policies
+        if (!hasAcceptablePolicy(call, context) && call != null) {
+          customPolices += call
+        }
+        typeIsAcceptable
+      } else {
+        // Known mutable[Primitive]StateOf()
+        true
+      }
+    } else false
+  }
+
+  private class ReturnsTracker(tracked: UElement, var returned: Boolean = false) :
+    DataFlowAnalyzer(listOf(tracked)) {
+    override fun returns(expression: UReturnExpression) {
+      returned = true
     }
-  } else false
+  }
 }
 
 /**
  * Checks if the mutableStateOf call uses an acceptable SnapshotMutationPolicy. Acceptable policies
  * are: neverEqualPolicy, structuralEqualityPolicy, referentialEqualityPolicy
  */
+@OptIn(ExperimentalContracts::class)
 private fun hasAcceptablePolicy(call: UCallExpression?, context: JavaContext): Boolean {
   val method = call?.resolve() ?: return true // Default policy is acceptable
   val arguments = context.evaluator.computeArgumentMapping(call, method)
@@ -202,49 +301,35 @@ private fun hasAcceptablePolicy(call: UCallExpression?, context: JavaContext): B
   val policyArgument =
     arguments
       .firstNotNullOfOrNull { (expression, parameter) ->
-        if (parameter.name == "policy") expression.skipParenthesizedExprDown() else null
+        if (parameter.name == "policy") expression else null
       }
-      ?.tryResolveNamed() ?: return true // If no policy is specified, assume its the default
+      ?.skipParenthesizedExprDown()
+      ?.tryResolveNamed()
 
-  return policyArgument is PsiMethod &&
-    policyArgument.isInPackageName(ComposeRuntimePackageName) &&
-    policyArgument.name in AcceptablePolicyMethods
-}
+  // Check if the policy is acceptable
+  val isAcceptablePolicy =
+    policyArgument is PsiMethod &&
+      policyArgument.isInPackageName(ComposeRuntimePackageName) &&
+      policyArgument.name in AcceptablePolicyMethods
 
-private class MutableStateOfVisitor(private val context: JavaContext) : AbstractUastVisitor() {
-
-  val mutableStateOfs = mutableListOf<UCallExpression>()
-
-  override fun visitCallExpression(node: UCallExpression): Boolean =
-    if (isKnownMutableStateFunction(node, context)) {
-      mutableStateOfs.add(node)
-      true
-    } else false
-}
-
-private class ReturnsTracker(tracked: UElement, var returned: Boolean = false) :
-  DataFlowAnalyzer(listOf(tracked)) {
-  override fun returns(expression: UReturnExpression) {
-    returned = true
-  }
+  // If no policy is specified, assume its the default
+  return policyArgument == null || isAcceptablePolicy
 }
 
 /**
  * > Lambdas in Kotlin implement Serializable, but will crash if you really try to save them. We
  * > check for both Function and Serializable (see kotlin.jvm.internal.Lambda) to support custom
  * > user defined classes implementing Function interface.
- * - From:
- *   https://github.com/androidx/androidx/blob/989d1e676252c69e1b9b2e0639c3dba039e7ac99/compose/ui/ui/src/androidMain/kotlin/androidx/compose/ui/platform/DisposableSaveableStateRegistry.android.kt#L122-L124
+ *
+ * https://github.com/androidx/androidx/blob/989d1e676252c69e1b9b2e0639c3dba039e7ac99/compose/ui/ui/src/androidMain/kotlin/androidx/compose/ui/platform/DisposableSaveableStateRegistry.android.kt#L122-L124
  */
 private fun returnsLambdaExpression(returnType: PsiType, expression: UExpression): Boolean {
   val isFunction = returnType.asClass()?.resolve()?.implements("kotlin.Function") == true
-
-  // Find all the function returns and see if any are lambda expressions
-  val visitor = ReturnsLambdaVisitor()
-  expression.accept(visitor)
-
-  // Return true if the return type is a function AND we found lambda returns
-  return isFunction && visitor.returnedLambda
+  return if (isFunction) {
+    val visitor = ReturnsLambdaVisitor()
+    expression.accept(visitor)
+    visitor.returnedLambda
+  } else false
 }
 
 private class ReturnsLambdaVisitor(var returnedLambda: Boolean = false) : AbstractUastVisitor() {
@@ -264,8 +349,6 @@ private class ReturnsLambdaVisitor(var returnedLambda: Boolean = false) : Abstra
   }
 }
 
-private fun PsiType?.asClass(): PsiClassType? = this as? PsiClassType
-
 private fun PsiType.isAcceptableType(): Boolean {
   return when (this) {
     is PsiPrimitiveType -> true
@@ -282,55 +365,22 @@ private fun PsiClass.isAcceptableClassType(): Boolean {
   return isBoxedPrimitive() || AcceptableClasses.any { implements(it) }
 }
 
-// From
-// https://github.com/androidx/androidx/blob/989d1e676252c69e1b9b2e0639c3dba039e7ac99/compose/ui/ui/src/androidMain/kotlin/androidx/compose/ui/platform/DisposableSaveableStateRegistry.android.kt#L108
-/*
-/** Checks that [value] can be stored inside [Bundle]. */
-private fun canBeSavedToBundle(value: Any): Boolean {
-    // SnapshotMutableStateImpl is Parcelable, but we do extra checks
-    if (value is SnapshotMutableState<*>) {
-        if (
-            value.policy === neverEqualPolicy<Any?>() ||
-                value.policy === structuralEqualityPolicy<Any?>() ||
-                value.policy === referentialEqualityPolicy<Any?>()
-        ) {
-            val stateValue = value.value
-            return if (stateValue == null) true else canBeSavedToBundle(stateValue)
-        } else {
-            return false
-        }
-    }
-    // lambdas in Kotlin implement Serializable, but will crash if you really try to save them.
-    // we check for both Function and Serializable (see kotlin.jvm.internal.Lambda) to support
-    // custom user defined classes implementing Function interface.
-    if (value is Function<*> && value is Serializable) {
-        return false
-    }
-    for (cl in AcceptableClasses) {
-        if (cl.isInstance(value)) {
-            return true
-        }
-    }
-    return false
-}
- */
-
-/*
- * From: https://github.com/androidx/androidx/blob/989d1e676252c69e1b9b2e0639c3dba039e7ac99/compose/ui/ui/src/androidMain/kotlin/androidx/compose/ui/platform/DisposableSaveableStateRegistry.android.kt#L151
+/**
+ * Based on this set used by `canBeSavedToBundle()`:
+ * ```
+ * private val AcceptableClasses =
+ *     arrayOf(
+ *         Serializable::class.java,
+ *         Parcelable::class.java,
+ *         String::class.java,
+ *         SparseArray::class.java,
+ *         Binder::class.java,
+ *         Size::class.java,
+ *         SizeF::class.java,
+ *     )
+ * ```
  *
- * Contains Classes which can be stored inside [Bundle].
- *
- * Some of the classes are not added separately because:
- *
- * This classes implement Serializable:
- * - Arrays (DoubleArray, BooleanArray, IntArray, LongArray, ByteArray, FloatArray, ShortArray,
- *   CharArray, Array<Parcelable, Array<String>)
- * - ArrayList
- * - Primitives (Boolean, Int, Long, Double, Float, Byte, Short, Char) will be boxed when casted to
- *   Any, and all the boxed classes implements Serializable. This class implements Parcelable:
- * - Bundle
- *
- * Note: it is simplified copy of the array from SavedStateHandle (lifecycle-viewmodel-savedstate).
+ * https://github.com/androidx/androidx/blob/989d1e676252c69e1b9b2e0639c3dba039e7ac99/compose/ui/ui/src/androidMain/kotlin/androidx/compose/ui/platform/DisposableSaveableStateRegistry.android.kt#L151-L160
  */
 private val AcceptableClasses =
   setOf(
@@ -352,5 +402,17 @@ private val AcceptableMutableStateMethods =
     "mutableLongStateOf",
   )
 
+/**
+ * Based on this check performed in `canBeSavedToBundle()`:
+ * ```
+ *   if (
+ *     value.policy === neverEqualPolicy<Any?>() ||
+ *       value.policy === structuralEqualityPolicy<Any?>() ||
+ *       value.policy === referentialEqualityPolicy<Any?>()
+ *   ) {
+ * ```
+ *
+ * https://github.com/androidx/androidx/blob/989d1e676252c69e1b9b2e0639c3dba039e7ac99/compose/ui/ui/src/androidMain/kotlin/androidx/compose/ui/platform/DisposableSaveableStateRegistry.android.kt#L112-L114
+ */
 private val AcceptablePolicyMethods =
   setOf("neverEqualPolicy", "structuralEqualityPolicy", "referentialEqualityPolicy")

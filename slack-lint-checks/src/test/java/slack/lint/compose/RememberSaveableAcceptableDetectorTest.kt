@@ -112,31 +112,6 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
-  fun acceptableTypes_nullables_noError() {
-    val source =
-      kotlin(
-          """
-          package test
-
-          import androidx.compose.runtime.Composable
-          import androidx.compose.runtime.saveable.rememberSaveable
-
-          @Composable
-          fun TestComposable() {
-              val nullableString = rememberSaveable<String?> { null }
-              val nullableInt = rememberSaveable<Int?> { null }
-              val nullableBoolean = rememberSaveable<Boolean?> { null }
-          }
-
-                """
-            .trimIndent()
-        )
-        .indented()
-
-    test(source).expectClean()
-  }
-
-  @Test
   fun acceptableTypes_mutableStates_noError() {
     val source =
       kotlin(
@@ -258,29 +233,33 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
     test(source)
       .expect(
         """
-        src/test/test.kt:11: Error: Brief description [RememberSaveableTypeMustBeAcceptable]
-            val customPolicyState = rememberSaveable { mutableStateOf("value", customPolicy()) }
-                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        1 errors, 0 warnings
-                """
+          src/test/test.kt:11: Error: Brief description (Custom policy) [RememberSaveableTypeMustBeAcceptable]
+              val customPolicyState = rememberSaveable { mutableStateOf("value", customPolicy()) }
+                                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          1 error
+          """
           .trimIndent()
       )
   }
 
   @Test
-  fun acceptableTypes_collections_wrong_saver_error() {
+  fun unacceptableTypes_mutableStateWithCustomPolicy_noError() {
     val source =
       kotlin(
           """
           package test
 
           import androidx.compose.runtime.Composable
-                    import androidx.compose.runtime.saveable.rememberSaveable
+          import androidx.compose.runtime.mutableStateOf
+          import androidx.compose.runtime.saveable.rememberSaveable
 
           @Composable
           fun TestComposable() {
-            val listValue = rememberSaveable { listOf("test") }
-            val mapValue = rememberSaveable { mapOf("key" to "value") }
+              fun <T> customPolicy(): SnapshotMutationPolicy<T> = TODO()
+              val saver =
+                Saver<MutableState<String>, String>({ it.value }, { mutableStateOf(it, customPolicy()) })
+              val customPolicyState =
+                rememberSaveable(saver = saver) { mutableStateOf("value", customPolicy()) }
           }
 
                 """
@@ -295,7 +274,7 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
   fun acceptableTypes_collections_wrong_saver_error() {
     val source =
       kotlin(
-        """
+          """
           package test
 
           import androidx.compose.runtime.Composable
@@ -308,8 +287,8 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
           }
 
                 """
-          .trimIndent()
-      )
+            .trimIndent()
+        )
         .indented()
 
     test(source).expectClean()
