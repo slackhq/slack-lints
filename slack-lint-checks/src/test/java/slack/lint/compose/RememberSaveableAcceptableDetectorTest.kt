@@ -4,6 +4,7 @@ package slack.lint.compose
 
 import com.android.tools.lint.checks.infrastructure.LintDetectorTest.java
 import com.android.tools.lint.checks.infrastructure.LintDetectorTest.kotlin
+import com.android.tools.lint.checks.infrastructure.TestFile
 import org.junit.Test
 import slack.lint.BaseSlackLintTest
 
@@ -13,31 +14,7 @@ class RememberSaveableAcceptableDetectorTest : BaseSlackLintTest() {
 
   override fun getIssues() = listOf(RememberSaveableAcceptableDetector.ISSUE)
 
-  @Test
-  fun acceptableTypes_primitives_noError() {
-    val source =
-      kotlin(
-          """
-package test
-
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.saveable.rememberSaveable
-
-@Composable
-fun TestComposable() {
-    val stringValue = rememberSaveable { "test" }
-    val intValue = rememberSaveable { 42 }
-    val booleanValue = rememberSaveable { true }
-    val floatValue = rememberSaveable { 1.0f }
-    val doubleValue = rememberSaveable { 1.0 }
-    val longValue = rememberSaveable { 1L }
-}
-
-      """
-            .trimIndent()
-        )
-        .indented()
-
+  private fun test(source: TestFile) =
     lint()
       .files(
         JAVA_IO,
@@ -50,7 +27,33 @@ fun TestComposable() {
         source,
       )
       .run()
-      .expectClean()
+
+  @Test
+  fun acceptableTypes_primitives_noError() {
+    val source =
+      kotlin(
+          """
+          package test
+
+          import androidx.compose.runtime.Composable
+          import androidx.compose.runtime.saveable.rememberSaveable
+
+          @Composable
+          fun TestComposable() {
+              val stringValue = rememberSaveable { "test" }
+              val intValue = rememberSaveable { 42 }
+              val booleanValue = rememberSaveable { true }
+              val floatValue = rememberSaveable { 1.0f }
+              val doubleValue = rememberSaveable { 1.0 }
+              val longValue = rememberSaveable { 1L }
+          }
+
+                """
+            .trimIndent()
+        )
+        .indented()
+
+    test(source).expectClean()
   }
 
   @Test
@@ -58,40 +61,28 @@ fun TestComposable() {
     val source =
       kotlin(
           """
-package test
+          package test
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.saveable.rememberSaveable
+          import androidx.compose.runtime.Composable
+          import androidx.compose.runtime.saveable.rememberSaveable
 
-@Composable
-fun TestComposable() {
-    val stringArray = rememberSaveable { arrayOf("test") }
-    val intArray = rememberSaveable { intArrayOf(42) }
-    val booleanArray = rememberSaveable { booleanArrayOf(true) }
-    val floatArray = rememberSaveable { floatArrayOf(1.0f) }
-    val doubleArray = rememberSaveable { doubleArrayOf(1.0) }
-    val longArray = rememberSaveable { longArrayOf(1L) }
-    val parcelableArray = rememberSaveable { arrayOf<Parcelable>() }
-}
+          @Composable
+          fun TestComposable() {
+              val stringArray = rememberSaveable { arrayOf("test") }
+              val intArray = rememberSaveable { intArrayOf(42) }
+              val booleanArray = rememberSaveable { booleanArrayOf(true) }
+              val floatArray = rememberSaveable { floatArrayOf(1.0f) }
+              val doubleArray = rememberSaveable { doubleArrayOf(1.0) }
+              val longArray = rememberSaveable { longArrayOf(1L) }
+              val parcelableArray = rememberSaveable { arrayOf<Parcelable>() }
+          }
 
-      """
+                """
             .trimIndent()
         )
         .indented()
 
-    lint()
-      .files(
-        JAVA_IO,
-        JAVA_UTIL,
-        ANDROID_OS,
-        ANDROID_UTIL,
-        COMPOSE_RUNTIME,
-        COMPOSE_SAVEABLE,
-        TEST_SAVEABLES,
-        source,
-      )
-      .run()
-      .expectClean()
+    test(source).expectClean()
   }
 
   @Test
@@ -99,37 +90,25 @@ fun TestComposable() {
     val source =
       kotlin(
           """
-package test
+          package test
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.saveable.rememberSaveable
-import java.util.ArrayList
+          import androidx.compose.runtime.Composable
+          import androidx.compose.runtime.saveable.rememberSaveable
+          import java.util.ArrayList
 
-@Composable
-fun TestComposable() {
-  val serializableValue = rememberSaveable { TestSerializable() }
-  val parcelableValue = rememberSaveable { TestParcelable() }
-  val arrayListValue = rememberSaveable { ArrayList<String>() }
-}
+          @Composable
+          fun TestComposable() {
+            val serializableValue = rememberSaveable { TestSerializable() }
+            val parcelableValue = rememberSaveable { TestParcelable() }
+            val arrayListValue = rememberSaveable { ArrayList<String>() }
+          }
 
-      """
+                """
             .trimIndent()
         )
         .indented()
 
-    lint()
-      .files(
-        JAVA_IO,
-        JAVA_UTIL,
-        ANDROID_OS,
-        ANDROID_UTIL,
-        COMPOSE_RUNTIME,
-        COMPOSE_SAVEABLE,
-        TEST_SAVEABLES,
-        source,
-      )
-      .run()
-      .expectClean()
+    test(source).expectClean()
   }
 
   @Test
@@ -137,36 +116,24 @@ fun TestComposable() {
     val source =
       kotlin(
           """
-package test
+          package test
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.saveable.rememberSaveable
+          import androidx.compose.runtime.Composable
+          import androidx.compose.runtime.saveable.rememberSaveable
 
-@Composable
-fun TestComposable() {
-    val nullableString = rememberSaveable<String?> { null }
-    val nullableInt = rememberSaveable<Int?> { null }
-    val nullableBoolean = rememberSaveable<Boolean?> { null }
-}
+          @Composable
+          fun TestComposable() {
+              val nullableString = rememberSaveable<String?> { null }
+              val nullableInt = rememberSaveable<Int?> { null }
+              val nullableBoolean = rememberSaveable<Boolean?> { null }
+          }
 
-      """
+                """
             .trimIndent()
         )
         .indented()
 
-    lint()
-      .files(
-        JAVA_IO,
-        JAVA_UTIL,
-        ANDROID_OS,
-        ANDROID_UTIL,
-        COMPOSE_RUNTIME,
-        COMPOSE_SAVEABLE,
-        TEST_SAVEABLES,
-        source,
-      )
-      .run()
-      .expectClean()
+    test(source).expectClean()
   }
 
   @Test
@@ -174,51 +141,39 @@ fun TestComposable() {
     val source =
       kotlin(
           """
-package test
+          package test
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableDoubleStateOf
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.structuralEqualityPolicy
-import androidx.compose.runtime.saveable.rememberSaveable
+          import androidx.compose.runtime.Composable
+          import androidx.compose.runtime.mutableDoubleStateOf
+          import androidx.compose.runtime.mutableFloatStateOf
+          import androidx.compose.runtime.mutableIntStateOf
+          import androidx.compose.runtime.mutableLongStateOf
+          import androidx.compose.runtime.mutableStateOf
+          import androidx.compose.runtime.structuralEqualityPolicy
+          import androidx.compose.runtime.saveable.rememberSaveable
 
-@Composable
-fun TestComposable() {
-    val mutableState = rememberSaveable { mutableStateOf("value") }
-    val mutableStateWithPolicy = rememberSaveable { mutableStateOf("value", structuralEqualityPolicy()) }
-    val mutableIntState = rememberSaveable { mutableIntStateOf(1) }
-    val mutableFloatState = rememberSaveable { mutableFloatStateOf(1f) }
-    val mutableDoubleState = rememberSaveable { mutableDoubleStateOf(1.0) }
-    val mutableLongState = rememberSaveable { mutableLongStateOf(1L) }
-    val mutableTestParcelableState = rememberSaveable {
-        mutableStateOf(TestParcelable()).apply { value = TestParcelable() }
-    }
-    val mutableTestSerializableState = rememberSaveable {
-        mutableStateOf(TestSerializable()).apply { value = TestSerializable() }
-    }
-}
+          @Composable
+          fun TestComposable() {
+              val mutableState = rememberSaveable { mutableStateOf("value") }
+              val mutableStateWithPolicy = rememberSaveable { mutableStateOf("value", structuralEqualityPolicy()) }
+              val mutableIntState = rememberSaveable { mutableIntStateOf(1) }
+              val mutableFloatState = rememberSaveable { mutableFloatStateOf(1f) }
+              val mutableDoubleState = rememberSaveable { mutableDoubleStateOf(1.0) }
+              val mutableLongState = rememberSaveable { mutableLongStateOf(1L) }
+              val mutableTestParcelableState = rememberSaveable {
+                  mutableStateOf(TestParcelable()).apply { value = TestParcelable() }
+              }
+              val mutableTestSerializableState = rememberSaveable {
+                  mutableStateOf(TestSerializable()).apply { value = TestSerializable() }
+              }
+          }
 
-      """
+                """
             .trimIndent()
         )
         .indented()
 
-    lint()
-      .files(
-        JAVA_IO,
-        JAVA_UTIL,
-        ANDROID_OS,
-        ANDROID_UTIL,
-        COMPOSE_RUNTIME,
-        COMPOSE_SAVEABLE,
-        TEST_SAVEABLES,
-        source,
-      )
-      .run()
-      .expectClean()
+    test(source).expectClean()
   }
 
   @Test
@@ -226,37 +181,25 @@ fun TestComposable() {
     val source =
       kotlin(
           """
-package test
+          package test
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.autoSaver
-import androidx.compose.runtime.saveable.rememberSaveable
+          import androidx.compose.runtime.Composable
+          import androidx.compose.runtime.mutableStateOf
+          import androidx.compose.runtime.saveable.autoSaver
+          import androidx.compose.runtime.saveable.rememberSaveable
 
-@Composable
-fun TestComposable() {
-    val mutableStateLabeled =
-        rememberSaveable(saver = autoSaver(), init = { mutableStateOf("value") })
-}
+          @Composable
+          fun TestComposable() {
+              val mutableStateLabeled =
+                  rememberSaveable(saver = autoSaver(), init = { mutableStateOf("value") })
+          }
 
-      """
+                """
             .trimIndent()
         )
         .indented()
 
-    lint()
-      .files(
-        JAVA_IO,
-        JAVA_UTIL,
-        ANDROID_OS,
-        ANDROID_UTIL,
-        COMPOSE_RUNTIME,
-        COMPOSE_SAVEABLE,
-        TEST_SAVEABLES,
-        source,
-      )
-      .run()
-      .expectClean()
+    test(source).expectClean()
   }
 
   @Test
@@ -264,41 +207,29 @@ fun TestComposable() {
     val source =
       kotlin(
           """
-package test
+          package test
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.neverEqualPolicy
-import androidx.compose.runtime.referentialEqualityPolicy
-import androidx.compose.runtime.structuralEqualityPolicy
-import androidx.compose.runtime.saveable.rememberSaveable
+          import androidx.compose.runtime.Composable
+          import androidx.compose.runtime.mutableStateOf
+          import androidx.compose.runtime.neverEqualPolicy
+          import androidx.compose.runtime.referentialEqualityPolicy
+          import androidx.compose.runtime.structuralEqualityPolicy
+          import androidx.compose.runtime.saveable.rememberSaveable
 
-@Composable
-fun TestComposable() {
-    val structuralPolicy = rememberSaveable { mutableStateOf("value", structuralEqualityPolicy()) }
-    val referentialPolicy = rememberSaveable { mutableStateOf("value", referentialEqualityPolicy()) }
-    val neverEqualPolicy = rememberSaveable { mutableStateOf("value", neverEqualPolicy()) }
-    val defaultPolicy = rememberSaveable { mutableStateOf("value") }
-}
+          @Composable
+          fun TestComposable() {
+              val structuralPolicy = rememberSaveable { mutableStateOf("value", structuralEqualityPolicy()) }
+              val referentialPolicy = rememberSaveable { mutableStateOf("value", referentialEqualityPolicy()) }
+              val neverEqualPolicy = rememberSaveable { mutableStateOf("value", neverEqualPolicy()) }
+              val defaultPolicy = rememberSaveable { mutableStateOf("value") }
+          }
 
-      """
+                """
             .trimIndent()
         )
         .indented()
 
-    lint()
-      .files(
-        JAVA_IO,
-        JAVA_UTIL,
-        ANDROID_OS,
-        ANDROID_UTIL,
-        COMPOSE_RUNTIME,
-        COMPOSE_SAVEABLE,
-        TEST_SAVEABLES,
-        source,
-      )
-      .run()
-      .expectClean()
+    test(source).expectClean()
   }
 
   @Test
@@ -306,108 +237,151 @@ fun TestComposable() {
     val source =
       kotlin(
           """
-package test
+          package test
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+          import androidx.compose.runtime.Composable
+          import androidx.compose.runtime.mutableStateOf
+          import androidx.compose.runtime.saveable.rememberSaveable
 
-@Composable
-fun TestComposable() {
-    fun <T> customPolicy(): SnapshotMutationPolicy<T> = TODO()
-    
-    val customPolicyState = rememberSaveable { mutableStateOf("value", customPolicy()) }
-}
+          @Composable
+          fun TestComposable() {
+              fun <T> customPolicy(): SnapshotMutationPolicy<T> = TODO()
+              
+              val customPolicyState = rememberSaveable { mutableStateOf("value", customPolicy()) }
+          }
 
-      """
+                """
             .trimIndent()
         )
         .indented()
 
-    lint()
-      .files(
-        JAVA_IO,
-        JAVA_UTIL,
-        ANDROID_OS,
-        ANDROID_UTIL,
-        COMPOSE_RUNTIME,
-        COMPOSE_SAVEABLE,
-        TEST_SAVEABLES,
-        source,
-      )
-      .run()
+    test(source)
       .expect(
         """
-src/test/test.kt:11: Error: Brief description [RememberSaveableTypeMustBeAcceptable]
-    val customPolicyState = rememberSaveable { mutableStateOf("value", customPolicy()) }
-                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-1 errors, 0 warnings
-        """
+        src/test/test.kt:11: Error: Brief description [RememberSaveableTypeMustBeAcceptable]
+            val customPolicyState = rememberSaveable { mutableStateOf("value", customPolicy()) }
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
+                """
           .trimIndent()
       )
   }
 
   @Test
-  fun acceptableTypes_collectionsAndLambdas_noError() {
+  fun acceptableTypes_collections_noError() {
     val source =
       kotlin(
           """
-package test
+          package test
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import kotlin.random.Random
+          import androidx.compose.runtime.Composable
+          import androidx.compose.runtime.mutableStateOf
+          import androidx.compose.runtime.saveable.rememberSaveable
 
-@Composable
-fun TestComposable() {
-    val listValue = rememberSaveable { listOf("test") }
-    val mapValue = rememberSaveable { mapOf("key" to "value") }
-    val mutableStateValue = rememberSaveable { mutableStateOf("value") }
-    val lambdaInvokedValue = rememberSaveable { { "value" }() }
-    val lambdaValue = rememberSaveable { { "value" } }
-    val lambdaBlockValue = rememberSaveable {
-        val a = { "value" }
-        val b = { "other" }
-        val c = if (Random.nextInt() == 42) 1 else 2
-        if (c == 1) {
-            a
-        } else {
-            ({ "other" })
-        }
-    }
-}
+          @Composable
+          fun TestComposable() {
+            val listValue = rememberSaveable { listOf("test") }
+            val mapValue = rememberSaveable { mapOf("key" to "value") }
+            val mutableStateValue = rememberSaveable { mutableStateOf("value") }
+          }
 
-      """
+                """
             .trimIndent()
         )
         .indented()
 
-    lint()
-      .files(
-        JAVA_IO,
-        JAVA_UTIL,
-        ANDROID_OS,
-        ANDROID_UTIL,
-        COMPOSE_RUNTIME,
-        COMPOSE_SAVEABLE,
-        TEST_SAVEABLES,
-        source,
+    test(source).expectClean()
+  }
+
+  @Test
+  fun acceptableTypes_lambdas_noError() {
+    val source =
+      kotlin(
+          """
+          package test
+
+          import androidx.compose.runtime.Composable
+          import androidx.compose.runtime.saveable.rememberSaveable
+
+          @Composable
+          fun TestComposable() {
+            val lambdaInvokedValue = rememberSaveable { { "value" }() }
+          }
+
+                """
+            .trimIndent()
+        )
+        .indented()
+
+    test(source).expectClean()
+  }
+
+  @Test
+  fun acceptableTypes_lambda_errors() {
+    val source =
+      kotlin(
+          """
+          package test
+
+          import androidx.compose.runtime.Composable
+          import androidx.compose.runtime.saveable.rememberSaveable
+          
+          @Composable
+          fun TestComposable() {
+            val lambdaValue = rememberSaveable { { "value" } }
+          }
+
+                """
+            .trimIndent()
+        )
+        .indented()
+
+    test(source).expect("")
+  }
+
+  @Test
+  fun acceptableTypes_multiReturnLambdas_errors() {
+    val source =
+      kotlin(
+        """
+          package test
+
+          import androidx.compose.runtime.Composable
+          import androidx.compose.runtime.saveable.rememberSaveable
+          import kotlin.random.Random
+
+          @Composable
+          fun TestComposable() {
+            val lambdaBlockValue = rememberSaveable {
+              val a = { "value" }
+              val b = { "other" }
+              val c = if (Random.nextInt() == 42) 1 else 2
+              if (c == 1) {
+                a
+              } else {
+                ({ "other" })
+              }
+            }
+          }
+
+                """
+          .trimIndent()
       )
-      .run()
-      .expectClean()
+        .indented()
+
+    test(source).expect("")
   }
 }
 
 private val JAVA_IO =
   java(
       """
-    package java.io;
+      package java.io;
 
-    public interface Serializable {
-    }
+      public interface Serializable {
+      }
 
-    """
+      """
         .trimIndent()
     )
     .indented()
@@ -415,13 +389,13 @@ private val JAVA_IO =
 private val JAVA_UTIL =
   java(
       """
-    package java.util;
+      package java.util;
 
-    import java.io.Serializable;
+      import java.io.Serializable;
 
-    public class ArrayList<E> implements Serializable {}
+      public class ArrayList<E> implements Serializable {}
 
-    """
+      """
         .trimIndent()
     )
     .indented()
@@ -456,60 +430,62 @@ private val ANDROID_UTIL =
 private val COMPOSE_RUNTIME =
   kotlin(
       """
-    package androidx.compose.runtime
+      package androidx.compose.runtime
 
-    annotation class Composable
+      annotation class Composable
 
-    annotation class Stable
+      annotation class Stable
 
-    interface SnapshotMutationPolicy<T>
+      interface SnapshotMutationPolicy<T>
 
-    interface State<out T> {
-      val value: T
-    }
+      interface State<out T> {
+        val value: T
+      }
 
-    interface MutableState<T> : State<T> {
-      override var value: T
-    }
+      interface MutableState<T> : State<T> {
+        override var value: T
+      }
 
-    fun <T> mutableStateOf(
-      value: T,
-      policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy(),
-    ): MutableState<T> = TODO()
+      fun <T> mutableStateOf(
+        value: T,
+        policy: SnapshotMutationPolicy<T> = structuralEqualityPolicy(),
+      ): MutableState<T> = TODO()
 
-    interface MutableIntState : IntState, MutableState<Int> {
-      override var value: Int
-      override var intValue: Int
-    }
+      interface MutableIntState : IntState, MutableState<Int> {
+        override var value: Int
+        override var intValue: Int
+      }
 
-    fun mutableIntStateOf(value: Int): MutableIntState = TODO()
+      fun mutableIntStateOf(value: Int): MutableIntState = TODO()
 
-    interface MutableFloatState : FloatState, MutableState<Float> {
-      override var value: Float
-      override var floatValue: Float
-    }
+      interface MutableFloatState : FloatState, MutableState<Float> {
+        override var value: Float
+        override var floatValue: Float
+      }
 
-    fun mutableFloatStateOf(value: Float): MutableFloatState = TODO()
+      fun mutableFloatStateOf(value: Float): MutableFloatState = TODO()
 
-    interface MutableDoubleState : MutableState<Double> {
+      interface MutableDoubleState : MutableState<Double> {
         override var value: Double
         override var doubleValue: Double
-    }
+      }
 
-    fun mutableDoubleStateOf(value: Double): MutableDoubleState = TODO()
+      fun mutableDoubleStateOf(value: Double): MutableDoubleState = TODO()
 
-    interface MutableLongState : MutableState<Long> {
+      interface MutableLongState : MutableState<Long> {
         override var value: Long
         override var longValue: Long
-    }
+      }
 
-    fun mutableLongStateOf(value: Long): MutableLongState = TODO()
+      fun mutableLongStateOf(value: Long): MutableLongState = TODO()
 
-    fun <T> structuralEqualityPolicy(): SnapshotMutationPolicy<T> = TODO()
-    fun <T> referentialEqualityPolicy(): SnapshotMutationPolicy<T> = TODO()
-    fun <T> neverEqualPolicy(): SnapshotMutationPolicy<T> = TODO()
+      fun <T> structuralEqualityPolicy(): SnapshotMutationPolicy<T> = TODO()
 
-    """
+      fun <T> referentialEqualityPolicy(): SnapshotMutationPolicy<T> = TODO()
+
+      fun <T> neverEqualPolicy(): SnapshotMutationPolicy<T> = TODO()
+
+            """
         .trimIndent()
     )
     .indented()
@@ -517,47 +493,48 @@ private val COMPOSE_RUNTIME =
 private val COMPOSE_SAVEABLE =
   kotlin(
       """
-    package androidx.compose.runtime.saveable
+      package androidx.compose.runtime.saveable
 
-    interface Saver<Original, Saveable : Any> {
-      fun save(value: Original): Saveable?
-      fun restore(value: Saveable): Original?
-    }
+      interface Saver<Original, Saveable : Any> {
+        fun save(value: Original): Saveable?
+        fun restore(value: Saveable): Original?
+      }
 
-    fun <T> autoSaver(): Saver<T, Any> = TODO()
+      fun <T> autoSaver(): Saver<T, Any> = TODO()
 
-    @Composable
-    fun <T : Any> rememberSaveable(
-        vararg inputs: Any?,
-        saver: Saver<T, out Any> = autoSaver(),
-        key: String? = null,
-        init: () -> T
-    ): T = TODO()
+      @Composable
+      fun <T : Any> rememberSaveable(
+          vararg inputs: Any?,
+          saver: Saver<T, out Any> = autoSaver(),
+          key: String? = null,
+          init: () -> T
+      ): T = TODO()
 
-    @Composable
-    fun <T> rememberSaveable(
-        vararg inputs: Any?,
-        stateSaver: Saver<T, out Any>,
-        key: String? = null,
-        init: () -> MutableState<T>
-    ): MutableState<T>  = TODO()
+      @Composable
+      fun <T> rememberSaveable(
+          vararg inputs: Any?,
+          stateSaver: Saver<T, out Any>,
+          key: String? = null,
+          init: () -> MutableState<T>
+      ): MutableState<T>  = TODO()
 
-    """
+      """
         .trimIndent()
     )
     .indented()
 
+@Suppress("")
 private val TEST_SAVEABLES =
   kotlin(
       """
-    package test
+      package test
 
-    import android.os.Parcelable
-    import java.io.Serializable
+      import android.os.Parcelable
+      import java.io.Serializable
 
-    class TestSerializable : Serializable
-    class TestParcelable : Parcelable
-    """
+      class TestSerializable : Serializable
+      class TestParcelable : Parcelable
+      """
         .trimIndent()
     )
     .indented()

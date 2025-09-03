@@ -40,10 +40,6 @@ private val ComposeRuntimePackageName = Package("androidx.compose.runtime")
 private val RememberSaveablePackageName = Package("androidx.compose.runtime.saveable")
 private val AUTO_SAVER = UastEmptyExpression(null)
 
-// todo Rewrite this so its checking this instead
-// Android only source set
-// rememberSaveable with autoSaver -> Check value type is in "AcceptableClasses"
-// rememberSaveable with custom saver -> Check Saver.save is in in "AcceptableClasses"
 
 class RememberSaveableAcceptableDetector : Detector(), SourceCodeScanner {
 
