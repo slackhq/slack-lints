@@ -36,21 +36,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
   """
     )
 
-  private val jsonStub =
-    java(
-      """
-    package com.squareup.moshi;
-
-    import java.lang.annotation.Retention;
-    import java.lang.annotation.RetentionPolicy;
-
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface Json {
-        String name();
-    }
-  """
-    )
-
   private val adaptedByStub =
     kotlin(
       """
@@ -114,7 +99,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
     lint()
       .files(
         jsonClassStub,
-        jsonStub,
         jsonInflaterStub,
         kotlin(
           """
@@ -146,7 +130,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
     lint()
       .files(
         jsonClassStub,
-        jsonStub,
         jsonInflaterStub,
         kotlin(
           """
@@ -180,7 +163,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
     lint()
       .files(
         jsonClassStub,
-        jsonStub,
         jsonInflaterStub,
         kotlin(
           """
@@ -212,7 +194,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
     lint()
       .files(
         jsonClassStub,
-        jsonStub,
         jsonInflaterStub,
         adaptedByStub,
         kotlin(
@@ -245,7 +226,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
     lint()
       .files(
         jsonClassStub,
-        jsonStub,
         jsonInflaterStub,
         adaptedByStub,
         parameterizedTypeStub,
@@ -284,7 +264,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
     lint()
       .files(
         jsonClassStub,
-        jsonStub,
         jsonInflaterStub,
         adaptedByStub,
         parameterizedTypeStub,
@@ -331,8 +310,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
   fun testMissingJsonClassAnnotation() {
     lint()
       .files(
-        jsonClassStub,
-        jsonStub,
         jsonInflaterStub,
         kotlin(
           """
@@ -372,7 +349,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
     lint()
       .files(
         jsonClassStub,
-        jsonStub,
         jsonInflaterStub,
         kotlin(
           """
@@ -404,7 +380,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
     lint()
       .files(
         jsonClassStub,
-        jsonStub,
         jsonInflaterStub,
         kotlin(
           """
@@ -437,6 +412,81 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
                     val json = jsonInflater.deflate(model, InvalidModel::class.java)
                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         2 errors, 0 warnings
+      """
+      )
+  }
+
+  @Test
+  fun testEnumClass() {
+    lint()
+      .files(
+        jsonClassStub,
+        jsonInflaterStub,
+        kotlin(
+          """
+        package test
+
+        import com.squareup.moshi.JsonClass
+        import slack.commons.json.JsonInflater
+
+        @JsonClass(generateAdapter = false)
+        enum class ValidEnum {
+            UNKNOWN,
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT
+        }
+
+        fun useJsonInflater(jsonInflater: JsonInflater) {
+            val model = jsonInflater.inflate("{}", ValidEnum::class.java)
+            val json = jsonInflater.deflate(model, ValidEnum::class.java)
+        }
+      """
+        ),
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun testEnumClassMissingJsonClassAnnotation() {
+    lint()
+      .files(
+        jsonClassStub,
+        jsonInflaterStub,
+        kotlin(
+          """
+        package test
+
+        import com.squareup.moshi.JsonClass
+        import slack.commons.json.JsonInflater
+
+        enum class ValidEnum {
+            UNKNOWN,
+            UP,
+            DOWN,
+            LEFT,
+            RIGHT
+        }
+
+        fun useJsonInflater(jsonInflater: JsonInflater) {
+            val model = jsonInflater.inflate("{}", ValidEnum::class.java)
+            val json = jsonInflater.deflate(model, ValidEnum::class.java)
+        }
+      """
+        ),
+      )
+      .run()
+      .expect(
+        """
+            src/test/ValidEnum.kt:16: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
+                        val model = jsonInflater.inflate("{}", ValidEnum::class.java)
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            src/test/ValidEnum.kt:17: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
+                        val json = jsonInflater.deflate(model, ValidEnum::class.java)
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            2 errors
       """
       )
   }

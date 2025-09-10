@@ -152,7 +152,6 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
   private fun isInstantiable(psiClass: PsiClass): Boolean {
     return !psiClass.isInterface &&
       !psiClass.hasModifierProperty(PsiModifier.ABSTRACT) &&
-      !psiClass.isEnum &&
       psiClass.hasModifierProperty(PsiModifier.PUBLIC)
   }
 
