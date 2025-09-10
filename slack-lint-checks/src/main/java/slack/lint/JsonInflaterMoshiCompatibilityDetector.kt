@@ -18,6 +18,8 @@ import com.intellij.psi.PsiPrimitiveType
 import com.intellij.psi.PsiType
 import com.intellij.psi.PsiWildcardType
 import com.intellij.psi.util.PsiTypesUtil
+import org.jetbrains.kotlin.asJava.classes.KtLightClass
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.uast.UCallExpression
 import slack.lint.moshi.MoshiLintUtil.hasMoshiAnnotation
 import slack.lint.util.sourceImplementation
@@ -139,7 +141,9 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
   private fun isMoshiCompatible(psiClass: PsiClass): Boolean {
     if (isCollectionType(psiClass)) return true
 
-    if (!isInstantiable(psiClass)) return false
+    if (isAbstractOrNonPublicClass(psiClass)) return false
+
+    if (isNonSealedInterface(psiClass)) return false
 
     return psiClass.hasMoshiAnnotation()
   }
@@ -149,10 +153,23 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     return qualifiedName in listOf(FQCN_LIST, FQCN_SET, FQCN_MAP, FQCN_COLLECTION)
   }
 
-  private fun isInstantiable(psiClass: PsiClass): Boolean {
+  private fun isAbstractOrNonPublicClass(psiClass: PsiClass): Boolean {
     return !psiClass.isInterface &&
-      !psiClass.hasModifierProperty(PsiModifier.ABSTRACT) &&
-      psiClass.hasModifierProperty(PsiModifier.PUBLIC)
+      (psiClass.hasModifierProperty(PsiModifier.ABSTRACT) ||
+        !psiClass.hasModifierProperty(PsiModifier.PUBLIC))
+  }
+
+  private fun isNonSealedInterface(psiClass: PsiClass): Boolean {
+    if (!psiClass.isInterface) return false
+
+    // For Kotlin classes, check using Kotlin PSI
+    if (psiClass is KtLightClass) {
+      val ktClass = psiClass.kotlinOrigin
+      return ktClass?.hasModifier(KtTokens.SEALED_KEYWORD) != true
+    }
+
+    // Fallback for Java classes
+    return !psiClass.hasModifierProperty(PsiModifier.SEALED)
   }
 
   companion object {
