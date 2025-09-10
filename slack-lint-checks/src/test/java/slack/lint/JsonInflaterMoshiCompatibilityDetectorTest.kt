@@ -416,14 +416,14 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
       )
   }
 
-    @Test
-    fun testEnumClass() {
-        lint()
-            .files(
-                jsonClassStub,
-                jsonInflaterStub,
-                kotlin(
-                    """
+  @Test
+  fun testEnumClass() {
+    lint()
+      .files(
+        jsonClassStub,
+        jsonInflaterStub,
+        kotlin(
+          """
         package test
 
         import com.squareup.moshi.JsonClass
@@ -443,20 +443,20 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
             val json = jsonInflater.deflate(model, ValidEnum::class.java)
         }
       """
-                ),
-            )
-            .run()
-            .expectClean()
-    }
+        ),
+      )
+      .run()
+      .expectClean()
+  }
 
-    @Test
-    fun testEnumClassMissingJsonClassAnnotation() {
-        lint()
-            .files(
-                jsonClassStub,
-                jsonInflaterStub,
-                kotlin(
-                    """
+  @Test
+  fun testEnumClassMissingJsonClassAnnotation() {
+    lint()
+      .files(
+        jsonClassStub,
+        jsonInflaterStub,
+        kotlin(
+          """
         package test
 
         import com.squareup.moshi.JsonClass
@@ -475,11 +475,11 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
             val json = jsonInflater.deflate(model, ValidEnum::class.java)
         }
       """
-                ),
-            )
-            .run()
-            .expect(
-                """
+        ),
+      )
+      .run()
+      .expect(
+        """
             src/test/ValidEnum.kt:16: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
                         val model = jsonInflater.inflate("{}", ValidEnum::class.java)
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -488,6 +488,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             2 errors
       """
-            )
-    }
+      )
+  }
 }
