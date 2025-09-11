@@ -143,7 +143,7 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
 
     if (isAbstractOrNonPublicClass(psiClass)) return false
 
-    if (isNonSealedInterface(psiClass)) return false
+    if (psiClass.isInterface && !isSealedInterface(psiClass)) return false
 
     return psiClass.hasMoshiAnnotation()
   }
@@ -159,17 +159,17 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
         !psiClass.hasModifierProperty(PsiModifier.PUBLIC))
   }
 
-  private fun isNonSealedInterface(psiClass: PsiClass): Boolean {
+  private fun isSealedInterface(psiClass: PsiClass): Boolean {
     if (!psiClass.isInterface) return false
 
     // For Kotlin classes, check using Kotlin PSI
     if (psiClass is KtLightClass) {
       val ktClass = psiClass.kotlinOrigin
-      return ktClass?.hasModifier(KtTokens.SEALED_KEYWORD) != true
+      return ktClass?.hasModifier(KtTokens.SEALED_KEYWORD) == true
     }
 
     // Fallback for Java classes
-    return !psiClass.hasModifierProperty(PsiModifier.SEALED)
+    return psiClass.hasModifierProperty(PsiModifier.SEALED)
   }
 
   companion object {
