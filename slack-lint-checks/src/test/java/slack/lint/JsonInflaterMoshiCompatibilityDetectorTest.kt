@@ -538,7 +538,7 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
             @JsonClass(generateAdapter = true)
             data class Cat(val age: Int) : Animal
 
-            @DefaultNull
+            @DefaultObject
             object Default : Animal
         }
 
