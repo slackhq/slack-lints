@@ -89,6 +89,26 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
         .trimIndent()
     )
 
+  private val typeLabelStub =
+    kotlin(
+        """
+      package dev.zacsweers.moshix.sealed.annotations
+
+      annotation class TypeLabel(val label: String, val alternateLabels: Array<String> = [])
+    """
+      )
+      .indented()
+
+  private val defaultObjectStub =
+    kotlin(
+        """
+      package dev.zacsweers.moshix.sealed.annotations
+
+      annotation class DefaultObject
+    """
+      )
+      .indented()
+
   @Test
   fun testDocumentationExample() {
     testMissingJsonClassAnnotation()
@@ -486,6 +506,151 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
             src/test/ValidEnum.kt:17: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
                         val json = jsonInflater.deflate(model, ValidEnum::class.java)
                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            2 errors
+      """
+      )
+  }
+
+  @Test
+  fun testNonSealedInterface() {
+    lint()
+      .files(
+        jsonClassStub,
+        jsonInflaterStub,
+        typeLabelStub,
+        defaultObjectStub,
+        kotlin(
+          """
+        package test
+
+        import com.squareup.moshi.JsonClass
+        import slack.commons.json.JsonInflater
+        import dev.zacsweers.moshix.sealed.annotations.TypeLabel
+        import dev.zacsweers.moshix.sealed.annotations.DefaultObject
+
+        @JsonClass(generateAdapter = true, generator = "sealed:type")
+        interface Animal {
+            @TypeLabel("dog")
+            @JsonClass(generateAdapter = true)
+            data class Dog(val name: String) : Animal
+
+            @TypeLabel("cat")
+            @JsonClass(generateAdapter = true)
+            data class Cat(val age: Int) : Animal
+
+            @DefaultObject
+            object Default : Animal
+        }
+
+        fun useJsonInflater(jsonInflater: JsonInflater) {
+            val model = jsonInflater.inflate("{}", Animal::class.java)
+            val json = jsonInflater.deflate(model, Animal::class.java)
+        }
+      """
+        ),
+      )
+      .run()
+      .expect(
+        """
+            src/test/Animal.kt:24: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
+                        val model = jsonInflater.inflate("{}", Animal::class.java)
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            src/test/Animal.kt:25: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
+                        val json = jsonInflater.deflate(model, Animal::class.java)
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            2 errors
+      """
+      )
+  }
+
+  @Test
+  fun testSealedInterface() {
+    lint()
+      .files(
+        jsonClassStub,
+        jsonInflaterStub,
+        typeLabelStub,
+        defaultObjectStub,
+        kotlin(
+          """
+        package test
+
+        import com.squareup.moshi.JsonClass
+        import slack.commons.json.JsonInflater
+        import dev.zacsweers.moshix.sealed.annotations.TypeLabel
+        import dev.zacsweers.moshix.sealed.annotations.DefaultObject
+
+        @JsonClass(generateAdapter = true, generator = "sealed:type")
+        sealed interface Animal {
+            @TypeLabel("dog")
+            @JsonClass(generateAdapter = true)
+            data class Dog(val name: String) : Animal
+
+            @TypeLabel("cat")
+            @JsonClass(generateAdapter = true)
+            data class Cat(val age: Int) : Animal
+
+            @DefaultObject
+            object Default : Animal
+        }
+
+        fun useJsonInflater(jsonInflater: JsonInflater) {
+            val model = jsonInflater.inflate("{}", Animal::class.java)
+            val json = jsonInflater.deflate(model, Animal::class.java)
+        }
+      """
+        ),
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun testSealedInterfaceMissingJsonClassAnnotation() {
+    lint()
+      .files(
+        jsonClassStub,
+        jsonInflaterStub,
+        typeLabelStub,
+        defaultObjectStub,
+        kotlin(
+          """
+        package test
+
+        import com.squareup.moshi.JsonClass
+        import slack.commons.json.JsonInflater
+        import dev.zacsweers.moshix.sealed.annotations.TypeLabel
+        import dev.zacsweers.moshix.sealed.annotations.DefaultObject
+
+        sealed interface Animal {
+            @TypeLabel("dog")
+            @JsonClass(generateAdapter = true)
+            data class Dog(val name: String) : Animal
+
+            @TypeLabel("cat")
+            @JsonClass(generateAdapter = true)
+            data class Cat(val age: Int) : Animal
+
+            @DefaultObject
+            object Default : Animal
+        }
+
+        fun useJsonInflater(jsonInflater: JsonInflater) {
+            val model = jsonInflater.inflate("{}", Animal::class.java)
+            val json = jsonInflater.deflate(model, Animal::class.java)
+        }
+      """
+        ),
+      )
+      .run()
+      .expect(
+        """
+            src/test/Animal.kt:23: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
+                        val model = jsonInflater.inflate("{}", Animal::class.java)
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            src/test/Animal.kt:24: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
+                        val json = jsonInflater.deflate(model, Animal::class.java)
+                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             2 errors
       """
       )
