@@ -279,6 +279,44 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
       .expectClean()
   }
 
+    @Test
+    fun testValidMapOfPrimitivers() {
+        lint()
+            .files(
+                jsonClassStub,
+                jsonInflaterStub,
+                adaptedByStub,
+                parameterizedTypeStub,
+                kotlin(
+                    """
+        package test
+
+        import com.squareup.moshi.JsonClass
+        import com.squareup.moshi.StubParameterizedType
+        import slack.commons.json.JsonInflater
+
+        @JsonClass(generateAdapter = true)
+        data class ValidModel(
+            val id: String,
+            val name: String,
+            val count: Int
+        )
+
+        fun useJsonInflater(jsonInflater: JsonInflater) {
+            val type = StubParameterizedType(
+                Map::class.java,
+                arrayOf(String::class.java, Int::class.java)
+            )
+            val model = jsonInflater.inflate<Map<String, String>>("{}", type)
+            val json = jsonInflater.deflate(model, type)
+        }
+      """
+                ),
+            )
+            .run()
+            .expectClean()
+    }
+
   @Test
   fun testInvalidDataClassInList() {
     lint()
