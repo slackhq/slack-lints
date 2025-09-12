@@ -145,7 +145,7 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
 
     if (isAbstractOrNonPublicClass(psiClass)) return false
 
-    if (isNonSealedInterface(psiClass)) return false
+    if (psiClass.isInterface && !isSealedInterface(psiClass)) return false
 
     return psiClass.hasMoshiAnnotation()
   }
@@ -171,22 +171,39 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
   }
 
   private fun isAbstractOrNonPublicClass(psiClass: PsiClass): Boolean {
-    return !psiClass.isInterface &&
-      (psiClass.hasModifierProperty(PsiModifier.ABSTRACT) ||
-        !psiClass.hasModifierProperty(PsiModifier.PUBLIC))
+    if (psiClass.isInterface) return false
+    
+    // Sealed classes are allowed even though they are abstract
+    if (isSealedClass(psiClass)) return false
+    
+    return (psiClass.hasModifierProperty(PsiModifier.ABSTRACT) ||
+            !psiClass.hasModifierProperty(PsiModifier.PUBLIC))
   }
 
-  private fun isNonSealedInterface(psiClass: PsiClass): Boolean {
+  private fun isSealedClass(psiClass: PsiClass): Boolean {
+    if (psiClass.isInterface) return false
+
+    // For Kotlin classes, check using Kotlin PSI
+    if (psiClass is KtLightClass) {
+      val ktClass = psiClass.kotlinOrigin
+      return ktClass?.hasModifier(KtTokens.SEALED_KEYWORD) == true
+    }
+
+    // Fallback for Java classes (Java doesn't have sealed classes in older versions)
+    return psiClass.hasModifierProperty(PsiModifier.SEALED)
+  }
+
+  private fun isSealedInterface(psiClass: PsiClass): Boolean {
     if (!psiClass.isInterface) return false
 
     // For Kotlin classes, check using Kotlin PSI
     if (psiClass is KtLightClass) {
       val ktClass = psiClass.kotlinOrigin
-      return ktClass?.hasModifier(KtTokens.SEALED_KEYWORD) != true
+      return ktClass?.hasModifier(KtTokens.SEALED_KEYWORD) == true
     }
 
     // Fallback for Java classes
-    return !psiClass.hasModifierProperty(PsiModifier.SEALED)
+    return psiClass.hasModifierProperty(PsiModifier.SEALED)
   }
 
   companion object {
