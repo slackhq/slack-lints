@@ -280,7 +280,7 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
   }
 
   @Test
-  fun testValidMapOfPrimitivers() {
+  fun testValidMapOfPrimitives() {
     lint()
       .files(
         jsonClassStub,
