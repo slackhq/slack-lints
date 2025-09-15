@@ -157,17 +157,18 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
 
   private fun isPrimitiveType(psiClass: PsiClass): Boolean {
     val qualifiedName = psiClass.qualifiedName ?: return false
-    return qualifiedName in listOf(
-      FQCN_JAVA_STRING,
-      FQCN_JAVA_BOOLEAN,
-      FQCN_JAVA_BYTE,
-      FQCN_JAVA_CHARACTER,
-      FQCN_JAVA_SHORT,
-      FQCN_JAVA_INTEGER,
-      FQCN_JAVA_LONG,
-      FQCN_JAVA_FLOAT,
-      FQCN_JAVA_DOUBLE
-    )
+    return qualifiedName in
+      listOf(
+        FQCN_JAVA_STRING,
+        FQCN_JAVA_BOOLEAN,
+        FQCN_JAVA_BYTE,
+        FQCN_JAVA_CHARACTER,
+        FQCN_JAVA_SHORT,
+        FQCN_JAVA_INTEGER,
+        FQCN_JAVA_LONG,
+        FQCN_JAVA_FLOAT,
+        FQCN_JAVA_DOUBLE,
+      )
   }
 
   private fun isAbstractOrNonPublicClass(psiClass: PsiClass): Boolean {

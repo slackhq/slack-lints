@@ -279,16 +279,16 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
       .expectClean()
   }
 
-    @Test
-    fun testValidMapOfPrimitivers() {
-        lint()
-            .files(
-                jsonClassStub,
-                jsonInflaterStub,
-                adaptedByStub,
-                parameterizedTypeStub,
-                kotlin(
-                    """
+  @Test
+  fun testValidMapOfPrimitivers() {
+    lint()
+      .files(
+        jsonClassStub,
+        jsonInflaterStub,
+        adaptedByStub,
+        parameterizedTypeStub,
+        kotlin(
+          """
         package test
 
         import com.squareup.moshi.JsonClass
@@ -311,11 +311,11 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
             val json = jsonInflater.deflate(model, type)
         }
       """
-                ),
-            )
-            .run()
-            .expectClean()
-    }
+        ),
+      )
+      .run()
+      .expectClean()
+  }
 
   @Test
   fun testInvalidDataClassInList() {
