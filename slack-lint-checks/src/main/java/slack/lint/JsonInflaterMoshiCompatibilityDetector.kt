@@ -139,6 +139,8 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
   }
 
   private fun isMoshiCompatible(psiClass: PsiClass): Boolean {
+    if (isPrimitiveType(psiClass)) return true
+
     if (isCollectionType(psiClass)) return true
 
     if (isAbstractOrNonPublicClass(psiClass)) return false
@@ -151,6 +153,22 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
   private fun isCollectionType(psiClass: PsiClass): Boolean {
     val qualifiedName = psiClass.qualifiedName ?: return false
     return qualifiedName in listOf(FQCN_LIST, FQCN_SET, FQCN_MAP, FQCN_COLLECTION)
+  }
+
+  private fun isPrimitiveType(psiClass: PsiClass): Boolean {
+    val qualifiedName = psiClass.qualifiedName ?: return false
+    return qualifiedName in
+      listOf(
+        FQCN_JAVA_STRING,
+        FQCN_JAVA_BOOLEAN,
+        FQCN_JAVA_BYTE,
+        FQCN_JAVA_CHARACTER,
+        FQCN_JAVA_SHORT,
+        FQCN_JAVA_INTEGER,
+        FQCN_JAVA_LONG,
+        FQCN_JAVA_FLOAT,
+        FQCN_JAVA_DOUBLE,
+      )
   }
 
   private fun isAbstractOrNonPublicClass(psiClass: PsiClass): Boolean {
@@ -176,6 +194,14 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
     // Fully qualified class names for relevant annotations and types
     private const val FQCN_JSON_INFLATER = "slack.commons.json.JsonInflater"
     private const val FQCN_JAVA_STRING = "java.lang.String"
+    private const val FQCN_JAVA_BOOLEAN = "java.lang.Boolean"
+    private const val FQCN_JAVA_BYTE = "java.lang.Byte"
+    private const val FQCN_JAVA_CHARACTER = "java.lang.Character"
+    private const val FQCN_JAVA_SHORT = "java.lang.Short"
+    private const val FQCN_JAVA_INTEGER = "java.lang.Integer"
+    private const val FQCN_JAVA_LONG = "java.lang.Long"
+    private const val FQCN_JAVA_FLOAT = "java.lang.Float"
+    private const val FQCN_JAVA_DOUBLE = "java.lang.Double"
     private const val FQCN_LIST = "java.util.List"
     private const val FQCN_SET = "java.util.Set"
     private const val FQCN_MAP = "java.util.Map"
