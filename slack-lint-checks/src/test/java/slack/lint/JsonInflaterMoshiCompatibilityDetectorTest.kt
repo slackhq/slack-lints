@@ -295,13 +295,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
         import com.squareup.moshi.StubParameterizedType
         import slack.commons.json.JsonInflater
 
-        @JsonClass(generateAdapter = true)
-        data class ValidModel(
-            val id: String,
-            val name: String,
-            val count: Int
-        )
-
         fun useJsonInflater(jsonInflater: JsonInflater) {
             val type = StubParameterizedType(
                 Map::class.java,
