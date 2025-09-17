@@ -687,16 +687,16 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
       )
   }
 
-    @Test
-    fun testSealedClass() {
-        lint()
-            .files(
-                jsonClassStub,
-                jsonInflaterStub,
-                typeLabelStub,
-                defaultObjectStub,
-                kotlin(
-                    """
+  @Test
+  fun testSealedClass() {
+    lint()
+      .files(
+        jsonClassStub,
+        jsonInflaterStub,
+        typeLabelStub,
+        defaultObjectStub,
+        kotlin(
+          """
         package test
 
         import com.squareup.moshi.JsonClass
@@ -723,22 +723,22 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
             val json = jsonInflater.deflate(model, Animal::class.java)
         }
       """
-                ),
-            )
-            .run()
-            .expectClean()
-    }
+        ),
+      )
+      .run()
+      .expectClean()
+  }
 
-    @Test
-    fun testSealedClassMissingJsonClassAnnotation() {
-        lint()
-            .files(
-                jsonClassStub,
-                jsonInflaterStub,
-                typeLabelStub,
-                defaultObjectStub,
-                kotlin(
-                    """
+  @Test
+  fun testSealedClassMissingJsonClassAnnotation() {
+    lint()
+      .files(
+        jsonClassStub,
+        jsonInflaterStub,
+        typeLabelStub,
+        defaultObjectStub,
+        kotlin(
+          """
         package test
 
         import com.squareup.moshi.JsonClass
@@ -764,11 +764,11 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
             val json = jsonInflater.deflate(model, Animal::class.java)
         }
       """
-                ),
-            )
-            .run()
-            .expect(
-                """
+        ),
+      )
+      .run()
+      .expect(
+        """
             src/test/Animal.kt:23: Error: Using JsonInflater.inflate/deflate with a Moshi-incompatible type. [JsonInflaterMoshiIncompatibleType]
                         val model = jsonInflater.inflate("{}", Animal::class.java)
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -777,6 +777,6 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             2 errors
       """
-            )
-    }
+      )
+  }
 }
