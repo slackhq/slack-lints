@@ -174,7 +174,8 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
   private fun isAbstractOrNonPublicClass(psiClass: PsiClass): Boolean {
     if (psiClass.isInterface) return false
 
-    // Sealed classes are allowed even though they are abstract
+    // We return false for sealed classes here even though they are technically considered abstract by PsiClass.
+    // From a Moshi perspective, sealed classes can be compatible, while abstract classes cannot.
     if (isSealedClass(psiClass)) return false
 
     return (psiClass.hasModifierProperty(PsiModifier.ABSTRACT) ||
