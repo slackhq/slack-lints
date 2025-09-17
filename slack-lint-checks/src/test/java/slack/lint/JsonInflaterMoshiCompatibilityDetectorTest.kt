@@ -307,7 +307,7 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
                 Map::class.java,
                 arrayOf(String::class.java, Int::class.java)
             )
-            val model = jsonInflater.inflate<Map<String, String>>("{}", type)
+            val model = jsonInflater.inflate<Map<String, Int>>("{}", type)
             val json = jsonInflater.deflate(model, type)
         }
       """
