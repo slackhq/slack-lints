@@ -172,9 +172,28 @@ class JsonInflaterMoshiCompatibilityDetector : Detector(), SourceCodeScanner {
   }
 
   private fun isAbstractOrNonPublicClass(psiClass: PsiClass): Boolean {
-    return !psiClass.isInterface &&
-      (psiClass.hasModifierProperty(PsiModifier.ABSTRACT) ||
-        !psiClass.hasModifierProperty(PsiModifier.PUBLIC))
+    if (psiClass.isInterface) return false
+
+    // We return false for sealed classes here even though they are technically considered abstract
+    // by PsiClass. From a Moshi perspective, sealed classes can be compatible, while abstract
+    // classes cannot.
+    if (isSealedClass(psiClass)) return false
+
+    return (psiClass.hasModifierProperty(PsiModifier.ABSTRACT) ||
+      !psiClass.hasModifierProperty(PsiModifier.PUBLIC))
+  }
+
+  private fun isSealedClass(psiClass: PsiClass): Boolean {
+    if (psiClass.isInterface) return false
+
+    // For Kotlin classes, check using Kotlin PSI
+    if (psiClass is KtLightClass) {
+      val ktClass = psiClass.kotlinOrigin
+      return ktClass?.hasModifier(KtTokens.SEALED_KEYWORD) == true
+    }
+
+    // Fallback for Java classes (Java doesn't have sealed classes in older versions)
+    return psiClass.hasModifierProperty(PsiModifier.SEALED)
   }
 
   private fun isSealedInterface(psiClass: PsiClass): Boolean {
