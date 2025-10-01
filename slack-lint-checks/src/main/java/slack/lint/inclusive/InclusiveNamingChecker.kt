@@ -44,9 +44,9 @@ sealed class InclusiveNamingChecker<C : Context, N> {
           "InclusiveNaming",
           "Use inclusive naming.",
           """
-          We try to use inclusive naming at Slack. Terms such as blacklist, whitelist, master, slave, etc, while maybe \
-          widely used today, can be socially charged and make others feel excluded or uncomfortable.
-        """
+            We try to use inclusive naming at Slack. Terms such as blacklist, whitelist, master, slave, etc, while maybe \
+            widely used today, can be socially charged and make others feel excluded or uncomfortable.
+          """
             .trimIndent(),
           Category.CORRECTNESS,
           Priorities.NORMAL,

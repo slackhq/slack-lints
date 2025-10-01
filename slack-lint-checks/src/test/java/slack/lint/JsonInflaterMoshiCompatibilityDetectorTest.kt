@@ -71,21 +71,21 @@ class JsonInflaterMoshiCompatibilityDetectorTest : LintDetectorTest() {
   private val parameterizedTypeStub =
     kotlin(
       """
-            package com.squareup.moshi
+          package com.squareup.moshi
 
-            import java.lang.reflect.ParameterizedType
-            import java.lang.reflect.Type
+          import java.lang.reflect.ParameterizedType
+          import java.lang.reflect.Type
 
-            class StubParameterizedType(
-                private val rawType: Type,
-                private val typeArguments: Array<Type>,
-                private val ownerType: Type? = null
-            ) : ParameterizedType {
-                override fun getActualTypeArguments(): Array<Type> = typeArguments
-                override fun getRawType(): Type = rawType
-                override fun getOwnerType(): Type? = ownerType
-            }
-        """
+          class StubParameterizedType(
+              private val rawType: Type,
+              private val typeArguments: Array<Type>,
+              private val ownerType: Type? = null
+          ) : ParameterizedType {
+              override fun getActualTypeArguments(): Array<Type> = typeArguments
+              override fun getRawType(): Type = rawType
+              override fun getOwnerType(): Type? = ownerType
+          }
+      """
         .trimIndent()
     )
 

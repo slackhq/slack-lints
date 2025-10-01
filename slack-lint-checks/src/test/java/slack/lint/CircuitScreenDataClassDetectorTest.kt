@@ -17,15 +17,15 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            @Parcelize
-            class HomeScreen(val userId: String) : Screen {
-                data class State(message: String) : State
-            }
-        """
+              @Parcelize
+              class HomeScreen(val userId: String) : Screen {
+                  data class State(message: String) : State
+              }
+          """
             .trimIndent()
         )
         .indented()
@@ -49,12 +49,12 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            data class HomeScreen(val userId: String) : Screen
-        """
+              data class HomeScreen(val userId: String) : Screen
+          """
             .trimIndent()
         )
         .indented()
@@ -67,12 +67,12 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            data object SettingsScreen : Screen
-        """
+              data object SettingsScreen : Screen
+          """
             .trimIndent()
         )
         .indented()
@@ -85,14 +85,14 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            interface CustomScreen : Screen {
-              val id: String
-            }
-        """
+              interface CustomScreen : Screen {
+                val id: String
+              }
+          """
             .trimIndent()
         )
         .indented()
@@ -105,10 +105,10 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            class HomeViewModel(val userId: String)
-        """
+              class HomeViewModel(val userId: String)
+          """
             .trimIndent()
         )
         .indented()
@@ -121,12 +121,12 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            class MyClassScreen(val id: String) : Screen
-        """
+              class MyClassScreen(val id: String) : Screen
+          """
             .trimIndent()
         )
         .indented()
@@ -150,12 +150,12 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            object SettingsScreen : Screen
-        """
+              object SettingsScreen : Screen
+          """
             .trimIndent()
         )
         .indented()
@@ -179,12 +179,12 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            open class ProfileScreen(val userId: String) : Screen
-        """
+              open class ProfileScreen(val userId: String) : Screen
+          """
             .trimIndent()
         )
         .indented()
@@ -197,14 +197,14 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            class SomeClass {
-                companion object NavScreen : Screen
-            }
-        """
+              class SomeClass {
+                  companion object NavScreen : Screen
+              }
+          """
             .trimIndent()
         )
         .indented()
@@ -217,14 +217,14 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            class OuterClass {
-                class NestedScreen(val id: String) : Screen
-            }
-        """
+              class OuterClass {
+                  class NestedScreen(val id: String) : Screen
+              }
+          """
             .trimIndent()
         )
         .indented()
@@ -248,14 +248,14 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            abstract class BaseScreen : Screen {
-                abstract val screenId: String
-            }
-        """
+              abstract class BaseScreen : Screen {
+                  abstract val screenId: String
+              }
+          """
             .trimIndent()
         )
         .indented()
@@ -268,15 +268,15 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            sealed class NavigationScreen : Screen {
-                data class Home(val userId: String) : NavigationScreen()
-                data object Settings : NavigationScreen()
-            }
-        """
+              sealed class NavigationScreen : Screen {
+                  data class Home(val userId: String) : NavigationScreen()
+                  data object Settings : NavigationScreen()
+              }
+          """
             .trimIndent()
         )
         .indented()
@@ -289,14 +289,14 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            class OuterClass {
-                class InnerScreen(val id: String) : Screen
-            }
-        """
+              class OuterClass {
+                  class InnerScreen(val id: String) : Screen
+              }
+          """
             .trimIndent()
         )
         .indented()
@@ -317,12 +317,12 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            class EmptyScreen : Screen
-        """
+              class EmptyScreen : Screen
+          """
             .trimIndent()
         )
         .indented()
@@ -346,12 +346,12 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            class EmptyScreen() : Screen
-        """
+              class EmptyScreen() : Screen
+          """
             .trimIndent()
         )
         .indented()
@@ -375,15 +375,15 @@ class CircuitScreenDataClassDetectorTest : BaseSlackLintTest() {
     val testFile =
       kotlin(
           """
-            package com.example.screens
+              package com.example.screens
 
-            import com.slack.circuit.runtime.screen.Screen
+              import com.slack.circuit.runtime.screen.Screen
 
-            fun createScreen() {
-                class LocalScreen : Screen
-                return LocalScreen()
-            }
-        """
+              fun createScreen() {
+                  class LocalScreen : Screen
+                  return LocalScreen()
+              }
+          """
             .trimIndent()
         )
         .indented()

@@ -40,11 +40,11 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-            src/test/Foo.kt:7: Hint: rxObservable does not call send() or trySend() [RxObservableDoesNotEmit]
-                rxObservable { println("foo") }
-                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            0 errors, 0 warnings, 1 hint
-            """
+        src/test/Foo.kt:7: Hint: rxObservable does not call send() or trySend() [RxObservableDoesNotEmit]
+            rxObservable { println("foo") }
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        0 errors, 0 warnings, 1 hint
+        """
           .trimIndent()
       )
   }
@@ -72,11 +72,11 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-            src/test/Foo.kt:7: Hint: rxFlowable does not call send() or trySend() [RxFlowableDoesNotEmit]
-                rxFlowable { println("foo") }
-                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-            0 errors, 0 warnings, 1 hint
-            """
+        src/test/Foo.kt:7: Hint: rxFlowable does not call send() or trySend() [RxFlowableDoesNotEmit]
+            rxFlowable { println("foo") }
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        0 errors, 0 warnings, 1 hint
+        """
           .trimIndent()
       )
   }

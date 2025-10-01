@@ -14,26 +14,26 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
     private val DISPATCHERS_STUB =
       kotlin(
         """
-      package kotlinx.coroutines
+        package kotlinx.coroutines
 
-      object Dispatchers {
-          @JvmStatic
-          val Default: String get() = error()
+        object Dispatchers {
+            @JvmStatic
+            val Default: String get() = error()
 
-          @JvmStatic
-          val Main: String get() = error()
+            @JvmStatic
+            val Main: String get() = error()
 
-          @JvmStatic
-          val Unconfined: String = ""
+            @JvmStatic
+            val Unconfined: String = ""
 
-          @JvmStatic
-          val IO: String = ""
-      }
+            @JvmStatic
+            val IO: String = ""
+        }
 
-      fun Dispatchers.someExtension() {
+        fun Dispatchers.someExtension() {
 
-      }
-      """
+        }
+        """
           .trimIndent()
       )
   }
@@ -49,22 +49,22 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
         DISPATCHERS_STUB,
         kotlin(
             """
-            package test.pkg
+              package test.pkg
 
-            import kotlinx.coroutines.Dispatchers
+              import kotlinx.coroutines.Dispatchers
 
-            fun example() {
-              Dispatchers.IO
-              Dispatchers.Default
-              Dispatchers.Unconfined
-              Dispatchers.Main
-              Dispatchers.someExtension()
-              Dispatchers::IO
-              Dispatchers::Default
-              Dispatchers::Unconfined
-              Dispatchers::Main
-            }
-          """
+              fun example() {
+                Dispatchers.IO
+                Dispatchers.Default
+                Dispatchers.Unconfined
+                Dispatchers.Main
+                Dispatchers.someExtension()
+                Dispatchers::IO
+                Dispatchers::Default
+                Dispatchers::Unconfined
+                Dispatchers::Main
+              }
+            """
               .trimIndent()
           )
           .indented(),
@@ -112,22 +112,22 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
         kotlin(
             "test/test/pkg/Test.kt",
             """
-            package test.pkg
+              package test.pkg
 
-            import kotlinx.coroutines.Dispatchers
+              import kotlinx.coroutines.Dispatchers
 
-            fun example() {
-              Dispatchers.IO
-              Dispatchers.Default
-              Dispatchers.Unconfined
-              Dispatchers.Main
-              Dispatchers.someExtension()
-              Dispatchers::IO
-              Dispatchers::Default
-              Dispatchers::Unconfined
-              Dispatchers::Main
-            }
-          """
+              fun example() {
+                Dispatchers.IO
+                Dispatchers.Default
+                Dispatchers.Unconfined
+                Dispatchers.Main
+                Dispatchers.someExtension()
+                Dispatchers::IO
+                Dispatchers::Default
+                Dispatchers::Unconfined
+                Dispatchers::Main
+              }
+            """
               .trimIndent(),
           )
           .indented(),

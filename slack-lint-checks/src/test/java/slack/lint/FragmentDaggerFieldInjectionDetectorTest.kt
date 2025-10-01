@@ -67,26 +67,26 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         kotlin(
             """
-            package foo
+              package foo
 
-            import javax.inject.Inject
-            import slack.coreui.fragment.ViewBindingFragment
+              import javax.inject.Inject
+              import slack.coreui.fragment.ViewBindingFragment
 
-            class MyFragment : ViewBindingFragment() {
+              class MyFragment : ViewBindingFragment() {
 
-              private lateinit var notAnnotated: String
-              private val defaulted: String = "defaulted"
+                private lateinit var notAnnotated: String
+                private val defaulted: String = "defaulted"
 
-              @Inject
-              private lateinit var stringValue1: String
-              @Inject
-              private lateinit var intValue1: Int
+                @Inject
+                private lateinit var stringValue1: String
+                @Inject
+                private lateinit var intValue1: Int
 
-              fun onCreate() {
-                notAnnotated = "fast"
+                fun onCreate() {
+                  notAnnotated = "fast"
+                }
               }
-            }
-          """
+            """
               .trimIndent()
           )
           .indented(),
@@ -117,26 +117,26 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         java(
             """
-            package foo;
+              package foo;
 
-            import javax.inject.Inject;
-            import slack.coreui.fragment.ViewBindingFragment;
+              import javax.inject.Inject;
+              import slack.coreui.fragment.ViewBindingFragment;
 
-            public class MyFragment extends ViewBindingFragment {
+              public class MyFragment extends ViewBindingFragment {
 
-              private static String notAnnotated;
-              private final String defaulted = "defaulted";
+                private static String notAnnotated;
+                private final String defaulted = "defaulted";
 
-              @Inject
-              String stringValue1;
-              @Inject
-              Int intValue1;
+                @Inject
+                String stringValue1;
+                @Inject
+                Int intValue1;
 
-              public void onCreate() {
-                notAnnotated = "fast";
+                public void onCreate() {
+                  notAnnotated = "fast";
+                }
               }
-            }
-          """
+            """
               .trimIndent()
           )
           .indented(),
@@ -167,46 +167,46 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         kotlin(
             """
-            package foo
+              package foo
 
-            import javax.inject.Inject
-            import dagger.assisted.AssistedInject
-            import slack.coreui.fragment.ViewBindingFragment
+              import javax.inject.Inject
+              import dagger.assisted.AssistedInject
+              import slack.coreui.fragment.ViewBindingFragment
 
-            class MyFragment @Inject constructor(
-              private val flag: Boolean
-            ): ViewBindingFragment() {
+              class MyFragment @Inject constructor(
+                private val flag: Boolean
+              ): ViewBindingFragment() {
 
-              private lateinit var notAnnotated: String
-              private val defaulted: String = "defaulted"
+                private lateinit var notAnnotated: String
+                private val defaulted: String = "defaulted"
 
-              @Inject
-              private lateinit var stringValue1: String
-              @Inject
-              private lateinit var intValue1: Int
+                @Inject
+                private lateinit var stringValue1: String
+                @Inject
+                private lateinit var intValue1: Int
 
-              fun onCreate() {
-                notAnnotated = "fast"
+                fun onCreate() {
+                  notAnnotated = "fast"
+                }
               }
-            }
 
-            class MyFragmentAssistedInject @AssistedInject constructor(
-              private val flag: Boolean
-            ): ViewBindingFragment() {
+              class MyFragmentAssistedInject @AssistedInject constructor(
+                private val flag: Boolean
+              ): ViewBindingFragment() {
 
-              private lateinit var notAnnotated: String
-              private val defaulted: String = "defaulted"
+                private lateinit var notAnnotated: String
+                private val defaulted: String = "defaulted"
 
-              @Inject
-              private lateinit var stringValue1: String
-              @Inject
-              private lateinit var intValue1: Int
+                @Inject
+                private lateinit var stringValue1: String
+                @Inject
+                private lateinit var intValue1: Int
 
-              fun onCreate() {
-                notAnnotated = "fast"
+                fun onCreate() {
+                  notAnnotated = "fast"
+                }
               }
-            }
-          """
+            """
               .trimIndent()
           )
           .indented(),
@@ -243,31 +243,31 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         java(
             """
-            package foo;
+              package foo;
 
-            import javax.inject.Inject;
-            import slack.coreui.fragment.ViewBindingFragment;
+              import javax.inject.Inject;
+              import slack.coreui.fragment.ViewBindingFragment;
 
-            public class MyFragment extends ViewBindingFragment {
+              public class MyFragment extends ViewBindingFragment {
 
-              private static String notAnnotated;
-              private final String defaulted = "defaulted";
+                private static String notAnnotated;
+                private final String defaulted = "defaulted";
 
-              @Inject
-              String stringValue1;
-              @Inject
-              Int intValue1;
+                @Inject
+                String stringValue1;
+                @Inject
+                Int intValue1;
 
-              @Inject
-              public MyFragment(Boolean flag) {
+                @Inject
+                public MyFragment(Boolean flag) {
 
+                }
+
+                public void onCreate() {
+                  notAnnotated = "fast";
+                }
               }
-
-              public void onCreate() {
-                notAnnotated = "fast";
-              }
-            }
-          """
+            """
               .trimIndent()
           )
           .indented(),
@@ -298,32 +298,32 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         java(
             """
-            package foo;
+              package foo;
 
-            import javax.inject.Inject;
-            import dagger.assisted.AssistedInject;
-            import slack.coreui.fragment.ViewBindingFragment;
+              import javax.inject.Inject;
+              import dagger.assisted.AssistedInject;
+              import slack.coreui.fragment.ViewBindingFragment;
 
-            public class MyFragment extends ViewBindingFragment {
+              public class MyFragment extends ViewBindingFragment {
 
-              private static String notAnnotated;
-              private final String defaulted = "defaulted";
+                private static String notAnnotated;
+                private final String defaulted = "defaulted";
 
-              @Inject
-              String stringValue1;
-              @Inject
-              Int intValue1;
+                @Inject
+                String stringValue1;
+                @Inject
+                Int intValue1;
 
-              @AssistedInject
-              public MyFragment(Boolean flag) {
+                @AssistedInject
+                public MyFragment(Boolean flag) {
 
+                }
+
+                public void onCreate() {
+                  notAnnotated = "fast";
+                }
               }
-
-              public void onCreate() {
-                notAnnotated = "fast";
-              }
-            }
-          """
+            """
               .trimIndent()
           )
           .indented(),
@@ -354,26 +354,26 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         kotlin(
             """
-            package foo
+              package foo
 
-            import javax.inject.Inject
-            import androidx.fragment.app.Fragment
+              import javax.inject.Inject
+              import androidx.fragment.app.Fragment
 
-            abstract class MyFragment : Fragment() {
+              abstract class MyFragment : Fragment() {
 
-              private lateinit var notAnnotated: String
-              private val defaulted: String = "defaulted"
+                private lateinit var notAnnotated: String
+                private val defaulted: String = "defaulted"
 
-              @Inject
-              private lateinit var stringValue1: String
-              @Inject
-              private lateinit var intValue1: Int
+                @Inject
+                private lateinit var stringValue1: String
+                @Inject
+                private lateinit var intValue1: Int
 
-              fun onCreate() {
-                notAnnotated = "fast"
+                fun onCreate() {
+                  notAnnotated = "fast"
+                }
               }
-            }
-          """
+            """
               .trimIndent()
           )
           .indented(),
@@ -438,27 +438,27 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         java(
             """
-            package foo;
+              package foo;
 
-            import javax.inject.Inject;
-            import dagger.assisted.AssistedInject;
-            import slack.coreui.fragment.ViewBindingFragment;
+              import javax.inject.Inject;
+              import dagger.assisted.AssistedInject;
+              import slack.coreui.fragment.ViewBindingFragment;
 
-            public abstract class MyFragment extends ViewBindingFragment {
+              public abstract class MyFragment extends ViewBindingFragment {
 
-              private static String notAnnotated;
-              private final String defaulted = "defaulted";
+                private static String notAnnotated;
+                private final String defaulted = "defaulted";
 
-              @Inject
-              String stringValue1;
-              @Inject
-              Int intValue1;
+                @Inject
+                String stringValue1;
+                @Inject
+                Int intValue1;
 
-              public void onCreate() {
-                notAnnotated = "fast";
+                public void onCreate() {
+                  notAnnotated = "fast";
+                }
               }
-            }
-          """
+            """
               .trimIndent()
           )
           .indented(),
@@ -489,26 +489,26 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         java(
             """
-            package foo;
+              package foo;
 
-            import javax.inject.Inject;
-            import dagger.assisted.AssistedInject;
+              import javax.inject.Inject;
+              import dagger.assisted.AssistedInject;
 
-            public class MyFragment {
+              public class MyFragment {
 
-              private static String notAnnotated;
-              private final String defaulted = "defaulted";
+                private static String notAnnotated;
+                private final String defaulted = "defaulted";
 
-              @Inject
-              String stringValue1;
-              @Inject
-              Int intValue1;
+                @Inject
+                String stringValue1;
+                @Inject
+                Int intValue1;
 
-              public void onCreate() {
-                notAnnotated = "fast";
+                public void onCreate() {
+                  notAnnotated = "fast";
+                }
               }
-            }
-          """
+            """
               .trimIndent()
           )
           .indented(),
