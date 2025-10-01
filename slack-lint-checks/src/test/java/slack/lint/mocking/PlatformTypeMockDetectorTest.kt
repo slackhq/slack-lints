@@ -11,10 +11,10 @@ class PlatformTypeMockDetectorTest : BaseSlackLintTest() {
     arrayOf(
       kotlin(
         """
-              package androidx.collection
+            package androidx.collection
 
-              class ArrayMap<K, V>
-          """
+            class ArrayMap<K, V>
+        """
           .trimIndent()
       )
     )

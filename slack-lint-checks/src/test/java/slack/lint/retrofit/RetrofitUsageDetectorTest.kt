@@ -145,26 +145,26 @@ class RetrofitUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test/Example.kt:10: Error: @Body param requires @PUT, @POST, or @PATCH. [RetrofitUsage]
-            @GET("/")
-            ~~~~~~~~~
-          src/test/Example.kt:13: Error: This annotation requires an @Body parameter. [RetrofitUsage]
-            @POST("/")
-            ~~~~~~~~~~
-          src/test/Example.kt:17: Error: Duplicate @Body param!. [RetrofitUsage]
-            fun doubleBody(@Body input: String, @Body input2: String): String
-                                                ~~~~~~~~~~~~~~~~~~~~
-          src/test/Example.kt:28: Error: @Multipart requires @PUT, @POST, or @PATCH. [RetrofitUsage]
-            fun multipartBadMethod(@Part input: String): String
-                ~~~~~~~~~~~~~~~~~~
-          src/test/Example.kt:31: Error: @Multipart methods should only contain @Part parameters. [RetrofitUsage]
-            @POST("/")
-            ~~~~~~~~~~
-          src/test/Example.kt:35: Error: @Multipart methods should contain at least one @Part parameter. [RetrofitUsage]
-            @POST("/")
-            ~~~~~~~~~~
-          6 errors, 0 warnings
-          """
+        src/test/Example.kt:10: Error: @Body param requires @PUT, @POST, or @PATCH. [RetrofitUsage]
+          @GET("/")
+          ~~~~~~~~~
+        src/test/Example.kt:13: Error: This annotation requires an @Body parameter. [RetrofitUsage]
+          @POST("/")
+          ~~~~~~~~~~
+        src/test/Example.kt:17: Error: Duplicate @Body param!. [RetrofitUsage]
+          fun doubleBody(@Body input: String, @Body input2: String): String
+                                              ~~~~~~~~~~~~~~~~~~~~
+        src/test/Example.kt:28: Error: @Multipart requires @PUT, @POST, or @PATCH. [RetrofitUsage]
+          fun multipartBadMethod(@Part input: String): String
+              ~~~~~~~~~~~~~~~~~~
+        src/test/Example.kt:31: Error: @Multipart methods should only contain @Part parameters. [RetrofitUsage]
+          @POST("/")
+          ~~~~~~~~~~
+        src/test/Example.kt:35: Error: @Multipart methods should contain at least one @Part parameter. [RetrofitUsage]
+          @POST("/")
+          ~~~~~~~~~~
+        6 errors, 0 warnings
+        """
           .trimIndent()
       )
   }

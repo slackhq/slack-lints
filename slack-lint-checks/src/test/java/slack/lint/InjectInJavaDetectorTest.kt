@@ -10,29 +10,29 @@ class InjectInJavaDetectorTest : BaseSlackLintTest() {
     private val JAVAX_STUBS =
       kotlin(
         """
-      package javax.inject
+        package javax.inject
 
-      annotation class Inject
-      """
+        annotation class Inject
+        """
           .trimIndent()
       )
     private val DAGGER_STUBS =
       kotlin(
         """
-      package dagger
+        package dagger
 
-      annotation class Module
-      """
+        annotation class Module
+        """
           .trimIndent()
       )
     private val ASSISTED_STUBS =
       kotlin(
         """
-      package dagger.assisted
+        package dagger.assisted
 
-      annotation class AssistedInject
-      annotation class AssistedFactory
-      """
+        annotation class AssistedInject
+        annotation class AssistedFactory
+        """
           .trimIndent()
       )
   }
