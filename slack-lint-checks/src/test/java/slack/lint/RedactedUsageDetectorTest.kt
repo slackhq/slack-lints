@@ -10,12 +10,12 @@ class RedactedUsageDetectorTest : BaseSlackLintTest() {
     private val REDACTED_STUB =
       kotlin(
         """
-      package slack.annotations
+        package slack.annotations
 
-      annotation class Redacted
-      annotation class AnotherRedacted
-      annotation class AnotherAnnotation
-      """
+        annotation class Redacted
+        annotation class AnotherRedacted
+        annotation class AnotherAnnotation
+        """
           .trimIndent()
       )
   }

@@ -1197,9 +1197,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "MissingTypeLabel",
         "Sealed Moshi subtypes must be annotated with @TypeLabel or @DefaultObject.",
         """
-        moshi-sealed requires sealed subtypes to be annotated with @TypeLabel or @DefaultObject. \
-        Otherwise, moshi-sealed will fail to compile.
-      """
+          moshi-sealed requires sealed subtypes to be annotated with @TypeLabel or @DefaultObject. \
+          Otherwise, moshi-sealed will fail to compile.
+        """
           .trimIndent(),
       )
 
@@ -1208,9 +1208,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "BlankGenerator",
         "Don't use blank JsonClass.generator values.",
         """
-        The default for JsonClass.generator is "", it's redundant to specify an empty one and an \
-        error to specify a blank one.
-      """
+          The default for JsonClass.generator is "", it's redundant to specify an empty one and an \
+          error to specify a blank one.
+        """
           .trimIndent(),
       )
 
@@ -1240,9 +1240,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "PrivateConstructor",
         "Constructors in Moshi classes cannot be private.",
         """
-        Constructors in Moshi classes cannot be private. \
-        Otherwise Moshi cannot invoke it during decoding.
-      """
+          Constructors in Moshi classes cannot be private. \
+          Otherwise Moshi cannot invoke it during decoding.
+        """
           .trimIndent(),
       )
 
@@ -1251,9 +1251,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "PrivateConstructorProperty",
         "Constructor parameter properties in Moshi classes cannot be private.",
         """
-        Constructor parameter properties in Moshi classes cannot be private. \
-        Otherwise these properties will not be visible in serialization.
-      """
+          Constructor parameter properties in Moshi classes cannot be private. \
+          Otherwise these properties will not be visible in serialization.
+        """
           .trimIndent(),
       )
 
@@ -1262,10 +1262,10 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "TransientNeedsInit",
         "Transient constructor properties must have default values.",
         """
-        Transient constructor property parameters in Moshi classes must have default values. Since \
-        these parameters do not participate in serialization, Moshi cannot fulfill them otherwise \
-        during construction.
-      """
+          Transient constructor property parameters in Moshi classes must have default values. Since \
+          these parameters do not participate in serialization, Moshi cannot fulfill them otherwise \
+          during construction.
+        """
           .trimIndent(),
       )
 
@@ -1274,10 +1274,10 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "InappropriateTypeLabel",
         "Inappropriate @TypeLabel or @DefaultObject annotation.",
         """
-        This class declares a @TypeLabel or @DefaultObject annotation but does not appear to \
-        subclass a sealed Moshi type. Please remove these annotations or extend the appropriate \
-        sealed Moshi-serialized class.
-      """
+          This class declares a @TypeLabel or @DefaultObject annotation but does not appear to \
+          subclass a sealed Moshi type. Please remove these annotations or extend the appropriate \
+          sealed Moshi-serialized class.
+        """
           .trimIndent(),
       )
 
@@ -1286,9 +1286,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "DoubleTypeLabel",
         "Only use one of @TypeLabel or @DefaultObject.",
         """
-        Only one of @TypeLabel and @DefaultObject annotations should be present. It is an error to \
-        declare both!
-      """
+          Only one of @TypeLabel and @DefaultObject annotations should be present. It is an error to \
+          declare both!
+        """
           .trimIndent(),
       )
 
@@ -1297,9 +1297,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "GenericSealedSubtype",
         "Sealed subtypes used with moshi-sealed cannot be generic.",
         """
-        Moshi has no way of conveying generics information to sealed subtypes when we create an \
-        adapter from the base type. As a result, you should remove generics from this subtype.
-      """
+          Moshi has no way of conveying generics information to sealed subtypes when we create an \
+          adapter from the base type. As a result, you should remove generics from this subtype.
+        """
           .trimIndent(),
       )
 
@@ -1308,9 +1308,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "DoubleClassAnnotation",
         "Only use one of @AdaptedBy or @JsonClass.",
         """
-        Only one of @AdaptedBy and @JsonClass annotations should be present. It is an error to \
-        declare both!
-      """
+          Only one of @AdaptedBy and @JsonClass annotations should be present. It is an error to \
+          declare both!
+        """
           .trimIndent(),
       )
 
@@ -1319,9 +1319,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "ClassVisibility",
         "@JsonClass-annotated types must be public, package-private, or internal.",
         """
-        @JsonClass-annotated types must be public, package-private, or internal. Otherwise, Moshi
-        will not be able to access them from generated adapters.
-      """
+          @JsonClass-annotated types must be public, package-private, or internal. Otherwise, Moshi
+          will not be able to access them from generated adapters.
+        """
           .trimIndent(),
       )
 
@@ -1330,10 +1330,10 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "ParamNeedsInit",
         "Constructor non-property parameters in Moshi classes must have default values.",
         """
-        Constructor non-property parameters in Moshi classes must have default values. Since these \
-        parameters do not participate in serialization, Moshi cannot fulfill them otherwise during \
-        construction.
-      """
+          Constructor non-property parameters in Moshi classes must have default values. Since these \
+          parameters do not participate in serialization, Moshi cannot fulfill them otherwise during \
+          construction.
+        """
           .trimIndent(),
       )
 
@@ -1342,9 +1342,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "BlankJsonName",
         "Don't use blank names in `@Json`.",
         """
-        Blank names in `@Json`, while technically legal, are likely a programmer error and
-        likely to cause encoding issues.
-      """
+          Blank names in `@Json`, while technically legal, are likely a programmer error and
+          likely to cause encoding issues.
+        """
           .trimIndent(),
       )
 
@@ -1353,9 +1353,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "RedundantJsonName",
         "Json.name with the same value as the property/enum member name is redundant.",
         """
-        Redundant Json.name values can make code noisier and harder to read, consider removing it \
-        or suppress this warning with a commented suppression explaining why it's needed.
-      """
+          Redundant Json.name values can make code noisier and harder to read, consider removing it \
+          or suppress this warning with a commented suppression explaining why it's needed.
+        """
           .trimIndent(),
         severity = Severity.WARNING,
       )
@@ -1365,9 +1365,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "SerializedName",
         "Use Moshi's @Json rather than Gson's @SerializedName.",
         """
-        @SerializedName is specific to Gson and will not work with Moshi. Replace it with Moshi's \
-        equivalent @Json annotation instead (or remove it if @Json is defined already).
-      """
+          @SerializedName is specific to Gson and will not work with Moshi. Replace it with Moshi's \
+          equivalent @Json annotation instead (or remove it if @Json is defined already).
+        """
           .trimIndent(),
       )
 
@@ -1376,10 +1376,10 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "QualifierRetention",
         "JsonQualifiers must have RUNTIME retention.",
         """
-        Moshi uses these annotations at runtime, as such they must be available at runtime. In \
-        Kotlin, this is the default and you can just remove the Retention annotation. In Java, \
-        you must specify it explicitly with @Retention(RUNTIME).
-      """
+          Moshi uses these annotations at runtime, as such they must be available at runtime. In \
+          Kotlin, this is the default and you can just remove the Retention annotation. In Java, \
+          you must specify it explicitly with @Retention(RUNTIME).
+        """
           .trimIndent(),
       )
 
@@ -1388,9 +1388,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "QualifierTarget",
         "JsonQualifiers must include FIELD targeting.",
         """
-        Moshi code gen stores these annotations on generated adapter fields, as such they must be \
-        allowed on fields. Please specify it explicitly as @Target(FIELD).
-      """
+          Moshi code gen stores these annotations on generated adapter fields, as such they must be \
+          allowed on fields. Please specify it explicitly as @Target(FIELD).
+        """
           .trimIndent(),
       )
 
@@ -1399,9 +1399,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "RedundantSiteTarget",
         "Use of site-targets on @Json are redundant.",
         """
-        Use of site-targets on @Json are redundant and can be removed. Only one, target-less @Json \
-        annotation is necessary.
-      """
+          Use of site-targets on @Json are redundant and can be removed. Only one, target-less @Json \
+          annotation is necessary.
+        """
           .trimIndent(),
       )
 
@@ -1410,10 +1410,10 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "Object",
         "Object types cannot be annotated with @JsonClass.",
         """
-        Object types cannot be annotated with @JsonClass. The only way they are permitted to \
-        participate in Moshi serialization is if they are a sealed subtype of a Moshi sealed \
-        class and annotated with `@TypeLabel` or `@DefaultObject` accordingly.
-      """
+          Object types cannot be annotated with @JsonClass. The only way they are permitted to \
+          participate in Moshi serialization is if they are a sealed subtype of a Moshi sealed \
+          class and annotated with `@TypeLabel` or `@DefaultObject` accordingly.
+        """
           .trimIndent(),
       )
 
@@ -1422,11 +1422,11 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "UseData",
         "Model classes should be immutable data classes.",
         """
-        @JsonClass-annotated models should be immutable data classes unless there's a very \
-        specific reason not to. If you want a custom equals/hashcode/toString impls, make it data \
-        anyway and override the ones you need. If you want non-property parameter values, consider \
-        making them `@Transient` properties instead with default values.
-      """
+          @JsonClass-annotated models should be immutable data classes unless there's a very \
+          specific reason not to. If you want a custom equals/hashcode/toString impls, make it data \
+          anyway and override the ones you need. If you want non-property parameter values, consider \
+          making them `@Transient` properties instead with default values.
+        """
           .trimIndent(),
       )
 
@@ -1435,9 +1435,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "UnsupportedType",
         "This type cannot be annotated with @JsonClass.",
         """
-        Abstract, interface, annotation, and inner class types cannot be annotated with @JsonClass. \
-        If you intend to decode this with a custom adapter, use @AdaptedBy.
-      """
+          Abstract, interface, annotation, and inner class types cannot be annotated with @JsonClass. \
+          If you intend to decode this with a custom adapter, use @AdaptedBy.
+        """
           .trimIndent(),
       )
 
@@ -1446,8 +1446,8 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "AdaptedByRequiresAdapter",
         "@AdaptedBy.adapter must be a JsonAdapter or JsonAdapter.Factory.",
         """
-        @AdaptedBy.adapter must be a subclass of JsonAdapter or implement JsonAdapter.Factory.
-      """
+          @AdaptedBy.adapter must be a subclass of JsonAdapter or implement JsonAdapter.Factory.
+        """
           .trimIndent(),
       )
 
@@ -1456,9 +1456,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "AdaptedByRequiresKeep",
         "Adapters targeted by @AdaptedBy must have @Keep.",
         """
-        Adapters targeted by @AdaptedBy must be annotated with @Keep in order to be reflectively \
-        looked up at runtime.
-      """
+          Adapters targeted by @AdaptedBy must be annotated with @Keep in order to be reflectively \
+          looked up at runtime.
+        """
           .trimIndent(),
       )
 
@@ -1467,10 +1467,10 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "MissingPrimary",
         "@JsonClass-annotated types must have a primary constructor or be sealed.",
         """
-        @JsonClass-annotated types must have a primary constructor or be sealed. Otherwise, they \
-        either have no serializable properties or all the potentially serializable properties are \
-        mutable (which is not a case we want!).
-      """
+          @JsonClass-annotated types must have a primary constructor or be sealed. Otherwise, they \
+          either have no serializable properties or all the potentially serializable properties are \
+          mutable (which is not a case we want!).
+        """
           .trimIndent(),
       )
 
@@ -1479,11 +1479,11 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "EnumPropertyCouldBeMoshi",
         "Consider making enum properties also use Moshi.",
         """
-        While we have Gson interop, it's convenient to move enums used by Moshi classes to also \
-        use Moshi so that you can leverage built-in support for UNKNOWN handling and get lint \
-        checks for it. Simply add `@JsonClass` to this enum class and the appropriate lint will \
-        guide you.
-      """
+          While we have Gson interop, it's convenient to move enums used by Moshi classes to also \
+          use Moshi so that you can leverage built-in support for UNKNOWN handling and get lint \
+          checks for it. Simply add `@JsonClass` to this enum class and the appropriate lint will \
+          guide you.
+        """
           .trimIndent(),
         Severity.WARNING,
       )
@@ -1493,11 +1493,11 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "EnumPropertyDefaultUnknown",
         "Suspicious default value to 'UNKNOWN' for a Moshi enum.",
         """
-        The enum type of this property is handled by Moshi. This means it will default to \
-        'UNKNOWN' if an unrecognized enum is encountered in decoding. At best, it is redundant to \
-        default a property to this value. At worst, it can change nullability semantics if the \
-        enum should actually allow nullable values or null on absence.
-      """
+          The enum type of this property is handled by Moshi. This means it will default to \
+          'UNKNOWN' if an unrecognized enum is encountered in decoding. At best, it is redundant to \
+          default a property to this value. At worst, it can change nullability semantics if the \
+          enum should actually allow nullable values or null on absence.
+        """
           .trimIndent(),
       )
 
@@ -1506,9 +1506,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "VarProperty",
         "Moshi properties should be immutable.",
         """
-        While var properties are technically possible, they should not be used with Moshi classes \
-        as it can lead to asymmetric encoding and thread-safety issues. Consider making this val.
-      """
+          While var properties are technically possible, they should not be used with Moshi classes \
+          as it can lead to asymmetric encoding and thread-safety issues. Consider making this val.
+        """
           .trimIndent(),
         Severity.WARNING,
       )
@@ -1518,9 +1518,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "SnakeCase",
         "Consider using `@Json(name = ...)` rather than direct snake casing.",
         """
-        Moshi offers `@Json` annotations to specify names to use in JSON serialization, similar \
-        to Gson's `@SerializedName`. This can help avoid snake_case properties in source directly.
-      """
+          Moshi offers `@Json` annotations to specify names to use in JSON serialization, similar \
+          to Gson's `@SerializedName`. This can help avoid snake_case properties in source directly.
+        """
           .trimIndent(),
         Severity.WARNING,
       )
@@ -1530,8 +1530,8 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "DuplicateJsonName",
         "Duplicate JSON names are errors as JSON does not allow duplicate keys in objects.",
         """
-        Duplicate JSON names are errors as JSON does not allow duplicate keys in objects.
-      """
+          Duplicate JSON names are errors as JSON does not allow duplicate keys in objects.
+        """
           .trimIndent(),
       )
 
@@ -1540,11 +1540,11 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "NonMoshiClassPlatform",
         "Platform type '$HINT' is not natively supported by Moshi.",
         """
-        The property type is a platform type (i.e. from java.*, kotlin.*, android.*). Moshi only \
-        natively supports a small subset of these (primitives, String, and collection interfaces). \
-        Otherwise, moshi-gson-interop will hand serialization of this property to Gson, which may \
-        or may not handle it. This will eventually become an error after GSON is removed.
-      """
+          The property type is a platform type (i.e. from java.*, kotlin.*, android.*). Moshi only \
+          natively supports a small subset of these (primitives, String, and collection interfaces). \
+          Otherwise, moshi-gson-interop will hand serialization of this property to Gson, which may \
+          or may not handle it. This will eventually become an error after GSON is removed.
+        """
           .trimIndent(),
         Severity.WARNING,
       )
@@ -1554,12 +1554,12 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "Array",
         "Prefer List over Array.",
         """
-        Array types are not supported by Moshi, please use a List instead. Arrays are expensive to \
-        manage in JSON as we don't know lengths ahead of time and they are a mutable code smell in \
-        what should be immutable value classes. Otherwise, moshi-gson-interop will hand \
-        serialization of this property to Gson, which may or may not handle it. This will \
-        eventually become an error after GSON is removed.
-      """
+          Array types are not supported by Moshi, please use a List instead. Arrays are expensive to \
+          manage in JSON as we don't know lengths ahead of time and they are a mutable code smell in \
+          what should be immutable value classes. Otherwise, moshi-gson-interop will hand \
+          serialization of this property to Gson, which may or may not handle it. This will \
+          eventually become an error after GSON is removed.
+        """
           .trimIndent(),
         Severity.WARNING,
       )
@@ -1569,10 +1569,10 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "MutableCollections",
         "Use immutable collections rather than mutable versions.",
         """
-        While mutable collections are technically possible, they should not be used with Moshi \
-        classes as it can lead to asymmetric encoding and thread-safety issues. Please make them \
-        immutable versions instead.
-      """
+          While mutable collections are technically possible, they should not be used with Moshi \
+          classes as it can lead to asymmetric encoding and thread-safety issues. Please make them \
+          immutable versions instead.
+        """
           .trimIndent(),
       )
 
@@ -1581,11 +1581,11 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "NonMoshiClassCollection",
         "Concrete Collection type '$HINT' is not natively supported by Moshi.",
         """
-        The property type is concrete Collection type (i.e. ArrayList, HashSet, etc). Moshi only \
-        natively supports their interface types (List, Set, etc). Consider upcasting to the
-        interface type. Otherwise, moshi-gson-interop will hand serialization of this property to \
-        Gson, which may or may not handle it.
-      """
+          The property type is concrete Collection type (i.e. ArrayList, HashSet, etc). Moshi only \
+          natively supports their interface types (List, Set, etc). Consider upcasting to the
+          interface type. Otherwise, moshi-gson-interop will hand serialization of this property to \
+          Gson, which may or may not handle it.
+        """
           .trimIndent(),
         Severity.INFORMATIONAL,
       )
@@ -1595,11 +1595,11 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "NonMoshiClassMap",
         "Concrete Map type '$HINT' is not natively supported by Moshi.",
         """
-        The property type is concrete Map type (i.e. LinkedHashMap, HashMap, etc). Moshi only \
-        natively supports their interface type (Map). Consider upcasting to the interface type. \
-        Otherwise, moshi-gson-interop will hand serialization of this property to Gson, which may \
-        or may not handle it.
-      """
+          The property type is concrete Map type (i.e. LinkedHashMap, HashMap, etc). Moshi only \
+          natively supports their interface type (Map). Consider upcasting to the interface type. \
+          Otherwise, moshi-gson-interop will hand serialization of this property to Gson, which may \
+          or may not handle it.
+        """
           .trimIndent(),
         Severity.INFORMATIONAL,
       )
@@ -1609,10 +1609,10 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "NonMoshiClassInternal",
         "Non-Moshi internal type '$HINT' is not natively supported by Moshi.",
         """
-        The property type is an internal type (i.e. slack.*) but is not a Moshi class itself. \
-        moshi-gson-interop will hand serialization of this property to Gson, but consider \
-        converting this type to Moshi as well to improve runtime performance and consistency.
-      """
+          The property type is an internal type (i.e. slack.*) but is not a Moshi class itself. \
+          moshi-gson-interop will hand serialization of this property to Gson, but consider \
+          converting this type to Moshi as well to improve runtime performance and consistency.
+        """
           .trimIndent(),
         Severity.INFORMATIONAL,
       )
@@ -1622,12 +1622,12 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "NonMoshiClassExternal",
         "External type '$HINT' is not natively supported by Moshi.",
         """
-        The property type is an external type (i.e. not a Slack or built-in type). Moshi will try
-        to serialize these reflectively, which is not something we want. Either write a custom \
-        adapter and annotating this property with `@AdaptedBy` or exclude/remove this type's use. \
-        Otherwise, moshi-gson-interop will hand serialization of this property to Gson, which may \
-        or may not handle it (also with reflection).
-      """
+          The property type is an external type (i.e. not a Slack or built-in type). Moshi will try
+          to serialize these reflectively, which is not something we want. Either write a custom \
+          adapter and annotating this property with `@AdaptedBy` or exclude/remove this type's use. \
+          Otherwise, moshi-gson-interop will hand serialization of this property to Gson, which may \
+          or may not handle it (also with reflection).
+        """
           .trimIndent(),
       )
 
@@ -1636,9 +1636,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "EnumJsonClassGenerated",
         "Enums annotated with @JsonClass must not set `generateAdapter` to true.",
         """
-        Enums annotated with @JsonClass do not need to set "generateAdapter" to true and should \
-        set it to false.
-      """
+          Enums annotated with @JsonClass do not need to set "generateAdapter" to true and should \
+          set it to false.
+        """
           .trimIndent(),
       )
 
@@ -1647,9 +1647,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "EnumAnnotatedUnknown",
         "UNKNOWN members in @JsonClass-annotated enums should not be annotated with @Json",
         """
-        UNKNOWN members in @JsonClass-annotated enums should not be annotated with @Json. These \
-        members are only used as a fallback and never expected in actual JSON bodies.
-      """
+          UNKNOWN members in @JsonClass-annotated enums should not be annotated with @Json. These \
+          members are only used as a fallback and never expected in actual JSON bodies.
+        """
           .trimIndent(),
       )
 
@@ -1658,10 +1658,10 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "EnumMissingUnknown",
         "Enums serialized with Moshi must reserve the first member as UNKNOWN.",
         """
-        For backward compatibility, enums serialized with Moshi must reserve the first \
-        member as "UNKNOWN". We will automatically substitute this when encountering \
-        an unrecognized value for this enum during decoding.
-      """
+          For backward compatibility, enums serialized with Moshi must reserve the first \
+          member as "UNKNOWN". We will automatically substitute this when encountering \
+          an unrecognized value for this enum during decoding.
+        """
           .trimIndent(),
       )
 
@@ -1670,9 +1670,9 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "EnumMissingJsonClass",
         "Enums serialized with Moshi should be annotated with @JsonClass.",
         """
-        This enum appears to use Moshi for serialization. Please also add an @JsonClass \
-        annotation to it to ensure safe handling with unknown values and R8 optimization.
-      """
+          This enum appears to use Moshi for serialization. Please also add an @JsonClass \
+          annotation to it to ensure safe handling with unknown values and R8 optimization.
+        """
           .trimIndent(),
       )
 
@@ -1681,10 +1681,10 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         "EnumCasing",
         "Consider using `@Json(name = ...)` rather than lower casing.",
         """
-        Moshi offers `@Json` annotations to specify names to use in JSON serialization, similar \
-        to Gson's `@SerializedName`. This can help avoid lower-casing enum properties in source \
-        directly.
-      """
+          Moshi offers `@Json` annotations to specify names to use in JSON serialization, similar \
+          to Gson's `@SerializedName`. This can help avoid lower-casing enum properties in source \
+          directly.
+        """
           .trimIndent(),
         severity = Severity.WARNING,
       )

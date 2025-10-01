@@ -1962,13 +1962,13 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
     val serializedName =
       java(
         """
-        package com.google.gson.annotations;
+          package com.google.gson.annotations;
 
-        public @interface SerializedName {
-          String value();
-          String[] alternate() default {};
-        }
-      """
+          public @interface SerializedName {
+            String value();
+            String[] alternate() default {};
+          }
+        """
           .trimIndent()
       )
     val source =

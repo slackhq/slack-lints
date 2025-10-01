@@ -32,14 +32,14 @@ class GuavaPreconditionsDetectorTest : BaseSlackLintTest() {
   private val slackPreconditionsStub =
     kotlin(
         """
-      @file:JvmName("JavaPreconditions")
+          @file:JvmName("JavaPreconditions")
 
-      package slack.commons
-      fun check(condition: Boolean) {}
-      fun require(condition: Boolean) {}
-      fun checkNotNull(condition: Boolean) {}
-      fun <T> checkNotNull(value: T): T {}
-    """
+          package slack.commons
+          fun check(condition: Boolean) {}
+          fun require(condition: Boolean) {}
+          fun checkNotNull(condition: Boolean) {}
+          fun <T> checkNotNull(value: T): T {}
+        """
           .trimIndent()
       )
       .indented()
