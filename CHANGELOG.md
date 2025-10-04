@@ -4,6 +4,20 @@ Changelog
 **Unreleased**
 --------------
 
+0.11.1
+------
+
+_2025-10-03_
+
+- **Fix**: Allow sealed classes to be Moshi-compatible.
+- **Fix**: Allow primitives in collections to be Moshi-compatible.
+- **Fix**: Allow sealed interfaces to be Moshi-compatible.
+- **Fix**: Allow enums to be Moshi-compatible.
+- Update Kotlin to `2.2.10`.
+- Update plugin lint to `8.13.0`.
+- Update dependency gradle to `9.1.0`.
+- Update various build plugins and GitHub Actions.
+
 0.11.0
 ------
 
