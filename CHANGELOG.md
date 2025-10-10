@@ -7,7 +7,7 @@ Changelog
 0.11.1
 ------
 
-_2025-10-03_
+_2025-10-10_
 
 - **Fix**: Allow sealed classes to be Moshi-compatible.
 - **Fix**: Allow primitives in collections to be Moshi-compatible.
