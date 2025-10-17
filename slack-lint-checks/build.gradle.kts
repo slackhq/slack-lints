@@ -90,15 +90,6 @@ val shadowJar =
     }
   }
 
-// Fix task dependency issues with Gradle 9.1.0
-tasks.whenTaskAdded {
-  when (name) {
-    "kspTestKotlin" -> dependsOn("generateTestBuildConfig")
-    "lintAnalyzeJvmTest",
-    "generateJvmTestLintModel" -> dependsOn("shadowJar")
-  }
-}
-
 artifacts {
   runtimeOnly(shadowJar)
   archives(shadowJar)
