@@ -36,7 +36,7 @@ jobs:
         id: gradle
         run: ./gradlew check --quiet
 
-      - uses: mikepenz/action-junit-report@v5
+      - uses: mikepenz/action-junit-report@v6
         if: success() || failure()
         with:
           report_paths: '**/build/test-results/test/TEST-*.xml'
