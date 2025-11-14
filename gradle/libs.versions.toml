@@ -10,7 +10,7 @@ lint = "31.12.0-alpha09"
 [plugins]
 buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.7.0" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.8" }
-dokka = { id = "org.jetbrains.dokka", version = "2.0.0" }
+dokka = { id = "org.jetbrains.dokka", version = "2.1.0" }
 lint = { id = "com.android.lint", version = "8.13.0" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "2.2.20-2.0.4" }
