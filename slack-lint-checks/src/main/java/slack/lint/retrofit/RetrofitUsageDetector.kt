@@ -44,7 +44,7 @@ class RetrofitUsageDetector : Detector(), SourceCodeScanner {
             returnType == PsiTypes.voidType() ||
             returnType.canonicalText == "kotlin.Unit"
         if (isVoidOrUnitReturnType) {
-          val allowsUnitResult = node.hasAnnotation("slack.lint.annotations.AllowUnitResponse")
+          val allowsUnitResult = node.hasAnnotation("slack.lint.annotations.AllowUnitResult")
           val isSuspend = context.evaluator.isSuspend(node)
           if (!(isSuspend && allowsUnitResult)) {
             node.report(
