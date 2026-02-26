@@ -11,7 +11,7 @@ lint = "31.12.0-alpha09"
 buildConfig = { id = "com.github.gmazzo.buildconfig", version = "5.7.1" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.8" }
 dokka = { id = "org.jetbrains.dokka", version = "2.1.0" }
-lint = { id = "com.android.lint", version = "8.13.2" }
+lint = { id = "com.android.lint", version = "9.0.1" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version = "2.3.4" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.36.0" }
