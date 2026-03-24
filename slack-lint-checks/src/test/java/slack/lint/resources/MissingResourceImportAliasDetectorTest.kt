@@ -35,7 +35,7 @@ class MissingResourceImportAliasDetectorTest : BaseSlackLintTest() {
           class MyClass {
 
              init {
-                  val appName = getString(L10R.string.app_name)
+                  val appName = getString(L10nR.string.app_name)
               }
 
            }
