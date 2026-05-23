@@ -4,6 +4,9 @@ Changelog
 **Unreleased**
 --------------
 
+- Build against lint `32.2.1`.
+- Target Kotlin 2.2 (matches lint 32.*).
+
 0.11.1
 ------
 
