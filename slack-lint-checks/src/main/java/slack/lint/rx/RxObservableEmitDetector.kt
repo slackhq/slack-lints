@@ -10,7 +10,6 @@ import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
-import com.intellij.psi.PsiClassType
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.ULambdaExpression
 import slack.lint.util.sourceImplementation
@@ -23,11 +22,14 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
       override fun visitCallExpression(node: UCallExpression) {
         val issue = functionToIssue[node.methodName] ?: return
         val lambdaExpression = node.valueArguments.lastOrNull() as? ULambdaExpression ?: return
-        val producerScopeParam = lambdaExpression.parameters.firstOrNull() ?: return
-        val producerScopeType = (producerScopeParam.type as? PsiClassType) ?: return
 
-        // Verify the parameter is a ProducerScope
-        if (producerScopeType.resolve()?.qualifiedName != PROVIDER_SCOPE_FQN) return
+        // Verify the trailing lambda is a `ProducerScope` receiver lambda (the coroutines rx
+        // factory shape). We inspect the resolved factory's `block` parameter type rather than the
+        // lambda's own receiver type: the latter resolves to an error type whenever the factory's
+        // type parameter can't be inferred from the lambda body (e.g. a lambda that never calls
+        // send()), which is exactly the case this detector needs to flag.
+        val blockParamType = node.resolve()?.parameterList?.parameters?.lastOrNull()?.type ?: return
+        if (PROVIDER_SCOPE_FQN !in blockParamType.canonicalText) return
 
         var sendCalled = false
 
@@ -65,7 +67,7 @@ class RxObservableEmitDetector : Detector(), SourceCodeScanner {
 
   internal companion object {
     private val REQUIRE_ONE_OF = setOf("send", "trySend")
-    private const val PROVIDER_SCOPE_FQN = "kotlin.coroutines.ProducerScope"
+    private const val PROVIDER_SCOPE_FQN = "kotlinx.coroutines.channels.ProducerScope"
 
     private val ISSUE_RX_OBSERVABLE_DOES_NOT_EMIT =
       Issue.create(

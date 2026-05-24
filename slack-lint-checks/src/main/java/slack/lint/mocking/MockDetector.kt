@@ -31,6 +31,7 @@ import slack.lint.mocking.MockDetector.TypeChecker
 import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.StringSetLintOption
+import slack.lint.util.findAnnotationCompat
 
 private data class MockFactory(val declarationContainer: String, val factoryName: String)
 
@@ -194,7 +195,7 @@ constructor(
       }
 
       private fun isMockAnnotated(node: UAnnotated): Boolean {
-        return mockAnnotationsOption.value.any { node.findAnnotation(it) != null }
+        return mockAnnotationsOption.value.any { node.findAnnotationCompat(it) != null }
       }
 
       private fun addReport(type: PsiClass, isError: Boolean) {

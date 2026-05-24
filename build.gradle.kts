@@ -4,7 +4,9 @@ import com.diffplug.gradle.spotless.KotlinExtension
 import com.diffplug.gradle.spotless.SpotlessExtension
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import io.gitlab.arturbosch.detekt.Detekt
-import org.jetbrains.dokka.gradle.DokkaTaskPartial
+import org.gradle.kotlin.dsl.configure
+import org.jetbrains.dokka.gradle.DokkaExtension
+import org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -92,10 +94,10 @@ subprojects {
     tasks.withType<KotlinCompile>().configureEach {
       compilerOptions {
         jvmTarget.set(JvmTarget.fromTarget(jvmTargetString))
-        // TODO re-enable on checks if lint ever targets latest kotlin versions
         if (isChecksProject) {
-          // Lint forces Kotlin 1.9 still
-          languageVersion.set(KotlinVersion.KOTLIN_1_9)
+          // Lint forces older Kotlin versions
+          // Check via kotlin-for-lint.sh
+          languageVersion.set(KotlinVersion.KOTLIN_2_2)
         } else {
           allWarningsAsErrors.set(true)
         }
@@ -108,9 +110,25 @@ subprojects {
   pluginManager.withPlugin("com.vanniktech.maven.publish") {
     apply(plugin = "org.jetbrains.dokka")
 
-    tasks.withType<DokkaTaskPartial>().configureEach {
-      outputDirectory.set(layout.buildDirectory.dir("docs/partial"))
-      dokkaSourceSets.configureEach { skipDeprecated.set(true) }
+    extensions.configure<DokkaExtension> {
+      basePublicationsDirectory.convention(layout.buildDirectory.dir("dokkaDir"))
+      dokkaSourceSets.configureEach {
+        skipDeprecated.convention(true)
+        documentedVisibilities.add(VisibilityModifier.Public)
+        reportUndocumented.convention(true)
+        perPackageOption {
+          matchingRegex.set(".*\\.internal.*")
+          suppress.set(true)
+        }
+        sourceLink {
+          localDirectory.convention(layout.projectDirectory.dir("src"))
+          val relPath = rootProject.projectDir.toPath().relativize(projectDir.toPath())
+          remoteUrl(
+            providers.gradleProperty("POM_SCM_URL").map { scmUrl -> "$scmUrl/tree/main/$relPath" }
+          )
+          remoteLineSuffix.convention("#L")
+        }
+      }
     }
 
     configure<MavenPublishBaseExtension> {

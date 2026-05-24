@@ -34,12 +34,16 @@ import com.intellij.psi.PsiWildcardType
 import java.util.EnumSet
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtAnnotated
+import org.jetbrains.uast.UAnnotated
+import org.jetbrains.uast.UAnnotation
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UQualifiedReferenceExpression
 import org.jetbrains.uast.UReferenceExpression
 import org.jetbrains.uast.USimpleNameReferenceExpression
+import org.jetbrains.uast.toUElementOfType
 import org.jetbrains.uast.tryResolve
 
 /**
@@ -66,6 +70,26 @@ internal fun PsiClass.implements(
 
   return this.superTypes.filterNotNull().any { classType ->
     classType.resolve()?.implements(qualifiedName, nameFilter) ?: false
+  }
+}
+
+/**
+ * Finds an annotation with the given [fqcn] on this element, accounting for Kotlin 2.2+ behavior.
+ *
+ * As of Kotlin 2.2, an annotation written with no explicit use-site target on a property or
+ * constructor parameter is no longer mirrored onto the backing field's (or parameter's) UAST
+ * annotation list when analyzing source: it lands on the Kotlin `property`/`param` declaration
+ * instead. [findAnnotation] therefore misses these in source mode, even though they're present in
+ * the compiled representation. This falls back to scanning the Kotlin source declaration's
+ * annotation entries so detectors behave consistently across source and bytecode.
+ */
+internal fun UAnnotated.findAnnotationCompat(fqcn: String): UAnnotation? {
+  findAnnotation(fqcn)?.let {
+    return it
+  }
+  val entries = (sourcePsi as? KtAnnotated)?.annotationEntries ?: return null
+  return entries.firstNotNullOfOrNull { entry ->
+    entry.toUElementOfType<UAnnotation>()?.takeIf { it.qualifiedName == fqcn }
   }
 }
 

@@ -51,6 +51,7 @@ import org.jetbrains.uast.toUElement
 import org.jetbrains.uast.toUElementOfType
 import slack.lint.moshi.MoshiLintUtil.hasMoshiAnnotation
 import slack.lint.util.MetadataJavaEvaluator
+import slack.lint.util.findAnnotationCompat
 import slack.lint.util.isBoxedPrimitive
 import slack.lint.util.isInnerClass
 import slack.lint.util.isObjectOrAny
@@ -288,10 +289,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
               null
             }
           val hasDefaultValue = defaultValueExpression != null
-          if (
-            parameter.uAnnotations.any { it.qualifiedName == "kotlin.jvm.Transient" } &&
-              !hasDefaultValue
-          ) {
+          if (parameter.findAnnotationCompat("kotlin.jvm.Transient") != null && !hasDefaultValue) {
             ISSUE_TRANSIENT_NEEDS_INIT
             context.report(
               ISSUE_TRANSIENT_NEEDS_INIT,

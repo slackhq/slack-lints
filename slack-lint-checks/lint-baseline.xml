@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<issues format="6" by="lint 8.11.0" type="baseline" client="gradle" dependencies="false" name="AGP (8.11.0)" variant="all" version="8.11.0">
+<issues format="6" by="lint 9.2.1" type="baseline" client="gradle" dependencies="false" name="AGP (9.2.1)" variant="all" version="9.2.1">
 
     <issue
         id="LintDocExample"
@@ -52,7 +52,7 @@
         errorLine2="  ^">
         <location
             file="src/test/java/slack/lint/MoshiUsageDetectorTest.kt"
-            line="2077"
+            line="2080"
             column="3"/>
     </issue>
 
@@ -91,6 +91,17 @@
 
     <issue
         id="LintImplTextFormat"
+        message="The issue summary should be shorter; typically just a 3-6 words; it&apos;s used as a topic header in HTML reports and in the IDE inspections window"
+        errorLine1="        &quot;Avoid returning null in getter for read-only properties in Kotlin&quot;,"
+        errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/AlwaysNullReadOnlyVariableDetector.kt"
+            line="110"
+            column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
         message="The issue summary should *not* end with a period (think of it as a headline)"
         errorLine1="        &quot;Count value in formatted string resource.&quot;,"
         errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
@@ -98,6 +109,39 @@
             file="src/main/java/slack/lint/ArgInFormattedQuantityStringResDetector.kt"
             line="31"
             column="10"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Single sentence error messages should not end with a period"
+        errorLine1="      &quot;Circuit Screen implementations should be data classes or data objects, not regular classes.&quot;"
+        errorLine2="       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/CircuitScreenDataClassDetector.kt"
+            line="92"
+            column="8"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="&quot;hashCode&quot; looks like a code reference; surround with backtics in string to display as symbol, e.g. \`hashCode\`"
+        errorLine1="        EXPLANATION,"
+        errorLine2="        ~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/CircuitScreenDataClassDetector.kt"
+            line="104"
+            column="9"/>
+    </issue>
+
+    <issue
+        id="LintImplTextFormat"
+        message="Multi-line issue explanation strings will interpret line separators as hard breaks, and this looks like a continuation of the same paragraph. Consider using \ at the end of the previous line to indicate that the lines should be joined, or add a blank line between unrelated sentences, or suppress this issue type here."
+        errorLine1="        EXPLANATION,"
+        errorLine2="        ~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/CircuitScreenDataClassDetector.kt"
+            line="104"
+            column="9"/>
     </issue>
 
     <issue
@@ -184,7 +228,7 @@
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
-            line="68"
+            line="69"
             column="12"/>
     </issue>
 
@@ -195,7 +239,7 @@
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
-            line="68"
+            line="69"
             column="12"/>
     </issue>
 
@@ -206,7 +250,7 @@
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
-            line="85"
+            line="86"
             column="12"/>
     </issue>
 
@@ -217,7 +261,7 @@
         errorLine2="           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
-            line="85"
+            line="86"
             column="12"/>
     </issue>
 
@@ -327,7 +371,7 @@
         errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/JsonInflaterMoshiCompatibilityDetector.kt"
-            line="173"
+            line="232"
             column="10"/>
     </issue>
 
@@ -338,7 +382,7 @@
         errorLine2="                            ~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/JsonInflaterMoshiCompatibilityDetector.kt"
-            line="175"
+            line="234"
             column="29"/>
     </issue>
 
@@ -371,7 +415,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="855"
+            line="863"
             column="9"/>
     </issue>
 
@@ -382,7 +426,7 @@
         errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="860"
+            line="868"
             column="9"/>
     </issue>
 
@@ -503,7 +547,7 @@
         errorLine2="         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/retrofit/RetrofitUsageDetector.kt"
-            line="176"
+            line="180"
             column="10"/>
     </issue>
 
@@ -620,6 +664,39 @@
     <issue
         id="UElementAsPsi"
         message="Do not use `UElement` as `PsiElement`"
+        errorLine1="            !node.isLocalClass() &amp;&amp;"
+        errorLine2="             ~~~~">
+        <location
+            file="src/main/java/slack/lint/CircuitScreenDataClassDetector.kt"
+            line="52"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="            node.implements(QUALIFIED_CIRCUIT_SCREEN)"
+        errorLine2="            ~~~~">
+        <location
+            file="src/main/java/slack/lint/CircuitScreenDataClassDetector.kt"
+            line="53"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
+        errorLine1="            !node.constructors"
+        errorLine2="             ~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/slack/lint/CircuitScreenDataClassDetector.kt"
+            line="56"
+            column="14"/>
+    </issue>
+
+    <issue
+        id="UElementAsPsi"
+        message="Do not use `UElement` as `PsiElement`"
         errorLine1="              containingClass.classKind == JvmClassKind.CLASS -> {"
         errorLine2="              ~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
@@ -690,7 +767,7 @@
         errorLine2="    ~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/FragmentDaggerFieldInjectionDetector.kt"
-            line="56"
+            line="57"
             column="5"/>
     </issue>
 
@@ -800,7 +877,7 @@
         errorLine2="  ~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/util/LintUtils.kt"
-            line="81"
+            line="105"
             column="3"/>
     </issue>
 
@@ -811,7 +888,7 @@
         errorLine2="               ~~~~~~~~">
         <location
             file="src/main/java/slack/lint/util/LintUtils.kt"
-            line="87"
+            line="111"
             column="16"/>
     </issue>
 
@@ -822,7 +899,7 @@
         errorLine2="      ~~~~~~~~">
         <location
             file="src/main/java/slack/lint/util/LintUtils.kt"
-            line="293"
+            line="317"
             column="7"/>
     </issue>
 
@@ -833,7 +910,7 @@
         errorLine2="                         ~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/util/LintUtils.kt"
-            line="294"
+            line="318"
             column="26"/>
     </issue>
 
@@ -866,7 +943,7 @@
         errorLine2="                     ~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/mocking/MockDetector.kt"
-            line="182"
+            line="183"
             column="22"/>
     </issue>
 
@@ -877,7 +954,7 @@
         errorLine2="                          ~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/mocking/MockDetector.kt"
-            line="189"
+            line="190"
             column="27"/>
     </issue>
 
@@ -888,7 +965,7 @@
         errorLine2="            ~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="76"
+            line="77"
             column="13"/>
     </issue>
 
@@ -899,7 +976,7 @@
         errorLine2="                                  ~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="199"
+            line="208"
             column="35"/>
     </issue>
 
@@ -910,7 +987,7 @@
         errorLine2="                                      ~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="206"
+            line="215"
             column="39"/>
     </issue>
 
@@ -921,7 +998,7 @@
         errorLine2="          ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="234"
+            line="245"
             column="11"/>
     </issue>
 
@@ -932,7 +1009,7 @@
         errorLine2="                                  ~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="303"
+            line="311"
             column="35"/>
     </issue>
 
@@ -943,7 +1020,7 @@
         errorLine2="                                  ~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="323"
+            line="331"
             column="35"/>
     </issue>
 
@@ -954,7 +1031,7 @@
         errorLine2="                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="446"
+            line="454"
             column="35"/>
     </issue>
 
@@ -965,7 +1042,7 @@
         errorLine2="                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="447"
+            line="455"
             column="39"/>
     </issue>
 
@@ -976,7 +1053,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="467"
+            line="475"
             column="30"/>
     </issue>
 
@@ -987,7 +1064,7 @@
         errorLine2="          ~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="483"
+            line="491"
             column="11"/>
     </issue>
 
@@ -998,7 +1075,7 @@
         errorLine2="                                                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="616"
+            line="624"
             column="63"/>
     </issue>
 
@@ -1009,7 +1086,7 @@
         errorLine2="                                                                                                                ~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="616"
+            line="624"
             column="113"/>
     </issue>
 
@@ -1020,7 +1097,7 @@
         errorLine2="                    ~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="833"
+            line="841"
             column="21"/>
     </issue>
 
@@ -1031,7 +1108,7 @@
         errorLine2="                                ~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="854"
+            line="862"
             column="33"/>
     </issue>
 
@@ -1042,7 +1119,7 @@
         errorLine2="                                                     ~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="860"
+            line="868"
             column="54"/>
     </issue>
 
@@ -1053,7 +1130,7 @@
         errorLine2="                            ~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="912"
+            line="920"
             column="29"/>
     </issue>
 
@@ -1064,7 +1141,7 @@
         errorLine2="                                                ~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="1069"
+            line="1077"
             column="49"/>
     </issue>
 
@@ -1075,7 +1152,7 @@
         errorLine2="                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="1087"
+            line="1095"
             column="30"/>
     </issue>
 
@@ -1086,7 +1163,7 @@
         errorLine2="                 ~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="1115"
+            line="1123"
             column="18"/>
     </issue>
 
@@ -1119,7 +1196,7 @@
         errorLine2="                                ~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/retrofit/RetrofitUsageDetector.kt"
-            line="93"
+            line="97"
             column="33"/>
     </issue>
 
@@ -1295,7 +1372,7 @@
         errorLine2="                                                 ~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="363"
+            line="371"
             column="50"/>
     </issue>
 
@@ -1306,7 +1383,7 @@
         errorLine2="                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/slack/lint/MoshiUsageDetector.kt"
-            line="545"
+            line="553"
             column="62"/>
     </issue>
 
