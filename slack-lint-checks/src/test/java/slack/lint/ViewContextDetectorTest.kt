@@ -20,10 +20,10 @@ class ViewContextDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/main/java/ViewContextDetectorTestCustomViewInternalCaller.java:11: Error: Unsafe cast of Context to Activity [CastingViewContextToActivity]
-              Activity a = (Activity) getContext();
-                           ~~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/main/java/ViewContextDetectorTestCustomViewInternalCaller.java:11: Error: Unsafe cast of Context to Activity [CastingViewContextToActivity]
+            Activity a = (Activity) getContext();
+                         ~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -36,10 +36,10 @@ class ViewContextDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/main/java/ViewContextDetectorTestExternalCallerOnView.java:12: Error: Unsafe cast of Context to Activity [CastingViewContextToActivity]
-              Activity activity = (Activity) view.getContext();
-                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/main/java/ViewContextDetectorTestExternalCallerOnView.java:12: Error: Unsafe cast of Context to Activity [CastingViewContextToActivity]
+            Activity activity = (Activity) view.getContext();
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -52,10 +52,10 @@ class ViewContextDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/main/java/ViewContextDetectorTestExternalCallerOnCustomView.java:12: Error: Unsafe cast of Context to Activity [CastingViewContextToActivity]
-              Activity activity = (Activity) view.getContext();
-                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/main/java/ViewContextDetectorTestExternalCallerOnCustomView.java:12: Error: Unsafe cast of Context to Activity [CastingViewContextToActivity]
+            Activity activity = (Activity) view.getContext();
+                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )

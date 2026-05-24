@@ -30,13 +30,13 @@ class NotNullOperatorDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/foo/Test.kt:6: Warning: Avoid using the !! operator [AvoidUsingNotNullOperator]
-                          t/* this is legal */!!.length
-                                              ~~
-          src/foo/Test.kt:7: Warning: Avoid using the !! operator [AvoidUsingNotNullOperator]
-                          return t!!.length == 1
-                                  ~~
-          0 errors, 2 warnings
+        src/foo/Test.kt:6: Warning: Avoid using the !! operator [AvoidUsingNotNullOperator]
+                        t/* this is legal */!!.length
+                                            ~~
+        src/foo/Test.kt:7: Warning: Avoid using the !! operator [AvoidUsingNotNullOperator]
+                        return t!!.length == 1
+                                ~~
+        0 errors, 2 warnings
         """
           .trimIndent()
       )

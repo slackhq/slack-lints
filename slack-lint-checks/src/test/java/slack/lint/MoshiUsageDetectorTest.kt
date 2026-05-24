@@ -481,10 +481,10 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.kt:5: Error: Don't use blank JsonClass.generator values. [MoshiUsageBlankGenerator]
-          @JsonClass(generateAdapter = true, generator = "")
-                                                         ~~
-          1 errors, 0 warnings
+        src/slack/model/Example.kt:5: Error: Don't use blank JsonClass.generator values. [MoshiUsageBlankGenerator]
+        @JsonClass(generateAdapter = true, generator = "")
+                                                       ~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -740,10 +740,10 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.kt:7: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
-          data class Example(@Json(name = "") val value: String)
-                                          ~~
-          1 errors, 0 warnings
+        src/slack/model/Example.kt:7: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
+        data class Example(@Json(name = "") val value: String)
+                                        ~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -770,10 +770,10 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.kt:7: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
-          data class Example(@Json(name = " ") val value: String)
-                                          ~~~
-          1 errors, 0 warnings
+        src/slack/model/Example.kt:7: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
+        data class Example(@Json(name = " ") val value: String)
+                                        ~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -802,10 +802,10 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.kt:8: Error: Use of site-targets on @Json are redundant. [MoshiUsageRedundantSiteTarget]
-            @field:Json(name = "foo") val value: String
-             ~~~~~
-          1 errors, 0 warnings
+        src/slack/model/Example.kt:8: Error: Use of site-targets on @Json are redundant. [MoshiUsageRedundantSiteTarget]
+          @field:Json(name = "foo") val value: String
+           ~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -843,16 +843,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.kt:8: Error: Use of site-targets on @Json are redundant. [MoshiUsageRedundantSiteTarget]
-            @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
-                                ~~~~~~~~~~~~~~~~~~~~~~~~~
-          src/slack/model/Example.kt:8: Error: Use of site-targets on @Json are redundant. [MoshiUsageRedundantSiteTarget]
-            @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
-                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          src/slack/model/Example.kt:8: Error: Use of site-targets on @Json are redundant. [MoshiUsageRedundantSiteTarget]
-            @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
-                                                                                       ~~~~~~~~~~~~~~~~~~~~~~~
-          3 errors, 0 warnings
+        src/slack/model/Example.kt:8: Error: Use of site-targets on @Json are redundant. [MoshiUsageRedundantSiteTarget]
+          @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
+                              ~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/slack/model/Example.kt:8: Error: Use of site-targets on @Json are redundant. [MoshiUsageRedundantSiteTarget]
+          @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
+                                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/slack/model/Example.kt:8: Error: Use of site-targets on @Json are redundant. [MoshiUsageRedundantSiteTarget]
+          @Json(name = "foo") @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
+                                                                                     ~~~~~~~~~~~~~~~~~~~~~~~
+        3 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -899,13 +899,13 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.kt:8: Error: Use of site-targets on @Json are redundant. [MoshiUsageRedundantSiteTarget]
-            @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
-                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          src/slack/model/Example.kt:8: Error: Use of site-targets on @Json are redundant. [MoshiUsageRedundantSiteTarget]
-            @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
-                                                                   ~~~~~~~~~~~~~~~~~~~~~~~
-          2 errors, 0 warnings
+        src/slack/model/Example.kt:8: Error: Use of site-targets on @Json are redundant. [MoshiUsageRedundantSiteTarget]
+          @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/slack/model/Example.kt:8: Error: Use of site-targets on @Json are redundant. [MoshiUsageRedundantSiteTarget]
+          @field:Json(name = "foo") @property:Json(name = "foo") @get:Json(name = "foo") val value: String
+                                                                 ~~~~~~~~~~~~~~~~~~~~~~~
+        2 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -1893,16 +1893,16 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/NoTargetIsOk.java:31: Error: JsonQualifiers must have RUNTIME retention. [MoshiUsageQualifierRetention]
-          @Retention(RetentionPolicy.CLASS)
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          src/slack/model/NoTargetIsOk.java:37: Error: JsonQualifiers must have RUNTIME retention. [MoshiUsageQualifierRetention]
-          public @interface MissingRetention {}
-                            ~~~~~~~~~~~~~~~~
-          src/slack/model/NoTargetIsOk.java:25: Error: JsonQualifiers must include FIELD targeting. [MoshiUsageQualifierTarget]
-          @Target(ElementType.METHOD)
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          3 errors, 0 warnings
+        src/slack/model/NoTargetIsOk.java:31: Error: JsonQualifiers must have RUNTIME retention. [MoshiUsageQualifierRetention]
+        @Retention(RetentionPolicy.CLASS)
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/slack/model/NoTargetIsOk.java:37: Error: JsonQualifiers must have RUNTIME retention. [MoshiUsageQualifierRetention]
+        public @interface MissingRetention {}
+                          ~~~~~~~~~~~~~~~~
+        src/slack/model/NoTargetIsOk.java:25: Error: JsonQualifiers must include FIELD targeting. [MoshiUsageQualifierTarget]
+        @Target(ElementType.METHOD)
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        3 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -1938,10 +1938,10 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.kt:7: Warning: Json.name with the same value as the property/enum member name is redundant. [MoshiUsageRedundantJsonName]
-          data class Example(@Json(name = "value") val value: String)
-                                          ~~~~~~~
-          0 errors, 1 warnings
+        src/slack/model/Example.kt:7: Warning: Json.name with the same value as the property/enum member name is redundant. [MoshiUsageRedundantJsonName]
+        data class Example(@Json(name = "value") val value: String)
+                                        ~~~~~~~
+        0 errors, 1 warnings
         """
           .trimIndent()
       )
@@ -1962,12 +1962,12 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
     val serializedName =
       java(
         """
-          package com.google.gson.annotations;
+        package com.google.gson.annotations;
 
-          public @interface SerializedName {
-            String value();
-            String[] alternate() default {};
-          }
+        public @interface SerializedName {
+          String value();
+          String[] alternate() default {};
+        }
         """
           .trimIndent()
       )
@@ -1999,22 +1999,22 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.kt:11: Error: Use Moshi's @Json rather than Gson's @SerializedName. [MoshiUsageSerializedName]
-            @SerializedName("full_gson") val fullGson: String,
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          src/slack/model/Example.kt:12: Error: Use Moshi's @Json rather than Gson's @SerializedName. [MoshiUsageSerializedName]
-            @SerializedName("full_gson_alts", alternate = ["foo"]) val fullGsonAlternates: String,
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          src/slack/model/Example.kt:13: Error: Use Moshi's @Json rather than Gson's @SerializedName. [MoshiUsageSerializedName]
-            @Json(name = "mixed") @SerializedName("mixed") val mixedSame: String,
-                                  ~~~~~~~~~~~~~~~~~~~~~~~~
-          src/slack/model/Example.kt:14: Error: Use Moshi's @Json rather than Gson's @SerializedName. [MoshiUsageSerializedName]
-            @Json(name = "mixed_diff") @SerializedName("mixed_diff_2") val mixedDiff: String,
-                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          src/slack/model/Example.kt:15: Error: Use Moshi's @Json rather than Gson's @SerializedName. [MoshiUsageSerializedName]
-            @Json(name = "mixed_alts") @SerializedName("mixed_alts", alternate = ["foo"]) val mixedAlternates: String,
-                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          5 errors, 0 warnings
+        src/slack/model/Example.kt:11: Error: Use Moshi's @Json rather than Gson's @SerializedName. [MoshiUsageSerializedName]
+          @SerializedName("full_gson") val fullGson: String,
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/slack/model/Example.kt:12: Error: Use Moshi's @Json rather than Gson's @SerializedName. [MoshiUsageSerializedName]
+          @SerializedName("full_gson_alts", alternate = ["foo"]) val fullGsonAlternates: String,
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/slack/model/Example.kt:13: Error: Use Moshi's @Json rather than Gson's @SerializedName. [MoshiUsageSerializedName]
+          @Json(name = "mixed") @SerializedName("mixed") val mixedSame: String,
+                                ~~~~~~~~~~~~~~~~~~~~~~~~
+        src/slack/model/Example.kt:14: Error: Use Moshi's @Json rather than Gson's @SerializedName. [MoshiUsageSerializedName]
+          @Json(name = "mixed_diff") @SerializedName("mixed_diff_2") val mixedDiff: String,
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/slack/model/Example.kt:15: Error: Use Moshi's @Json rather than Gson's @SerializedName. [MoshiUsageSerializedName]
+          @Json(name = "mixed_alts") @SerializedName("mixed_alts", alternate = ["foo"]) val mixedAlternates: String,
+                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        5 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -2059,19 +2059,19 @@ class MoshiUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.kt:8: Error: Name 'value' is duplicated by member 'anotherValue'. [MoshiUsageDuplicateJsonName]
-            val value: String,
-                ~~~~~
-          src/slack/model/Example.kt:9: Error: Name 'value' is duplicated by member 'value'. [MoshiUsageDuplicateJsonName]
-            @Json(name = "value") val anotherValue: String,
-                                      ~~~~~~~~~~~~
-          src/slack/model/Example.kt:10: Error: Name 'value2' is duplicated by member 'anotherValue3'. [MoshiUsageDuplicateJsonName]
-            @Json(name = "value2") val anotherValue2: String,
-                                       ~~~~~~~~~~~~~
-          src/slack/model/Example.kt:11: Error: Name 'value2' is duplicated by member 'anotherValue2'. [MoshiUsageDuplicateJsonName]
-            @Json(name = "value2") val anotherValue3: String
-                                       ~~~~~~~~~~~~~
-          4 errors, 0 warnings
+        src/slack/model/Example.kt:8: Error: Name 'value' is duplicated by member 'anotherValue'. [MoshiUsageDuplicateJsonName]
+          val value: String,
+              ~~~~~
+        src/slack/model/Example.kt:9: Error: Name 'value' is duplicated by member 'value'. [MoshiUsageDuplicateJsonName]
+          @Json(name = "value") val anotherValue: String,
+                                    ~~~~~~~~~~~~
+        src/slack/model/Example.kt:10: Error: Name 'value2' is duplicated by member 'anotherValue3'. [MoshiUsageDuplicateJsonName]
+          @Json(name = "value2") val anotherValue2: String,
+                                     ~~~~~~~~~~~~~
+        src/slack/model/Example.kt:11: Error: Name 'value2' is duplicated by member 'anotherValue2'. [MoshiUsageDuplicateJsonName]
+          @Json(name = "value2") val anotherValue3: String
+                                     ~~~~~~~~~~~~~
+        4 errors, 0 warnings
         """
           .trimIndent()
       )

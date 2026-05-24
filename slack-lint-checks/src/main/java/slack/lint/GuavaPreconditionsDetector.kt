@@ -65,18 +65,17 @@ class GuavaPreconditionsDetector : Detector(), SourceCodeScanner {
         else -> null
       }
 
-    val lintFix =
-      updatedKotlinCheckMethod?.let { updatedCheckMethod ->
-        fix()
-          .name("Use Kotlin's standard library checks")
-          .replace()
-          .shortenNames()
-          .range(context.getLocation(node))
-          .text(createLintFixTextReplaceString(node))
-          .with(updatedCheckMethod)
-          .autoFix()
-          .build()
-      }
+    val lintFix = updatedKotlinCheckMethod?.let { updatedCheckMethod ->
+      fix()
+        .name("Use Kotlin's standard library checks")
+        .replace()
+        .shortenNames()
+        .range(context.getLocation(node))
+        .text(createLintFixTextReplaceString(node))
+        .with(updatedCheckMethod)
+        .autoFix()
+        .build()
+    }
     reportIssue(context, node, issueToReport, lintFix)
   }
 

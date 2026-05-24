@@ -102,25 +102,25 @@ class RedactedUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test/pkg/AnotherRedactedClass.java:6: Error: @Redacted is only supported in Kotlin classes! [RedactedInJavaUsage]
+        src/test/pkg/AnotherRedactedClass.java:6: Error: @Redacted is only supported in Kotlin classes! [RedactedInJavaUsage]
+        @AnotherRedacted
+        ~~~~~~~~~~~~~~~~
+        src/test/pkg/AnotherRedactedClass.java:8: Error: @Redacted is only supported in Kotlin classes! [RedactedInJavaUsage]
           @AnotherRedacted
           ~~~~~~~~~~~~~~~~
-          src/test/pkg/AnotherRedactedClass.java:8: Error: @Redacted is only supported in Kotlin classes! [RedactedInJavaUsage]
-            @AnotherRedacted
-            ~~~~~~~~~~~~~~~~
-          src/test/pkg/AnotherRedactedClass.java:11: Error: @Redacted is only supported in Kotlin classes! [RedactedInJavaUsage]
-            @AnotherRedacted
-            ~~~~~~~~~~~~~~~~
-          src/test/pkg/RedactedClass.java:6: Error: @Redacted is only supported in Kotlin classes! [RedactedInJavaUsage]
+        src/test/pkg/AnotherRedactedClass.java:11: Error: @Redacted is only supported in Kotlin classes! [RedactedInJavaUsage]
+          @AnotherRedacted
+          ~~~~~~~~~~~~~~~~
+        src/test/pkg/RedactedClass.java:6: Error: @Redacted is only supported in Kotlin classes! [RedactedInJavaUsage]
+        @Redacted
+        ~~~~~~~~~
+        src/test/pkg/RedactedClass.java:8: Error: @Redacted is only supported in Kotlin classes! [RedactedInJavaUsage]
           @Redacted
           ~~~~~~~~~
-          src/test/pkg/RedactedClass.java:8: Error: @Redacted is only supported in Kotlin classes! [RedactedInJavaUsage]
-            @Redacted
-            ~~~~~~~~~
-          src/test/pkg/RedactedClass.java:13: Error: @Redacted is only supported in Kotlin classes! [RedactedInJavaUsage]
-            @Redacted
-            ~~~~~~~~~
-          6 errors, 0 warnings
+        src/test/pkg/RedactedClass.java:13: Error: @Redacted is only supported in Kotlin classes! [RedactedInJavaUsage]
+          @Redacted
+          ~~~~~~~~~
+        6 errors, 0 warnings
         """
           .trimIndent()
       )

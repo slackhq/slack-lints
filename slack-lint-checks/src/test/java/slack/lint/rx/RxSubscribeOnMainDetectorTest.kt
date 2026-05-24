@@ -58,19 +58,19 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.java:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
-              obs.subscribeOn(AndroidSchedulers.mainThread());
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/com/slack/lint/Foo.java:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
+            obs.subscribeOn(AndroidSchedulers.mainThread());
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/com/slack/lint/Foo.java line 8: Replace with observeOn():
-          @@ -8 +8
-          -     obs.subscribeOn(AndroidSchedulers.mainThread());
-          +     obs.observeOn(AndroidSchedulers.mainThread());
+        Fix for src/com/slack/lint/Foo.java line 8: Replace with observeOn():
+        @@ -8 +8
+        -     obs.subscribeOn(AndroidSchedulers.mainThread());
+        +     obs.observeOn(AndroidSchedulers.mainThread());
         """
           .trimIndent()
       )
@@ -102,19 +102,19 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.kt:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
-              obs.subscribeOn(AndroidSchedulers.mainThread())
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/com/slack/lint/Foo.kt:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
+            obs.subscribeOn(AndroidSchedulers.mainThread())
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/com/slack/lint/Foo.kt line 8: Replace with observeOn():
-          @@ -8 +8
-          -     obs.subscribeOn(AndroidSchedulers.mainThread())
-          +     obs.observeOn(AndroidSchedulers.mainThread())
+        Fix for src/com/slack/lint/Foo.kt line 8: Replace with observeOn():
+        @@ -8 +8
+        -     obs.subscribeOn(AndroidSchedulers.mainThread())
+        +     obs.observeOn(AndroidSchedulers.mainThread())
         """
           .trimIndent()
       )
@@ -146,19 +146,19 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.java:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
-              obs.subscribeOn(mainThread());
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/com/slack/lint/Foo.java:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
+            obs.subscribeOn(mainThread());
+                ~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/com/slack/lint/Foo.java line 8: Replace with observeOn():
-          @@ -8 +8
-          -     obs.subscribeOn(mainThread());
-          +     obs.observeOn(mainThread());
+        Fix for src/com/slack/lint/Foo.java line 8: Replace with observeOn():
+        @@ -8 +8
+        -     obs.subscribeOn(mainThread());
+        +     obs.observeOn(mainThread());
         """
           .trimIndent()
       )
@@ -190,19 +190,19 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.kt:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
-              obs.subscribeOn(mainThread())
-                  ~~~~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/com/slack/lint/Foo.kt:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
+            obs.subscribeOn(mainThread())
+                ~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/com/slack/lint/Foo.kt line 8: Replace with observeOn():
-          @@ -8 +8
-          -     obs.subscribeOn(mainThread())
-          +     obs.observeOn(mainThread())
+        Fix for src/com/slack/lint/Foo.kt line 8: Replace with observeOn():
+        @@ -8 +8
+        -     obs.subscribeOn(mainThread())
+        +     obs.observeOn(mainThread())
         """
           .trimIndent()
       )
@@ -236,19 +236,19 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.java:10: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
-              obs.subscribeOn(scheduler);
-                  ~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/com/slack/lint/Foo.java:10: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
+            obs.subscribeOn(scheduler);
+                ~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/com/slack/lint/Foo.java line 10: Replace with observeOn():
-          @@ -10 +10
-          -     obs.subscribeOn(scheduler);
-          +     obs.observeOn(scheduler);
+        Fix for src/com/slack/lint/Foo.java line 10: Replace with observeOn():
+        @@ -10 +10
+        -     obs.subscribeOn(scheduler);
+        +     obs.observeOn(scheduler);
         """
           .trimIndent()
       )
@@ -282,19 +282,19 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.java:10: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
-              obs.subscribeOn(scheduler);
-                  ~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/com/slack/lint/Foo.java:10: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
+            obs.subscribeOn(scheduler);
+                ~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/com/slack/lint/Foo.java line 10: Replace with observeOn():
-          @@ -10 +10
-          -     obs.subscribeOn(scheduler);
-          +     obs.observeOn(scheduler);
+        Fix for src/com/slack/lint/Foo.java line 10: Replace with observeOn():
+        @@ -10 +10
+        -     obs.subscribeOn(scheduler);
+        +     obs.observeOn(scheduler);
         """
           .trimIndent()
       )
@@ -328,19 +328,19 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.kt:10: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
-              obs.subscribeOn(scheduler)
-                  ~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/com/slack/lint/Foo.kt:10: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
+            obs.subscribeOn(scheduler)
+                ~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/com/slack/lint/Foo.kt line 10: Replace with observeOn():
-          @@ -10 +10
-          -     obs.subscribeOn(scheduler)
-          +     obs.observeOn(scheduler)
+        Fix for src/com/slack/lint/Foo.kt line 10: Replace with observeOn():
+        @@ -10 +10
+        -     obs.subscribeOn(scheduler)
+        +     obs.observeOn(scheduler)
         """
           .trimIndent()
       )
@@ -374,19 +374,19 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.kt:10: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
-              obs.subscribeOn(scheduler)
-                  ~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/com/slack/lint/Foo.kt:10: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
+            obs.subscribeOn(scheduler)
+                ~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/com/slack/lint/Foo.kt line 10: Replace with observeOn():
-          @@ -10 +10
-          -     obs.subscribeOn(scheduler)
-          +     obs.observeOn(scheduler)
+        Fix for src/com/slack/lint/Foo.kt line 10: Replace with observeOn():
+        @@ -10 +10
+        -     obs.subscribeOn(scheduler)
+        +     obs.observeOn(scheduler)
         """
           .trimIndent()
       )
@@ -585,19 +585,19 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.kt:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
-              flow.subscribeOn(AndroidSchedulers.mainThread())
-                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/com/slack/lint/Foo.kt:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
+            flow.subscribeOn(AndroidSchedulers.mainThread())
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/com/slack/lint/Foo.kt line 8: Replace with observeOn():
-          @@ -8 +8
-          -     flow.subscribeOn(AndroidSchedulers.mainThread())
-          +     flow.observeOn(AndroidSchedulers.mainThread())
+        Fix for src/com/slack/lint/Foo.kt line 8: Replace with observeOn():
+        @@ -8 +8
+        -     flow.subscribeOn(AndroidSchedulers.mainThread())
+        +     flow.observeOn(AndroidSchedulers.mainThread())
         """
           .trimIndent()
       )
@@ -656,19 +656,19 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.kt:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
-              maybe.subscribeOn(AndroidSchedulers.mainThread())
-                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/com/slack/lint/Foo.kt:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
+            maybe.subscribeOn(AndroidSchedulers.mainThread())
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/com/slack/lint/Foo.kt line 8: Replace with observeOn():
-          @@ -8 +8
-          -     maybe.subscribeOn(AndroidSchedulers.mainThread())
-          +     maybe.observeOn(AndroidSchedulers.mainThread())
+        Fix for src/com/slack/lint/Foo.kt line 8: Replace with observeOn():
+        @@ -8 +8
+        -     maybe.subscribeOn(AndroidSchedulers.mainThread())
+        +     maybe.observeOn(AndroidSchedulers.mainThread())
         """
           .trimIndent()
       )
@@ -727,19 +727,19 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.kt:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
-              single.subscribeOn(AndroidSchedulers.mainThread())
-                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/com/slack/lint/Foo.kt:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
+            single.subscribeOn(AndroidSchedulers.mainThread())
+                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/com/slack/lint/Foo.kt line 8: Replace with observeOn():
-          @@ -8 +8
-          -     single.subscribeOn(AndroidSchedulers.mainThread())
-          +     single.observeOn(AndroidSchedulers.mainThread())
+        Fix for src/com/slack/lint/Foo.kt line 8: Replace with observeOn():
+        @@ -8 +8
+        -     single.subscribeOn(AndroidSchedulers.mainThread())
+        +     single.observeOn(AndroidSchedulers.mainThread())
         """
           .trimIndent()
       )
@@ -798,19 +798,19 @@ class RxSubscribeOnMainDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.kt:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
-              completable.subscribeOn(AndroidSchedulers.mainThread())
-                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/com/slack/lint/Foo.kt:8: Error: This will make the code for the initial subscription (above this line) run on the main thread. You probably want observeOn(AndroidSchedulers.mainThread()). [SubscribeOnMain]
+            completable.subscribeOn(AndroidSchedulers.mainThread())
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/com/slack/lint/Foo.kt line 8: Replace with observeOn():
-          @@ -8 +8
-          -     completable.subscribeOn(AndroidSchedulers.mainThread())
-          +     completable.observeOn(AndroidSchedulers.mainThread())
+        Fix for src/com/slack/lint/Foo.kt line 8: Replace with observeOn():
+        @@ -8 +8
+        -     completable.subscribeOn(AndroidSchedulers.mainThread())
+        +     completable.observeOn(AndroidSchedulers.mainThread())
         """
           .trimIndent()
       )

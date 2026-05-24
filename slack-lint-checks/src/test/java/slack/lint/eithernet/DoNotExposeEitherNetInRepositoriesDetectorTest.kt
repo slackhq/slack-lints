@@ -204,13 +204,13 @@ class DoNotExposeEitherNetInRepositoriesDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test/StuffRepository.kt:7: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
-            suspend fun fetchStuff(): ApiResult<String, String>
-                                      ~~~~~~~~~~~~~~~~~~~~~~~~~
-          src/test/StuffRepository.kt:11: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
-            ): ApiResult<Unit, String>
-               ~~~~~~~~~~~~~~~~~~~~~~~
-          2 errors, 0 warnings
+        src/test/StuffRepository.kt:7: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
+          suspend fun fetchStuff(): ApiResult<String, String>
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/test/StuffRepository.kt:11: Error: Repository APIs should not expose EitherNet types directly. [DoNotExposeEitherNetInRepositories]
+          ): ApiResult<Unit, String>
+             ~~~~~~~~~~~~~~~~~~~~~~~
+        2 errors, 0 warnings
         """
           .trimIndent()
       )

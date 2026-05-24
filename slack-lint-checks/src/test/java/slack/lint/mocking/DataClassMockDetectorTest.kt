@@ -74,40 +74,40 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.kt:8: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-            @Mock lateinit var fieldMock: TestClass
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:9: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-            @Spy lateinit var fieldSpy: TestClass
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:12: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-              val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:13: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-              val localSpy1 = org.mockito.Mockito.spy(localMock1)
-                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:14: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-              val localMock2 = mock<TestClass>()
-                               ~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:16: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-              val localMock3 = org.mockito.Mockito.mock(classRef)
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:18: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-              val dynamicMock = mock<TestClass> {
-                                ^
-          test/test/slack/test/TestClass.kt:21: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-              val assigned: TestClass = mock()
-                                        ~~~~~~
-          test/test/slack/test/TestClass.kt:31: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-                listOf(mock())
-                       ~~~~~~
-          test/test/slack/test/TestClass.kt:35: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-                list = listOf(mock())
-                              ~~~~~~
-          test/test/slack/test/TestClass.kt:27: Error: platform type 'java.util.List' should not be mocked [DoNotMockPlatformTypes]
-                mock()
-                ~~~~~~
-          11 errors, 0 warnings
+        test/test/slack/test/TestClass.kt:8: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+          @Mock lateinit var fieldMock: TestClass
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:9: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+          @Spy lateinit var fieldSpy: TestClass
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:12: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+            val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:13: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+            val localSpy1 = org.mockito.Mockito.spy(localMock1)
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:14: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+            val localMock2 = mock<TestClass>()
+                             ~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:16: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+            val localMock3 = org.mockito.Mockito.mock(classRef)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:18: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+            val dynamicMock = mock<TestClass> {
+                              ^
+        test/test/slack/test/TestClass.kt:21: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+            val assigned: TestClass = mock()
+                                      ~~~~~~
+        test/test/slack/test/TestClass.kt:31: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+              listOf(mock())
+                     ~~~~~~
+        test/test/slack/test/TestClass.kt:35: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+              list = listOf(mock())
+                            ~~~~~~
+        test/test/slack/test/TestClass.kt:27: Error: platform type 'java.util.List' should not be mocked [DoNotMockPlatformTypes]
+              mock()
+              ~~~~~~
+        11 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -147,22 +147,22 @@ class DataClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.java:9: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-            @Mock TestClass fieldMock;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:10: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-            @Spy TestClass fieldSpy;
-            ~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:13: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-              TestClass localMock = mock(TestClass.class);
-                                    ~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:14: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-              TestClass localSpy = spy(localMock);
+        test/test/slack/test/TestClass.java:9: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+          @Mock TestClass fieldMock;
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:10: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+          @Spy TestClass fieldSpy;
+          ~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:13: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+            TestClass localMock = mock(TestClass.class);
+                                  ~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:14: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+            TestClass localSpy = spy(localMock);
+                                 ~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:16: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
+            TestClass localMock2 = mock(classRef);
                                    ~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:16: Error: 'slack.test.TestClass' is a data class, so mocking it should not be necessary [DoNotMockDataClass]
-              TestClass localMock2 = mock(classRef);
-                                     ~~~~~~~~~~~~~~
-          5 errors, 0 warnings
+        5 errors, 0 warnings
         """
           .trimIndent()
       )

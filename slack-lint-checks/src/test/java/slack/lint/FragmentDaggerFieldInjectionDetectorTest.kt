@@ -67,25 +67,25 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         kotlin(
             """
-              package foo
+            package foo
 
-              import javax.inject.Inject
-              import slack.coreui.fragment.ViewBindingFragment
+            import javax.inject.Inject
+            import slack.coreui.fragment.ViewBindingFragment
 
-              class MyFragment : ViewBindingFragment() {
+            class MyFragment : ViewBindingFragment() {
 
-                private lateinit var notAnnotated: String
-                private val defaulted: String = "defaulted"
+              private lateinit var notAnnotated: String
+              private val defaulted: String = "defaulted"
 
-                @Inject
-                private lateinit var stringValue1: String
-                @Inject
-                private lateinit var intValue1: Int
+              @Inject
+              private lateinit var stringValue1: String
+              @Inject
+              private lateinit var intValue1: Int
 
-                fun onCreate() {
-                  notAnnotated = "fast"
-                }
+              fun onCreate() {
+                notAnnotated = "fast"
               }
+            }
             """
               .trimIndent()
           )
@@ -95,13 +95,13 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/foo/MyFragment.kt:11: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
-            @Inject
-            ^
-          src/foo/MyFragment.kt:13: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
-            @Inject
-            ^
-          2 errors, 0 warnings
+        src/foo/MyFragment.kt:11: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
+          @Inject
+          ^
+        src/foo/MyFragment.kt:13: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
+          @Inject
+          ^
+        2 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -117,25 +117,25 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         java(
             """
-              package foo;
+            package foo;
 
-              import javax.inject.Inject;
-              import slack.coreui.fragment.ViewBindingFragment;
+            import javax.inject.Inject;
+            import slack.coreui.fragment.ViewBindingFragment;
 
-              public class MyFragment extends ViewBindingFragment {
+            public class MyFragment extends ViewBindingFragment {
 
-                private static String notAnnotated;
-                private final String defaulted = "defaulted";
+              private static String notAnnotated;
+              private final String defaulted = "defaulted";
 
-                @Inject
-                String stringValue1;
-                @Inject
-                Int intValue1;
+              @Inject
+              String stringValue1;
+              @Inject
+              Int intValue1;
 
-                public void onCreate() {
-                  notAnnotated = "fast";
-                }
+              public void onCreate() {
+                notAnnotated = "fast";
               }
+            }
             """
               .trimIndent()
           )
@@ -145,13 +145,13 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/foo/MyFragment.java:11: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
-            @Inject
-            ^
-          src/foo/MyFragment.java:13: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
-            @Inject
-            ^
-          2 errors, 0 warnings
+        src/foo/MyFragment.java:11: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
+          @Inject
+          ^
+        src/foo/MyFragment.java:13: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
+          @Inject
+          ^
+        2 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -167,45 +167,45 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         kotlin(
             """
-              package foo
+            package foo
 
-              import javax.inject.Inject
-              import dagger.assisted.AssistedInject
-              import slack.coreui.fragment.ViewBindingFragment
+            import javax.inject.Inject
+            import dagger.assisted.AssistedInject
+            import slack.coreui.fragment.ViewBindingFragment
 
-              class MyFragment @Inject constructor(
-                private val flag: Boolean
-              ): ViewBindingFragment() {
+            class MyFragment @Inject constructor(
+              private val flag: Boolean
+            ): ViewBindingFragment() {
 
-                private lateinit var notAnnotated: String
-                private val defaulted: String = "defaulted"
+              private lateinit var notAnnotated: String
+              private val defaulted: String = "defaulted"
 
-                @Inject
-                private lateinit var stringValue1: String
-                @Inject
-                private lateinit var intValue1: Int
+              @Inject
+              private lateinit var stringValue1: String
+              @Inject
+              private lateinit var intValue1: Int
 
-                fun onCreate() {
-                  notAnnotated = "fast"
-                }
+              fun onCreate() {
+                notAnnotated = "fast"
               }
+            }
 
-              class MyFragmentAssistedInject @AssistedInject constructor(
-                private val flag: Boolean
-              ): ViewBindingFragment() {
+            class MyFragmentAssistedInject @AssistedInject constructor(
+              private val flag: Boolean
+            ): ViewBindingFragment() {
 
-                private lateinit var notAnnotated: String
-                private val defaulted: String = "defaulted"
+              private lateinit var notAnnotated: String
+              private val defaulted: String = "defaulted"
 
-                @Inject
-                private lateinit var stringValue1: String
-                @Inject
-                private lateinit var intValue1: Int
+              @Inject
+              private lateinit var stringValue1: String
+              @Inject
+              private lateinit var intValue1: Int
 
-                fun onCreate() {
-                  notAnnotated = "fast"
-                }
+              fun onCreate() {
+                notAnnotated = "fast"
               }
+            }
             """
               .trimIndent()
           )
@@ -215,19 +215,19 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/foo/MyFragment.kt:14: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
-            @Inject
-            ^
-          src/foo/MyFragment.kt:16: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
-            @Inject
-            ^
-          src/foo/MyFragment.kt:31: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
-            @Inject
-            ^
-          src/foo/MyFragment.kt:33: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
-            @Inject
-            ^
-          4 errors, 0 warnings
+        src/foo/MyFragment.kt:14: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
+          @Inject
+          ^
+        src/foo/MyFragment.kt:16: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
+          @Inject
+          ^
+        src/foo/MyFragment.kt:31: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
+          @Inject
+          ^
+        src/foo/MyFragment.kt:33: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
+          @Inject
+          ^
+        4 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -243,30 +243,30 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         java(
             """
-              package foo;
+            package foo;
 
-              import javax.inject.Inject;
-              import slack.coreui.fragment.ViewBindingFragment;
+            import javax.inject.Inject;
+            import slack.coreui.fragment.ViewBindingFragment;
 
-              public class MyFragment extends ViewBindingFragment {
+            public class MyFragment extends ViewBindingFragment {
 
-                private static String notAnnotated;
-                private final String defaulted = "defaulted";
+              private static String notAnnotated;
+              private final String defaulted = "defaulted";
 
-                @Inject
-                String stringValue1;
-                @Inject
-                Int intValue1;
+              @Inject
+              String stringValue1;
+              @Inject
+              Int intValue1;
 
-                @Inject
-                public MyFragment(Boolean flag) {
+              @Inject
+              public MyFragment(Boolean flag) {
 
-                }
-
-                public void onCreate() {
-                  notAnnotated = "fast";
-                }
               }
+
+              public void onCreate() {
+                notAnnotated = "fast";
+              }
+            }
             """
               .trimIndent()
           )
@@ -276,13 +276,13 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/foo/MyFragment.java:11: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
-            @Inject
-            ^
-          src/foo/MyFragment.java:13: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
-            @Inject
-            ^
-          2 errors, 0 warnings
+        src/foo/MyFragment.java:11: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
+          @Inject
+          ^
+        src/foo/MyFragment.java:13: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
+          @Inject
+          ^
+        2 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -298,31 +298,31 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         java(
             """
-              package foo;
+            package foo;
 
-              import javax.inject.Inject;
-              import dagger.assisted.AssistedInject;
-              import slack.coreui.fragment.ViewBindingFragment;
+            import javax.inject.Inject;
+            import dagger.assisted.AssistedInject;
+            import slack.coreui.fragment.ViewBindingFragment;
 
-              public class MyFragment extends ViewBindingFragment {
+            public class MyFragment extends ViewBindingFragment {
 
-                private static String notAnnotated;
-                private final String defaulted = "defaulted";
+              private static String notAnnotated;
+              private final String defaulted = "defaulted";
 
-                @Inject
-                String stringValue1;
-                @Inject
-                Int intValue1;
+              @Inject
+              String stringValue1;
+              @Inject
+              Int intValue1;
 
-                @AssistedInject
-                public MyFragment(Boolean flag) {
+              @AssistedInject
+              public MyFragment(Boolean flag) {
 
-                }
-
-                public void onCreate() {
-                  notAnnotated = "fast";
-                }
               }
+
+              public void onCreate() {
+                notAnnotated = "fast";
+              }
+            }
             """
               .trimIndent()
           )
@@ -332,13 +332,13 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/foo/MyFragment.java:12: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
-            @Inject
-            ^
-          src/foo/MyFragment.java:14: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
-            @Inject
-            ^
-          2 errors, 0 warnings
+        src/foo/MyFragment.java:12: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
+          @Inject
+          ^
+        src/foo/MyFragment.java:14: Error: Fragment dependencies should be injected using constructor injections only. [FragmentConstructorInjection]
+          @Inject
+          ^
+        2 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -354,25 +354,25 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         kotlin(
             """
-              package foo
+            package foo
 
-              import javax.inject.Inject
-              import androidx.fragment.app.Fragment
+            import javax.inject.Inject
+            import androidx.fragment.app.Fragment
 
-              abstract class MyFragment : Fragment() {
+            abstract class MyFragment : Fragment() {
 
-                private lateinit var notAnnotated: String
-                private val defaulted: String = "defaulted"
+              private lateinit var notAnnotated: String
+              private val defaulted: String = "defaulted"
 
-                @Inject
-                private lateinit var stringValue1: String
-                @Inject
-                private lateinit var intValue1: Int
+              @Inject
+              private lateinit var stringValue1: String
+              @Inject
+              private lateinit var intValue1: Int
 
-                fun onCreate() {
-                  notAnnotated = "fast"
-                }
+              fun onCreate() {
+                notAnnotated = "fast"
               }
+            }
             """
               .trimIndent()
           )
@@ -382,13 +382,13 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/foo/MyFragment.kt:11: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
-            @Inject
-            ^
-          src/foo/MyFragment.kt:13: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
-            @Inject
-            ^
-          2 errors, 0 warnings
+        src/foo/MyFragment.kt:11: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
+          @Inject
+          ^
+        src/foo/MyFragment.kt:13: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
+          @Inject
+          ^
+        2 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -438,26 +438,26 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         java(
             """
-              package foo;
+            package foo;
 
-              import javax.inject.Inject;
-              import dagger.assisted.AssistedInject;
-              import slack.coreui.fragment.ViewBindingFragment;
+            import javax.inject.Inject;
+            import dagger.assisted.AssistedInject;
+            import slack.coreui.fragment.ViewBindingFragment;
 
-              public abstract class MyFragment extends ViewBindingFragment {
+            public abstract class MyFragment extends ViewBindingFragment {
 
-                private static String notAnnotated;
-                private final String defaulted = "defaulted";
+              private static String notAnnotated;
+              private final String defaulted = "defaulted";
 
-                @Inject
-                String stringValue1;
-                @Inject
-                Int intValue1;
+              @Inject
+              String stringValue1;
+              @Inject
+              Int intValue1;
 
-                public void onCreate() {
-                  notAnnotated = "fast";
-                }
+              public void onCreate() {
+                notAnnotated = "fast";
               }
+            }
             """
               .trimIndent()
           )
@@ -467,13 +467,13 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/foo/MyFragment.java:12: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
-            @Inject
-            ^
-          src/foo/MyFragment.java:14: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
-            @Inject
-            ^
-          2 errors, 0 warnings
+        src/foo/MyFragment.java:12: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
+          @Inject
+          ^
+        src/foo/MyFragment.java:14: Error: Fragment dependencies should be injected using the Fragment's constructor. [FragmentFieldInjection]
+          @Inject
+          ^
+        2 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -489,25 +489,25 @@ class FragmentDaggerFieldInjectionDetectorTest : BaseSlackLintTest() {
         coreUiAbstractFragment,
         java(
             """
-              package foo;
+            package foo;
 
-              import javax.inject.Inject;
-              import dagger.assisted.AssistedInject;
+            import javax.inject.Inject;
+            import dagger.assisted.AssistedInject;
 
-              public class MyFragment {
+            public class MyFragment {
 
-                private static String notAnnotated;
-                private final String defaulted = "defaulted";
+              private static String notAnnotated;
+              private final String defaulted = "defaulted";
 
-                @Inject
-                String stringValue1;
-                @Inject
-                Int intValue1;
+              @Inject
+              String stringValue1;
+              @Inject
+              Int intValue1;
 
-                public void onCreate() {
-                  notAnnotated = "fast";
-                }
+              public void onCreate() {
+                notAnnotated = "fast";
               }
+            }
             """
               .trimIndent()
           )

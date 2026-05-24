@@ -84,19 +84,19 @@ class DoNotMockMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.kt:6: Error: Do not mock TestClass: Use fake() [DoNotMock]
-            @Mock lateinit var mock1: TestClass
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:7: Error: Do not mock TestClass2: Use fake() [DoNotMock]
-            @Mock lateinit var mock2: TestClass2
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:8: Error: Do not mock TestClass3: BECAUSE REASONS [DoNotMock]
-            @Mock lateinit var mock3: TestClass3
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:9: Error: Do not mock TestClass4: BECAUSE REASONS [DoNotMock]
-            @Mock lateinit var mock4: TestClass4
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          4 errors, 0 warnings
+        test/test/slack/test/TestClass.kt:6: Error: Do not mock TestClass: Use fake() [DoNotMock]
+          @Mock lateinit var mock1: TestClass
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:7: Error: Do not mock TestClass2: Use fake() [DoNotMock]
+          @Mock lateinit var mock2: TestClass2
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:8: Error: Do not mock TestClass3: BECAUSE REASONS [DoNotMock]
+          @Mock lateinit var mock3: TestClass3
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:9: Error: Do not mock TestClass4: BECAUSE REASONS [DoNotMock]
+          @Mock lateinit var mock4: TestClass4
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        4 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -133,19 +133,19 @@ class DoNotMockMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.java:9: Error: Do not mock TestClass: Use fake() [DoNotMock]
-            @Mock TestClass mock;
-            ~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:10: Error: Do not mock TestClass2: Use fake() [DoNotMock]
-            @Mock TestClass2 mock2;
-            ~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:11: Error: Do not mock TestClass3: BECAUSE REASONS [DoNotMock]
-            @Mock TestClass3 mock3;
-            ~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:12: Error: Do not mock TestClass4: BECAUSE REASONS [DoNotMock]
-            @Mock TestClass4 mock4;
-            ~~~~~~~~~~~~~~~~~~~~~~~
-          4 errors, 0 warnings
+        test/test/slack/test/TestClass.java:9: Error: Do not mock TestClass: Use fake() [DoNotMock]
+          @Mock TestClass mock;
+          ~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:10: Error: Do not mock TestClass2: Use fake() [DoNotMock]
+          @Mock TestClass2 mock2;
+          ~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:11: Error: Do not mock TestClass3: BECAUSE REASONS [DoNotMock]
+          @Mock TestClass3 mock3;
+          ~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:12: Error: Do not mock TestClass4: BECAUSE REASONS [DoNotMock]
+          @Mock TestClass4 mock4;
+          ~~~~~~~~~~~~~~~~~~~~~~~
+        4 errors, 0 warnings
         """
           .trimIndent()
       )
