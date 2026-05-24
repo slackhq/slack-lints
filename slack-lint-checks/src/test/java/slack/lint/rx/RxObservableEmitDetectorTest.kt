@@ -398,7 +398,7 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
     val PRODUCER_SCOPE_API: TestFile =
       kotlin(
           """
-          package kotlin.coroutines
+          package kotlinx.coroutines.channels
 
           class ChannelResult<T>
 
@@ -417,7 +417,7 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
 
             import io.reactivex.rxjava3.core.Observable
             import kotlin.coroutines.CoroutineContext
-            import kotlin.coroutines.ProducerScope
+            import kotlinx.coroutines.channels.ProducerScope
 
             fun <T : Any> rxObservable(
               context: CoroutineContext,
@@ -434,7 +434,7 @@ class RxObservableEmitDetectorTest : BaseSlackLintTest() {
 
             import io.reactivex.rxjava3.core.Flowable
             import kotlin.coroutines.CoroutineContext
-            import kotlin.coroutines.ProducerScope
+            import kotlinx.coroutines.channels.ProducerScope
 
             fun <T : Any> rxFlowable(
               context: CoroutineContext,
