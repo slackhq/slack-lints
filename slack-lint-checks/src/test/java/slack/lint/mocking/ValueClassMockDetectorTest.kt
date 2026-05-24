@@ -65,31 +65,31 @@ class ValueClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.kt:8: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-            @Mock lateinit var fieldMock: TestClass
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:9: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-            @Spy lateinit var fieldSpy: TestClass
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:12: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-              val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:13: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-              val localSpy1 = org.mockito.Mockito.spy(localMock1)
-                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:14: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-              val localMock2 = mock<TestClass>()
-                               ~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:16: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-              val localMock3 = org.mockito.Mockito.mock(classRef)
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:18: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-              val dynamicMock = mock<TestClass> {
-                                ^
-          test/test/slack/test/TestClass.kt:21: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-              val assigned: TestClass = mock()
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          8 errors, 0 warnings
+        test/test/slack/test/TestClass.kt:8: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+          @Mock lateinit var fieldMock: TestClass
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:9: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+          @Spy lateinit var fieldSpy: TestClass
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:12: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+            val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:13: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+            val localSpy1 = org.mockito.Mockito.spy(localMock1)
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:14: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+            val localMock2 = mock<TestClass>()
+                             ~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:16: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+            val localMock3 = org.mockito.Mockito.mock(classRef)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:18: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+            val dynamicMock = mock<TestClass> {
+                              ^
+        test/test/slack/test/TestClass.kt:21: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+            val assigned: TestClass = mock()
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        8 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -129,22 +129,22 @@ class ValueClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.java:9: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-            @Mock TestClass fieldMock;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:10: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-            @Spy TestClass fieldSpy;
-            ~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:13: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-              TestClass localMock = mock(TestClass.class);
-                                    ~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:14: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-              TestClass localSpy = spy(localMock);
+        test/test/slack/test/TestClass.java:9: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+          @Mock TestClass fieldMock;
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:10: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+          @Spy TestClass fieldSpy;
+          ~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:13: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+            TestClass localMock = mock(TestClass.class);
+                                  ~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:14: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+            TestClass localSpy = spy(localMock);
+                                 ~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:16: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
+            TestClass localMock2 = mock(classRef);
                                    ~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:16: Error: value classes represent inlined types, so mocking them should not be necessary [DoNotMockValueClass]
-              TestClass localMock2 = mock(classRef);
-                                     ~~~~~~~~~~~~~~
-          5 errors, 0 warnings
+        5 errors, 0 warnings
         """
           .trimIndent()
       )

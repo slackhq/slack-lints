@@ -108,19 +108,19 @@ class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-              src/foo/MyModule.kt:15: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
-                  binds1("this is bad")
-                  ~~~~~~~~~~~~~~~~~~~~~
-              src/foo/MyModule.kt:16: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
-                  "this is bad".binds2()
-                   ~~~~~~~~~~~~~~~~~~~~~
-              src/foo/MyModule.kt:17: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
-                  provider()
-                  ~~~~~~~~~~
-              src/foo/MyModule.kt:18: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
-                  producer()
-                  ~~~~~~~~~~
-              4 errors, 0 warnings
+        src/foo/MyModule.kt:15: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
+            binds1("this is bad")
+            ~~~~~~~~~~~~~~~~~~~~~
+        src/foo/MyModule.kt:16: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
+            "this is bad".binds2()
+             ~~~~~~~~~~~~~~~~~~~~~
+        src/foo/MyModule.kt:17: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
+            provider()
+            ~~~~~~~~~~
+        src/foo/MyModule.kt:18: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
+            producer()
+            ~~~~~~~~~~
+        4 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -183,16 +183,16 @@ class DoNotCallProvidersDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-              src/foo/Holder.java:15: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
-                    binds1("this is bad");
-                    ~~~~~~~~~~~~~~~~~~~~~
-              src/foo/Holder.java:16: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
-                    provider();
-                    ~~~~~~~~~~
-              src/foo/Holder.java:17: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
-                    producer();
-                    ~~~~~~~~~~
-              3 errors, 0 warnings
+        src/foo/Holder.java:15: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
+              binds1("this is bad");
+              ~~~~~~~~~~~~~~~~~~~~~
+        src/foo/Holder.java:16: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
+              provider();
+              ~~~~~~~~~~
+        src/foo/Holder.java:17: Error: Dagger provider methods should not be called directly by user code. [DoNotCallProviders]
+              producer();
+              ~~~~~~~~~~
+        3 errors, 0 warnings
         """
           .trimIndent()
       )

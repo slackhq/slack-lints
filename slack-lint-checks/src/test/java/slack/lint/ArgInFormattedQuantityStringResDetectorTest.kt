@@ -62,13 +62,13 @@ class ArgInFormattedQuantityStringResDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.kt:7: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]
-              val s = res.getQuantityString(0, 3, 3, "asdf")
-                                                  ~
-          src/com/slack/lint/Foo.kt:7: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]
-              val s = res.getQuantityString(0, 3, 3, "asdf")
-                                                     ~~~~~~
-          0 errors, 2 warnings
+        src/com/slack/lint/Foo.kt:7: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]
+            val s = res.getQuantityString(0, 3, 3, "asdf")
+                                                ~
+        src/com/slack/lint/Foo.kt:7: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]
+            val s = res.getQuantityString(0, 3, 3, "asdf")
+                                                   ~~~~~~
+        0 errors, 2 warnings
         """
           .trimIndent()
       )
@@ -199,10 +199,10 @@ class ArgInFormattedQuantityStringResDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.kt:8: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]
-              val s = res.getQuantityString(0, 3, getFormattedCount(), "asdf")
-                                                                       ~~~~~~
-          0 errors, 1 warnings
+        src/com/slack/lint/Foo.kt:8: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]
+            val s = res.getQuantityString(0, 3, getFormattedCount(), "asdf")
+                                                                     ~~~~~~
+        0 errors, 1 warnings
         """
           .trimIndent()
       )
@@ -236,10 +236,10 @@ class ArgInFormattedQuantityStringResDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/com/slack/lint/Foo.kt:7: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]
-              val s = res.getQuantityString(0, 3, LocalizationUtils.getFormattedCount(), "asdf")
-                                                                                         ~~~~~~
-          0 errors, 1 warnings
+        src/com/slack/lint/Foo.kt:7: Warning: This may require a localized count modifier. If so, use LocalizationUtils.getFormattedCount(). Consult #plz-localization if you are unsure. [ArgInFormattedQuantityStringRes]
+            val s = res.getQuantityString(0, 3, LocalizationUtils.getFormattedCount(), "asdf")
+                                                                                       ~~~~~~
+        0 errors, 1 warnings
         """
           .trimIndent()
       )

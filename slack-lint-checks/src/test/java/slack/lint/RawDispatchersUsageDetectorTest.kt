@@ -49,21 +49,21 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
         DISPATCHERS_STUB,
         kotlin(
             """
-              package test.pkg
+            package test.pkg
 
-              import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.Dispatchers
 
-              fun example() {
-                Dispatchers.IO
-                Dispatchers.Default
-                Dispatchers.Unconfined
-                Dispatchers.Main
-                Dispatchers.someExtension()
-                Dispatchers::IO
-                Dispatchers::Default
-                Dispatchers::Unconfined
-                Dispatchers::Main
-              }
+            fun example() {
+              Dispatchers.IO
+              Dispatchers.Default
+              Dispatchers.Unconfined
+              Dispatchers.Main
+              Dispatchers.someExtension()
+              Dispatchers::IO
+              Dispatchers::Default
+              Dispatchers::Unconfined
+              Dispatchers::Main
+            }
             """
               .trimIndent()
           )
@@ -73,31 +73,31 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test/pkg/test.kt:6: Error: Use SlackDispatchers. [RawDispatchersUse]
-            Dispatchers.IO
-            ~~~~~~~~~~~~~~
-          src/test/pkg/test.kt:7: Error: Use SlackDispatchers. [RawDispatchersUse]
-            Dispatchers.Default
-            ~~~~~~~~~~~~~~~~~~~
-          src/test/pkg/test.kt:8: Error: Use SlackDispatchers. [RawDispatchersUse]
-            Dispatchers.Unconfined
-            ~~~~~~~~~~~~~~~~~~~~~~
-          src/test/pkg/test.kt:9: Error: Use SlackDispatchers. [RawDispatchersUse]
-            Dispatchers.Main
-            ~~~~~~~~~~~~~~~~
-          src/test/pkg/test.kt:11: Error: Use SlackDispatchers. [RawDispatchersUse]
-            Dispatchers::IO
-            ~~~~~~~~~~~~~~~
-          src/test/pkg/test.kt:12: Error: Use SlackDispatchers. [RawDispatchersUse]
-            Dispatchers::Default
-            ~~~~~~~~~~~~~~~~~~~~
-          src/test/pkg/test.kt:13: Error: Use SlackDispatchers. [RawDispatchersUse]
-            Dispatchers::Unconfined
-            ~~~~~~~~~~~~~~~~~~~~~~~
-          src/test/pkg/test.kt:14: Error: Use SlackDispatchers. [RawDispatchersUse]
-            Dispatchers::Main
-            ~~~~~~~~~~~~~~~~~
-          8 errors, 0 warnings
+        src/test/pkg/test.kt:6: Error: Use SlackDispatchers. [RawDispatchersUse]
+          Dispatchers.IO
+          ~~~~~~~~~~~~~~
+        src/test/pkg/test.kt:7: Error: Use SlackDispatchers. [RawDispatchersUse]
+          Dispatchers.Default
+          ~~~~~~~~~~~~~~~~~~~
+        src/test/pkg/test.kt:8: Error: Use SlackDispatchers. [RawDispatchersUse]
+          Dispatchers.Unconfined
+          ~~~~~~~~~~~~~~~~~~~~~~
+        src/test/pkg/test.kt:9: Error: Use SlackDispatchers. [RawDispatchersUse]
+          Dispatchers.Main
+          ~~~~~~~~~~~~~~~~
+        src/test/pkg/test.kt:11: Error: Use SlackDispatchers. [RawDispatchersUse]
+          Dispatchers::IO
+          ~~~~~~~~~~~~~~~
+        src/test/pkg/test.kt:12: Error: Use SlackDispatchers. [RawDispatchersUse]
+          Dispatchers::Default
+          ~~~~~~~~~~~~~~~~~~~~
+        src/test/pkg/test.kt:13: Error: Use SlackDispatchers. [RawDispatchersUse]
+          Dispatchers::Unconfined
+          ~~~~~~~~~~~~~~~~~~~~~~~
+        src/test/pkg/test.kt:14: Error: Use SlackDispatchers. [RawDispatchersUse]
+          Dispatchers::Main
+          ~~~~~~~~~~~~~~~~~
+        8 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -112,21 +112,21 @@ class RawDispatchersUsageDetectorTest : BaseSlackLintTest() {
         kotlin(
             "test/test/pkg/Test.kt",
             """
-              package test.pkg
+            package test.pkg
 
-              import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.Dispatchers
 
-              fun example() {
-                Dispatchers.IO
-                Dispatchers.Default
-                Dispatchers.Unconfined
-                Dispatchers.Main
-                Dispatchers.someExtension()
-                Dispatchers::IO
-                Dispatchers::Default
-                Dispatchers::Unconfined
-                Dispatchers::Main
-              }
+            fun example() {
+              Dispatchers.IO
+              Dispatchers.Default
+              Dispatchers.Unconfined
+              Dispatchers.Main
+              Dispatchers.someExtension()
+              Dispatchers::IO
+              Dispatchers::Default
+              Dispatchers::Unconfined
+              Dispatchers::Main
+            }
             """
               .trimIndent(),
           )

@@ -311,10 +311,10 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/TestEnum.java:8: Warning: Consider using @Json(name = ...) rather than lower casing. [MoshiUsageEnumCasing]
-            test
-            ~~~~
-          0 errors, 1 warnings
+        src/slack/model/TestEnum.java:8: Warning: Consider using @Json(name = ...) rather than lower casing. [MoshiUsageEnumCasing]
+          test
+          ~~~~
+        0 errors, 1 warnings
         """
           .trimIndent()
       )
@@ -344,10 +344,10 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/TestEnum.java:9: Warning: Consider using @Json(name = ...) rather than lower casing. [MoshiUsageEnumCasing]
-            @Json(name = "taken") test
-                                  ~~~~
-          0 errors, 1 warnings
+        src/slack/model/TestEnum.java:9: Warning: Consider using @Json(name = ...) rather than lower casing. [MoshiUsageEnumCasing]
+          @Json(name = "taken") test
+                                ~~~~
+        0 errors, 1 warnings
         """
           .trimIndent()
       )
@@ -386,10 +386,10 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/TestEnum.java:9: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
-            @Json(name = " ") TEST
-                         ~~~
-          1 errors, 0 warnings
+        src/slack/model/TestEnum.java:9: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
+          @Json(name = " ") TEST
+                       ~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -419,10 +419,10 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/TestEnum.java:9: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
-            @Json(name = "") TEST
-                         ~~
-          1 errors, 0 warnings
+        src/slack/model/TestEnum.java:9: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
+          @Json(name = "") TEST
+                       ~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -452,10 +452,10 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.java:9: Warning: Json.name with the same value as the property/enum member name is redundant. [MoshiUsageRedundantJsonName]
-            @Json(name = "VALUE") VALUE
-                         ~~~~~~~
-          0 errors, 1 warnings
+        src/slack/model/Example.java:9: Warning: Json.name with the same value as the property/enum member name is redundant. [MoshiUsageRedundantJsonName]
+          @Json(name = "VALUE") VALUE
+                       ~~~~~~~
+        0 errors, 1 warnings
         """
           .trimIndent()
       )
@@ -497,19 +497,19 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.java:9: Error: Name 'VALUE' is duplicated by member 'VALUE_1'. [MoshiUsageDuplicateJsonName]
-            VALUE,
-            ~~~~~
-          src/slack/model/Example.java:10: Error: Name 'VALUE' is duplicated by member 'VALUE'. [MoshiUsageDuplicateJsonName]
-            @Json(name = "VALUE") VALUE_1,
-                                  ~~~~~~~
-          src/slack/model/Example.java:11: Error: Name 'value2' is duplicated by member 'VALUE_3'. [MoshiUsageDuplicateJsonName]
-            @Json(name = "value2") VALUE_2,
-                                   ~~~~~~~
-          src/slack/model/Example.java:12: Error: Name 'value2' is duplicated by member 'VALUE_2'. [MoshiUsageDuplicateJsonName]
-            @Json(name = "value2") VALUE_3;
-                                   ~~~~~~~
-          4 errors, 0 warnings
+        src/slack/model/Example.java:9: Error: Name 'VALUE' is duplicated by member 'VALUE_1'. [MoshiUsageDuplicateJsonName]
+          VALUE,
+          ~~~~~
+        src/slack/model/Example.java:10: Error: Name 'VALUE' is duplicated by member 'VALUE'. [MoshiUsageDuplicateJsonName]
+          @Json(name = "VALUE") VALUE_1,
+                                ~~~~~~~
+        src/slack/model/Example.java:11: Error: Name 'value2' is duplicated by member 'VALUE_3'. [MoshiUsageDuplicateJsonName]
+          @Json(name = "value2") VALUE_2,
+                                 ~~~~~~~
+        src/slack/model/Example.java:12: Error: Name 'value2' is duplicated by member 'VALUE_2'. [MoshiUsageDuplicateJsonName]
+          @Json(name = "value2") VALUE_3;
+                                 ~~~~~~~
+        4 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -791,10 +791,10 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/TestEnum.kt:8: Warning: Consider using @Json(name = ...) rather than lower casing. [MoshiUsageEnumCasing]
-            test
-            ~~~~
-          0 errors, 1 warnings
+        src/slack/model/TestEnum.kt:8: Warning: Consider using @Json(name = ...) rather than lower casing. [MoshiUsageEnumCasing]
+          test
+          ~~~~
+        0 errors, 1 warnings
         """
           .trimIndent()
       )
@@ -833,10 +833,10 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/TestEnum.kt:9: Warning: Consider using @Json(name = ...) rather than lower casing. [MoshiUsageEnumCasing]
-            @Json(name = "taken") test
-                                  ~~~~
-          0 errors, 1 warnings
+        src/slack/model/TestEnum.kt:9: Warning: Consider using @Json(name = ...) rather than lower casing. [MoshiUsageEnumCasing]
+          @Json(name = "taken") test
+                                ~~~~
+        0 errors, 1 warnings
         """
           .trimIndent()
       )
@@ -875,10 +875,10 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/TestEnum.kt:9: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
-            @Json(name = " ") TEST
-                         ~~~
-          1 errors, 0 warnings
+        src/slack/model/TestEnum.kt:9: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
+          @Json(name = " ") TEST
+                       ~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -908,10 +908,10 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/TestEnum.kt:9: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
-            @Json(name = "") TEST
-                         ~~
-          1 errors, 0 warnings
+        src/slack/model/TestEnum.kt:9: Error: Don't use blank names in @Json. [MoshiUsageBlankJsonName]
+          @Json(name = "") TEST
+                       ~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -941,10 +941,10 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.kt:9: Warning: Json.name with the same value as the property/enum member name is redundant. [MoshiUsageRedundantJsonName]
-            @Json(name = "VALUE") VALUE
-                         ~~~~~~~
-          0 errors, 1 warnings
+        src/slack/model/Example.kt:9: Warning: Json.name with the same value as the property/enum member name is redundant. [MoshiUsageRedundantJsonName]
+          @Json(name = "VALUE") VALUE
+                       ~~~~~~~
+        0 errors, 1 warnings
         """
           .trimIndent()
       )
@@ -986,19 +986,19 @@ class MoshiEnumUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/model/Example.kt:9: Error: Name 'VALUE' is duplicated by member 'VALUE_1'. [MoshiUsageDuplicateJsonName]
-            VALUE,
-            ~~~~~
-          src/slack/model/Example.kt:10: Error: Name 'VALUE' is duplicated by member 'VALUE'. [MoshiUsageDuplicateJsonName]
-            @Json(name = "VALUE") VALUE_1,
-                                  ~~~~~~~
-          src/slack/model/Example.kt:11: Error: Name 'value2' is duplicated by member 'VALUE_3'. [MoshiUsageDuplicateJsonName]
-            @Json(name = "value2") VALUE_2,
-                                   ~~~~~~~
-          src/slack/model/Example.kt:12: Error: Name 'value2' is duplicated by member 'VALUE_2'. [MoshiUsageDuplicateJsonName]
-            @Json(name = "value2") VALUE_3
-                                   ~~~~~~~
-          4 errors, 0 warnings
+        src/slack/model/Example.kt:9: Error: Name 'VALUE' is duplicated by member 'VALUE_1'. [MoshiUsageDuplicateJsonName]
+          VALUE,
+          ~~~~~
+        src/slack/model/Example.kt:10: Error: Name 'VALUE' is duplicated by member 'VALUE'. [MoshiUsageDuplicateJsonName]
+          @Json(name = "VALUE") VALUE_1,
+                                ~~~~~~~
+        src/slack/model/Example.kt:11: Error: Name 'value2' is duplicated by member 'VALUE_3'. [MoshiUsageDuplicateJsonName]
+          @Json(name = "value2") VALUE_2,
+                                 ~~~~~~~
+        src/slack/model/Example.kt:12: Error: Name 'value2' is duplicated by member 'VALUE_2'. [MoshiUsageDuplicateJsonName]
+          @Json(name = "value2") VALUE_3
+                                 ~~~~~~~
+        4 errors, 0 warnings
         """
           .trimIndent()
       )

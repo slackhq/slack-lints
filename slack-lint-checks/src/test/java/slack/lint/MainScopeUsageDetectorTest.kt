@@ -13,11 +13,11 @@ class MainScopeUsageDetectorTest : BaseSlackLintTest() {
         "test/kotlinx/coroutines/CoroutineScope.kt",
         // language=kotlin
         """
-          package kotlinx.coroutines
+        package kotlinx.coroutines
 
-          fun MainScope() {
+        fun MainScope() {
 
-          }
+        }
         """
           .trimIndent(),
       )
@@ -80,13 +80,13 @@ class MainScopeUsageDetectorTest : BaseSlackLintTest() {
         kotlin(
             "test/test/pkg/Test.kt",
             """
-              package test.pkg
+            package test.pkg
 
-              import kotlinx.coroutines.MainScope
+            import kotlinx.coroutines.MainScope
 
-              fun example() {
-                val scope = MainScope()
-              }
+            fun example() {
+              val scope = MainScope()
+            }
             """
               .trimIndent(),
           )

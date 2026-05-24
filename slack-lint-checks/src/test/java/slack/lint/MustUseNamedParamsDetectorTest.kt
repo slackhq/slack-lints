@@ -65,10 +65,10 @@ class MustUseNamedParamsDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/foo/TestFile.kt:16: Error: Calls to @MustUseNamedParams-annotated methods must name all parameters. [MustUseNamedParams]
-              methodWithAnnotation("Zac")
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          1 errors, 0 warnings
+        src/foo/TestFile.kt:16: Error: Calls to @MustUseNamedParams-annotated methods must name all parameters. [MustUseNamedParams]
+            methodWithAnnotation("Zac")
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        1 errors, 0 warnings
         """
           .trimIndent()
       )

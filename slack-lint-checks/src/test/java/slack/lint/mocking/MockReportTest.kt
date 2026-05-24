@@ -90,18 +90,18 @@ class MockReportTest : BaseSlackLintTest() {
     assertThat(reports.readText())
       .isEqualTo(
         """
-          type,isError
-          java.util.List,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
+        type,isError
+        java.util.List,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
         """
           .trimIndent()
       )
@@ -149,12 +149,12 @@ class MockReportTest : BaseSlackLintTest() {
     assertThat(reports.readText())
       .isEqualTo(
         """
-          type,isError
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
+        type,isError
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
         """
           .trimIndent()
       )
@@ -235,25 +235,25 @@ class MockReportTest : BaseSlackLintTest() {
     assertThat(reports.readText())
       .isEqualTo(
         """
-          type,isError
-          java.util.List,true
-          slack.test.ExampleInterface,false
-          slack.test.ExampleInterface,false
-          slack.test.ExampleInterface,false
-          slack.test.ExampleInterface,false
-          slack.test.ExampleInterface,false
-          slack.test.ExampleInterface,false
-          slack.test.ExampleInterface,false
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
-          slack.test.TestClass,true
+        type,isError
+        java.util.List,true
+        slack.test.ExampleInterface,false
+        slack.test.ExampleInterface,false
+        slack.test.ExampleInterface,false
+        slack.test.ExampleInterface,false
+        slack.test.ExampleInterface,false
+        slack.test.ExampleInterface,false
+        slack.test.ExampleInterface,false
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
+        slack.test.TestClass,true
         """
           .trimIndent()
       )

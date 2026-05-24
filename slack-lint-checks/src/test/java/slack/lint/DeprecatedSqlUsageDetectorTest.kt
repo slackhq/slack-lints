@@ -36,10 +36,10 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/foo/SqlUsageTestFailure.java:7: Warning: All SQL querying should be performed using SqlDelight [DeprecatedSqlUsage]
-              db.execSQL("DROP TABLE IF EXISTS foo");
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          0 errors, 1 warnings
+        src/foo/SqlUsageTestFailure.java:7: Warning: All SQL querying should be performed using SqlDelight [DeprecatedSqlUsage]
+            db.execSQL("DROP TABLE IF EXISTS foo");
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        0 errors, 1 warnings
         """
           .trimIndent()
       )
@@ -68,10 +68,10 @@ class DeprecatedSqlUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/foo/SqlUsageTestFailure.kt:7: Warning: All SQL querying should be performed using SqlDelight [DeprecatedSqlUsage]
-              db.execSQL("DROP TABLE IF EXISTS foo")
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          0 errors, 1 warnings
+        src/foo/SqlUsageTestFailure.kt:7: Warning: All SQL querying should be performed using SqlDelight [DeprecatedSqlUsage]
+            db.execSQL("DROP TABLE IF EXISTS foo")
+            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        0 errors, 1 warnings
         """
           .trimIndent()
       )

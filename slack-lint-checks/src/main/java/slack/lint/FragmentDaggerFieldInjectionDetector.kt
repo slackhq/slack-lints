@@ -53,10 +53,9 @@ class FragmentDaggerFieldInjectionDetector : Detector(), SourceCodeScanner {
 
   private fun UClass.isFragment() = implements("androidx.fragment.app.Fragment")
 
-  private fun UClass.hasConstructorInjection() =
-    constructors.any {
-      it.hasAnnotation(FQN_JAVAX_INJECT) || it.hasAnnotation(FQN_DAGGER_ASSISTED_INJECT)
-    }
+  private fun UClass.hasConstructorInjection() = constructors.any {
+    it.hasAnnotation(FQN_JAVAX_INJECT) || it.hasAnnotation(FQN_DAGGER_ASSISTED_INJECT)
+  }
 
   companion object {
     private const val FQN_JAVAX_INJECT = "javax.inject.Inject"

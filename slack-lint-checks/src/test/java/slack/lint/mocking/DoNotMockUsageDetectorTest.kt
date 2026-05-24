@@ -72,26 +72,26 @@ class DoNotMockUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/test/TestClass.kt:10: Error: Use Slack's internal @DoNotMock annotation. [ErrorProneDoNotMockUsage]
-          @com.google.errorprone.annotations.DoNotMock("Use fake()")
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          src/slack/test/TestClass.kt:20: Error: Use Slack's internal @DoNotMock annotation. [ErrorProneDoNotMockUsage]
-          @DoNotMock
-          ~~~~~~~~~~
-          2 errors, 0 warnings
+        src/slack/test/TestClass.kt:10: Error: Use Slack's internal @DoNotMock annotation. [ErrorProneDoNotMockUsage]
+        @com.google.errorprone.annotations.DoNotMock("Use fake()")
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/slack/test/TestClass.kt:20: Error: Use Slack's internal @DoNotMock annotation. [ErrorProneDoNotMockUsage]
+        @DoNotMock
+        ~~~~~~~~~~
+        2 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/slack/test/TestClass.kt line 10: Replace with slack.lint.annotations.DoNotMock:
-          @@ -10 +10
-          - @com.google.errorprone.annotations.DoNotMock("Use fake()")
-          + @slack.lint.annotations.DoNotMock("Use fake()")
-          Fix for src/slack/test/TestClass.kt line 20: Replace with slack.lint.annotations.DoNotMock:
-          @@ -20 +20
-          - @DoNotMock
-          + @slack.lint.annotations.DoNotMock
+        Fix for src/slack/test/TestClass.kt line 10: Replace with slack.lint.annotations.DoNotMock:
+        @@ -10 +10
+        - @com.google.errorprone.annotations.DoNotMock("Use fake()")
+        + @slack.lint.annotations.DoNotMock("Use fake()")
+        Fix for src/slack/test/TestClass.kt line 20: Replace with slack.lint.annotations.DoNotMock:
+        @@ -20 +20
+        - @DoNotMock
+        + @slack.lint.annotations.DoNotMock
         """
           .trimIndent()
       )
@@ -130,26 +130,26 @@ class DoNotMockUsageDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/slack/test/TestClass.java:9: Error: Use Slack's internal @DoNotMock annotation. [ErrorProneDoNotMockUsage]
-          @com.google.errorprone.annotations.DoNotMock("Use fake()")
-          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          src/slack/test/TestClass.java:17: Error: Use Slack's internal @DoNotMock annotation. [ErrorProneDoNotMockUsage]
-          @DoNotMock
-          ~~~~~~~~~~
-          2 errors, 0 warnings
+        src/slack/test/TestClass.java:9: Error: Use Slack's internal @DoNotMock annotation. [ErrorProneDoNotMockUsage]
+        @com.google.errorprone.annotations.DoNotMock("Use fake()")
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        src/slack/test/TestClass.java:17: Error: Use Slack's internal @DoNotMock annotation. [ErrorProneDoNotMockUsage]
+        @DoNotMock
+        ~~~~~~~~~~
+        2 errors, 0 warnings
         """
           .trimIndent()
       )
       .expectFixDiffs(
         """
-          Fix for src/slack/test/TestClass.java line 9: Replace with slack.lint.annotations.DoNotMock:
-          @@ -9 +9
-          - @com.google.errorprone.annotations.DoNotMock("Use fake()")
-          + @slack.lint.annotations.DoNotMock("Use fake()")
-          Fix for src/slack/test/TestClass.java line 17: Replace with slack.lint.annotations.DoNotMock:
-          @@ -17 +17
-          - @DoNotMock
-          + @slack.lint.annotations.DoNotMock
+        Fix for src/slack/test/TestClass.java line 9: Replace with slack.lint.annotations.DoNotMock:
+        @@ -9 +9
+        - @com.google.errorprone.annotations.DoNotMock("Use fake()")
+        + @slack.lint.annotations.DoNotMock("Use fake()")
+        Fix for src/slack/test/TestClass.java line 17: Replace with slack.lint.annotations.DoNotMock:
+        @@ -17 +17
+        - @DoNotMock
+        + @slack.lint.annotations.DoNotMock
         """
           .trimIndent()
       )

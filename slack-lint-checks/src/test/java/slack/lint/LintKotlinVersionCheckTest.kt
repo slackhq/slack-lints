@@ -40,10 +40,10 @@ class LintKotlinVersionCheckTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          src/test/test.kt:3: Error: Kotlin version matched expected one [KotlinVersion]
-          fun main() {
-          ^
-          1 errors, 0 warnings
+        src/test/test.kt:3: Error: Kotlin version matched expected one [KotlinVersion]
+        fun main() {
+        ^
+        1 errors, 0 warnings
         """
           .trimIndent()
       )

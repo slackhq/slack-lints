@@ -61,40 +61,40 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/ForkHandler.kt:1: Error: Use inclusive naming. Matched string is 'fork' in file name 'ForkHandler.kt' [InclusiveNaming]
-          class Spork(val sporkBranch: String, sporkParam: String) {
-          ^
-          test/ForkHandler.kt:1: Error: Use inclusive naming. Matched string is 'spork' in class name 'Spork' [InclusiveNaming]
-          class Spork(val sporkBranch: String, sporkParam: String) {
-          ^
-          test/ForkHandler.kt:1: Error: Use inclusive naming. Matched string is 'spork' in function name 'getSporkBranch' [InclusiveNaming]
-          class Spork(val sporkBranch: String, sporkParam: String) {
-                          ~~~~~~~~~~~
-          test/ForkHandler.kt:1: Error: Use inclusive naming. Matched string is 'spork' in parameter name 'sporkParam' [InclusiveNaming]
-          class Spork(val sporkBranch: String, sporkParam: String) {
-                                               ~~~~~~~~~~~~~~~~~~
-          test/ForkHandler.kt:1: Error: Use inclusive naming. Matched string is 'spork' in property name 'sporkBranch' [InclusiveNaming]
-          class Spork(val sporkBranch: String, sporkParam: String) {
-                      ~~~~~~~~~~~~~~~~~~~~~~~
-          test/ForkHandler.kt:2: Error: Use inclusive naming. Matched string is 'knife' in function name 'getKnife' [InclusiveNaming]
-            val knife = ""
-                ~~~~~
-          test/ForkHandler.kt:2: Error: Use inclusive naming. Matched string is 'knife' in property name 'knife' [InclusiveNaming]
-            val knife = ""
-            ~~~~~~~~~~~~~~
-          test/ForkHandler.kt:4: Error: Use inclusive naming. Matched string is 'spoon' in function name 'spoonBranch' [InclusiveNaming]
-            fun spoonBranch(val spoonRef: String) {
-                ~~~~~~~~~~~
-          test/ForkHandler.kt:4: Error: Use inclusive naming. Matched string is 'spoon' in parameter name 'spoonRef' [InclusiveNaming]
-            fun spoonBranch(val spoonRef: String) {
-                            ~~~~~~~~~~~~~~~~~~~~
-          test/ForkHandler.kt:5: Error: Use inclusive naming. Matched string is 'fork' in local variable name 'localFork' [InclusiveNaming]
-              val localFork = ""
-              ~~~~~~~~~~~~~~~~~~
-          test/ForkHandler.kt:7: Error: Use inclusive naming. Matched string is 'spoon' in label name 'spoonRefs' [InclusiveNaming]
-                  .forEach spoonRefs@ {
-                           ^
-          11 errors, 0 warnings
+        test/ForkHandler.kt:1: Error: Use inclusive naming. Matched string is 'fork' in file name 'ForkHandler.kt' [InclusiveNaming]
+        class Spork(val sporkBranch: String, sporkParam: String) {
+        ^
+        test/ForkHandler.kt:1: Error: Use inclusive naming. Matched string is 'spork' in class name 'Spork' [InclusiveNaming]
+        class Spork(val sporkBranch: String, sporkParam: String) {
+        ^
+        test/ForkHandler.kt:1: Error: Use inclusive naming. Matched string is 'spork' in function name 'getSporkBranch' [InclusiveNaming]
+        class Spork(val sporkBranch: String, sporkParam: String) {
+                        ~~~~~~~~~~~
+        test/ForkHandler.kt:1: Error: Use inclusive naming. Matched string is 'spork' in parameter name 'sporkParam' [InclusiveNaming]
+        class Spork(val sporkBranch: String, sporkParam: String) {
+                                             ~~~~~~~~~~~~~~~~~~
+        test/ForkHandler.kt:1: Error: Use inclusive naming. Matched string is 'spork' in property name 'sporkBranch' [InclusiveNaming]
+        class Spork(val sporkBranch: String, sporkParam: String) {
+                    ~~~~~~~~~~~~~~~~~~~~~~~
+        test/ForkHandler.kt:2: Error: Use inclusive naming. Matched string is 'knife' in function name 'getKnife' [InclusiveNaming]
+          val knife = ""
+              ~~~~~
+        test/ForkHandler.kt:2: Error: Use inclusive naming. Matched string is 'knife' in property name 'knife' [InclusiveNaming]
+          val knife = ""
+          ~~~~~~~~~~~~~~
+        test/ForkHandler.kt:4: Error: Use inclusive naming. Matched string is 'spoon' in function name 'spoonBranch' [InclusiveNaming]
+          fun spoonBranch(val spoonRef: String) {
+              ~~~~~~~~~~~
+        test/ForkHandler.kt:4: Error: Use inclusive naming. Matched string is 'spoon' in parameter name 'spoonRef' [InclusiveNaming]
+          fun spoonBranch(val spoonRef: String) {
+                          ~~~~~~~~~~~~~~~~~~~~
+        test/ForkHandler.kt:5: Error: Use inclusive naming. Matched string is 'fork' in local variable name 'localFork' [InclusiveNaming]
+            val localFork = ""
+            ~~~~~~~~~~~~~~~~~~
+        test/ForkHandler.kt:7: Error: Use inclusive naming. Matched string is 'spoon' in label name 'spoonRefs' [InclusiveNaming]
+                .forEach spoonRefs@ {
+                         ^
+        11 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -127,25 +127,25 @@ class InclusiveNamingDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/ForkHandler.java:1: Error: Use inclusive naming. Matched string is 'fork' in class name 'ForkHandler' [InclusiveNaming]
-          class ForkHandler {
-          ^
-          test/ForkHandler.java:1: Error: Use inclusive naming. Matched string is 'fork' in file name 'ForkHandler.java' [InclusiveNaming]
-          class ForkHandler {
-          ^
-          test/ForkHandler.java:2: Error: Use inclusive naming. Matched string is 'knife' in field name 'knife' [InclusiveNaming]
-            String knife = "";
-            ~~~~~~~~~~~~~~~~~~
-          test/ForkHandler.java:4: Error: Use inclusive naming. Matched string is 'spoon' in method name 'spoonBranch' [InclusiveNaming]
-            void spoonBranch(String spoonRef) {
-                 ~~~~~~~~~~~
-          test/ForkHandler.java:4: Error: Use inclusive naming. Matched string is 'spoon' in parameter name 'spoonRef' [InclusiveNaming]
-            void spoonBranch(String spoonRef) {
-                             ~~~~~~~~~~~~~~~
-          test/ForkHandler.java:5: Error: Use inclusive naming. Matched string is 'fork' in local variable name 'localFork' [InclusiveNaming]
-              String localFork = "";
-              ~~~~~~~~~~~~~~~~~~~~~~
-          6 errors, 0 warnings
+        test/ForkHandler.java:1: Error: Use inclusive naming. Matched string is 'fork' in class name 'ForkHandler' [InclusiveNaming]
+        class ForkHandler {
+        ^
+        test/ForkHandler.java:1: Error: Use inclusive naming. Matched string is 'fork' in file name 'ForkHandler.java' [InclusiveNaming]
+        class ForkHandler {
+        ^
+        test/ForkHandler.java:2: Error: Use inclusive naming. Matched string is 'knife' in field name 'knife' [InclusiveNaming]
+          String knife = "";
+          ~~~~~~~~~~~~~~~~~~
+        test/ForkHandler.java:4: Error: Use inclusive naming. Matched string is 'spoon' in method name 'spoonBranch' [InclusiveNaming]
+          void spoonBranch(String spoonRef) {
+               ~~~~~~~~~~~
+        test/ForkHandler.java:4: Error: Use inclusive naming. Matched string is 'spoon' in parameter name 'spoonRef' [InclusiveNaming]
+          void spoonBranch(String spoonRef) {
+                           ~~~~~~~~~~~~~~~
+        test/ForkHandler.java:5: Error: Use inclusive naming. Matched string is 'fork' in local variable name 'localFork' [InclusiveNaming]
+            String localFork = "";
+            ~~~~~~~~~~~~~~~~~~~~~~
+        6 errors, 0 warnings
         """
           .trimIndent()
       )

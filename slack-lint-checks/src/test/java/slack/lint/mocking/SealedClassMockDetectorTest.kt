@@ -99,55 +99,55 @@ class SealedClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.kt:8: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-            @Mock lateinit var fieldMock: TestClass
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:9: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-            @Spy lateinit var fieldSpy: TestClass
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:12: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:13: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              val localSpy1 = org.mockito.Mockito.spy(localMock1)
-                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:14: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              val localMock2 = mock<TestClass>()
-                               ~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:16: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              val localMock3 = org.mockito.Mockito.mock(classRef)
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:18: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              val dynamicMock = mock<TestClass> {
-                                ^
-          test/test/slack/test/TestClass.kt:21: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              val assigned: TestClass = mock()
-                                        ~~~~~~
-          test/test/slack/test/TestClass.kt:25: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-            @Mock lateinit var fieldMock2: TestJavaClass
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:26: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-            @Spy lateinit var fieldSpy2: TestJavaClass
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:28: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              val localMock1 = org.mockito.Mockito.mock(TestJavaClass::class.java)
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:29: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              val localSpy1 = org.mockito.Mockito.spy(localMock1)
-                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:30: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              val localMock2 = mock<TestJavaClass>()
-                               ~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:32: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              val localMock3 = org.mockito.Mockito.mock(classRef)
-                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.kt:34: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              val dynamicMock = mock<TestJavaClass> {
-                                ^
-          test/test/slack/test/TestClass.kt:37: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              val assigned: TestJavaClass = mock()
-                                            ~~~~~~
-          16 errors, 0 warnings
+        test/test/slack/test/TestClass.kt:8: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+          @Mock lateinit var fieldMock: TestClass
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:9: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+          @Spy lateinit var fieldSpy: TestClass
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:12: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            val localMock1 = org.mockito.Mockito.mock(TestClass::class.java)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:13: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            val localSpy1 = org.mockito.Mockito.spy(localMock1)
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:14: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            val localMock2 = mock<TestClass>()
+                             ~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:16: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            val localMock3 = org.mockito.Mockito.mock(classRef)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:18: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            val dynamicMock = mock<TestClass> {
+                              ^
+        test/test/slack/test/TestClass.kt:21: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            val assigned: TestClass = mock()
+                                      ~~~~~~
+        test/test/slack/test/TestClass.kt:25: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+          @Mock lateinit var fieldMock2: TestJavaClass
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:26: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+          @Spy lateinit var fieldSpy2: TestJavaClass
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:28: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            val localMock1 = org.mockito.Mockito.mock(TestJavaClass::class.java)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:29: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            val localSpy1 = org.mockito.Mockito.spy(localMock1)
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:30: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            val localMock2 = mock<TestJavaClass>()
+                             ~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:32: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            val localMock3 = org.mockito.Mockito.mock(classRef)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.kt:34: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            val dynamicMock = mock<TestJavaClass> {
+                              ^
+        test/test/slack/test/TestClass.kt:37: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            val assigned: TestJavaClass = mock()
+                                          ~~~~~~
+        16 errors, 0 warnings
         """
           .trimIndent()
       )
@@ -198,37 +198,37 @@ class SealedClassMockDetectorTest : BaseSlackLintTest() {
       .run()
       .expect(
         """
-          test/test/slack/test/TestClass.java:9: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-            @Mock TestClass fieldMock;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:10: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-            @Spy TestClass fieldSpy;
-            ~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:13: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              TestClass localMock = mock(TestClass.class);
-                                    ~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:14: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              TestClass localSpy = spy(localMock);
+        test/test/slack/test/TestClass.java:9: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+          @Mock TestClass fieldMock;
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:10: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+          @Spy TestClass fieldSpy;
+          ~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:13: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            TestClass localMock = mock(TestClass.class);
+                                  ~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:14: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            TestClass localSpy = spy(localMock);
+                                 ~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:16: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            TestClass localMock2 = mock(classRef);
                                    ~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:16: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              TestClass localMock2 = mock(classRef);
+        test/test/slack/test/TestClass.java:20: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+          @Mock TestJavaClass fieldMock2;
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:21: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+          @Spy TestJavaClass fieldSpy2;
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:23: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            TestClass localMock = mock(TestJavaClass.class);
+                                  ~~~~~~~~~~~~~~~~~~~~~~~~~
+        test/test/slack/test/TestClass.java:24: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            TestJavaClass localSpy = spy(localMock);
                                      ~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:20: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-            @Mock TestJavaClass fieldMock2;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:21: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-            @Spy TestJavaClass fieldSpy2;
-            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:23: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              TestClass localMock = mock(TestJavaClass.class);
-                                    ~~~~~~~~~~~~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:24: Error: 'slack.test.TestClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              TestJavaClass localSpy = spy(localMock);
+        test/test/slack/test/TestClass.java:26: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
+            TestJavaClass localMock2 = mock(classRef);
                                        ~~~~~~~~~~~~~~
-          test/test/slack/test/TestClass.java:26: Error: 'slack.test.TestJavaClass' is a sealed type and has a restricted type hierarchy, use a subtype instead. [DoNotMockSealedClass]
-              TestJavaClass localMock2 = mock(classRef);
-                                         ~~~~~~~~~~~~~~
-          10 errors, 0 warnings
+        10 errors, 0 warnings
         """
           .trimIndent()
       )
