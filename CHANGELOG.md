@@ -4,6 +4,7 @@ Changelog
 **Unreleased**
 --------------
 
+- **Fix**: Fix various compatibility issues with Kotlin 2.2+.
 - **Fix**: Fix `ProducerScope` package in RxObservableEmitDetector.
 - Build against lint `32.2.1`.
 - Target Kotlin 2.2 (matches lint 32.*).
