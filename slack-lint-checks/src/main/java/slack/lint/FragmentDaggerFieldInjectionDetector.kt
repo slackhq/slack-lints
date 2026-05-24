@@ -12,6 +12,7 @@ import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.TextFormat
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UField
+import slack.lint.util.findAnnotationCompat
 import slack.lint.util.implements
 import slack.lint.util.sourceImplementation
 
@@ -27,7 +28,7 @@ class FragmentDaggerFieldInjectionDetector : Detector(), SourceCodeScanner {
     return object : UElementHandler() {
 
       override fun visitField(node: UField) {
-        if (node.isStatic || node.findAnnotation(FQN_JAVAX_INJECT) == null) return
+        if (node.isStatic || node.findAnnotationCompat(FQN_JAVAX_INJECT) == null) return
 
         val nodeParent = node.uastParent
         if (nodeParent !is UClass || nodeParent.isInterface) return
