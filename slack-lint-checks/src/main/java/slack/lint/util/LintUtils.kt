@@ -390,3 +390,16 @@ internal val PsiMethod.returnsUnit
  */
 internal val PsiType?.isVoidOrUnit
   get() = this == PsiTypes.voidType() || this?.canonicalText == "kotlin.Unit"
+
+/**
+ * Returns true if this [UAnnotated] element has any annotation whose short name is in
+ * [annotationNames]. Matches on simple name to avoid requiring fully qualified annotations in
+ * config.
+ */
+internal fun UAnnotated.hasAnyAnnotation(annotationNames: Set<String>): Boolean {
+  if (annotationNames.isEmpty()) return false
+  return uAnnotations.any { annotation ->
+    val name = annotation.qualifiedName?.substringAfterLast('.') ?: return@any false
+    name in annotationNames
+  }
+}

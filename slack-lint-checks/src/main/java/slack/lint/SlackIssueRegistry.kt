@@ -8,6 +8,26 @@ import com.android.tools.lint.detector.api.CURRENT_API
 import com.android.tools.lint.detector.api.Issue
 import com.google.auto.service.AutoService
 import slack.lint.denylistedapis.DenyListedApiDetector
+import slack.lint.detekt.CyclomaticComplexMethodDetector
+import slack.lint.detekt.FunctionNamingDetector
+import slack.lint.detekt.FunctionOnlyReturningConstantDetector
+import slack.lint.detekt.InvalidPackageDeclarationDetector
+import slack.lint.detekt.LongMethodDetector
+import slack.lint.detekt.LongParameterListDetector
+import slack.lint.detekt.MagicNumberDetector
+import slack.lint.detekt.NestedBlockDepthDetector
+import slack.lint.detekt.ReturnCountDetector
+import slack.lint.detekt.SwallowedExceptionDetector
+import slack.lint.detekt.ThrowingExceptionsWithoutMessageDetector
+import slack.lint.detekt.TooGenericExceptionCaughtDetector
+import slack.lint.detekt.TooGenericExceptionThrownDetector
+import slack.lint.detekt.TooManyFunctionsDetector
+import slack.lint.detekt.TopLevelPropertyNamingDetector
+import slack.lint.detekt.UnderscoresInNumericLiteralsDetector
+import slack.lint.detekt.UnnecessaryAbstractClassDetector
+import slack.lint.detekt.UnnecessaryBackticksDetector
+import slack.lint.detekt.UnusedPrivateMemberDetector
+import slack.lint.detekt.VarCouldBeValDetector
 import slack.lint.eithernet.DoNotExposeEitherNetInRepositoriesDetector
 import slack.lint.inclusive.InclusiveNamingChecker
 import slack.lint.mocking.ErrorProneDoNotMockDetector
@@ -77,5 +97,26 @@ class SlackIssueRegistry : IssueRegistry() {
     add(NullableConcurrentHashMapDetector.ISSUE)
     add(CircuitScreenDataClassDetector.ISSUE)
     add(JsonInflaterMoshiCompatibilityDetector.ISSUE)
+    // Detekt replacement rules
+    add(ReturnCountDetector.ISSUE)
+    add(UnnecessaryBackticksDetector.ISSUE)
+    add(UnderscoresInNumericLiteralsDetector.ISSUE)
+    add(FunctionNamingDetector.ISSUE)
+    add(TopLevelPropertyNamingDetector.ISSUE)
+    add(InvalidPackageDeclarationDetector.ISSUE)
+    add(SwallowedExceptionDetector.ISSUE)
+    add(ThrowingExceptionsWithoutMessageDetector.ISSUE)
+    add(TooGenericExceptionCaughtDetector.ISSUE)
+    add(TooGenericExceptionThrownDetector.ISSUE)
+    add(LongMethodDetector.ISSUE)
+    add(LongParameterListDetector.ISSUE)
+    add(NestedBlockDepthDetector.ISSUE)
+    add(TooManyFunctionsDetector.ISSUE)
+    add(CyclomaticComplexMethodDetector.ISSUE)
+    add(MagicNumberDetector.ISSUE)
+    add(VarCouldBeValDetector.ISSUE)
+    add(UnnecessaryAbstractClassDetector.ISSUE)
+    add(UnusedPrivateMemberDetector.ISSUE)
+    add(FunctionOnlyReturningConstantDetector.ISSUE)
   }
 }
