@@ -56,16 +56,16 @@ class LongParameterListDetector(
 
     val ISSUE =
       Issue.create(
-        id = "LongParameterList",
-        briefDescription = "Function has too many parameters",
-        explanation =
-          "Functions with many parameters are hard to call correctly and suggest " +
-            "the function is doing too much. Consider using a data class or builder pattern.",
-        category = Category.CORRECTNESS,
-        priority = 5,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<LongParameterListDetector>(),
-      )
+          id = "LongParameterList",
+          briefDescription = "Function has too many parameters",
+          explanation =
+            "Functions with many parameters are hard to call correctly and suggest " +
+              "the function is doing too much. Consider using a data class or builder pattern.",
+          category = Category.CORRECTNESS,
+          priority = 5,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<LongParameterListDetector>(),
+        )
         .setOptions(listOf(FUNCTION_THRESHOLD, IGNORE_ANNOTATED))
   }
 }

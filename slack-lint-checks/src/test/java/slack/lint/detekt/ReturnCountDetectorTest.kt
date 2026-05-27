@@ -24,7 +24,8 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
             if (x < 0) return "negative"
             return "zero"
           }
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()
@@ -44,7 +45,8 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
             if (x == 4) return "four"
             return "other"
           }
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()
@@ -54,7 +56,8 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
         fun example(x: Int): String {
             ~~~~~~~
         0 errors, 1 warnings
-        """.trimIndent()
+        """
+          .trimIndent()
       )
   }
 }

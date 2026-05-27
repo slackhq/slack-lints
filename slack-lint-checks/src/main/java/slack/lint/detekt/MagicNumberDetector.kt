@@ -23,7 +23,7 @@ import slack.lint.util.sourceImplementation
 private val ALLOWED_NUMBERS = setOf(-1.0, 0.0, 1.0, 2.0)
 
 class MagicNumberDetector(
-  private val ignoreAnnotatedOption: StringSetLintOption = StringSetLintOption(IGNORE_ANNOTATED),
+  private val ignoreAnnotatedOption: StringSetLintOption = StringSetLintOption(IGNORE_ANNOTATED)
 ) : OptionLoadingDetector(ignoreAnnotatedOption), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> =
@@ -60,11 +60,16 @@ class MagicNumberDetector(
         if (annotation != null) return
 
         // Check ignoreAnnotated on containing function/class
-        val containingMethod =
-          node.getParentOfType<org.jetbrains.uast.UMethod>()
-        if (containingMethod != null && containingMethod.hasAnyAnnotation(ignoreAnnotatedOption.value)) return
+        val containingMethod = node.getParentOfType<org.jetbrains.uast.UMethod>()
+        if (
+          containingMethod != null && containingMethod.hasAnyAnnotation(ignoreAnnotatedOption.value)
+        )
+          return
         val containingClass = node.getParentOfType<org.jetbrains.uast.UClass>()
-        if (containingClass != null && containingClass.hasAnyAnnotation(ignoreAnnotatedOption.value)) return
+        if (
+          containingClass != null && containingClass.hasAnyAnnotation(ignoreAnnotatedOption.value)
+        )
+          return
 
         context.report(
           ISSUE,
@@ -87,17 +92,16 @@ class MagicNumberDetector(
 
     val ISSUE =
       Issue.create(
-        id = "MagicNumber",
-        briefDescription = "Magic number used without a named constant",
-        explanation =
-          "Using unnamed numeric literals makes code harder to understand and maintain. " +
-            "Extract magic numbers into named constants with descriptive names.",
-        category = Category.CORRECTNESS,
-        priority = 4,
-        severity = Severity.WARNING,
-        implementation =
-          sourceImplementation<MagicNumberDetector>(shouldRunOnTestSources = false),
-      )
+          id = "MagicNumber",
+          briefDescription = "Magic number used without a named constant",
+          explanation =
+            "Using unnamed numeric literals makes code harder to understand and maintain. " +
+              "Extract magic numbers into named constants with descriptive names.",
+          category = Category.CORRECTNESS,
+          priority = 4,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<MagicNumberDetector>(shouldRunOnTestSources = false),
+        )
         .setOptions(listOf(IGNORE_ANNOTATED))
   }
 }

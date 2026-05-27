@@ -10,12 +10,8 @@ import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.StringOption
 import com.android.tools.lint.detector.api.isKotlin
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
-import org.jetbrains.uast.UField
-import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.USimpleNameReferenceExpression
 import org.jetbrains.uast.visitor.AbstractUastVisitor
 import slack.lint.util.OptionLoadingDetector
@@ -24,7 +20,7 @@ import slack.lint.util.hasAnyAnnotation
 import slack.lint.util.sourceImplementation
 
 class UnusedPrivateMemberDetector(
-  private val ignoreAnnotatedOption: StringSetLintOption = StringSetLintOption(IGNORE_ANNOTATED),
+  private val ignoreAnnotatedOption: StringSetLintOption = StringSetLintOption(IGNORE_ANNOTATED)
 ) : OptionLoadingDetector(ignoreAnnotatedOption), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UClass::class.java)
@@ -93,16 +89,15 @@ class UnusedPrivateMemberDetector(
 
     val ISSUE =
       Issue.create(
-        id = "UnusedPrivateMember",
-        briefDescription = "Private member is never used",
-        explanation =
-          "Unused private members add noise to the codebase. " +
-            "Remove them or make them used.",
-        category = Category.CORRECTNESS,
-        priority = 5,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<UnusedPrivateMemberDetector>(),
-      )
+          id = "UnusedPrivateMember",
+          briefDescription = "Private member is never used",
+          explanation =
+            "Unused private members add noise to the codebase. " + "Remove them or make them used.",
+          category = Category.CORRECTNESS,
+          priority = 5,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<UnusedPrivateMemberDetector>(),
+        )
         .setOptions(listOf(IGNORE_ANNOTATED))
   }
 }

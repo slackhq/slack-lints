@@ -26,7 +26,8 @@ class NestedBlockDepthDetectorTest : BaseSlackLintTest() {
               }
             }
           }
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()
@@ -56,7 +57,8 @@ class NestedBlockDepthDetectorTest : BaseSlackLintTest() {
               }
             }
           }
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()

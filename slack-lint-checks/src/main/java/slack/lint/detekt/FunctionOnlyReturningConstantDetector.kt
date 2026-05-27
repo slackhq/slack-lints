@@ -21,8 +21,7 @@ import slack.lint.util.sourceImplementation
 
 class FunctionOnlyReturningConstantDetector(
   private val ignoreAnnotatedOption: StringSetLintOption = StringSetLintOption(IGNORE_ANNOTATED),
-  private val excludedFunctionsOption: StringSetLintOption =
-    StringSetLintOption(EXCLUDED_FUNCTIONS),
+  private val excludedFunctionsOption: StringSetLintOption = StringSetLintOption(EXCLUDED_FUNCTIONS),
 ) : OptionLoadingDetector(ignoreAnnotatedOption, excludedFunctionsOption), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UMethod::class.java)
@@ -88,16 +87,16 @@ class FunctionOnlyReturningConstantDetector(
 
     val ISSUE =
       Issue.create(
-        id = "FunctionOnlyReturningConstant",
-        briefDescription = "Function only returns a constant value",
-        explanation =
-          "Functions that only return a constant value should be replaced with " +
-            "a `const val` property for better performance and clarity.",
-        category = Category.CORRECTNESS,
-        priority = 4,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<FunctionOnlyReturningConstantDetector>(),
-      )
+          id = "FunctionOnlyReturningConstant",
+          briefDescription = "Function only returns a constant value",
+          explanation =
+            "Functions that only return a constant value should be replaced with " +
+              "a `const val` property for better performance and clarity.",
+          category = Category.CORRECTNESS,
+          priority = 4,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<FunctionOnlyReturningConstantDetector>(),
+        )
         .setOptions(listOf(IGNORE_ANNOTATED, EXCLUDED_FUNCTIONS))
   }
 }

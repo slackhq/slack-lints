@@ -20,7 +20,8 @@ class UnnecessaryBackticksDetectorTest : BaseSlackLintTest() {
         kotlin(
           """
           val `class` = "test"
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()
@@ -34,7 +35,8 @@ class UnnecessaryBackticksDetectorTest : BaseSlackLintTest() {
         kotlin(
           """
           val normalName = "test"
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()
@@ -48,7 +50,8 @@ class UnnecessaryBackticksDetectorTest : BaseSlackLintTest() {
         kotlin(
           """
           fun `myFunction`() {}
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()

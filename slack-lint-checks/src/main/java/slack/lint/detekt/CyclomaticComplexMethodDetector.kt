@@ -11,7 +11,6 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import org.jetbrains.uast.UBinaryExpression
-import org.jetbrains.uast.UBinaryExpressionWithType
 import org.jetbrains.uast.UCatchClause
 import org.jetbrains.uast.UDoWhileExpression
 import org.jetbrains.uast.UElement
@@ -144,16 +143,16 @@ class CyclomaticComplexMethodDetector(
 
     val ISSUE =
       Issue.create(
-        id = "CyclomaticComplexMethod",
-        briefDescription = "Function has high cyclomatic complexity",
-        explanation =
-          "Functions with high cyclomatic complexity have too many decision points, " +
-            "making them hard to understand and test. Consider decomposing the function.",
-        category = Category.CORRECTNESS,
-        priority = 5,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<CyclomaticComplexMethodDetector>(),
-      )
+          id = "CyclomaticComplexMethod",
+          briefDescription = "Function has high cyclomatic complexity",
+          explanation =
+            "Functions with high cyclomatic complexity have too many decision points, " +
+              "making them hard to understand and test. Consider decomposing the function.",
+          category = Category.CORRECTNESS,
+          priority = 5,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<CyclomaticComplexMethodDetector>(),
+        )
         .setOptions(listOf(THRESHOLD, IGNORE_SINGLE_WHEN, IGNORE_SIMPLE_WHEN_ENTRIES))
   }
 }

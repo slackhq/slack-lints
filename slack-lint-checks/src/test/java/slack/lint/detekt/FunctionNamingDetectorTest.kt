@@ -21,7 +21,8 @@ class FunctionNamingDetectorTest : BaseSlackLintTest() {
           """
           fun myFunction() {}
           fun anotherOne() {}
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()
@@ -35,7 +36,8 @@ class FunctionNamingDetectorTest : BaseSlackLintTest() {
         kotlin(
           """
           fun MyFunction() {}
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()
@@ -54,7 +56,8 @@ class FunctionNamingDetectorTest : BaseSlackLintTest() {
 
           @Composable
           fun MyScreen() {}
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()
@@ -71,7 +74,8 @@ class FunctionNamingDetectorTest : BaseSlackLintTest() {
 
           @Test
           fun MyTest_does_something() {}
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()

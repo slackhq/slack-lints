@@ -9,7 +9,6 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.StringOption
-import com.intellij.psi.PsiMethod
 import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UThrowExpression
@@ -32,7 +31,7 @@ private val DEFAULT_EXCEPTION_TYPES =
   )
 
 class ThrowingExceptionsWithoutMessageDetector(
-  private val exceptionTypesOption: StringSetLintOption = StringSetLintOption(EXCEPTION_TYPES),
+  private val exceptionTypesOption: StringSetLintOption = StringSetLintOption(EXCEPTION_TYPES)
 ) : OptionLoadingDetector(exceptionTypesOption), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> =
@@ -73,16 +72,16 @@ class ThrowingExceptionsWithoutMessageDetector(
 
     val ISSUE =
       Issue.create(
-        id = "ThrowingExceptionsWithoutMessageOrCause",
-        briefDescription = "Exception thrown without a message or cause",
-        explanation =
-          "Exceptions should always include a descriptive message or a cause " +
-            "to aid in debugging. Throwing without arguments makes it harder to diagnose issues.",
-        category = Category.CORRECTNESS,
-        priority = 6,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<ThrowingExceptionsWithoutMessageDetector>(),
-      )
+          id = "ThrowingExceptionsWithoutMessageOrCause",
+          briefDescription = "Exception thrown without a message or cause",
+          explanation =
+            "Exceptions should always include a descriptive message or a cause " +
+              "to aid in debugging. Throwing without arguments makes it harder to diagnose issues.",
+          category = Category.CORRECTNESS,
+          priority = 6,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<ThrowingExceptionsWithoutMessageDetector>(),
+        )
         .setOptions(listOf(EXCEPTION_TYPES))
   }
 }

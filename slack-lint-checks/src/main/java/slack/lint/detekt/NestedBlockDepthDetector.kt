@@ -24,7 +24,7 @@ import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.sourceImplementation
 
 class NestedBlockDepthDetector(
-  private val thresholdOption: IntLintOption = IntLintOption(THRESHOLD),
+  private val thresholdOption: IntLintOption = IntLintOption(THRESHOLD)
 ) : OptionLoadingDetector(thresholdOption), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UMethod::class.java)
@@ -125,16 +125,16 @@ class NestedBlockDepthDetector(
 
     val ISSUE =
       Issue.create(
-        id = "NestedBlockDepth",
-        briefDescription = "Function has too many nested blocks",
-        explanation =
-          "Deeply nested code blocks are difficult to read and understand. " +
-            "Consider extracting nested logic into separate functions or using early returns.",
-        category = Category.CORRECTNESS,
-        priority = 5,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<NestedBlockDepthDetector>(),
-      )
+          id = "NestedBlockDepth",
+          briefDescription = "Function has too many nested blocks",
+          explanation =
+            "Deeply nested code blocks are difficult to read and understand. " +
+              "Consider extracting nested logic into separate functions or using early returns.",
+          category = Category.CORRECTNESS,
+          priority = 5,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<NestedBlockDepthDetector>(),
+        )
         .setOptions(listOf(THRESHOLD))
   }
 }

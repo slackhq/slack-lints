@@ -20,7 +20,7 @@ import slack.lint.util.sourceImplementation
 private val FUNCTION_NAME_PATTERN = Regex("^[a-z][a-zA-Z0-9]*$")
 
 class FunctionNamingDetector(
-  private val ignoreAnnotatedOption: StringSetLintOption = StringSetLintOption(IGNORE_ANNOTATED),
+  private val ignoreAnnotatedOption: StringSetLintOption = StringSetLintOption(IGNORE_ANNOTATED)
 ) : OptionLoadingDetector(ignoreAnnotatedOption), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UMethod::class.java)
@@ -55,16 +55,16 @@ class FunctionNamingDetector(
 
     val ISSUE =
       Issue.create(
-        id = "FunctionNaming",
-        briefDescription = "Function name does not follow naming conventions",
-        explanation =
-          "Function names should start with a lowercase letter and use camelCase. " +
-            "Exceptions can be configured via the ignore-annotated option.",
-        category = Category.CORRECTNESS,
-        priority = 5,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<FunctionNamingDetector>(),
-      )
+          id = "FunctionNaming",
+          briefDescription = "Function name does not follow naming conventions",
+          explanation =
+            "Function names should start with a lowercase letter and use camelCase. " +
+              "Exceptions can be configured via the ignore-annotated option.",
+          category = Category.CORRECTNESS,
+          priority = 5,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<FunctionNamingDetector>(),
+        )
         .setOptions(listOf(IGNORE_ANNOTATED))
   }
 }

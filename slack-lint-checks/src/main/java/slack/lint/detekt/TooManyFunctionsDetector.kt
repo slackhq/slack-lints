@@ -43,9 +43,8 @@ class TooManyFunctionsDetector(
       }
 
       override fun visitFile(node: UFile) {
-        val topLevelFunctions = node.classes.flatMap { cls ->
-          cls.methods.filter { !it.isConstructor }
-        }
+        val topLevelFunctions =
+          node.classes.flatMap { cls -> cls.methods.filter { !it.isConstructor } }
         // Only check file-level function count if there's no primary class
         // (i.e. it's a file of top-level functions)
         val primaryClass = node.classes.firstOrNull { it.name != null }
@@ -69,16 +68,16 @@ class TooManyFunctionsDetector(
 
     val ISSUE =
       Issue.create(
-        id = "TooManyFunctions",
-        briefDescription = "Class has too many functions",
-        explanation =
-          "Classes with too many functions are likely doing too much. " +
-            "Consider splitting responsibilities across multiple classes.",
-        category = Category.CORRECTNESS,
-        priority = 5,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<TooManyFunctionsDetector>(),
-      )
+          id = "TooManyFunctions",
+          briefDescription = "Class has too many functions",
+          explanation =
+            "Classes with too many functions are likely doing too much. " +
+              "Consider splitting responsibilities across multiple classes.",
+          category = Category.CORRECTNESS,
+          priority = 5,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<TooManyFunctionsDetector>(),
+        )
         .setOptions(listOf(THRESHOLD, IGNORE_ANNOTATED))
   }
 }

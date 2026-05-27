@@ -16,7 +16,6 @@ import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UField
 import org.jetbrains.uast.ULocalVariable
 import org.jetbrains.uast.UMethod
-import org.jetbrains.uast.UParameter
 import slack.lint.util.sourceImplementation
 
 private val KOTLIN_KEYWORDS =

@@ -28,11 +28,24 @@ class InvalidPackageDeclarationDetector : Detector(), SourceCodeScanner {
   private fun checkPackage(context: JavaContext, file: UFile) {
     val declaredPackage = file.packageName
     val filePath = context.file.path
-    val srcSegments = listOf("/src/main/java/", "/src/main/kotlin/", "/src/test/java/", "/src/test/kotlin/", "/src/debug/java/", "/src/debug/kotlin/", "/src/release/java/", "/src/release/kotlin/", "/src/androidTest/java/", "/src/androidTest/kotlin/")
-    val srcIndex = srcSegments.firstNotNullOfOrNull { segment ->
-      val idx = filePath.indexOf(segment)
-      if (idx >= 0) idx + segment.length else null
-    } ?: return
+    val srcSegments =
+      listOf(
+        "/src/main/java/",
+        "/src/main/kotlin/",
+        "/src/test/java/",
+        "/src/test/kotlin/",
+        "/src/debug/java/",
+        "/src/debug/kotlin/",
+        "/src/release/java/",
+        "/src/release/kotlin/",
+        "/src/androidTest/java/",
+        "/src/androidTest/kotlin/",
+      )
+    val srcIndex =
+      srcSegments.firstNotNullOfOrNull { segment ->
+        val idx = filePath.indexOf(segment)
+        if (idx >= 0) idx + segment.length else null
+      } ?: return
 
     val relativePath = filePath.substring(srcIndex)
     val expectedPackage = relativePath.substringBeforeLast('/').replace('/', '.')

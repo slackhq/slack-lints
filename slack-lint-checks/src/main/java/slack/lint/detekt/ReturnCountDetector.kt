@@ -17,9 +17,8 @@ import slack.lint.util.IntLintOption
 import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.sourceImplementation
 
-class ReturnCountDetector(
-  private val maxOption: IntLintOption = IntLintOption(MAX_RETURNS),
-) : OptionLoadingDetector(maxOption), SourceCodeScanner {
+class ReturnCountDetector(private val maxOption: IntLintOption = IntLintOption(MAX_RETURNS)) :
+  OptionLoadingDetector(maxOption), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UMethod::class.java)
 
@@ -53,16 +52,16 @@ class ReturnCountDetector(
 
     val ISSUE =
       Issue.create(
-        id = "ReturnCount",
-        briefDescription = "Function has too many return statements",
-        explanation =
-          "Functions with many return statements are harder to follow. " +
-            "Consider refactoring to reduce the number of exit points.",
-        category = Category.CORRECTNESS,
-        priority = 5,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<ReturnCountDetector>(),
-      )
+          id = "ReturnCount",
+          briefDescription = "Function has too many return statements",
+          explanation =
+            "Functions with many return statements are harder to follow. " +
+              "Consider refactoring to reduce the number of exit points.",
+          category = Category.CORRECTNESS,
+          priority = 5,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<ReturnCountDetector>(),
+        )
         .setOptions(listOf(MAX_RETURNS))
   }
 }

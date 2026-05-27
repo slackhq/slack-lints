@@ -17,7 +17,7 @@ import slack.lint.util.hasAnyAnnotation
 import slack.lint.util.sourceImplementation
 
 class UnnecessaryAbstractClassDetector(
-  private val ignoreAnnotatedOption: StringSetLintOption = StringSetLintOption(IGNORE_ANNOTATED),
+  private val ignoreAnnotatedOption: StringSetLintOption = StringSetLintOption(IGNORE_ANNOTATED)
 ) : OptionLoadingDetector(ignoreAnnotatedOption), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UClass::class.java)
@@ -28,9 +28,7 @@ class UnnecessaryAbstractClassDetector(
         if (!node.isAbstract()) return
         if (node.hasAnyAnnotation(ignoreAnnotatedOption.value)) return
 
-        val hasAbstractMembers = node.methods.any { method ->
-          context.evaluator.isAbstract(method)
-        }
+        val hasAbstractMembers = node.methods.any { method -> context.evaluator.isAbstract(method) }
         if (!hasAbstractMembers) {
           context.report(
             ISSUE,
@@ -58,16 +56,16 @@ class UnnecessaryAbstractClassDetector(
 
     val ISSUE =
       Issue.create(
-        id = "UnnecessaryAbstractClass",
-        briefDescription = "Abstract class has no abstract members",
-        explanation =
-          "An abstract class without abstract members doesn't need to be abstract. " +
-            "Consider making it a concrete class or an interface, or add abstract members.",
-        category = Category.CORRECTNESS,
-        priority = 5,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<UnnecessaryAbstractClassDetector>(),
-      )
+          id = "UnnecessaryAbstractClass",
+          briefDescription = "Abstract class has no abstract members",
+          explanation =
+            "An abstract class without abstract members doesn't need to be abstract. " +
+              "Consider making it a concrete class or an interface, or add abstract members.",
+          category = Category.CORRECTNESS,
+          priority = 5,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<UnnecessaryAbstractClassDetector>(),
+        )
         .setOptions(listOf(IGNORE_ANNOTATED))
   }
 }

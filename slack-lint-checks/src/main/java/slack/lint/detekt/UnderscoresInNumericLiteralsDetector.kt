@@ -16,7 +16,7 @@ import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.sourceImplementation
 
 class UnderscoresInNumericLiteralsDetector(
-  private val acceptableLengthOption: IntLintOption = IntLintOption(ACCEPTABLE_LENGTH),
+  private val acceptableLengthOption: IntLintOption = IntLintOption(ACCEPTABLE_LENGTH)
 ) : OptionLoadingDetector(acceptableLengthOption), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> =
@@ -49,7 +49,9 @@ class UnderscoresInNumericLiteralsDetector(
 
   private fun extractDigitPart(text: String): String {
     val stripped = text.removeSuffix("L").removeSuffix("l").removeSuffix("f").removeSuffix("F")
-    if (stripped.startsWith("0x", ignoreCase = true) || stripped.startsWith("0b", ignoreCase = true))
+    if (
+      stripped.startsWith("0x", ignoreCase = true) || stripped.startsWith("0b", ignoreCase = true)
+    )
       return ""
     val dotIndex = stripped.indexOf('.')
     return if (dotIndex >= 0) {
@@ -62,24 +64,20 @@ class UnderscoresInNumericLiteralsDetector(
 
   companion object {
     private val ACCEPTABLE_LENGTH =
-      IntOption(
-        "acceptable-length",
-        "Minimum number of digits before underscores are required.",
-        5,
-      )
+      IntOption("acceptable-length", "Minimum number of digits before underscores are required.", 5)
 
     val ISSUE =
       Issue.create(
-        id = "UnderscoresInNumericLiterals",
-        briefDescription = "Long numeric literal without underscores",
-        explanation =
-          "Long numeric literals are more readable with underscores grouping digits " +
-            "(e.g. `1_000_000` instead of `1000000`).",
-        category = Category.USABILITY,
-        priority = 3,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<UnderscoresInNumericLiteralsDetector>(),
-      )
+          id = "UnderscoresInNumericLiterals",
+          briefDescription = "Long numeric literal without underscores",
+          explanation =
+            "Long numeric literals are more readable with underscores grouping digits " +
+              "(e.g. `1_000_000` instead of `1000000`).",
+          category = Category.USABILITY,
+          priority = 3,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<UnderscoresInNumericLiteralsDetector>(),
+        )
         .setOptions(listOf(ACCEPTABLE_LENGTH))
   }
 }

@@ -54,16 +54,16 @@ class TopLevelPropertyNamingDetector : Detector(), SourceCodeScanner {
 
     val ISSUE =
       Issue.create(
-        id = "TopLevelPropertyNaming",
-        briefDescription = "Top-level constant does not follow naming conventions",
-        explanation =
-          "Top-level `const val` properties should follow the configured naming pattern " +
-            "(default: UPPER_CASE_WITH_UNDERSCORES).",
-        category = Category.CORRECTNESS,
-        priority = 5,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<TopLevelPropertyNamingDetector>(),
-      )
+          id = "TopLevelPropertyNaming",
+          briefDescription = "Top-level constant does not follow naming conventions",
+          explanation =
+            "Top-level `const val` properties should follow the configured naming pattern " +
+              "(default: UPPER_CASE_WITH_UNDERSCORES).",
+          category = Category.CORRECTNESS,
+          priority = 5,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<TopLevelPropertyNamingDetector>(),
+        )
         .setOptions(listOf(CONSTANT_PATTERN))
   }
 }

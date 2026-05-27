@@ -21,7 +21,8 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
         kotlin(
           """
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) {}
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()
@@ -35,7 +36,8 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
         kotlin(
           """
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int) {}
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()
@@ -52,7 +54,8 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
 
           @Inject
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int) {}
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()

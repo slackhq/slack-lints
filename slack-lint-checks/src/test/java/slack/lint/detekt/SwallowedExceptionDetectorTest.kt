@@ -27,7 +27,8 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
             }
           }
           fun doSomething() {}
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()
@@ -48,7 +49,8 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
             }
           }
           fun doSomething() {}
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()
@@ -69,7 +71,8 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
             }
           }
           fun doSomething() {}
-          """.trimIndent()
+          """
+            .trimIndent()
         )
       )
       .run()

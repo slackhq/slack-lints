@@ -12,14 +12,12 @@ import com.android.tools.lint.detector.api.SourceCodeScanner
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.UMethod
-import org.jetbrains.uast.visitor.AbstractUastVisitor
 import slack.lint.util.IntLintOption
 import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.sourceImplementation
 
-class LongMethodDetector(
-  private val thresholdOption: IntLintOption = IntLintOption(THRESHOLD),
-) : OptionLoadingDetector(thresholdOption), SourceCodeScanner {
+class LongMethodDetector(private val thresholdOption: IntLintOption = IntLintOption(THRESHOLD)) :
+  OptionLoadingDetector(thresholdOption), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UMethod::class.java)
 
@@ -52,16 +50,16 @@ class LongMethodDetector(
 
     val ISSUE =
       Issue.create(
-        id = "LongMethod",
-        briefDescription = "Function body is too long",
-        explanation =
-          "Long functions are harder to understand, test, and maintain. " +
-            "Consider extracting parts of the function into smaller, well-named functions.",
-        category = Category.CORRECTNESS,
-        priority = 5,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<LongMethodDetector>(),
-      )
+          id = "LongMethod",
+          briefDescription = "Function body is too long",
+          explanation =
+            "Long functions are harder to understand, test, and maintain. " +
+              "Consider extracting parts of the function into smaller, well-named functions.",
+          category = Category.CORRECTNESS,
+          priority = 5,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<LongMethodDetector>(),
+        )
         .setOptions(listOf(THRESHOLD))
   }
 }

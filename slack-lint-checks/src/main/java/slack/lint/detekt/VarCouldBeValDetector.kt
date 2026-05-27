@@ -6,17 +6,16 @@ import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
-import com.android.tools.lint.detector.api.LintFix
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.StringOption
 import com.android.tools.lint.detector.api.isKotlin
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.uast.UBinaryExpression
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UField
 import org.jetbrains.uast.USimpleNameReferenceExpression
-import org.jetbrains.uast.UBinaryExpression
 import org.jetbrains.uast.UastBinaryOperator
 import org.jetbrains.uast.getParentOfType
 import org.jetbrains.uast.visitor.AbstractUastVisitor
@@ -26,7 +25,7 @@ import slack.lint.util.hasAnyAnnotation
 import slack.lint.util.sourceImplementation
 
 class VarCouldBeValDetector(
-  private val ignoreAnnotatedOption: StringSetLintOption = StringSetLintOption(IGNORE_ANNOTATED),
+  private val ignoreAnnotatedOption: StringSetLintOption = StringSetLintOption(IGNORE_ANNOTATED)
 ) : OptionLoadingDetector(ignoreAnnotatedOption), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UField::class.java)
@@ -86,16 +85,16 @@ class VarCouldBeValDetector(
 
     val ISSUE =
       Issue.create(
-        id = "VarCouldBeVal",
-        briefDescription = "Property declared as `var` but never reassigned",
-        explanation =
-          "Properties that are never reassigned should be declared as `val` " +
-            "to communicate immutability and prevent accidental mutation.",
-        category = Category.CORRECTNESS,
-        priority = 5,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<VarCouldBeValDetector>(),
-      )
+          id = "VarCouldBeVal",
+          briefDescription = "Property declared as `var` but never reassigned",
+          explanation =
+            "Properties that are never reassigned should be declared as `val` " +
+              "to communicate immutability and prevent accidental mutation.",
+          category = Category.CORRECTNESS,
+          priority = 5,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<VarCouldBeValDetector>(),
+        )
         .setOptions(listOf(IGNORE_ANNOTATED))
   }
 }

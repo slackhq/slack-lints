@@ -28,7 +28,7 @@ private val DEFAULT_GENERIC_EXCEPTIONS =
   )
 
 class TooGenericExceptionCaughtDetector(
-  private val exceptionTypesOption: StringSetLintOption = StringSetLintOption(EXCEPTION_TYPES),
+  private val exceptionTypesOption: StringSetLintOption = StringSetLintOption(EXCEPTION_TYPES)
 ) : OptionLoadingDetector(exceptionTypesOption), SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> =
@@ -64,16 +64,16 @@ class TooGenericExceptionCaughtDetector(
 
     val ISSUE =
       Issue.create(
-        id = "TooGenericExceptionCaught",
-        briefDescription = "Caught exception type is too generic",
-        explanation =
-          "Catching overly generic exceptions like `Exception` or `Throwable` " +
-            "can hide bugs and make error handling brittle. Catch more specific exception types.",
-        category = Category.CORRECTNESS,
-        priority = 6,
-        severity = Severity.WARNING,
-        implementation = sourceImplementation<TooGenericExceptionCaughtDetector>(),
-      )
+          id = "TooGenericExceptionCaught",
+          briefDescription = "Caught exception type is too generic",
+          explanation =
+            "Catching overly generic exceptions like `Exception` or `Throwable` " +
+              "can hide bugs and make error handling brittle. Catch more specific exception types.",
+          category = Category.CORRECTNESS,
+          priority = 6,
+          severity = Severity.WARNING,
+          implementation = sourceImplementation<TooGenericExceptionCaughtDetector>(),
+        )
         .setOptions(listOf(EXCEPTION_TYPES))
   }
 }
