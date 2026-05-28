@@ -61,4 +61,39 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
       .run()
       .expectClean()
   }
+
+  @Test
+  fun `clean - higher threshold configured`() {
+    lint()
+      .configureOption(LongParameterListDetector.FUNCTION_THRESHOLD, 10)
+      .files(
+        kotlin(
+          """
+          fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int) {}
+          """
+            .trimIndent()
+        )
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `clean - custom ignoreAnnotated configured`() {
+    lint()
+      .configureOption(LongParameterListDetector.IGNORE_ANNOTATED, "MyCustomAnnotation")
+      .files(
+        kotlin(
+          """
+          annotation class MyCustomAnnotation
+
+          @MyCustomAnnotation
+          fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int) {}
+          """
+            .trimIndent()
+        )
+      )
+      .run()
+      .expectClean()
+  }
 }

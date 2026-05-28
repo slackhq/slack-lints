@@ -120,7 +120,7 @@ class NestedBlockDepthDetector(
   }
 
   companion object {
-    private val THRESHOLD =
+    internal val THRESHOLD =
       IntOption("threshold", "Maximum nesting depth allowed in a function.", 6)
 
     val ISSUE =

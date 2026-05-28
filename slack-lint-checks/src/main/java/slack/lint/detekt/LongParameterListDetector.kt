@@ -43,10 +43,10 @@ class LongParameterListDetector(
   }
 
   companion object {
-    private val FUNCTION_THRESHOLD =
+    internal val FUNCTION_THRESHOLD =
       IntOption("function-threshold", "Maximum number of parameters allowed.", 7)
 
-    private val IGNORE_ANNOTATED =
+    internal val IGNORE_ANNOTATED =
       StringOption(
         "ignore-annotated",
         "Comma-separated list of annotation simple names to ignore.",

@@ -60,4 +60,26 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
           .trimIndent()
       )
   }
+
+  @Test
+  fun `clean - higher threshold configured`() {
+    lint()
+      .configureOption(ReturnCountDetector.MAX_RETURNS, 6)
+      .files(
+        kotlin(
+          """
+          fun example(x: Int): String {
+            if (x == 1) return "one"
+            if (x == 2) return "two"
+            if (x == 3) return "three"
+            if (x == 4) return "four"
+            return "other"
+          }
+          """
+            .trimIndent()
+        )
+      )
+      .run()
+      .expectClean()
+  }
 }

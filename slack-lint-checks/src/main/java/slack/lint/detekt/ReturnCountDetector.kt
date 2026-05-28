@@ -47,7 +47,7 @@ class ReturnCountDetector(private val maxOption: IntLintOption = IntLintOption(M
   }
 
   companion object {
-    private val MAX_RETURNS =
+    internal val MAX_RETURNS =
       IntOption("max-returns", "Maximum number of return statements allowed per function.", 4)
 
     val ISSUE =

@@ -64,4 +64,36 @@ class NestedBlockDepthDetectorTest : BaseSlackLintTest() {
       .run()
       .expectContains("Function has a nested block depth of 7, exceeding the limit of 6")
   }
+
+  @Test
+  fun `clean - higher threshold configured`() {
+    lint()
+      .configureOption(NestedBlockDepthDetector.THRESHOLD, 8)
+      .files(
+        kotlin(
+          """
+          fun example(x: Int) {
+            if (x > 0) {
+              if (x > 1) {
+                if (x > 2) {
+                  if (x > 3) {
+                    if (x > 4) {
+                      if (x > 5) {
+                        if (x > 6) {
+                          println("too deep")
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          """
+            .trimIndent()
+        )
+      )
+      .run()
+      .expectClean()
+  }
 }
