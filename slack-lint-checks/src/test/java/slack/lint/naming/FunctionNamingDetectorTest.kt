@@ -18,12 +18,12 @@ class FunctionNamingDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           fun myFunction() {}
           fun anotherOne() {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -34,11 +34,11 @@ class FunctionNamingDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           fun MyFunction() {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectContains("Function name")
@@ -51,14 +51,14 @@ class FunctionNamingDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           annotation class Composable
 
           @Composable
           fun MyScreen() {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -69,14 +69,14 @@ class FunctionNamingDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           annotation class Test
 
           @Test
           fun MyTest_does_something() {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()

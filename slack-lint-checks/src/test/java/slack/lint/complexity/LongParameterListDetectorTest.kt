@@ -19,11 +19,11 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -34,11 +34,11 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int) {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectContains("Function has 8 parameters, exceeding the limit of 7")
@@ -49,14 +49,14 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           annotation class Inject
 
           @Inject
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int) {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -68,11 +68,11 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
       .configureOption(LongParameterListDetector.FUNCTION_THRESHOLD, 10)
       .files(
         kotlin(
-          """
+            """
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int) {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -84,14 +84,14 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
       .configureOption(LongParameterListDetector.IGNORE_ANNOTATED, "MyCustomAnnotation")
       .files(
         kotlin(
-          """
+            """
           annotation class MyCustomAnnotation
 
           @MyCustomAnnotation
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int) {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()

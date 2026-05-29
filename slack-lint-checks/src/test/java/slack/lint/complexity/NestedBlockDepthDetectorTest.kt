@@ -18,7 +18,7 @@ class NestedBlockDepthDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           fun example(x: Int) {
             if (x > 0) {
               if (x > 1) {
@@ -27,8 +27,8 @@ class NestedBlockDepthDetectorTest : BaseSlackLintTest() {
             }
           }
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -39,7 +39,7 @@ class NestedBlockDepthDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           fun example(x: Int) {
             if (x > 0) {
               if (x > 1) {
@@ -58,8 +58,8 @@ class NestedBlockDepthDetectorTest : BaseSlackLintTest() {
             }
           }
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectContains("Function has a nested block depth of 7, exceeding the limit of 6")
@@ -71,7 +71,7 @@ class NestedBlockDepthDetectorTest : BaseSlackLintTest() {
       .configureOption(NestedBlockDepthDetector.THRESHOLD, 8)
       .files(
         kotlin(
-          """
+            """
           fun example(x: Int) {
             if (x > 0) {
               if (x > 1) {
@@ -90,8 +90,8 @@ class NestedBlockDepthDetectorTest : BaseSlackLintTest() {
             }
           }
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()

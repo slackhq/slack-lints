@@ -18,7 +18,7 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           fun example() {
             try {
               doSomething()
@@ -28,8 +28,8 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
           }
           fun doSomething() {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -40,7 +40,7 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           fun example() {
             try {
               doSomething()
@@ -50,8 +50,8 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
           }
           fun doSomething() {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -62,7 +62,7 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           fun example() {
             try {
               doSomething()
@@ -72,8 +72,8 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
           }
           fun doSomething() {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectContains("Exception")

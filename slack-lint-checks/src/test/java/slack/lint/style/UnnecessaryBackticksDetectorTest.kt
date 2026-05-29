@@ -18,11 +18,11 @@ class UnnecessaryBackticksDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           val `class` = "test"
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -33,11 +33,11 @@ class UnnecessaryBackticksDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           val normalName = "test"
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectClean()
@@ -48,11 +48,11 @@ class UnnecessaryBackticksDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           fun `myFunction`() {}
           """
-        )
-        .indented()
+          )
+          .indented()
       )
       .run()
       .expectContains("Unnecessary backticks around")

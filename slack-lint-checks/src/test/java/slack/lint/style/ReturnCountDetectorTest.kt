@@ -18,14 +18,14 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           fun example(x: Int): String {
             if (x > 0) return "positive"
             if (x < 0) return "negative"
             return "zero"
           }
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -37,7 +37,7 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
     lint()
       .files(
         kotlin(
-          """
+            """
           fun example(x: Int): String {
             if (x == 1) return "one"
             if (x == 2) return "two"
@@ -46,7 +46,7 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
             return "other"
           }
           """
-        )
+          )
           .indented()
       )
       .run()
@@ -67,7 +67,7 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
       .configureOption(ReturnCountDetector.MAX_RETURNS, 6)
       .files(
         kotlin(
-          """
+            """
           fun example(x: Int): String {
             if (x == 1) return "one"
             if (x == 2) return "two"
@@ -76,7 +76,7 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
             return "other"
           }
           """
-        )
+          )
           .indented()
       )
       .run()
