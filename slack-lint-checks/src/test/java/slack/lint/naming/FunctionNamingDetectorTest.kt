@@ -1,6 +1,6 @@
 // Copyright (C) 2025 Slack Technologies, LLC
 // SPDX-License-Identifier: Apache-2.0
-package slack.lint.detekt
+package slack.lint.naming
 
 import com.android.tools.lint.checks.infrastructure.TestMode
 import org.junit.Test

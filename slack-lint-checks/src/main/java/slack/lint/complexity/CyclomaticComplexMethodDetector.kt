@@ -1,6 +1,6 @@
 // Copyright (C) 2025 Slack Technologies, LLC
 // SPDX-License-Identifier: Apache-2.0
-package slack.lint.detekt
+package slack.lint.complexity
 
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.BooleanOption
