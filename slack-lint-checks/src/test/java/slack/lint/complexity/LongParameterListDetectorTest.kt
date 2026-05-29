@@ -22,8 +22,8 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
           """
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()
@@ -37,8 +37,8 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
           """
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int) {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectContains("Function has 8 parameters, exceeding the limit of 7")
@@ -55,8 +55,8 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
           @Inject
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int) {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()
@@ -71,8 +71,8 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
           """
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int) {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()
@@ -90,8 +90,8 @@ class LongParameterListDetectorTest : BaseSlackLintTest() {
           @MyCustomAnnotation
           fun example(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int) {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()

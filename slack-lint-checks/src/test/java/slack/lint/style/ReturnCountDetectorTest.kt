@@ -25,8 +25,8 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
             return "zero"
           }
           """
-            .trimIndent()
         )
+          .indented()
       )
       .run()
       .expectClean()
@@ -46,8 +46,8 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
             return "other"
           }
           """
-            .trimIndent()
         )
+          .indented()
       )
       .run()
       .expect(
@@ -76,8 +76,8 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
             return "other"
           }
           """
-            .trimIndent()
         )
+          .indented()
       )
       .run()
       .expectClean()

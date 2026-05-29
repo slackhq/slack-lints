@@ -22,8 +22,8 @@ class FunctionNamingDetectorTest : BaseSlackLintTest() {
           fun myFunction() {}
           fun anotherOne() {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()
@@ -37,8 +37,8 @@ class FunctionNamingDetectorTest : BaseSlackLintTest() {
           """
           fun MyFunction() {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectContains("Function name")
@@ -57,8 +57,8 @@ class FunctionNamingDetectorTest : BaseSlackLintTest() {
           @Composable
           fun MyScreen() {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()
@@ -75,8 +75,8 @@ class FunctionNamingDetectorTest : BaseSlackLintTest() {
           @Test
           fun MyTest_does_something() {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()

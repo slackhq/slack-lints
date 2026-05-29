@@ -27,8 +27,8 @@ class NestedBlockDepthDetectorTest : BaseSlackLintTest() {
             }
           }
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()
@@ -58,8 +58,8 @@ class NestedBlockDepthDetectorTest : BaseSlackLintTest() {
             }
           }
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectContains("Function has a nested block depth of 7, exceeding the limit of 6")
@@ -90,8 +90,8 @@ class NestedBlockDepthDetectorTest : BaseSlackLintTest() {
             }
           }
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()

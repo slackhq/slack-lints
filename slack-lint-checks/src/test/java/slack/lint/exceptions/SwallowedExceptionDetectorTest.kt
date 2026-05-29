@@ -28,8 +28,8 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
           }
           fun doSomething() {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()
@@ -50,8 +50,8 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
           }
           fun doSomething() {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()
@@ -72,8 +72,8 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
           }
           fun doSomething() {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectContains("Exception")

@@ -21,8 +21,8 @@ class UnnecessaryBackticksDetectorTest : BaseSlackLintTest() {
           """
           val `class` = "test"
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()
@@ -36,8 +36,8 @@ class UnnecessaryBackticksDetectorTest : BaseSlackLintTest() {
           """
           val normalName = "test"
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectClean()
@@ -51,8 +51,8 @@ class UnnecessaryBackticksDetectorTest : BaseSlackLintTest() {
           """
           fun `myFunction`() {}
           """
-            .trimIndent()
         )
+        .indented()
       )
       .run()
       .expectContains("Unnecessary backticks around")
