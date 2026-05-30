@@ -10,6 +10,7 @@ import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.StringOption
 import com.android.tools.lint.detector.api.isKotlin
+import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.USimpleNameReferenceExpression
@@ -56,6 +57,15 @@ class UnusedPrivateMemberDetector(
               node: USimpleNameReferenceExpression
             ): Boolean {
               usedNames.add(node.identifier)
+              return false
+            }
+
+            override fun visitCallExpression(node: UCallExpression): Boolean {
+              // A call like `helper()` references the callee by name, but the callee is not a
+              // USimpleNameReferenceExpression, so record both the syntactic name and the resolved
+              // method name to avoid flagging called private functions as unused.
+              node.methodName?.let(usedNames::add)
+              node.resolve()?.name?.let(usedNames::add)
               return false
             }
           }

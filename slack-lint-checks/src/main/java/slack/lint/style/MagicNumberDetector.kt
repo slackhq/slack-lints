@@ -44,16 +44,10 @@ class MagicNumberDetector(
           }
         if (numericValue in ALLOWED_NUMBERS) return
 
-        // Ignore if part of a constant declaration
-        val field = node.getParentOfType<UField>()
-        if (field != null) {
-          val sourcePsi = field.sourcePsi
-          if (sourcePsi != null && sourcePsi.text.contains("const ")) return
-        }
-
-        // Ignore if in a local val assignment (named constant)
-        val localVar = node.getParentOfType<ULocalVariable>()
-        if (localVar != null) return
+        // Ignore literals in a property/field declaration (top-level, member, or local). The
+        // declaration itself is the named constant, so there is nothing to extract.
+        if (node.getParentOfType<UField>() != null) return
+        if (node.getParentOfType<ULocalVariable>() != null) return
 
         // Ignore if in an annotation
         val annotation = node.getParentOfType<UAnnotation>()

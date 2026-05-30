@@ -7,9 +7,11 @@ import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.IntOption
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
+import com.android.tools.lint.detector.api.Location
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.StringOption
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UFile
@@ -30,6 +32,10 @@ class TooManyFunctionsDetector(
   override fun createUastHandler(context: JavaContext): UElementHandler {
     return object : UElementHandler() {
       override fun visitClass(node: UClass) {
+        // Kotlin top-level functions are wrapped in a synthetic facade class (e.g. `FooKt`) with no
+        // backing KtClassOrObject. visitFile handles those, so skip them here to avoid reporting a
+        // misleading synthetic class name.
+        if (node.sourcePsi !is KtClassOrObject) return
         if (node.hasAnyAnnotation(ignoreAnnotatedOption.value)) return
         val functionCount = node.methods.count { !it.isConstructor }
         if (functionCount > thresholdOption.value) {
@@ -43,13 +49,21 @@ class TooManyFunctionsDetector(
       }
 
       override fun visitFile(node: UFile) {
-        val topLevelFunctions =
-          node.classes.flatMap { cls -> cls.methods.filter { !it.isConstructor } }
-        // Only check file-level function count if there's no primary class
-        // (i.e. it's a file of top-level functions)
-        val primaryClass = node.classes.firstOrNull { it.name != null }
-        if (primaryClass == null || node.classes.size == 1) return
-        // File-level check is just for files with only top-level declarations
+        // Count top-level functions, which UAST exposes as members of synthetic facade classes
+        // backed by the KtFile. Members of real classes declared in the file are reported by
+        // visitClass instead.
+        val topLevelFunctionCount =
+          node.classes
+            .filter { it.sourcePsi !is KtClassOrObject }
+            .sumOf { facade -> facade.methods.count { !it.isConstructor } }
+        if (topLevelFunctionCount > thresholdOption.value) {
+          context.report(
+            ISSUE,
+            node,
+            Location.create(context.file),
+            "File `${context.file.name}` has $topLevelFunctionCount top-level functions, exceeding the limit of ${thresholdOption.value}.",
+          )
+        }
       }
     }
   }

@@ -10,6 +10,8 @@ import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
+import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.uast.UBinaryExpression
 import org.jetbrains.uast.UCatchClause
 import org.jetbrains.uast.UDoWhileExpression
@@ -80,10 +82,13 @@ class CyclomaticComplexMethodDetector(
             }
 
             override fun visitSwitchClauseExpression(node: USwitchClauseExpression): Boolean {
-              if (node.caseValues.isNotEmpty()) {
-                complexity++
-                whenEntries++
-              }
+              // The `else` branch has no case values and never adds complexity.
+              if (node.caseValues.isEmpty()) return false
+              // When ignoring simple when entries, only entries with a block body (e.g.
+              // `1 -> { ... }`) add complexity; single-expression entries are considered trivial.
+              if (ignoreSimpleWhenEntriesOption.value && !node.hasBlockBody()) return false
+              complexity++
+              whenEntries++
               return false
             }
 
@@ -106,9 +111,6 @@ class CyclomaticComplexMethodDetector(
 
         if (ignoreSingleWhenOption.value && whenCount == 1) {
           complexity -= whenEntries
-        } else if (ignoreSimpleWhenEntriesOption.value) {
-          // Simple when entries don't add complexity in this mode
-          // (handled by not counting entries with single expressions)
         }
 
         if (complexity > thresholdOption.value) {
@@ -121,6 +123,11 @@ class CyclomaticComplexMethodDetector(
         }
       }
     }
+  }
+
+  /** True if this when entry's body is a block (`-> { ... }`) rather than a single expression. */
+  private fun USwitchClauseExpression.hasBlockBody(): Boolean {
+    return (sourcePsi as? KtWhenEntry)?.expression is KtBlockExpression
   }
 
   companion object {

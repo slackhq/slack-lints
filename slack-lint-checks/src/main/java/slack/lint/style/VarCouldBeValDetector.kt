@@ -15,7 +15,9 @@ import org.jetbrains.uast.UBinaryExpression
 import org.jetbrains.uast.UClass
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UField
+import org.jetbrains.uast.UQualifiedReferenceExpression
 import org.jetbrains.uast.USimpleNameReferenceExpression
+import org.jetbrains.uast.UThisExpression
 import org.jetbrains.uast.UastBinaryOperator
 import org.jetbrains.uast.getParentOfType
 import org.jetbrains.uast.visitor.AbstractUastVisitor
@@ -48,11 +50,11 @@ class VarCouldBeValDetector(
           method.uastBody?.accept(
             object : AbstractUastVisitor() {
               override fun visitBinaryExpression(node: UBinaryExpression): Boolean {
-                if (node.operator is UastBinaryOperator.AssignOperator) {
-                  val leftText = node.leftOperand
-                  if (leftText is USimpleNameReferenceExpression && leftText.identifier == name) {
-                    isReassigned = true
-                  }
+                if (
+                  node.operator is UastBinaryOperator.AssignOperator &&
+                    node.leftOperand.referencesProperty(name)
+                ) {
+                  isReassigned = true
                 }
                 return isReassigned
               }
@@ -67,10 +69,29 @@ class VarCouldBeValDetector(
             node,
             context.getNameLocation(node),
             "Property `$name` is never reassigned and could be a `val`.",
-            fix().replace().text("var").with("val").build(),
+            fix()
+              .replace()
+              .range(context.getLocation(ktProperty.valOrVarKeyword))
+              .text("var")
+              .with("val")
+              .build(),
           )
         }
       }
+    }
+  }
+
+  /**
+   * True if this expression is an assignment target referring to the property [name], either as a
+   * bare reference (`name = ...`) or qualified through `this` (`this.name = ...`).
+   */
+  private fun UElement.referencesProperty(name: String): Boolean {
+    return when (this) {
+      is USimpleNameReferenceExpression -> identifier == name
+      is UQualifiedReferenceExpression ->
+        receiver is UThisExpression &&
+          (selector as? USimpleNameReferenceExpression)?.identifier == name
+      else -> false
     }
   }
 
