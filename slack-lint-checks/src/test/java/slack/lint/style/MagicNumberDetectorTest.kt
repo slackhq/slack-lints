@@ -60,9 +60,9 @@ class MagicNumberDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
-  fun `clean - non-const property initializer`() {
-    // A literal in a property declaration is itself the named value; flagging it would be
-    // inconsistent with how local vals are treated.
+  fun `error - non-const property initializer`() {
+    // Matches detekt's default (ignorePropertyDeclaration = false): only `const` declarations are
+    // exempt, so a non-const property initializer is still flagged.
     lint()
       .files(
         kotlin(
@@ -78,11 +78,12 @@ class MagicNumberDetectorTest : BaseSlackLintTest() {
           .indented()
       )
       .run()
-      .expectClean()
+      .expectContains("Magic number 100. Extract to a named constant.")
   }
 
   @Test
-  fun `clean - local val initializer`() {
+  fun `error - local val initializer`() {
+    // Matches detekt's default (ignoreLocalVariableDeclaration = false).
     lint()
       .files(
         kotlin(
@@ -100,7 +101,7 @@ class MagicNumberDetectorTest : BaseSlackLintTest() {
           .indented()
       )
       .run()
-      .expectClean()
+      .expectContains("Magic number 100. Extract to a named constant.")
   }
 
   @Test

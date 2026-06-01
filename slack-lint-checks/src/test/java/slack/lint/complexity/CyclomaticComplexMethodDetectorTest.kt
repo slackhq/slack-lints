@@ -160,6 +160,28 @@ class CyclomaticComplexMethodDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
+  fun `error - elvis operators add complexity`() {
+    lint()
+      .configureOption("threshold", "3")
+      .files(
+        kotlin(
+            """
+          fun example(a: Int?, b: Int?, c: Int?, d: Int?): Int {
+            val w = a ?: 0
+            val x = b ?: 0
+            val y = c ?: 0
+            val z = d ?: 0
+            return w + x + y + z
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectContains("exceeding the limit of 3")
+  }
+
+  @Test
   fun `error - block-bodied when entries still count`() {
     // Block-bodied entries are not "simple" and add complexity even with the default option on.
     lint()

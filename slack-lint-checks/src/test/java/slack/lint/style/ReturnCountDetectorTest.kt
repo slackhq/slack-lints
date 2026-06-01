@@ -62,6 +62,31 @@ class ReturnCountDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
+  fun `clean - returns inside lambdas are excluded`() {
+    // Labeled returns (return@forEach) exit the lambda, not the function, so they should not
+    // count toward the function's return total.
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example(items: List<Int>): String {
+            items.forEach {
+              if (it == 1) return@forEach
+              if (it == 2) return@forEach
+              if (it == 3) return@forEach
+            }
+            if (items.isEmpty()) return "empty"
+            return "done"
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
   fun `clean - higher threshold configured`() {
     lint()
       .configureOption(ReturnCountDetector.MAX_RETURNS, 6)

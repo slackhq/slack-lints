@@ -29,6 +29,37 @@ class UnderscoresInNumericLiteralsDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
+  fun `clean - literal at acceptable length boundary`() {
+    // Exactly 5 digits is acceptable; underscores are only required beyond the configured length.
+    lint()
+      .files(
+        kotlin(
+            """
+          val value = 10000
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `error - literal one digit over boundary`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          val value = 100000
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectContains("Numeric literal 100000 should use underscores for readability")
+  }
+
+  @Test
   fun `clean - long literal with underscores`() {
     lint()
       .files(

@@ -69,4 +69,21 @@ class TooGenericExceptionThrownDetectorTest : BaseSlackLintTest() {
       .run()
       .expectContains("Thrown exception Exception is too generic")
   }
+
+  @Test
+  fun `error - NullPointerException thrown`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example() {
+            throw NullPointerException("npe")
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectContains("Thrown exception NullPointerException is too generic")
+  }
 }

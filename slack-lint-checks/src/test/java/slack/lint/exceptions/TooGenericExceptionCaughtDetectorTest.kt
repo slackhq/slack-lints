@@ -78,4 +78,70 @@ class TooGenericExceptionCaughtDetectorTest : BaseSlackLintTest() {
       .run()
       .expectContains("Caught exception type Throwable is too generic")
   }
+
+  @Test
+  fun `clean - exception named ignored`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example() {
+            try {
+              doSomething()
+            } catch (ignored: Exception) {
+              println("skip")
+            }
+          }
+          fun doSomething() {}
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `clean - exception named expected`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example() {
+            try {
+              doSomething()
+            } catch (expectedFailure: Throwable) {
+              println("skip")
+            }
+          }
+          fun doSomething() {}
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `clean - exception named underscore`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example() {
+            try {
+              doSomething()
+            } catch (_: Exception) {
+              println("skip")
+            }
+          }
+          fun doSomething() {}
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
 }

@@ -9,6 +9,7 @@ import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
+import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UReturnExpression
@@ -29,7 +30,11 @@ class ReturnCountDetector(private val maxOption: IntLintOption = IntLintOption(M
         node.accept(
           object : AbstractUastVisitor() {
             override fun visitReturnExpression(node: UReturnExpression): Boolean {
-              returnCount++
+              // Labeled returns (e.g. `return@forEach`) exit a lambda, not the function, so they
+              // are excluded to match detekt's excludeReturnFromLambda default.
+              if ((node.sourcePsi as? KtReturnExpression)?.getTargetLabel() == null) {
+                returnCount++
+              }
               return super.visitReturnExpression(node)
             }
           }

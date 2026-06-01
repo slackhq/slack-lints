@@ -76,4 +76,59 @@ class FunctionOnlyReturningConstantDetectorTest : BaseSlackLintTest() {
       .run()
       .expectClean()
   }
+
+  @Test
+  fun `clean - open function`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          open class Example {
+            open fun version(): Int = 1
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `clean - override function`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          interface HasVersion {
+            fun version(): Int
+          }
+
+          class Example : HasVersion {
+            override fun version(): Int = 1
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `clean - interface function with default body`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          interface Example {
+            fun version(): Int = 1
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
 }

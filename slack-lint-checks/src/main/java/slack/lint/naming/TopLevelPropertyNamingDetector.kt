@@ -23,20 +23,30 @@ class TopLevelPropertyNamingDetector : Detector(), SourceCodeScanner {
 
   override fun createUastHandler(context: JavaContext): UElementHandler {
     if (!isKotlin(context.psiFile)) return UElementHandler.NONE
-    val pattern =
+    val constantPattern =
       Regex(CONSTANT_PATTERN.getValue(context.configuration) ?: CONSTANT_PATTERN.defaultValue!!)
+    val propertyPattern =
+      Regex(PROPERTY_PATTERN.getValue(context.configuration) ?: PROPERTY_PATTERN.defaultValue!!)
     return object : UElementHandler() {
       override fun visitField(node: UField) {
         val ktProperty = node.sourcePsi as? KtProperty ?: return
         if (!ktProperty.isTopLevel) return
-        if (!ktProperty.hasModifier(KtTokens.CONST_KEYWORD)) return
         val name = node.name
-        if (!pattern.matches(name)) {
+        if (ktProperty.hasModifier(KtTokens.CONST_KEYWORD)) {
+          if (!constantPattern.matches(name)) {
+            context.report(
+              ISSUE,
+              node,
+              context.getNameLocation(node),
+              "Top-level constant `$name` does not match pattern `$constantPattern`.",
+            )
+          }
+        } else if (!propertyPattern.matches(name)) {
           context.report(
             ISSUE,
             node,
             context.getNameLocation(node),
-            "Top-level constant `$name` does not match pattern `$pattern`.",
+            "Top-level property `$name` does not match pattern `$propertyPattern`.",
           )
         }
       }
@@ -52,6 +62,14 @@ class TopLevelPropertyNamingDetector : Detector(), SourceCodeScanner {
         "Top-level constants must match this pattern.",
       )
 
+    private val PROPERTY_PATTERN =
+      StringOption(
+        "property-pattern",
+        "Regex pattern for non-const top-level property names.",
+        "[a-z][A-Za-z0-9]*",
+        "Non-const top-level properties must match this pattern.",
+      )
+
     val ISSUE =
       Issue.create(
           id = "TopLevelPropertyNaming",
@@ -64,6 +82,6 @@ class TopLevelPropertyNamingDetector : Detector(), SourceCodeScanner {
           severity = Severity.WARNING,
           implementation = sourceImplementation<TopLevelPropertyNamingDetector>(),
         )
-        .setOptions(listOf(CONSTANT_PATTERN))
+        .setOptions(listOf(CONSTANT_PATTERN, PROPERTY_PATTERN))
   }
 }

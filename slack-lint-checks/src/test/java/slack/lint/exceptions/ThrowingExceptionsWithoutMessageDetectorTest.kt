@@ -54,6 +54,25 @@ class ThrowingExceptionsWithoutMessageDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
+  fun `error - IOException thrown without a message`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          import java.io.IOException
+
+          fun example() {
+            throw IOException()
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectContains("IOException thrown without a message or cause argument")
+  }
+
+  @Test
   fun `clean - non-listed exception thrown without a message`() {
     lint()
       .files(

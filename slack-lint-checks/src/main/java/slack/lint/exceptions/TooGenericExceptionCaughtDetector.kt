@@ -35,8 +35,18 @@ class TooGenericExceptionCaughtDetector(
     listOf(UCatchClause::class.java)
 
   override fun createUastHandler(context: JavaContext): UElementHandler {
+    val allowedNamePattern =
+      Regex(
+        ALLOWED_EXCEPTION_NAME.getValue(context.configuration)
+          ?: ALLOWED_EXCEPTION_NAME.defaultValue!!
+      )
     return object : UElementHandler() {
       override fun visitCatchClause(node: UCatchClause) {
+        // Allow deliberately-ignored exceptions named e.g. `_`, `ignored`, or `expected`, matching
+        // detekt's allowedExceptionNameRegex default.
+        val paramName = node.parameters.firstOrNull()?.name
+        if (paramName != null && allowedNamePattern.matches(paramName)) return
+
         val types = exceptionTypesOption.value.ifEmpty { DEFAULT_GENERIC_EXCEPTIONS.toSet() }
         for (typeRef in node.typeReferences) {
           val typeName = typeRef.type.canonicalText.substringAfterLast('.')
@@ -62,6 +72,14 @@ class TooGenericExceptionCaughtDetector(
         "Catching these exceptions is flagged as too generic.",
       )
 
+    private val ALLOWED_EXCEPTION_NAME =
+      StringOption(
+        "allowed-exception-name-regex",
+        "Regex for catch parameter names that are exempt from this check.",
+        "_|(ignore|expected).*",
+        "Catch blocks whose parameter name matches this pattern are allowed.",
+      )
+
     val ISSUE =
       Issue.create(
           id = "TooGenericExceptionCaught",
@@ -74,6 +92,6 @@ class TooGenericExceptionCaughtDetector(
           severity = Severity.WARNING,
           implementation = sourceImplementation<TooGenericExceptionCaughtDetector>(),
         )
-        .setOptions(listOf(EXCEPTION_TYPES))
+        .setOptions(listOf(EXCEPTION_TYPES, ALLOWED_EXCEPTION_NAME))
   }
 }

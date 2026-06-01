@@ -29,12 +29,12 @@ class UnderscoresInNumericLiteralsDetector(
         val text = sourcePsi.text
         if (!isNumericLiteral(text)) return
         val digits = extractDigitPart(text)
-        if (digits.length >= acceptableLengthOption.value && !digits.contains('_')) {
+        if (digits.length > acceptableLengthOption.value && !digits.contains('_')) {
           context.report(
             ISSUE,
             node,
             context.getLocation(node),
-            "Numeric literal `$text` should use underscores for readability (length >= ${acceptableLengthOption.value}).",
+            "Numeric literal `$text` should use underscores for readability (more than ${acceptableLengthOption.value} digits).",
           )
         }
       }

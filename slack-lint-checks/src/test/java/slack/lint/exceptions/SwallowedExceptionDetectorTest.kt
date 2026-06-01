@@ -79,4 +79,50 @@ class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
       .expectContains("Exception")
       .expectContains("is caught but never used")
   }
+
+  @Test
+  fun `clean - catch rethrows a different exception`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          class CustomException : Exception()
+
+          fun example() {
+            try {
+              doSomething()
+            } catch (e: Exception) {
+              throw CustomException()
+            }
+          }
+          fun doSomething() {}
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `clean - ignored exception type`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example() {
+            try {
+              doSomething()
+            } catch (e: NumberFormatException) {
+              println("default")
+            }
+          }
+          fun doSomething() {}
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
 }

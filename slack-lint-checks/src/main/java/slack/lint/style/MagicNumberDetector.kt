@@ -13,7 +13,6 @@ import org.jetbrains.uast.UAnnotation
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UField
 import org.jetbrains.uast.ULiteralExpression
-import org.jetbrains.uast.ULocalVariable
 import org.jetbrains.uast.getParentOfType
 import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.StringSetLintOption
@@ -44,10 +43,14 @@ class MagicNumberDetector(
           }
         if (numericValue in ALLOWED_NUMBERS) return
 
-        // Ignore literals in a property/field declaration (top-level, member, or local). The
-        // declaration itself is the named constant, so there is nothing to extract.
-        if (node.getParentOfType<UField>() != null) return
-        if (node.getParentOfType<ULocalVariable>() != null) return
+        // Ignore literals in a `const` declaration only, matching detekt's default where
+        // ignoreConstantDeclaration is true but property and local-variable declarations are not
+        // exempt. Non-const property and local-variable initializers are still flagged.
+        val field = node.getParentOfType<UField>()
+        if (field != null) {
+          val sourcePsi = field.sourcePsi
+          if (sourcePsi != null && sourcePsi.text.contains("const ")) return
+        }
 
         // Ignore if in an annotation
         val annotation = node.getParentOfType<UAnnotation>()

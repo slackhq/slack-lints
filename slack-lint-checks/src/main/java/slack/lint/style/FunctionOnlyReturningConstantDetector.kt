@@ -9,11 +9,14 @@ import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.android.tools.lint.detector.api.StringOption
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.uast.UBlockExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.ULiteralExpression
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UReturnExpression
+import org.jetbrains.uast.getContainingUClass
 import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.StringSetLintOption
 import slack.lint.util.hasAnyAnnotation
@@ -32,6 +35,10 @@ class FunctionOnlyReturningConstantDetector(
         if (node.isConstructor) return
         if (node.hasAnyAnnotation(ignoreAnnotatedOption.value)) return
         if (node.name in excludedFunctionsOption.value) return
+        // Overridable functions (open/abstract/override, or interface members) cannot simply be
+        // replaced with a const val, so they are excluded to match detekt's
+        // ignoreOverridableFunction default.
+        if (node.isOverridable(context)) return
 
         val body = node.uastBody
         val returnExpr =
@@ -66,6 +73,25 @@ class FunctionOnlyReturningConstantDetector(
         }
       }
     }
+  }
+
+  /**
+   * True if this function can be overridden (declared `open`, `abstract`, or `override`) or is an
+   * interface member, in which case it cannot be replaced with a `const val`.
+   */
+  private fun UMethod.isOverridable(context: JavaContext): Boolean {
+    if (context.evaluator.isAbstract(this)) return true
+    val ktFunction = sourcePsi as? KtNamedFunction
+    if (ktFunction != null) {
+      if (
+        ktFunction.hasModifier(KtTokens.OPEN_KEYWORD) ||
+          ktFunction.hasModifier(KtTokens.OVERRIDE_KEYWORD) ||
+          ktFunction.hasModifier(KtTokens.ABSTRACT_KEYWORD)
+      ) {
+        return true
+      }
+    }
+    return getContainingUClass()?.isInterface == true
   }
 
   companion object {

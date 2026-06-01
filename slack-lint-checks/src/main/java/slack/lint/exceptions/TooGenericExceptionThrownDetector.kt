@@ -19,7 +19,7 @@ import slack.lint.util.StringSetLintOption
 import slack.lint.util.sourceImplementation
 
 private val DEFAULT_GENERIC_EXCEPTIONS =
-  listOf("Error", "Exception", "RuntimeException", "Throwable")
+  listOf("Error", "Exception", "NullPointerException", "RuntimeException", "Throwable")
 
 class TooGenericExceptionThrownDetector(
   private val exceptionTypesOption: StringSetLintOption = StringSetLintOption(EXCEPTION_TYPES)

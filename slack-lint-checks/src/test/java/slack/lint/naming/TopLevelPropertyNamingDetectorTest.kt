@@ -59,6 +59,21 @@ class TopLevelPropertyNamingDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
+  fun `error - non-const top-level property in PascalCase`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          val MaxCount = 10
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectContains("Top-level property MaxCount does not match pattern")
+  }
+
+  @Test
   fun `clean - custom pattern configured`() {
     lint()
       .configureOption("constant-pattern", "[a-z][A-Za-z0-9]*")

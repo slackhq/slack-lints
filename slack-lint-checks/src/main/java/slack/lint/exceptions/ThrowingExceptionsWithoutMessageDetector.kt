@@ -23,6 +23,7 @@ private val DEFAULT_EXCEPTION_TYPES =
     "Exception",
     "IllegalArgumentException",
     "IllegalMonitorStateException",
+    "IOException",
     "IllegalStateException",
     "IndexOutOfBoundsException",
     "NullPointerException",

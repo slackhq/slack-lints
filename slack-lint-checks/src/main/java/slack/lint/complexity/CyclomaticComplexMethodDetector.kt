@@ -10,12 +10,15 @@ import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.uast.UBinaryExpression
 import org.jetbrains.uast.UCatchClause
 import org.jetbrains.uast.UDoWhileExpression
 import org.jetbrains.uast.UElement
+import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.UForEachExpression
 import org.jetbrains.uast.UForExpression
 import org.jetbrains.uast.UIfExpression
@@ -102,6 +105,16 @@ class CyclomaticComplexMethodDetector(
                 node.operator == UastBinaryOperator.LOGICAL_AND ||
                   node.operator == UastBinaryOperator.LOGICAL_OR
               ) {
+                complexity++
+              }
+              return false
+            }
+
+            override fun visitExpression(node: UExpression): Boolean {
+              // The elvis operator (`?:`) introduces a branch but UAST models it as a dedicated
+              // expression rather than a UBinaryExpression, so detect it via its source PSI.
+              val ktBinary = node.sourcePsi as? KtBinaryExpression
+              if (ktBinary?.operationToken == KtTokens.ELVIS) {
                 complexity++
               }
               return false
