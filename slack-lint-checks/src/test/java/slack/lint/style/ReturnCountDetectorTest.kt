@@ -1,0 +1,110 @@
+// Copyright (C) 2026 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
+package slack.lint.style
+
+import com.android.tools.lint.checks.infrastructure.TestMode
+import org.junit.Test
+import slack.lint.BaseSlackLintTest
+
+class ReturnCountDetectorTest : BaseSlackLintTest() {
+  override fun getDetector() = ReturnCountDetector()
+
+  override fun getIssues() = listOf(ReturnCountDetector.ISSUE)
+
+  override val skipTestModes = arrayOf(TestMode.WHITESPACE, TestMode.SUPPRESSIBLE)
+
+  @Test
+  fun `clean - function with few returns`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example(x: Int): String {
+            if (x > 0) return "positive"
+            if (x < 0) return "negative"
+            return "zero"
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `error - function with too many returns`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example(x: Int): String {
+            if (x == 1) return "one"
+            if (x == 2) return "two"
+            if (x == 3) return "three"
+            if (x == 4) return "four"
+            return "other"
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expect(
+        """
+        src/test.kt:1: Warning: Function has 5 return statements, exceeding the limit of 4. [ReturnCount]
+        fun example(x: Int): String {
+            ~~~~~~~
+        0 errors, 1 warnings
+        """
+          .trimIndent()
+      )
+  }
+
+  @Test
+  fun `clean - returns inside lambdas are excluded`() {
+    // Labeled returns (return@forEach) exit the lambda, not the function, so they should not
+    // count toward the function's return total.
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example(items: List<Int>): String {
+            items.forEach {
+              if (it == 1) return@forEach
+              if (it == 2) return@forEach
+              if (it == 3) return@forEach
+            }
+            if (items.isEmpty()) return "empty"
+            return "done"
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `clean - higher threshold configured`() {
+    lint()
+      .configureOption(ReturnCountDetector.MAX_RETURNS, 6)
+      .files(
+        kotlin(
+            """
+          fun example(x: Int): String {
+            if (x == 1) return "one"
+            if (x == 2) return "two"
+            if (x == 3) return "three"
+            if (x == 4) return "four"
+            return "other"
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+}

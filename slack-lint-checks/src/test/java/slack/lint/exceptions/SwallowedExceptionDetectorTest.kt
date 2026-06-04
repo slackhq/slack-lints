@@ -1,0 +1,128 @@
+// Copyright (C) 2026 Slack Technologies, LLC
+// SPDX-License-Identifier: Apache-2.0
+package slack.lint.exceptions
+
+import com.android.tools.lint.checks.infrastructure.TestMode
+import org.junit.Test
+import slack.lint.BaseSlackLintTest
+
+class SwallowedExceptionDetectorTest : BaseSlackLintTest() {
+  override fun getDetector() = SwallowedExceptionDetector()
+
+  override fun getIssues() = listOf(SwallowedExceptionDetector.ISSUE)
+
+  override val skipTestModes = arrayOf(TestMode.WHITESPACE, TestMode.SUPPRESSIBLE)
+
+  @Test
+  fun `clean - exception is used`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example() {
+            try {
+              doSomething()
+            } catch (e: Exception) {
+              println(e.message)
+            }
+          }
+          fun doSomething() {}
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `clean - exception named underscore`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example() {
+            try {
+              doSomething()
+            } catch (_: Exception) {
+              println("failed")
+            }
+          }
+          fun doSomething() {}
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `error - exception is swallowed`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example() {
+            try {
+              doSomething()
+            } catch (e: Exception) {
+              println("failed")
+            }
+          }
+          fun doSomething() {}
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectContains("Exception")
+      .expectContains("is caught but never used")
+  }
+
+  @Test
+  fun `clean - catch rethrows a different exception`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          class CustomException : Exception()
+
+          fun example() {
+            try {
+              doSomething()
+            } catch (e: Exception) {
+              throw CustomException()
+            }
+          }
+          fun doSomething() {}
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
+  fun `clean - ignored exception type`() {
+    lint()
+      .files(
+        kotlin(
+            """
+          fun example() {
+            try {
+              doSomething()
+            } catch (e: NumberFormatException) {
+              println("default")
+            }
+          }
+          fun doSomething() {}
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+}

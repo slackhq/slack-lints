@@ -7,11 +7,23 @@ import com.android.tools.lint.client.api.Vendor
 import com.android.tools.lint.detector.api.CURRENT_API
 import com.android.tools.lint.detector.api.Issue
 import com.google.auto.service.AutoService
+import slack.lint.complexity.CyclomaticComplexMethodDetector
+import slack.lint.complexity.LongMethodDetector
+import slack.lint.complexity.LongParameterListDetector
+import slack.lint.complexity.NestedBlockDepthDetector
+import slack.lint.complexity.TooManyFunctionsDetector
 import slack.lint.denylistedapis.DenyListedApiDetector
 import slack.lint.eithernet.DoNotExposeEitherNetInRepositoriesDetector
+import slack.lint.exceptions.SwallowedExceptionDetector
+import slack.lint.exceptions.ThrowingExceptionsWithoutMessageDetector
+import slack.lint.exceptions.TooGenericExceptionCaughtDetector
+import slack.lint.exceptions.TooGenericExceptionThrownDetector
 import slack.lint.inclusive.InclusiveNamingChecker
 import slack.lint.mocking.ErrorProneDoNotMockDetector
 import slack.lint.mocking.MockDetector
+import slack.lint.naming.FunctionNamingDetector
+import slack.lint.naming.InvalidPackageDeclarationDetector
+import slack.lint.naming.TopLevelPropertyNamingDetector
 import slack.lint.parcel.ParcelizeFunctionPropertyDetector
 import slack.lint.resources.FullyQualifiedResourceDetector
 import slack.lint.resources.MissingResourceImportAliasDetector
@@ -19,6 +31,14 @@ import slack.lint.resources.WrongResourceImportAliasDetector
 import slack.lint.retrofit.RetrofitUsageDetector
 import slack.lint.rx.RxObservableEmitDetector
 import slack.lint.rx.RxSubscribeOnMainDetector
+import slack.lint.style.FunctionOnlyReturningConstantDetector
+import slack.lint.style.MagicNumberDetector
+import slack.lint.style.ReturnCountDetector
+import slack.lint.style.UnderscoresInNumericLiteralsDetector
+import slack.lint.style.UnnecessaryAbstractClassDetector
+import slack.lint.style.UnnecessaryBackticksDetector
+import slack.lint.style.UnusedPrivateMemberDetector
+import slack.lint.style.VarCouldBeValDetector
 import slack.lint.text.SpanMarkPointMissingMaskDetector
 import slack.lint.ui.DoNotCallViewToString
 import slack.lint.ui.ItemDecorationViewBindingDetector
@@ -77,5 +97,26 @@ class SlackIssueRegistry : IssueRegistry() {
     add(NullableConcurrentHashMapDetector.ISSUE)
     add(CircuitScreenDataClassDetector.ISSUE)
     add(JsonInflaterMoshiCompatibilityDetector.ISSUE)
+    // Detekt replacement rules
+    add(ReturnCountDetector.ISSUE)
+    add(UnnecessaryBackticksDetector.ISSUE)
+    add(UnderscoresInNumericLiteralsDetector.ISSUE)
+    add(FunctionNamingDetector.ISSUE)
+    add(TopLevelPropertyNamingDetector.ISSUE)
+    add(InvalidPackageDeclarationDetector.ISSUE)
+    add(SwallowedExceptionDetector.ISSUE)
+    add(ThrowingExceptionsWithoutMessageDetector.ISSUE)
+    add(TooGenericExceptionCaughtDetector.ISSUE)
+    add(TooGenericExceptionThrownDetector.ISSUE)
+    add(LongMethodDetector.ISSUE)
+    add(LongParameterListDetector.ISSUE)
+    add(NestedBlockDepthDetector.ISSUE)
+    add(TooManyFunctionsDetector.ISSUE)
+    add(CyclomaticComplexMethodDetector.ISSUE)
+    add(MagicNumberDetector.ISSUE)
+    add(VarCouldBeValDetector.ISSUE)
+    add(UnnecessaryAbstractClassDetector.ISSUE)
+    add(UnusedPrivateMemberDetector.ISSUE)
+    add(FunctionOnlyReturningConstantDetector.ISSUE)
   }
 }
