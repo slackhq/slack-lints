@@ -182,6 +182,175 @@ class CyclomaticComplexMethodDetectorTest : BaseSlackLintTest() {
   }
 
   @Test
+  fun `error - control flow constructs each add complexity`() {
+    lint()
+      .configureOption("threshold", "5")
+      .files(
+        kotlin(
+            """
+          fun example(items: List<Int>, n: Int): Int {
+            var sum = 0
+            for (i in items) {
+              sum += i
+            }
+            items.forEach { sum += it }
+            var i = 0
+            while (i < n) {
+              i++
+            }
+            do {
+              i--
+            } while (i > 0)
+            try {
+              sum += 1
+            } catch (e: Exception) {
+              sum += 2
+            }
+            return sum
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectContains("Function has a cyclomatic complexity of 6, exceeding the limit of 5")
+  }
+
+  @Test
+  fun `error - boolean operators each add complexity`() {
+    lint()
+      .configureOption("threshold", "4")
+      .files(
+        kotlin(
+            """
+          fun example(a: Boolean, b: Boolean, c: Boolean, d: Boolean): Boolean {
+            return (a && b) || (c && d) || a
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectContains("Function has a cyclomatic complexity of 5, exceeding the limit of 4")
+  }
+
+  @Test
+  fun `error - break and continue each add complexity`() {
+    lint()
+      .configureOption("threshold", "5")
+      .files(
+        kotlin(
+            """
+          fun example(items: List<Int>) {
+            for (i in items) {
+              if (i < 0) continue
+              if (i > 100) break
+              println(i)
+            }
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectContains("Function has a cyclomatic complexity of 6, exceeding the limit of 5")
+  }
+
+  @Test
+  fun `error - nesting function calls add complexity`() {
+    lint()
+      .configureOption("threshold", "3")
+      .files(
+        kotlin(
+            """
+          fun example(items: List<Int>, value: Int?) {
+            items.forEach { println(it) }
+            value?.let { println(it) }
+            run { println("done") }
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectContains("Function has a cyclomatic complexity of 4, exceeding the limit of 3")
+  }
+
+  @Test
+  fun `error - control flow inside a nesting function lambda still counts`() {
+    lint()
+      .configureOption("threshold", "2")
+      .files(
+        kotlin(
+            """
+          fun example(items: List<Int>) {
+            items.forEach {
+              if (it > 0) println(it)
+            }
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectContains("Function has a cyclomatic complexity of 3, exceeding the limit of 2")
+  }
+
+  @Test
+  fun `clean - object literal method is not reported on its own`() {
+    // A method declared inside an object literal is dispatched independently by lint but excluded
+    // from complexity, so it is never reported standalone even though its own body has enough
+    // decision points to exceed the threshold of 1.
+    lint()
+      .configureOption("threshold", "1")
+      .files(
+        kotlin(
+            """
+          fun interface Predicate {
+            fun test(x: Int): Boolean
+          }
+
+          fun makePredicate(): Predicate {
+            return object : Predicate {
+              override fun test(x: Int): Boolean {
+                if (x > 0) return true
+                if (x < -10) return true
+                return false
+              }
+            }
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      // The override is never reported standalone; only makePredicate is.
+      .expectContains("complexity of 3")
+      .expectContains("fun makePredicate")
+  }
+
+  @Test
+  fun `clean - nesting functions ignored when option disabled`() {
+    lint()
+      .configureOption("threshold", "3")
+      .configureOption("ignore-nesting-functions", "true")
+      .files(
+        kotlin(
+            """
+          fun example(items: List<Int>, value: Int?) {
+            items.forEach { println(it) }
+            value?.let { println(it) }
+            run { println("done") }
+          }
+          """
+          )
+          .indented()
+      )
+      .run()
+      .expectClean()
+  }
+
+  @Test
   fun `error - block-bodied when entries still count`() {
     // Block-bodied entries are not "simple" and add complexity even with the default option on.
     lint()

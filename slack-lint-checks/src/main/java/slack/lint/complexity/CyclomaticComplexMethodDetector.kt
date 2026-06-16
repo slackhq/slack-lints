@@ -10,17 +10,24 @@ import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
+import com.android.tools.lint.detector.api.StringOption
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 import org.jetbrains.kotlin.psi.KtWhenEntry
+import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.uast.UBinaryExpression
+import org.jetbrains.uast.UBreakExpression
+import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UCatchClause
+import org.jetbrains.uast.UContinueExpression
 import org.jetbrains.uast.UDoWhileExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UExpression
 import org.jetbrains.uast.UForEachExpression
-import org.jetbrains.uast.UForExpression
 import org.jetbrains.uast.UIfExpression
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.USwitchClauseExpression
@@ -31,6 +38,7 @@ import org.jetbrains.uast.visitor.AbstractUastVisitor
 import slack.lint.util.BooleanLintOption
 import slack.lint.util.IntLintOption
 import slack.lint.util.OptionLoadingDetector
+import slack.lint.util.StringSetLintOption
 import slack.lint.util.sourceImplementation
 
 class CyclomaticComplexMethodDetector(
@@ -38,8 +46,17 @@ class CyclomaticComplexMethodDetector(
   private val ignoreSingleWhenOption: BooleanLintOption = BooleanLintOption(IGNORE_SINGLE_WHEN),
   private val ignoreSimpleWhenEntriesOption: BooleanLintOption =
     BooleanLintOption(IGNORE_SIMPLE_WHEN_ENTRIES),
+  private val ignoreNestingFunctionsOption: BooleanLintOption =
+    BooleanLintOption(IGNORE_NESTING_FUNCTIONS),
+  private val nestingFunctionsOption: StringSetLintOption = StringSetLintOption(NESTING_FUNCTIONS),
 ) :
-  OptionLoadingDetector(thresholdOption, ignoreSingleWhenOption, ignoreSimpleWhenEntriesOption),
+  OptionLoadingDetector(
+    thresholdOption,
+    ignoreSingleWhenOption,
+    ignoreSimpleWhenEntriesOption,
+    ignoreNestingFunctionsOption,
+    nestingFunctionsOption,
+  ),
   SourceCodeScanner {
 
   override fun getApplicableUastTypes(): List<Class<out UElement>> = listOf(UMethod::class.java)
@@ -47,6 +64,8 @@ class CyclomaticComplexMethodDetector(
   override fun createUastHandler(context: JavaContext): UElementHandler {
     return object : UElementHandler() {
       override fun visitMethod(node: UMethod) {
+        // Methods inside an object literal are excluded from complexity.
+        if (node.sourcePsi?.getStrictParentOfType<KtObjectLiteralExpression>() != null) return
         val body = node.uastBody ?: return
         var complexity = 1
         var whenCount = 0
@@ -55,11 +74,6 @@ class CyclomaticComplexMethodDetector(
         body.accept(
           object : AbstractUastVisitor() {
             override fun visitIfExpression(node: UIfExpression): Boolean {
-              complexity++
-              return false
-            }
-
-            override fun visitForExpression(node: UForExpression): Boolean {
               complexity++
               return false
             }
@@ -97,6 +111,24 @@ class CyclomaticComplexMethodDetector(
 
             override fun visitCatchClause(node: UCatchClause): Boolean {
               complexity++
+              return false
+            }
+
+            override fun visitBreakExpression(node: UBreakExpression): Boolean {
+              complexity++
+              return false
+            }
+
+            override fun visitContinueExpression(node: UContinueExpression): Boolean {
+              complexity++
+              return false
+            }
+
+            override fun visitCallExpression(node: UCallExpression): Boolean {
+              // Nesting functions (e.g. `forEach`, `let`, `run`) introduce a nested control scope.
+              if (!ignoreNestingFunctionsOption.value && node.isNestingFunctionWithLambda()) {
+                complexity++
+              }
               return false
             }
 
@@ -143,6 +175,14 @@ class CyclomaticComplexMethodDetector(
     return (sourcePsi as? KtWhenEntry)?.expression is KtBlockExpression
   }
 
+  /** True if this is a call to a configured nesting function passing a lambda with a body. */
+  private fun UCallExpression.isNestingFunctionWithLambda(): Boolean {
+    val ktCall = sourcePsi as? KtCallExpression ?: return false
+    if (ktCall.getCallNameExpression()?.text !in nestingFunctionsOption.value) return false
+    val lambda = ktCall.lambdaArguments.firstOrNull()?.getLambdaExpression()
+    return lambda?.bodyExpression != null
+  }
+
   companion object {
     private val THRESHOLD =
       IntOption("threshold", "Maximum cyclomatic complexity allowed per function.", 15)
@@ -161,6 +201,22 @@ class CyclomaticComplexMethodDetector(
         true,
       )
 
+    private val IGNORE_NESTING_FUNCTIONS =
+      BooleanOption(
+        "ignore-nesting-functions",
+        "If true, calls to nesting functions (e.g. run, let, forEach) don't add to complexity.",
+        false,
+      )
+
+    private val NESTING_FUNCTIONS =
+      StringOption(
+        "nesting-functions",
+        "A comma-separated list of function names that introduce a nested control-flow scope.",
+        "run,let,apply,with,also,use,forEach,isNotNull,ifNull",
+        "A comma-separated list of function names that introduce a nested control-flow scope. " +
+          "Calls to these with a lambda body add to a function's cyclomatic complexity.",
+      )
+
     val ISSUE =
       Issue.create(
           id = "CyclomaticComplexMethod",
@@ -173,6 +229,14 @@ class CyclomaticComplexMethodDetector(
           severity = Severity.WARNING,
           implementation = sourceImplementation<CyclomaticComplexMethodDetector>(),
         )
-        .setOptions(listOf(THRESHOLD, IGNORE_SINGLE_WHEN, IGNORE_SIMPLE_WHEN_ENTRIES))
+        .setOptions(
+          listOf(
+            THRESHOLD,
+            IGNORE_SINGLE_WHEN,
+            IGNORE_SIMPLE_WHEN_ENTRIES,
+            IGNORE_NESTING_FUNCTIONS,
+            NESTING_FUNCTIONS,
+          )
+        )
   }
 }
