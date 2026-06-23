@@ -1,6 +1,5 @@
 // Copyright (C) 2021 Slack Technologies, LLC
 // SPDX-License-Identifier: Apache-2.0
-import com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -10,7 +9,6 @@ plugins {
   alias(libs.plugins.lint)
   alias(libs.plugins.ksp)
   alias(libs.plugins.mavenPublish)
-  alias(libs.plugins.shadow)
   alias(libs.plugins.buildConfig)
 }
 
@@ -39,10 +37,6 @@ lint {
   fatal += setOf("LintDocExample", "LintImplPsiEquals", "UastImplementation")
 }
 
-val shade: Configuration = configurations.maybeCreate("compileShaded")
-
-configurations.getByName("compileOnly").extendsFrom(shade)
-
 tasks.test {
   // Disable noisy java applications launching during tests
   jvmArgs("-Djava.awt.headless=true")
@@ -53,12 +47,6 @@ dependencies {
   compileOnly(libs.bundles.lintApi)
   ksp(libs.autoService.ksp)
   implementation(libs.autoService.annotations)
-  shade(libs.kotlin.metadata) { exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib") }
-
-  // Dupe the dep because the shaded version is compileOnly in the eyes of the gradle configurations
-  testImplementation(libs.kotlin.metadata) {
-    exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
-  }
   testImplementation(libs.bundles.lintTest)
   testImplementation(libs.junit)
 
@@ -78,19 +66,4 @@ tasks.withType<KotlinCompile>().configureEach {
     apiVersion.set(kgpKotlinVersion)
     languageVersion.set(kgpKotlinVersion)
   }
-}
-
-val shadowJar =
-  tasks.shadowJar.apply {
-    configure {
-      archiveClassifier.set("")
-      configurations = listOf(shade)
-      relocate("kotlinx.metadata", "slack.lint.shaded.kotlinx.metadata")
-      transformers.add(ServiceFileTransformer())
-    }
-  }
-
-artifacts {
-  runtimeOnly(shadowJar)
-  archives(shadowJar)
 }

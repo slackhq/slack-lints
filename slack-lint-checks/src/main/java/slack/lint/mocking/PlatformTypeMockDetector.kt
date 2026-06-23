@@ -2,12 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
+import com.android.tools.lint.client.api.JavaEvaluator
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.intellij.psi.PsiClass
-import slack.lint.util.MetadataJavaEvaluator
+import org.jetbrains.uast.UElement
 import slack.lint.util.sourceImplementation
 
 /** A [MockDetector.TypeChecker] that checks for mocking platform types. */
@@ -35,7 +36,8 @@ object PlatformTypeMockDetector : MockDetector.TypeChecker {
 
   override fun checkType(
     context: JavaContext,
-    evaluator: MetadataJavaEvaluator,
+    useSiteElement: UElement,
+    evaluator: JavaEvaluator,
     mockedType: PsiClass,
   ): MockDetector.Reason? {
     val name = mockedType.qualifiedName ?: return null

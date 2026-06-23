@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint
 
+import com.android.tools.lint.client.api.JavaEvaluator
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Detector
@@ -24,6 +25,7 @@ import com.intellij.psi.util.InheritanceUtil.isInheritor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtCollectionLiteralExpression
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.KtParameter
@@ -50,12 +52,14 @@ import org.jetbrains.uast.kotlin.KotlinUClassLiteralExpression
 import org.jetbrains.uast.toUElement
 import org.jetbrains.uast.toUElementOfType
 import slack.lint.moshi.MoshiLintUtil.hasMoshiAnnotation
-import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.findAnnotationCompat
 import slack.lint.util.isBoxedPrimitive
+import slack.lint.util.isDataClass
 import slack.lint.util.isInnerClass
+import slack.lint.util.isObject
 import slack.lint.util.isObjectOrAny
 import slack.lint.util.isPlatformType
+import slack.lint.util.isSealed
 import slack.lint.util.isString
 import slack.lint.util.removeNode
 import slack.lint.util.snakeToCamel
@@ -70,7 +74,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
   override fun getApplicableUastTypes() = listOf(UClass::class.java)
 
   override fun createUastHandler(context: JavaContext): UElementHandler {
-    val slackEvaluator = MetadataJavaEvaluator(context.file.name, context.evaluator)
+    val evaluator = context.evaluator
     return object : UElementHandler() {
       override fun visitClass(node: UClass) {
         // Enums get checked in both languages because it's easy enough
@@ -104,7 +108,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             )
           }
 
-          validateAdaptedByAnnotation(context, slackEvaluator, adaptedByAnnotation)
+          validateAdaptedByAnnotation(context, evaluator, adaptedByAnnotation)
           return
         }
 
@@ -133,6 +137,8 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                 .build(),
           )
         }
+
+        val useSiteElement = node.sourcePsi as? KtElement
 
         // Check that generateAdapter is false
         var usesCustomGenerator = false
@@ -165,7 +171,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                   quickfixData = null,
                 )
               }
-              if (!slackEvaluator.isSealed(node)) {
+              if (!node.isSealed(evaluator, useSiteElement)) {
                 context.report(
                   ISSUE_SEALED_MUST_BE_SEALED,
                   context.getNameLocation(node),
@@ -179,7 +185,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
 
         val generateAdapterExpression = jsonClassAnnotation.findAttributeValue("generateAdapter")
         val generateAdapter = generateAdapterExpression?.evaluate() as? Boolean? ?: false
-        val isData = slackEvaluator.isData(node)
+        val isData = node.isDataClass(evaluator, useSiteElement)
         if (!generateAdapter) {
           // If it's a data class always report these because it's probably user error
           if (isData) {
@@ -205,14 +211,14 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         if (usesCustomGenerator) return
 
         val isUnsupportedType =
-          slackEvaluator.isObject(node) ||
+          node.isObject(useSiteElement) ||
             node.isAnnotationType ||
             node.isInterface ||
-            node.isInnerClass(slackEvaluator) ||
-            slackEvaluator.isAbstract(node)
+            node.isInnerClass(evaluator) ||
+            evaluator.isAbstract(node)
 
         if (isUnsupportedType) {
-          if (slackEvaluator.isObject(node)) {
+          if (node.isObject(useSiteElement)) {
             // Kotlin objects are ok in certain cases, so we give a more specific error message
             context.report(
               ISSUE_OBJECT,
@@ -340,7 +346,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
 
             val propertyAdaptedByAnnotation = parameter.findAnnotation(FQCN_ADAPTED_BY)
             if (propertyAdaptedByAnnotation != null) {
-              validateAdaptedByAnnotation(context, slackEvaluator, propertyAdaptedByAnnotation)
+              validateAdaptedByAnnotation(context, evaluator, propertyAdaptedByAnnotation)
             }
 
             val shouldCheckPropertyType =
@@ -354,7 +360,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
             if (shouldCheckPropertyType) {
               checkMoshiType(
                 context,
-                slackEvaluator,
+                evaluator,
                 parameter.type,
                 parameter,
                 parameter.typeReference!!,
@@ -490,10 +496,10 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
         val sealedSuperTypeFound =
           node.superTypes
             .asSequence()
-            .mapNotNull { slackEvaluator.getTypeClass(it)?.toUElementOfType<UClass>() }
+            .mapNotNull { evaluator.getTypeClass(it)?.toUElementOfType<UClass>() }
             .filter { it.getContainingUFile()?.packageName == currentPackage }
             .firstOrNull { superType ->
-              if (slackEvaluator.isSealed(superType)) {
+              if (superType.isSealed(evaluator, node.sourcePsi as? KtElement)) {
                 val superJsonClassAnnotation = superType.findAnnotation(FQCN_JSON_CLASS)
                 if (superJsonClassAnnotation != null) {
                   val generatorExpression = superJsonClassAnnotation.findAttributeValue("generator")
@@ -545,7 +551,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
 
   private fun validateAdaptedByAnnotation(
     context: JavaContext,
-    evaluator: MetadataJavaEvaluator,
+    evaluator: JavaEvaluator,
     adaptedByAnnotation: UAnnotation,
   ) {
     // Check the adapter is a valid adapter type
@@ -576,7 +582,7 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
 
   private fun checkMoshiType(
     context: JavaContext,
-    evaluator: MetadataJavaEvaluator,
+    evaluator: JavaEvaluator,
     psiType: PsiType,
     parameter: UParameter,
     typeNode: UElement,
