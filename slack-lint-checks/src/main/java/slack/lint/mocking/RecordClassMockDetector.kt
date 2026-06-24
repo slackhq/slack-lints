@@ -2,13 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
+import com.android.tools.lint.client.api.JavaEvaluator
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.isJava
 import com.intellij.psi.PsiClass
-import slack.lint.util.MetadataJavaEvaluator
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.uast.UClass
+import org.jetbrains.uast.UElement
+import org.jetbrains.uast.toUElementOfType
+import slack.lint.util.isDataClass
 import slack.lint.util.sourceImplementation
 
 /** A [MockDetector.TypeChecker] that checks for mocking record classes. */
@@ -31,16 +36,19 @@ object RecordClassMockDetector : MockDetector.TypeChecker {
 
   override fun checkType(
     context: JavaContext,
-    evaluator: MetadataJavaEvaluator,
+    useSiteElement: UElement,
+    evaluator: JavaEvaluator,
     mockedType: PsiClass,
   ): MockDetector.Reason? {
+    val uMockedType = mockedType.toUElementOfType<UClass>()
     val isRecord =
       if (isJava(mockedType.language)) {
         // Java
         mockedType.isRecord
       } else {
         // Kotlin. Check the annotation first as the isData check may check metadata
-        mockedType.hasAnnotation("kotlin.jvm.JvmRecord") && evaluator.isData(mockedType)
+        mockedType.hasAnnotation("kotlin.jvm.JvmRecord") &&
+          uMockedType?.isDataClass(evaluator, useSiteElement.sourcePsi as? KtElement) == true
       }
     return if (isRecord) {
       MockDetector.Reason(

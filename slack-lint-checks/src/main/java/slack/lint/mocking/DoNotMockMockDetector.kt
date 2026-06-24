@@ -2,14 +2,15 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
+import com.android.tools.lint.client.api.JavaEvaluator
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.intellij.psi.PsiClass
 import org.jetbrains.uast.UClass
+import org.jetbrains.uast.UElement
 import org.jetbrains.uast.toUElementOfType
-import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.sourceImplementation
 
 /** A [MockDetector.TypeChecker] that checks for mocking `@DoNotMock`-annotated classes. */
@@ -34,7 +35,8 @@ object DoNotMockMockDetector : MockDetector.TypeChecker {
 
   override fun checkType(
     context: JavaContext,
-    evaluator: MetadataJavaEvaluator,
+    useSiteElement: UElement,
+    evaluator: JavaEvaluator,
     mockedType: PsiClass,
   ): MockDetector.Reason? {
     val uMockedType = mockedType.toUElementOfType<UClass>() ?: return null

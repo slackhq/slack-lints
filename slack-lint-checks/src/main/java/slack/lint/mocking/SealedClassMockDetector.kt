@@ -2,13 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
+import com.android.tools.lint.client.api.JavaEvaluator
 import com.android.tools.lint.detector.api.Category
 import com.android.tools.lint.detector.api.Issue
 import com.android.tools.lint.detector.api.JavaContext
 import com.android.tools.lint.detector.api.Severity
 import com.intellij.psi.PsiClass
 import com.intellij.psi.impl.light.LightElement
-import slack.lint.util.MetadataJavaEvaluator
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.uast.UClass
+import org.jetbrains.uast.UElement
+import org.jetbrains.uast.toUElementOfType
+import slack.lint.util.isSealed
 import slack.lint.util.sourceImplementation
 
 /** A [MockDetector.TypeChecker] that checks for mocking Kotlin sealed classes. */
@@ -32,11 +37,16 @@ object SealedClassMockDetector : MockDetector.TypeChecker {
 
   override fun checkType(
     context: JavaContext,
-    evaluator: MetadataJavaEvaluator,
+    useSiteElement: UElement,
+    evaluator: JavaEvaluator,
     mockedType: PsiClass,
   ): MockDetector.Reason? {
+    val uMockedType = mockedType.toUElementOfType<UClass>()
     // Check permitsList to cover Java 17 sealed types too
-    return if (evaluator.isSealed(mockedType) || mockedType.hasPermitsList()) {
+    return if (
+      uMockedType?.isSealed(evaluator, useSiteElement.sourcePsi as? KtElement) == true ||
+        mockedType.hasPermitsList()
+    ) {
       MockDetector.Reason(
         mockedType,
         "'${mockedType.qualifiedName}' is a sealed type and has a restricted type hierarchy, use a subtype instead.",

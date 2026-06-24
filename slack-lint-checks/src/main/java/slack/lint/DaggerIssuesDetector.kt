@@ -144,7 +144,6 @@ class DaggerIssuesDetector : Detector(), SourceCodeScanner {
 
           val containingClass = node.getContainingUClass()
           if (containingClass != null) {
-            // Fine to not use MetadataJavaEvaluator since we only care about current module
             val moduleClass =
               if (context.evaluator.hasModifier(containingClass, KtTokens.COMPANION_KEYWORD)) {
                 checkNotNull(containingClass.getContainingUClass()) {

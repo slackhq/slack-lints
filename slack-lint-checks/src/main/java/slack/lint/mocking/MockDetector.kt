@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 package slack.lint.mocking
 
+import com.android.tools.lint.client.api.JavaEvaluator
 import com.android.tools.lint.client.api.UElementHandler
 import com.android.tools.lint.detector.api.Context
 import com.android.tools.lint.detector.api.Issue
@@ -27,8 +28,6 @@ import org.jetbrains.uast.UField
 import org.jetbrains.uast.UReferenceExpression
 import org.jetbrains.uast.UastCallKind
 import slack.lint.mocking.MockDetector.Companion.TYPE_CHECKERS
-import slack.lint.mocking.MockDetector.TypeChecker
-import slack.lint.util.MetadataJavaEvaluator
 import slack.lint.util.OptionLoadingDetector
 import slack.lint.util.StringSetLintOption
 import slack.lint.util.findAnnotationCompat
@@ -107,7 +106,7 @@ constructor(
         .ifEmpty {
           return null
         }
-    val slackEvaluator = MetadataJavaEvaluator(context.file.name, context.evaluator)
+    val evaluator = context.evaluator
 
     val reportingMode = reportMode(context)
 
@@ -148,27 +147,27 @@ constructor(
         val expressionType = node.getExpressionType()
         when {
           expressionType != null -> {
-            argumentType = slackEvaluator.getTypeClass(expressionType)
+            argumentType = evaluator.getTypeClass(expressionType)
           }
           node.typeArgumentCount == 1 -> {
             // We can read the type here for the fun <reified T> mock() helpers
-            argumentType = slackEvaluator.getTypeClass(node.typeArguments[0])
+            argumentType = evaluator.getTypeClass(node.typeArguments[0])
           }
           node.valueArgumentCount != 0 -> {
             when (val firstArg = node.valueArguments[0]) {
               is UClassLiteralExpression -> {
                 // It's Foo.class, we can just use it directly
-                argumentType = slackEvaluator.getTypeClass(firstArg.type)
+                argumentType = evaluator.getTypeClass(firstArg.type)
               }
               is UReferenceExpression -> {
                 val type = firstArg.getExpressionType()
                 if (node.methodName == "spy") {
                   // spy takes an instance, so take the type at face value
-                  argumentType = slackEvaluator.getTypeClass(type)
+                  argumentType = evaluator.getTypeClass(type)
                 } else if (type is PsiClassType && type.parameterCount == 1) {
                   // If it's a Class and not a "spy" method, assume it's the mock type
                   val classGeneric = type.parameters[0]
-                  argumentType = slackEvaluator.getTypeClass(classGeneric)
+                  argumentType = evaluator.getTypeClass(classGeneric)
                 }
               }
             }
@@ -183,12 +182,12 @@ constructor(
         if (isKotlin(node.language)) {
           val sourcePsi = node.sourcePsi ?: return
           if (sourcePsi is KtProperty && isMockAnnotated(node)) {
-            val type = slackEvaluator.getTypeClass(node.type) ?: return
+            val type = evaluator.getTypeClass(node.type) ?: return
             checkMock(node, type)
             return
           }
         } else if (isJava(node.language) && isMockAnnotated(node)) {
-          val type = slackEvaluator.getTypeClass(node.type) ?: return
+          val type = evaluator.getTypeClass(node.type) ?: return
           checkMock(node, type)
           return
         }
@@ -206,7 +205,7 @@ constructor(
 
       private fun checkMock(node: UElement, type: PsiClass) {
         for (checker in checkers) {
-          val reason = checker.checkType(context, slackEvaluator, type)
+          val reason = checker.checkType(context, node, evaluator, type)
           if (reason != null) {
             addReport(type, isError = true)
             context.report(checker.issue, context.getLocation(node), reason.reason)
@@ -262,7 +261,8 @@ constructor(
 
     fun checkType(
       context: JavaContext,
-      evaluator: MetadataJavaEvaluator,
+      useSiteElement: UElement,
+      evaluator: JavaEvaluator,
       mockedType: PsiClass,
     ): Reason? {
       return null

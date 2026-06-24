@@ -27,14 +27,21 @@ import com.intellij.psi.PsiClassType
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiJavaFile
 import com.intellij.psi.PsiMethod
-import com.intellij.psi.PsiModifierListOwner
 import com.intellij.psi.PsiType
-import com.intellij.psi.PsiTypes
 import com.intellij.psi.PsiWildcardType
 import java.util.EnumSet
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotated
+import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.uast.UAnnotated
 import org.jetbrains.uast.UAnnotation
 import org.jetbrains.uast.UClass
@@ -93,11 +100,55 @@ internal fun UAnnotated.findAnnotationCompat(fqcn: String): UAnnotation? {
   }
 }
 
-/** @return whether [owner] is a Kotlin `value` class. */
-internal fun JavaEvaluator.isValueClass(owner: PsiModifierListOwner?): Boolean {
-  // Check the annotation for JvmInline as a shorter check
-  return owner?.hasAnnotation("kotlin.jvm.JvmInline") == true ||
-    hasModifier(owner, KtTokens.VALUE_KEYWORD)
+internal fun UClass.isDataClass(
+  evaluator: JavaEvaluator,
+  useSiteElement: KtElement? = sourcePsi as? KtElement,
+): Boolean {
+  return (sourceKtClassOrObject as? KtClass)?.hasModifier(KtTokens.DATA_KEYWORD) == true ||
+    evaluator.hasModifier(this, KtTokens.DATA_KEYWORD) ||
+    matchesKaPredicate(useSiteElement) { it.isData }
+}
+
+internal fun UClass.isSealed(
+  evaluator: JavaEvaluator,
+  useSiteElement: KtElement? = sourcePsi as? KtElement,
+): Boolean {
+  return (sourceKtClassOrObject as? KtClass)?.hasModifier(KtTokens.SEALED_KEYWORD) == true ||
+    evaluator.hasModifier(this, KtTokens.SEALED_KEYWORD) ||
+    matchesKaPredicate(useSiteElement) { it.modality == KaSymbolModality.SEALED }
+}
+
+internal fun UClass.isObject(useSiteElement: KtElement? = sourcePsi as? KtElement): Boolean {
+  return sourceKtClassOrObject is KtObjectDeclaration ||
+    matchesKaPredicate(useSiteElement) {
+      it.classKind == KaClassKind.OBJECT || it.classKind == KaClassKind.COMPANION_OBJECT
+    }
+}
+
+internal fun UClass.isValueClass(
+  evaluator: JavaEvaluator,
+  useSiteElement: KtElement? = sourcePsi as? KtElement,
+): Boolean {
+  return javaPsi.hasAnnotation("kotlin.jvm.JvmInline") ||
+    (sourceKtClassOrObject as? KtClass)?.hasModifier(KtTokens.VALUE_KEYWORD) == true ||
+    evaluator.hasModifier(this, KtTokens.VALUE_KEYWORD) ||
+    matchesKaPredicate(useSiteElement) { it.isInline }
+}
+
+private val UClass.sourceKtClassOrObject: KtClassOrObject?
+  get() = sourcePsi as? KtClassOrObject
+
+@OptIn(KaExperimentalApi::class)
+private inline fun UClass.matchesKaPredicate(
+  useSiteElement: KtElement?,
+  flag: (KaNamedClassSymbol) -> Boolean,
+): Boolean {
+  if (useSiteElement == null) return false
+  if (sourceKtClassOrObject == null && javaPsi.containingFile == null) return false
+  return analyze(useSiteElement) {
+    val symbol = sourceKtClassOrObject?.symbol as? KaNamedClassSymbol ?: javaPsi.namedClassSymbol
+    symbol?.let(flag) == true
+  }
 }
 
 internal fun UClass.isInnerClass(evaluator: JavaEvaluator): Boolean {
@@ -336,70 +387,8 @@ internal fun StringOption.loadAsSet(
     .toSet()
 }
 
-internal inline fun <T, reified R> Array<out T>.mapArray(transform: (T) -> R): Array<R> =
-  Array(this.size) { i -> transform(this[i]) }
-
-internal inline fun <T> measureTimeMillisWithResult(block: () -> T): Pair<Long, T> {
-  val start = System.currentTimeMillis()
-  val result = block()
-  return Pair(System.currentTimeMillis() - start, result)
-}
-
-private val logVerbosely by lazy {
-  System.getProperty("slack.lint.logVerbosely", "false").toBoolean()
-}
-private val logErrorsVerbosely by lazy {
-  System.getProperty("slack.lint.logErrorsVerbosely", "true").toBoolean()
-}
-
-/**
- * Logs to std if [logVerbosely] is enabled. Useful for debugging and should not generally be
- * enabled.
- */
-internal fun slackLintLog(message: String) {
-  if (logVerbosely) {
-    println("SlackLint: $message")
-  }
-}
-
-/**
- * Logs to std if [logErrorsVerbosely] is enabled. Important for errors that you don't necessarily
- * want to fail the build
- */
-internal fun slackLintErrorLog(message: String) {
-  if (logErrorsVerbosely) {
-    System.err.println("SlackLint: $message")
-  }
-}
-
 /** Returns whether [this] has [packageName] as its package name. */
 internal fun PsiMethod.isInPackageName(packageName: PackageName): Boolean {
   val actual = (containingFile as? PsiJavaFile)?.packageName
   return packageName.javaPackageName == actual
-}
-
-/** Whether this [PsiMethod] returns Unit */
-internal val PsiMethod.returnsUnit
-  get() = returnType.isVoidOrUnit
-
-/**
- * Whether this [PsiType] is `void` or [Unit]
- *
- * In Kotlin 1.6 some expressions now explicitly return [Unit] instead of just being [PsiType.VOID],
- * so this returns whether this type is either.
- */
-internal val PsiType?.isVoidOrUnit
-  get() = this == PsiTypes.voidType() || this?.canonicalText == "kotlin.Unit"
-
-/**
- * Returns true if this [UAnnotated] element has any annotation whose short name is in
- * [annotationNames]. Matches on simple name to avoid requiring fully qualified annotations in
- * config.
- */
-internal fun UAnnotated.hasAnyAnnotation(annotationNames: Set<String>): Boolean {
-  if (annotationNames.isEmpty()) return false
-  return uAnnotations.any { annotation ->
-    val name = annotation.qualifiedName?.substringAfterLast('.') ?: return@any false
-    name in annotationNames
-  }
 }

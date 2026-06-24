@@ -15,8 +15,6 @@
  */
 package slack.lint.util
 
-import kotlin.metadata.ClassName
-
 /**
  * Represents a qualified package
  *
@@ -39,21 +37,6 @@ internal class Name(private val pkg: PackageName, private val nameSegments: List
   /** The short name for this [Name] */
   val shortName: String
     get() = nameSegments.last()
-
-  /** The Java-style fully qualified name for this [Name], separated with `.` */
-  val javaFqn: String
-    get() = pkg.segments.joinToString(".", postfix = ".") + nameSegments.joinToString(".")
-
-  /**
-   * The [ClassName] for use with kotlinx.metadata. Note that in kotlinx.metadata the actual type
-   * might be different from the underlying JVM type, for example: kotlin/Int -> java/lang/Integer
-   */
-  val kmClassName: ClassName
-    get() = pkg.segments.joinToString("/", postfix = "/") + nameSegments.joinToString(".")
-
-  /** The [PackageName] of this element. */
-  val packageName: PackageName
-    get() = pkg
 }
 
 /** @return a [PackageName] with a Java-style (separated with `.`) [packageName]. */
