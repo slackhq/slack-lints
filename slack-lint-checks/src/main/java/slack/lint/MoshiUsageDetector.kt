@@ -409,7 +409,11 @@ class MoshiUsageDetector : Detector(), SourceCodeScanner {
                     ISSUE_JSON_SITE_TARGET.getBriefDescription(TextFormat.TEXT),
                     quickfixData =
                       fix()
-                        .removeNode(context, jsonAnnotation.sourcePsi, text = "${siteTarget.text}:"),
+                        .removeNode(
+                          context,
+                          jsonAnnotation.sourcePsi,
+                          text = "${siteTarget.text}:",
+                        ),
                   )
                 }
 
