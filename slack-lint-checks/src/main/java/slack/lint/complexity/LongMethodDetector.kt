@@ -11,6 +11,7 @@ import com.android.tools.lint.detector.api.Severity
 import com.android.tools.lint.detector.api.SourceCodeScanner
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
@@ -28,17 +29,30 @@ class LongMethodDetector(private val thresholdOption: IntLintOption = IntLintOpt
 
   override fun createUastHandler(context: JavaContext): UElementHandler {
     return object : UElementHandler() {
+      private var cachedFile: PsiFile? = null
+      private var cachedNewlineOffsets = IntArray(0)
+
       override fun visitMethod(node: UMethod) {
         val function = node.sourcePsi as? KtNamedFunction ?: return
-        val lineCount = countLines(function)
+        val file = function.containingFile ?: return
+        val lineCount = countLines(function, newlineOffsetsFor(file))
         if (lineCount > thresholdOption.value) {
           context.report(
             ISSUE,
             node,
             context.getNameLocation(node),
-            "Function is too long ($lineCount lines), exceeding the limit of ${thresholdOption.value}.",
+            "Function is too long ($lineCount lines), exceeding the limit of ${thresholdOption.value}",
           )
         }
+      }
+
+      // Cached so a file with many functions scans its text once, not once per function.
+      private fun newlineOffsetsFor(file: PsiFile): IntArray {
+        if (cachedFile !== file) {
+          cachedFile = file
+          cachedNewlineOffsets = newlineOffsets(file.text)
+        }
+        return cachedNewlineOffsets
       }
     }
   }
@@ -49,10 +63,8 @@ class LongMethodDetector(private val thresholdOption: IntLintOption = IntLintOpt
    * measured whole. The net line count of every nested function is subtracted so their lines aren't
    * attributed to the enclosing function.
    */
-  private fun countLines(function: KtNamedFunction): Int {
+  private fun countLines(function: KtNamedFunction, newlineOffsets: IntArray): Int {
     val body = function.bodyBlockExpression ?: function.bodyExpression ?: return 0
-    val fileText = function.containingFile?.text ?: return 0
-    val newlineOffsets = newlineOffsets(fileText)
 
     val isNested = PsiTreeUtil.getParentOfType(function, KtNamedFunction::class.java) != null
     val measured: PsiElement = if (isNested) function else body
@@ -78,17 +90,24 @@ class LongMethodDetector(private val thresholdOption: IntLintOption = IntLintOpt
     return lines.size
   }
 
-  private fun collectCodeLines(element: PsiElement, newlineOffsets: IntArray, lines: HashSet<Int>) {
-    // Skip whitespace and comment/KDoc subtrees entirely so they don't count toward length.
-    if (element is PsiWhiteSpace || element is PsiComment || element is KDoc) return
-    var child = element.firstChild
-    if (child == null) {
-      lines.add(lineIndex(element.textRange.startOffset, newlineOffsets))
-      return
-    }
-    while (child != null) {
-      collectCodeLines(child, newlineOffsets, lines)
-      child = child.nextSibling
+  // Iterative so deeply nested expressions can't overflow the stack. Order doesn't matter because
+  // the caller collects line indices into a set.
+  private fun collectCodeLines(root: PsiElement, newlineOffsets: IntArray, lines: HashSet<Int>) {
+    val stack = ArrayDeque<PsiElement>()
+    stack.addLast(root)
+    while (stack.isNotEmpty()) {
+      val element = stack.removeLast()
+      // Skip whitespace and comment/KDoc subtrees entirely so they don't count toward length.
+      if (element is PsiWhiteSpace || element is PsiComment || element is KDoc) continue
+      var child = element.firstChild
+      if (child == null) {
+        lines.add(lineIndex(element.textRange.startOffset, newlineOffsets))
+        continue
+      }
+      while (child != null) {
+        stack.addLast(child)
+        child = child.nextSibling
+      }
     }
   }
 
