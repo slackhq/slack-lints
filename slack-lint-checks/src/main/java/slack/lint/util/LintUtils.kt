@@ -81,6 +81,19 @@ internal fun PsiClass.implements(
 }
 
 /**
+ * Returns true if this [UAnnotated] element has any annotation whose short name is in
+ * [annotationNames]. Matches on simple name to avoid requiring fully qualified annotations in
+ * config.
+ */
+internal fun UAnnotated.hasAnyAnnotation(annotationNames: Set<String>): Boolean {
+  if (annotationNames.isEmpty()) return false
+  return uAnnotations.any { annotation ->
+    val name = annotation.qualifiedName?.substringAfterLast('.') ?: return@any false
+    name in annotationNames
+  }
+}
+
+/**
  * Finds an annotation with the given [fqcn] on this element, accounting for Kotlin 2.2+ behavior.
  *
  * As of Kotlin 2.2, an annotation written with no explicit use-site target on a property or
