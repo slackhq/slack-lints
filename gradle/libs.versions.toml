@@ -1,21 +1,21 @@
 [versions]
-kotlin = "2.4.10"
+kotlin = "2.4.21"
 ktfmt = "0.64"
 jdk = "27"
 # lint checks must target JDK 17, but the runtime should remain 11
 lintJvmTarget = "17"
 runtimeJvmTarget = "11"
-lint = "32.3.2"
+lint = "32.4.1"
 
 [plugins]
-buildConfig = { id = "com.github.gmazzo.buildconfig", version = "6.0.10" }
+buildConfig = { id = "com.github.gmazzo.buildconfig", version = "6.1.2" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.8" }
 dokka = { id = "org.jetbrains.dokka", version = "2.2.0" }
-lint = { id = "com.android.lint", version = "9.3.2" }
+lint = { id = "com.android.lint", version = "9.4.1" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version = "2.3.11" }
+ksp = { id = "com.google.devtools.ksp", version = "2.3.12" }
 mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.37.0" }
-spotless = { id = "com.diffplug.spotless", version = "8.10.0" }
+spotless = { id = "com.diffplug.spotless", version = "8.10.4" }
 
 [libraries]
 autoService-annotations = "com.google.auto.service:auto-service-annotations:1.1.1"
