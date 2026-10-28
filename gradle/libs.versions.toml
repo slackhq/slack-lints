@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.4.10"
 ktfmt = "0.64"
-jdk = "25"
+jdk = "27"
 # lint checks must target JDK 17, but the runtime should remain 11
 lintJvmTarget = "17"
 runtimeJvmTarget = "11"
